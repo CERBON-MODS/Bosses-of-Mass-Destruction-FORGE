@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction;
 
+import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,6 +15,9 @@ public class BossesOfMassDestruction {
 
     public BossesOfMassDestruction() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        BMDItems.register(modEventBus);
+
         MinecraftForge.EVENT_BUS.register(this);
     }
 }
