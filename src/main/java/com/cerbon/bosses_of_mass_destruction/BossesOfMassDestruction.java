@@ -2,6 +2,7 @@ package com.cerbon.bosses_of_mass_destruction;
 
 import com.cerbon.bosses_of_mass_destruction.item.BMDCreativeModeTabs;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
+import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,6 +23,8 @@ public class BossesOfMassDestruction {
 
         BMDCreativeModeTabs.register(modEventBus);
         BMDItems.register(modEventBus);
+
+        BMDSounds.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
