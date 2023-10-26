@@ -57,10 +57,10 @@ public class VanillaCopies {
                 new Vector3f(1.0f, 0.0f, -1.0f)
         };
 
-        for (int k = 0; k < 4; ++k) {
+        for (int k = 0; k <= 3; k++) {
             Vector3f vector3f2 = vector3fs[k];
             vector3f2.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(rotation));
-            vector3f2.set(scale);
+            vector3f2.mul(scale);
             vector3f2.add(f, g, h);
         }
 
