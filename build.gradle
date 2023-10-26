@@ -76,6 +76,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation fg.deobf("curse.maven:geckolib-388172:${geckolib_version}")
+    implementation fg.deobf("curse.maven:cloth-config-348521:${cloth_config_version}")
 
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
