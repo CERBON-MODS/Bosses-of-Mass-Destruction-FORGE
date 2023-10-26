@@ -25,7 +25,7 @@ public class VanillaCopies {
 
         for (int k = 0; k <= 3; k++){
             Vector3f vector3f2 = vector3fs[k];
-            vector3f2.rotate(new Quaternionf().rotationZ(rotation)); // Not sure if it's working correctly
+            vector3f2.rotate(RotationAxis.POSITIVE_Z.rotationDegrees(rotation));
             vector3f2.rotate(quaternion2);
             vector3f2.mul(scale);
             vector3f2.add(f, g, h);
@@ -59,7 +59,7 @@ public class VanillaCopies {
 
         for (int k = 0; k < 4; ++k) {
             Vector3f vector3f2 = vector3fs[k];
-            vector3f2.rotate(new Quaternionf().rotationY(rotation));
+            vector3f2.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(rotation));
             vector3f2.set(scale);
             vector3f2.add(f, g, h);
         }
