@@ -1,11 +1,14 @@
 package com.cerbon.bosses_of_mass_destruction;
 
+import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.item.BMDCreativeModeTabs;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.mojang.logging.LogUtils;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,6 +35,10 @@ public class BossesOfMassDestruction {
         BMDParticles.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
+
+        AutoConfig.register(BMDConfig.class, JanksonConfigSerializer::new);
+        AutoConfig.getConfigHolder(BMDConfig.class).getConfig().postInit();
+        AutoConfig.getConfigHolder(BMDConfig.class).save();
     }
 
     private void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
