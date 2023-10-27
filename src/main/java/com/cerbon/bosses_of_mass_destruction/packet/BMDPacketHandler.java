@@ -45,7 +45,7 @@ public class BMDPacketHandler {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
 
-    public static <MSG> void sendToAllPlayersInChunk(MSG message, ServerLevel level, Vec3 pos){
+    public static <MSG> void sendToAllPlayersTrackingChunk(MSG message, ServerLevel level, Vec3 pos){
         INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(BlockPos.containing(pos))), message);
     }
 }

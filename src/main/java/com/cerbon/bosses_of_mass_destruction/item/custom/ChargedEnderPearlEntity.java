@@ -76,7 +76,7 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
     private void serverCollision(){
         teleportEntity(getOwner());
         applyMobEffects(getOwner());
-        BMDPacketHandler.sendToAllPlayersInChunk(new ChargedEnderPearlS2CPacket(position()), (ServerLevel) level(), position());
+        BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChargedEnderPearlS2CPacket(position()), (ServerLevel) level(), position());
         playSound(BMDSounds.CHARGED_ENDER_PEARL.get(), 1.0f, BMDUtils.randomPitch(this.random) * 0.8f);
         discard();
     }
