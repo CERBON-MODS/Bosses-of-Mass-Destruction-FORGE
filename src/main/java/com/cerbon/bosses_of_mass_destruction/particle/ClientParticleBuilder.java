@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ClientParticleBuilder {
-    private ParticleOptions effect;
+    private ParticleOptions options;
     private Function<SimpleParticle, Vec3> getVel = null;
     private Function<SimpleParticle, Vec3> continuousPos = null;
     private Function<Float, Vec3> color = null;
@@ -21,8 +21,8 @@ public class ClientParticleBuilder {
     private Double colorVariation = null;
     private Function<SimpleParticle, Float> getRotation = null;
 
-    public ClientParticleBuilder(ParticleOptions effect){
-        this.effect = effect;
+    public ClientParticleBuilder(ParticleOptions options){
+        this.options = options;
     }
 
     public ClientParticleBuilder continuousRotation(Function<SimpleParticle, Float> rotation) {
@@ -95,7 +95,7 @@ public class ClientParticleBuilder {
         Camera camera = client.gameRenderer.getMainCamera();
 
         if (camera.isInitialized()) {
-            Particle particle = client.particleEngine.createParticle(effect, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+            Particle particle = client.particleEngine.createParticle(options, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
             if (particle == null) {
                 return;
             }

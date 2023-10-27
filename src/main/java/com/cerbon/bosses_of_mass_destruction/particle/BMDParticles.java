@@ -105,8 +105,9 @@ public class BMDParticles {
     public static final RegistryObject<SimpleParticleType> GROUND_ROD = PARTICLE_TYPES.register("ground_rod",
             () -> new SimpleParticleType(true));
 
+    public static final int FULL_BRIGHT = 15728880;
+
     public static void initClient(RegisterParticleProvidersEvent event){
-        final int FULL_BRIGHT = 15728880;
 
         event.registerSpriteSet(BMDParticles.DISAPPEARING_SWIRL.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
