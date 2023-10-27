@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.util;
 
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -25,7 +26,7 @@ public class VanillaCopies {
 
         for (int k = 0; k <= 3; k++){
             Vector3f vector3f2 = vector3fs[k];
-            vector3f2.rotate(RotationAxis.POSITIVE_Z.rotationDegrees(rotation));
+            vector3f2.rotate(Axis.ZP.rotationDegrees(rotation));
             vector3f2.rotate(quaternion2);
             vector3f2.mul(scale);
             vector3f2.add(f, g, h);
@@ -59,7 +60,7 @@ public class VanillaCopies {
 
         for (int k = 0; k <= 3; k++) {
             Vector3f vector3f2 = vector3fs[k];
-            vector3f2.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(rotation));
+            vector3f2.rotate(Axis.YP.rotationDegrees(rotation));
             vector3f2.mul(scale);
             vector3f2.add(f, g, h);
         }
