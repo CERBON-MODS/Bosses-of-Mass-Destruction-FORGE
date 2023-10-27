@@ -29,7 +29,6 @@ public class BillboardRenderer<T extends Entity> implements IRenderer<T> {
         poseStack.popPose();
     }
 
-
     public interface ScaleFunction<T> {
         float apply(T entity);
     }
