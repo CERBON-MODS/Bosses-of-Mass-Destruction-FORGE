@@ -4,6 +4,8 @@ import com.cerbon.bosses_of_mass_destruction.util.maelstrom.general.math.Referen
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class MathUtils {
@@ -33,5 +35,26 @@ public class MathUtils {
 
         return Math.toDegrees(Mth.atan2(z, x));
     }
+
+    public static float roundedStep(float n, List<Float> steps, boolean floor) {
+        if (floor) {
+            steps.sort(Collections.reverseOrder());
+            for (Float step : steps) {
+                if (step <= n) {
+                    return step;
+                }
+            }
+            return steps.get(0);
+        } else {
+            Collections.sort(steps);
+            for (Float step : steps) {
+                if (step > n) {
+                    return step;
+                }
+            }
+            return steps.get(steps.size() - 1);
+        }
+    }
+
 
 }
