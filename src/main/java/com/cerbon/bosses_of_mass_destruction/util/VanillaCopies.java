@@ -4,13 +4,22 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.List;
-
 public class VanillaCopies {
-    public static Vector3f[] buildBillBoardGeometry(Camera camera, float tickDelta, double prevPosX, double prevPosY, double prevPosZ, double x, double y, double z, float scale, float rotation){
+    public static Vector3f[] buildBillBoardGeometry(
+            @NotNull Camera camera, float tickDelta,
+            double prevPosX,
+            double prevPosY,
+            double prevPosZ,
+            double x,
+            double y,
+            double z,
+            float scale,
+            float rotation
+    ) {
         Vec3 vec3 = camera.getPosition();
         float f = (float) (Mth.lerp(tickDelta, prevPosX, x) - vec3.x());
         float g = (float) (Mth.lerp(tickDelta, prevPosY, y) - vec3.y());
@@ -35,8 +44,8 @@ public class VanillaCopies {
         return vector3fs;
     }
 
-    public static Vector3f[] buildFlatGeometry(
-            Camera camera, float tickDelta,
+    public static Vector3f @NotNull [] buildFlatGeometry(
+            @NotNull Camera camera, float tickDelta,
             double prevPosX,
             double prevPosY,
             double prevPosZ,
