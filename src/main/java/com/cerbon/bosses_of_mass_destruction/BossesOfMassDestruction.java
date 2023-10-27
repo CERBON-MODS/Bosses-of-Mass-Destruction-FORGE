@@ -1,8 +1,10 @@
 package com.cerbon.bosses_of_mass_destruction;
 
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
+import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDCreativeModeTabs;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
+import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
@@ -16,6 +18,8 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -27,9 +31,11 @@ public class BossesOfMassDestruction {
     public BossesOfMassDestruction() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::addCreativeTab);
+        modEventBus.addListener(this::onCommonSetup);
 
         BMDCreativeModeTabs.register(modEventBus);
         BMDItems.register(modEventBus);
+        BMDEntities.register(modEventBus);
 
         BMDSounds.register(modEventBus);
         BMDParticles.register(modEventBus);
@@ -41,6 +47,10 @@ public class BossesOfMassDestruction {
         AutoConfig.getConfigHolder(BMDConfig.class).save();
     }
 
+    private void onCommonSetup(FMLCommonSetupEvent event){
+        BMDPacketHandler.register();
+    }
+
     private void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
         if (event.getTab() == BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION.get()) {
             event.accept(BMDItems.ANCIENT_ANIMA);
@@ -48,11 +58,17 @@ public class BossesOfMassDestruction {
             event.accept(BMDItems.OBSIDIAN_HEART);
             event.accept(BMDItems.VOID_THORN);
             event.accept(BMDItems.CRYSTAL_FRUIT);
+            event.accept(BMDItems.CHARGED_ENDER_PEARL);
         }
     }
 
     @Mod.EventBusSubscriber(modid = BMDConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientEvents {
+
+        @SubscribeEvent
+        protected static void onClientSetup(FMLClientSetupEvent event){
+            BMDEntities.initClient();
+        }
 
         @SubscribeEvent
         protected static void registerParticleProviders(final @NotNull RegisterParticleProvidersEvent event) {

@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.item;
 
+import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlItem;
 import com.cerbon.bosses_of_mass_destruction.item.custom.CrystalFruitItem;
 import com.cerbon.bosses_of_mass_destruction.item.custom.MaterialItem;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
@@ -28,6 +29,9 @@ public class BMDItems {
 
     public static final RegistryObject<Item> CRYSTAL_FRUIT = ITEMS.register("crystal_fruit",
             () -> new CrystalFruitItem(new Item.Properties().rarity(Rarity.RARE).fireResistant().food(BMDFoods.CRYSTAL_FRUIT)));
+
+    public static final RegistryObject<Item> CHARGED_ENDER_PEARL = ITEMS.register("charged_ender_pearl",
+            () -> new ChargedEnderPearlItem(new Item.Properties().fireResistant().stacksTo(1)));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);

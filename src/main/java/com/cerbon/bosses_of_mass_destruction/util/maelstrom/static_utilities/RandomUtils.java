@@ -15,6 +15,15 @@ public class RandomUtils {
         return min + new Random().nextInt(range);
     }
 
+    public static double range(double min, double max) {
+        if (min > max) {
+            throw new IllegalArgumentException("Minimum is greater than maximum");
+        }
+        double range = max - min;
+        return min + Math.random() * range;
+    }
+
+
 
     public static Vec3 randVec(Supplier<Double> rand) {
         if (rand == null)
