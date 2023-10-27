@@ -12,14 +12,14 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ChargedEnderPearlPacket {
+public class ChargedEnderPearlS2CPacket {
     private final Vec3 pos;
 
-    public ChargedEnderPearlPacket(Vec3 pos){
+    public ChargedEnderPearlS2CPacket(Vec3 pos){
         this.pos = pos;
     }
 
-    public ChargedEnderPearlPacket(FriendlyByteBuf buf){
+    public ChargedEnderPearlS2CPacket(FriendlyByteBuf buf){
         this.pos = PacketUtils.readVec3(buf);
     }
 

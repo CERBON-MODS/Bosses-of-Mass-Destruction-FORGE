@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.item.custom;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.ChargedEnderPearlPacket;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.ChargedEnderPearlS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
@@ -76,7 +76,7 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
     private void serverCollision(){
         teleportEntity(getOwner());
         applyMobEffects(getOwner());
-        BMDPacketHandler.sendToAllPlayersInChunk(new ChargedEnderPearlPacket(position()), (ServerLevel) level(), position());
+        BMDPacketHandler.sendToAllPlayersInChunk(new ChargedEnderPearlS2CPacket(position()), (ServerLevel) level(), position());
         playSound(BMDSounds.CHARGED_ENDER_PEARL.get(), 1.0f, BMDUtils.randomPitch(this.random) * 0.8f);
         discard();
     }
