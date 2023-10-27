@@ -13,8 +13,8 @@ import java.util.List;
 
 public class NodeBossBarRenderer {
     private final String entityTypeKey;
-    private List<Float> hpPercentages;
-    private ResourceLocation noteTexture;
+    private final List<Float> hpPercentages;
+    private final ResourceLocation noteTexture;
     private final int textureSize;
 
     public NodeBossBarRenderer(String entityTypeKey, List<Float> hpPercentages, ResourceLocation noteTexture, int textureSize) {
