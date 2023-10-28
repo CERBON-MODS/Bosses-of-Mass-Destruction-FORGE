@@ -21,7 +21,7 @@ public class VecUtils {
         return vec.subtract(planeVector.multiply(vec.dot(planeVector), vec.dot(planeVector), vec.dot(planeVector)));
     }
 
-    public static Vec3 asVec3d(BlockPos blockPos) {
+    public static Vec3 asVec3(BlockPos blockPos) {
         return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 

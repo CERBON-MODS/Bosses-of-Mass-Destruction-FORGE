@@ -67,7 +67,7 @@ public class WallTeleport {
     }
 
     private void teleportTo(BlockPos teleportPos){
-        Vec3 pos = VecUtils.asVec3d(teleportPos).add(new Vec3(0.5, 0.0, 0.5));
+        Vec3 pos = VecUtils.asVec3(teleportPos).add(new Vec3(0.5, 0.0, 0.5));
         entity.teleportTo(pos.x, pos.y, pos.z);
     }
 
