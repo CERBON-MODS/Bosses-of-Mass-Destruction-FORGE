@@ -2,6 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.item;
 
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlItem;
 import com.cerbon.bosses_of_mass_destruction.item.custom.CrystalFruitItem;
+import com.cerbon.bosses_of_mass_destruction.item.custom.EarthdiveSpear;
 import com.cerbon.bosses_of_mass_destruction.item.custom.MaterialItem;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.world.item.Item;
@@ -23,6 +24,9 @@ public class BMDItems {
 
     public static final RegistryObject<Item> OBSIDIAN_HEART = ITEMS.register("obsidian_heart",
             () -> new MaterialItem(new Item.Properties().rarity(Rarity.RARE).fireResistant()));
+
+    public static final RegistryObject<Item> EARTHDIVE_SPEAR = ITEMS.register("earthdive_spear",
+            () -> new EarthdiveSpear(new Item.Properties().fireResistant().durability(250)));
 
     public static final RegistryObject<Item> VOID_THORN = ITEMS.register("void_thorn",
             () -> new MaterialItem(new Item.Properties().rarity(Rarity.RARE).fireResistant()));

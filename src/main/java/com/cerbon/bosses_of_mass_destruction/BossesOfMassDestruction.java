@@ -56,6 +56,7 @@ public class BossesOfMassDestruction {
             event.accept(BMDItems.ANCIENT_ANIMA);
             event.accept(BMDItems.BLAZING_EYE);
             event.accept(BMDItems.OBSIDIAN_HEART);
+            event.accept(BMDItems.EARTHDIVE_SPEAR.get());
             event.accept(BMDItems.VOID_THORN);
             event.accept(BMDItems.CRYSTAL_FRUIT);
             event.accept(BMDItems.CHARGED_ENDER_PEARL);

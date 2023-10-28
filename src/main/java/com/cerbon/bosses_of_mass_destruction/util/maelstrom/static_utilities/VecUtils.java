@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
 public class VecUtils {
@@ -18,6 +19,10 @@ public class VecUtils {
 
     public static Vec3 planeProject(Vec3 vec, Vec3 planeVector) {
         return vec.subtract(planeVector.multiply(vec.dot(planeVector), vec.dot(planeVector), vec.dot(planeVector)));
+    }
+
+    public static Vec3 asVec3d(BlockPos blockPos) {
+        return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     public static Vec3 rotateVector(Vec3 vec, Vec3 axis, double degrees) {
