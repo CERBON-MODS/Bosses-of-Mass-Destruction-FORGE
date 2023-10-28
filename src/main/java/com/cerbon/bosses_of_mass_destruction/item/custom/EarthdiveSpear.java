@@ -134,7 +134,7 @@ public class EarthdiveSpear extends Item {
     }
 
     private void spawnTeleportParticles(ServerLevel level, LivingEntity user){
-        Vec3 pos = user.getEyePosition().add(user.getLookAngle().multiply(0.15, 0.15, 0.15)).add(RandomUtils.randVec(() -> new Random().nextDouble() - 0.5));
+        Vec3 pos = user.getEyePosition().add(user.getLookAngle().multiply(0.15, 0.15, 0.15)).add(RandomUtils.randVec(null));
         Vec3 vel = user.getEyePosition().add(user.getLookAngle().multiply(4.0, 4.0, 4.0)).subtract(pos);
         BMDUtils.spawnParticle(level, BMDParticles.EARTHDIVE_INDICATOR.get(), pos, vel, 0, 0.07);
     }

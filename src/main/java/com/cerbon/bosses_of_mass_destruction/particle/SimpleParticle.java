@@ -133,7 +133,7 @@ public class SimpleParticle extends TextureSheetParticle {
     }
 
     public void setColorVariation(double variation){
-        colorVariation = RandomUtils.randVec(() -> new Random().nextDouble() - 0.5).multiply(variation, variation, variation);
+        colorVariation = RandomUtils.randVec(null).multiply(variation, variation, variation);
         setColorFromOverride(colorOverride, 0f);
     }
 
