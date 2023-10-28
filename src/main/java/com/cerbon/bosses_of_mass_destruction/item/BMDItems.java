@@ -5,6 +5,8 @@ import com.cerbon.bosses_of_mass_destruction.item.custom.CrystalFruitItem;
 import com.cerbon.bosses_of_mass_destruction.item.custom.EarthdiveSpear;
 import com.cerbon.bosses_of_mass_destruction.item.custom.MaterialItem;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -36,6 +38,18 @@ public class BMDItems {
 
     public static final RegistryObject<Item> CHARGED_ENDER_PEARL = ITEMS.register("charged_ender_pearl",
             () -> new ChargedEnderPearlItem(new Item.Properties().fireResistant().stacksTo(1)));
+
+    public static void initClient(){
+        ItemProperties.register(EARTHDIVE_SPEAR.get(),
+                new ResourceLocation("throwing"),
+                (stack, level, entity, seed) -> {
+                    if (entity == null)
+                        return 0.0f;
+
+                    return (entity.isUsingItem() && entity.getUseItem() == stack) ? 1.0f : 0.0f;
+                });
+
+    }
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);

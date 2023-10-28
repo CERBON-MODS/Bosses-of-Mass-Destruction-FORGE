@@ -69,6 +69,7 @@ public class BossesOfMassDestruction {
         @SubscribeEvent
         protected static void onClientSetup(FMLClientSetupEvent event){
             BMDEntities.initClient();
+            BMDItems.initClient();
         }
 
         @SubscribeEvent
