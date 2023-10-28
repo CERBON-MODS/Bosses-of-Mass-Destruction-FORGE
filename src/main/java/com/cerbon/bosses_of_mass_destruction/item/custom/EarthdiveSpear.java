@@ -67,8 +67,8 @@ public class EarthdiveSpear extends Item {
     }
 
     @Override
-    public void releaseUsing(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity entity, int timeCharged) {
-        if (entity instanceof Player player)
+    public void releaseUsing(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity user, int timeCharged) {
+        if (user instanceof Player player)
             if (isCharged(stack, timeCharged))
                 if (!level.isClientSide() && level instanceof ServerLevel serverLevel)
                     if (new WallTeleport(serverLevel, player).tryTeleport(player.getLookAngle(), player.getEyePosition()) ||
