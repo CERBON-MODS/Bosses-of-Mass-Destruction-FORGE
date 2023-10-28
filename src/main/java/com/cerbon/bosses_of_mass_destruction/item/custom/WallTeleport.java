@@ -71,13 +71,6 @@ public class WallTeleport {
         entity.teleportTo(pos.x, pos.y, pos.z);
     }
 
-    private static class Context {
-        private final Vec3 direction;
-        private final Vec3 position;
-
-        public Context(Vec3 direction, Vec3 position) {
-            this.direction = direction;
-            this.position = position;
-        }
+    private record Context(Vec3 direction, Vec3 position) {
     }
 }
