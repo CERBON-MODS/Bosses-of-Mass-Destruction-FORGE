@@ -3,11 +3,19 @@ package com.cerbon.bosses_of_mass_destruction.entity;
 import com.cerbon.bosses_of_mass_destruction.animation.PauseAnimationTimer;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.WeakHashPredicate;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallOverlay;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallSizeRenderer;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeCodeAnimations;
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlEntity;
+import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
+import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.projectile.MagicMissileProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.PetalBladeProjectile;
+import com.cerbon.bosses_of_mass_destruction.projectile.SporeBallProjectile;
+import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.client.Minecraft;
@@ -15,7 +23,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.phys.Vec3;
@@ -38,6 +45,11 @@ public class BMDEntities {
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "charged_ender_pearl").toString()));
 
+    public static final RegistryObject<EntityType<SporeBallProjectile>> SPORE_BALL = ENTITY_TYPES.register("spore_ball",
+            () -> EntityType.Builder.of(SporeBallProjectile::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f)
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "spore_ball").toString()));
+
     public static final RegistryObject<EntityType<PetalBladeProjectile>> PETAL_BLADE = ENTITY_TYPES.register("petal_blade",
             () -> EntityType.Builder.of(PetalBladeProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
@@ -59,6 +71,36 @@ public class BMDEntities {
                                         new LerpedPosRenderer<>(vec3 -> ParticleFactories.soulFlame().build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), Vec3.ZERO)))),
                         entity -> missileTexture, new FullRenderLight<>()
                 ));
+
+        EntityRenderers.register(SPORE_BALL.get(), context -> {
+            SporeBallOverlay explosionFlasher = new SporeBallOverlay();
+            return new SimpleLivingGeoRenderer<>(
+                    context,
+                    new GeoModel<>(
+                            geoAnimatable -> new ResourceLocation(BMDConstants.MOD_ID, "geo/comet.geo.json"),
+                            entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/spore.png"),
+                            new ResourceLocation(BMDConstants.MOD_ID, "animations/comet.animation.json"),
+                            new SporeCodeAnimations(),
+                            RenderType::entityCutout),
+                    new FullRenderLight<>(),
+                    null,
+                    new CompositeRenderer<>(
+                            new ConditionalRenderer<>(
+                                    new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
+                                    new LerpedPosRenderer<>(vec3 -> {
+                                        ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.OBSIDILITH_BURST.get())
+                                                .color(BMDColors.GREEN)
+                                                .colorVariation(0.4)
+                                                .scale(0.5f)
+                                                .brightness(BMDParticles.FULL_BRIGHT);
+                                        projectileParticles.build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), VecUtils.yAxis.multiply(0.1, 0.1, 0.1));
+                                    })),
+                            explosionFlasher,
+                            new SporeBallSizeRenderer()),
+                    null,
+                    explosionFlasher,
+                    true);
+        });
 
         ResourceLocation petalTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/petal_blade.png");
         RenderType petalBladeRenderType = RenderType.entityCutoutNoCull(petalTexture);
