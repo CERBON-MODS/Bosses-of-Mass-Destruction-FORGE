@@ -7,6 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.client.render.*;
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlEntity;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.projectile.MagicMissileProjectile;
+import com.cerbon.bosses_of_mass_destruction.projectile.PetalBladeProjectile;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.phys.Vec3;
@@ -36,6 +38,11 @@ public class BMDEntities {
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "charged_ender_pearl").toString()));
 
+    public static final RegistryObject<EntityType<PetalBladeProjectile>> PETAL_BLADE = ENTITY_TYPES.register("petal_blade",
+            () -> EntityType.Builder.of(PetalBladeProjectile::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f)
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "petal_blade").toString()));
+
     public static void initClient(){
         PauseAnimationTimer pauseSecondTimer = new PauseAnimationTimer(Blaze3D::getTime, () -> Minecraft.getInstance().isPaused());
 
@@ -52,6 +59,18 @@ public class BMDEntities {
                                         new LerpedPosRenderer<>(vec3 -> ParticleFactories.soulFlame().build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), Vec3.ZERO)))),
                         entity -> missileTexture, new FullRenderLight<>()
                 ));
+
+        ResourceLocation petalTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/petal_blade.png");
+        RenderType petalBladeRenderType = RenderType.entityCutoutNoCull(petalTexture);
+        EntityRenderers.register(PETAL_BLADE.get(), context ->
+                new SimpleEntityRenderer<>(context,
+                        new CompositeRenderer<>(
+                                new PetalBladeRenderer(context.getEntityRenderDispatcher(), petalBladeRenderType),
+                                new ConditionalRenderer<>(
+                                        new WeakHashPredicate<>(() -> new FrameLimiter(30f, pauseSecondTimer)::canDoFrame),
+                                        new PetalBladeParticleRenderer<>()
+                                )),
+                        entity -> petalTexture, new FullRenderLight<>()));
     }
 
     public static void register(IEventBus eventBus){
