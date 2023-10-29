@@ -3,19 +3,46 @@ package com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.math.ReferencedAxisRotator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class MathUtils {
-    public static Vec3 lerpVec(float partialTicks, Vec3 vec1, Vec3 vec2) {
-        double x = Mth.lerp(partialTicks, vec1.x, vec2.x);
-        double y = Mth.lerp(partialTicks, vec1.y, vec2.y);
-        double z = Mth.lerp(partialTicks, vec1.z, vec2.z);
-        return new Vec3(x, y, z);
+    public static boolean withinDistance(Vec3 pos1, Vec3 pos2, double distance) {
+        if (distance < 0)
+            throw new IllegalArgumentException("Distance cannot be negative");
+
+        return pos1.distanceToSqr(pos2) < Math.pow(distance, 2.0);
+    }
+
+    public static boolean movingTowards(Vec3 center, Vec3 pos, Vec3 direction) {
+        Vec3 directionTo = unNormedDirection(pos, center);
+        return direction.dot(directionTo) > 0;
+    }
+
+    public static Vec3 unNormedDirection(Vec3 source, Vec3 target) {
+        return target.subtract(source);
+    }
+
+    /**
+     * Calls a function that linearly interpolates between two points. Includes both ends of the line
+     *
+     * Callback returns the position and the point number from 1 to points
+     */
+    public static void lineCallback(Vec3 start, Vec3 end, int points, java.util.function.BiConsumer<Vec3, Integer> callback) {
+        Vec3 dir = end.subtract(start).multiply(1.0 / (points - 1), 1.0 / (points - 1), 1.0 / (points - 1));
+        Vec3 pos = start;
+        for (int i = 0; i < points; i++) {
+            callback.accept(pos, i);
+            pos = pos.add(dir);
+        }
     }
 
     public static void circleCallback(double radius, int points, Vec3 axis, Consumer<Vec3> callback) {
@@ -31,11 +58,60 @@ public class MathUtils {
         }
     }
 
+    public static Collection<Vec3> circlePoints(double radius, int points, Vec3 axis) {
+        Collection<Vec3> vectors = new ArrayList<>();
+        circleCallback(radius, points, axis, vectors::add);
+        return vectors;
+    }
+
+    public static boolean willAABBFit(AABB aabb, Vec3 movement, Predicate<AABB> collision) {
+        AtomicBoolean collided = new AtomicBoolean(false);
+        int points = (int) Math.ceil(movement.length() / aabb.getSize());
+        lineCallback(Vec3.ZERO, movement, points, (vec3, integer) -> {
+            if (collision.test(aabb.move(vec3))) {
+                collided.set(true);
+            }
+        });
+        return !collided.get();
+    }
+
+    public static float directionToPitch(Vec3 direction) {
+        double x = direction.x;
+        double z = direction.z;
+        double y = direction.y;
+
+        double h = Math.sqrt(x * x + z * z);
+        return (float) Math.toDegrees(-Mth.atan2(y, h));
+    }
+
     public static double directionToYaw(Vec3 direction) {
         double x = direction.x();
         double z = direction.z();
 
         return Math.toDegrees(Mth.atan2(z, x));
+    }
+
+    public static Vec3 lerpVec(float partialTicks, Vec3 vec1, Vec3 vec2) {
+        double x = Mth.lerp(partialTicks, vec1.x, vec2.x);
+        double y = Mth.lerp(partialTicks, vec1.y, vec2.y);
+        double z = Mth.lerp(partialTicks, vec1.z, vec2.z);
+        return new Vec3(x, y, z);
+    }
+
+    public static Vec3 axisOffset(Vec3 direction, Vec3 offset) {
+        Vec3 forward = direction.normalize();
+        Vec3 side = forward.cross(VecUtils.yAxis).normalize();
+        Vec3 up = side.cross(forward).normalize();
+        return forward.multiply(offset.x, offset.x, offset.x).add(side.multiply(offset.z, offset.z, offset.z)).add(up.multiply(offset.y, offset.y, offset.y));
+    }
+
+    public static boolean facingSameDirection(Vec3 direction1, Vec3 direction2) {
+        return direction1.dot(direction2) > 0;
+    }
+
+    // https://www.wikihow.com/Add-Consecutive-Integers-from-1-to-100
+    public static int consecutiveSum(int firstNumber, int lastNumber) {
+        return ((lastNumber - firstNumber + 1) * (firstNumber + lastNumber) / 2);
     }
 
     public static float roundedStep(float n, List<Float> steps, boolean floor) {
@@ -56,6 +132,21 @@ public class MathUtils {
             }
             return steps.get(steps.size() - 1);
         }
+    }
+
+    public static List<Vec3> buildBlockCircle(double radius) {
+        int intRadius = (int) radius;
+        double radiusSq = radius * radius;
+        List<Vec3> points = new ArrayList<>();
+        for (int x = -intRadius; x <= intRadius; x++) {
+            for (int z = -intRadius; z <= intRadius; z++) {
+                Vec3 pos = new Vec3(x, 0.0, z);
+                if (pos.lengthSqr() <= radiusSq) {
+                    points.add(pos);
+                }
+            }
+        }
+        return points;
     }
 
     // https://www.geeksforgeeks.org/bresenhams-algorithm-for-3-d-line-drawing/
@@ -128,6 +219,15 @@ public class MathUtils {
             }
         }
         return points;
+    }
+
+    public static float ratioLerp(float time, float ratio, float maxAge, float partialTicks) {
+        assert ratio <= 1;
+        assert ratio >= 0;
+        assert maxAge > 0;
+
+        float currentTime = Mth.clamp((time + partialTicks) / maxAge, 0f, 1f);
+        return Math.max(0f, currentTime - ratio) / (1 - ratio);
     }
 
 }
