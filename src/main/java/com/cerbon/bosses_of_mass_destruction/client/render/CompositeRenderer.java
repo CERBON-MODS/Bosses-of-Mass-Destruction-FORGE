@@ -10,6 +10,7 @@ import java.util.List;
 public class CompositeRenderer<T extends Entity> implements IRenderer<T> {
     private final List<IRenderer<T>> rendererList;
 
+    @SafeVarargs
     public CompositeRenderer(IRenderer<T>... renderers) {
         this.rendererList = Arrays.asList(renderers);
     }

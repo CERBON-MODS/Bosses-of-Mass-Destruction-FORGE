@@ -11,8 +11,8 @@ public class ParticleFactories {
                 .scale(f -> 0.5f + f * 0.3f);
     }
 
-    public static void soulFlame(){
-        new ClientParticleBuilder(BMDParticles.SOUL_FLAME.get())
+    public static ClientParticleBuilder soulFlame(){
+        return new ClientParticleBuilder(BMDParticles.SOUL_FLAME.get())
                 .brightness(BMDParticles.FULL_BRIGHT);
     }
 }

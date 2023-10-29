@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class SimpleEntityRenderer<T extends Entity> extends EntityRenderer<T> {
+public class SimpleEntityRenderer<T extends Entity> extends EntityRenderer<T> {
     private final IRenderer<T> renderer;
     private final ITextureProvider<T> textureProvider;
     private final IRenderLight<T> brightness;
