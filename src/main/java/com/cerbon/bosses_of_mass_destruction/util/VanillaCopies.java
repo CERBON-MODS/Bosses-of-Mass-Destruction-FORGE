@@ -90,7 +90,7 @@ public class VanillaCopies {
         return oldAngle + f;
     }
 
-    public void handleClientSpawnEntity(Minecraft client, ClientboundAddEntityPacket packet) {
+    public static void handleClientSpawnEntity(Minecraft client, ClientboundAddEntityPacket packet) {
         double d = packet.getX();
         double e = packet.getY();
         double f = packet.getZ();
@@ -250,7 +250,7 @@ public class VanillaCopies {
         return vector3fs;
     }
 
-    public boolean destroyBlocks(Entity entity, AABB aabb) {
+    public static boolean destroyBlocks(Entity entity, AABB aabb) {
         int i = Mth.floor(aabb.minX);
         int j = Mth.floor(aabb.minY);
         int k = Mth.floor(aabb.minZ);
@@ -378,7 +378,7 @@ public class VanillaCopies {
         return new Vec3(d, e, f);
     }
 
-    public void onBreakInCreative(Level level, BlockPos pos, BlockState state, Player player) {
+    public static void onBreakInCreative(Level level, BlockPos pos, BlockState state, Player player) {
         DoubleBlockHalf doubleBlockHalf = state.getValue(DoublePlantBlock.HALF);
 
         if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
