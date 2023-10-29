@@ -48,7 +48,7 @@ public class BossesOfMassDestruction {
     }
 
     private void onCommonSetup(FMLCommonSetupEvent event){
-        BMDPacketHandler.register();
+        event.enqueueWork(BMDPacketHandler::register);
     }
 
     private void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
