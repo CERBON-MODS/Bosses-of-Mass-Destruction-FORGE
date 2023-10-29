@@ -9,6 +9,30 @@ public class VecUtils {
     public static final Vec3 zAxis = new Vec3(0.0, 0.0, 1.0);
     public static final Vec3 unit = new Vec3(1.0, 1.0, 1.0);
 
+    public static Vec3 yOffset(Vec3 vec, double i) {
+        return vec.add(0.0, i, 0.0);
+    }
+
+    public static Vec3 planeProject(Vec3 vec, Vec3 planeVector) {
+        return vec.subtract(planeVector.multiply(vec.dot(planeVector), vec.dot(planeVector), vec.dot(planeVector)));
+    }
+
+    public static Vec3 newVec3(double x, double y, double z) {
+        return new Vec3(x, y, z);
+    }
+
+    public static Vec3 newVec3d() {
+        return new Vec3(0.0, 0.0, 0.0);
+    }
+
+    public static Vec3 asVec3(BlockPos blockPos) {
+        return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public static Vec3 negateServer(Vec3 vec) {
+        return vec.multiply(-1.0, -1.0, -1.0);
+    }
+
     public static Vec3 coerceAtLeast(Vec3 vec1, Vec3 vec2) {
         return new Vec3(Math.max(vec1.x(), vec2.x()), Math.max(vec1.y(), vec2.y()), Math.max(vec1.z(), vec2.z()));
     }
@@ -17,12 +41,15 @@ public class VecUtils {
         return new Vec3(Math.min(vec1.x(), vec2.x()), Math.min(vec1.y(), vec2.y()), Math.min(vec1.z(), vec2.z()));
     }
 
-    public static Vec3 planeProject(Vec3 vec, Vec3 planeVector) {
-        return vec.subtract(planeVector.multiply(vec.dot(planeVector), vec.dot(planeVector), vec.dot(planeVector)));
-    }
+    public static double unsignedAngle(Vec3 vec, Vec3 b) {
+        double dot = vec.dot(b);
+        double lengths = vec.length() * b.length();
 
-    public static Vec3 asVec3(BlockPos blockPos) {
-        return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        if (lengths == 0.0)
+            return 0.0;
+
+        double cos = Math.max(-1.0, Math.min(1.0, dot / lengths));
+        return Math.toDegrees(Math.acos(cos));
     }
 
     public static Vec3 rotateVector(Vec3 vec, Vec3 axis, double degrees) {
@@ -39,16 +66,4 @@ public class VecUtils {
         double zPrime = w * (u * x + v * y + w * z) * (1.0 - Math.cos(theta)) + z * Math.cos(theta) + (-v * x + u * y) * Math.sin(theta);
         return new Vec3(xPrime, yPrime, zPrime);
     }
-
-    public static double unsignedAngle(Vec3 vec, Vec3 b) {
-        double dot = vec.dot(b);
-        double lengths = vec.length() * b.length();
-
-        if (lengths == 0.0)
-            return 0.0;
-
-        double cos = Math.max(-1.0, Math.min(1.0, dot / lengths));
-        return Math.toDegrees(Math.acos(cos));
-    }
-
 }
