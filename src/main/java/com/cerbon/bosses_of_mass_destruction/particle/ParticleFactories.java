@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.particle;
 
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities.MathUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 
 public class ParticleFactories {
     public static void cometTrail(){

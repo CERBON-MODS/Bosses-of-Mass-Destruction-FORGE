@@ -1,6 +1,6 @@
-package com.cerbon.bosses_of_mass_destruction.util.maelstrom.general.math;
+package com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.math;
 
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import net.minecraft.world.phys.Vec3;
 
 public class ReferencedAxisRotator {

@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.item.custom;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities.RandomUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Random;
 import java.util.function.Consumer;
 
 public class EarthdiveSpear extends Item {

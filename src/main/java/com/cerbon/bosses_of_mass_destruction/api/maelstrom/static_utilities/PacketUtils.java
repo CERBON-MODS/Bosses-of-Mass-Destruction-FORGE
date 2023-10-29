@@ -1,4 +1,4 @@
-package com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities;
+package com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;

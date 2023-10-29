@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.particle;
 
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities.RandomUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;

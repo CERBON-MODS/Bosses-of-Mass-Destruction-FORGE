@@ -1,6 +1,6 @@
-package com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities;
+package com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities;
 
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.general.math.ReferencedAxisRotator;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.math.ReferencedAxisRotator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;

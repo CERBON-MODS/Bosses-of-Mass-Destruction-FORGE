@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.util;
 
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import net.minecraft.world.phys.Vec3;
 
 public class BMDColors {

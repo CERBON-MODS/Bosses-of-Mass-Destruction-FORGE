@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.particle;
 
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.util.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -11,7 +11,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-import java.util.Random;
 import java.util.function.Function;
 
 public class SimpleParticle extends TextureSheetParticle {
