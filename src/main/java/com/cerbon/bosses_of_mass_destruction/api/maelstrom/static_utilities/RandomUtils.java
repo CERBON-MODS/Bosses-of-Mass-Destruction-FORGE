@@ -6,13 +6,28 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class RandomUtils {
+    private static final Random rand = new Random();
 
+    /**
+     * Creates a random value between -range and range
+     */
+    public double randomDouble(double range) {
+        return (rand.nextDouble() - 0.5) * 2 * range;
+    }
+
+    /**
+     * Chooses a random integer between the min (inclusive) and the max (exclusive)
+     *
+     * @param min
+     * @param max
+     * @return
+     */
     public static int range(int min, int max) {
         if (min > max) {
             throw new IllegalArgumentException("Minimum is greater than maximum");
         }
         int range = max - min;
-        return min + new Random().nextInt(range);
+        return min + rand.nextInt(range);
     }
 
     public static double range(double min, double max) {
@@ -20,19 +35,17 @@ public class RandomUtils {
             throw new IllegalArgumentException("Minimum is greater than maximum");
         }
         double range = max - min;
-        return min + Math.random() * range;
+        return min + rand.nextDouble() * range;
     }
 
+    public static Vec3 randVec(Supplier<Double> doubleSupplier) {
+        if (doubleSupplier == null)
+            doubleSupplier = () -> rand.nextDouble() - 0.5;
 
-
-    public static Vec3 randVec(Supplier<Double> rand) {
-        if (rand == null)
-            rand = () -> Math.random() - 0.5;
-
-        return new Vec3(rand.get(), rand.get(), rand.get());
+        return new Vec3(doubleSupplier.get(), doubleSupplier.get(), doubleSupplier.get());
     }
 
     public static int randSign() {
-        return (new Random().nextInt(2) == 0) ? 1 : -1;
+        return (rand.nextInt(2) == 0) ? 1 : -1;
     }
 }
