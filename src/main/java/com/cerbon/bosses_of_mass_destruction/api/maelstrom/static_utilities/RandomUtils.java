@@ -38,11 +38,12 @@ public class RandomUtils {
         return min + rand.nextDouble() * range;
     }
 
-    public static Vec3 randVec(Supplier<Double> doubleSupplier) {
-        if (doubleSupplier == null)
-            doubleSupplier = () -> rand.nextDouble() - 0.5;
+    public static Vec3 randVec(Supplier<Double> rand) {
+        return new Vec3(rand.get() - 0.5, rand.get() - 0.5, rand.get() - 0.5);
+    }
 
-        return new Vec3(doubleSupplier.get(), doubleSupplier.get(), doubleSupplier.get());
+    public static Vec3 randVec() {
+        return randVec(rand::nextDouble);
     }
 
     public static int randSign() {
