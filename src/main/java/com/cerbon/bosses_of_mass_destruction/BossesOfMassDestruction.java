@@ -30,8 +30,6 @@ public class BossesOfMassDestruction {
 
     public BossesOfMassDestruction() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::addCreativeTab);
-        modEventBus.addListener(this::onCommonSetup);
 
         BMDCreativeModeTabs.register(modEventBus);
         BMDItems.register(modEventBus);
@@ -47,19 +45,26 @@ public class BossesOfMassDestruction {
         AutoConfig.getConfigHolder(BMDConfig.class).save();
     }
 
-    private void onCommonSetup(FMLCommonSetupEvent event){
-        event.enqueueWork(BMDPacketHandler::register);
-    }
 
-    private void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
-        if (event.getTab() == BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION.get()) {
-            event.accept(BMDItems.ANCIENT_ANIMA);
-            event.accept(BMDItems.BLAZING_EYE);
-            event.accept(BMDItems.OBSIDIAN_HEART);
-            event.accept(BMDItems.EARTHDIVE_SPEAR.get());
-            event.accept(BMDItems.VOID_THORN);
-            event.accept(BMDItems.CRYSTAL_FRUIT);
-            event.accept(BMDItems.CHARGED_ENDER_PEARL);
+    @Mod.EventBusSubscriber(modid = BMDConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class CommonEvents {
+
+        @SubscribeEvent
+        protected static void onCommonSetup(FMLCommonSetupEvent event){
+            event.enqueueWork(BMDPacketHandler::register);
+        }
+
+        @SubscribeEvent
+        protected static void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
+            if (event.getTab() == BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION.get()) {
+                event.accept(BMDItems.ANCIENT_ANIMA);
+                event.accept(BMDItems.BLAZING_EYE);
+                event.accept(BMDItems.OBSIDIAN_HEART);
+                event.accept(BMDItems.EARTHDIVE_SPEAR.get());
+                event.accept(BMDItems.VOID_THORN);
+                event.accept(BMDItems.CRYSTAL_FRUIT);
+                event.accept(BMDItems.CHARGED_ENDER_PEARL);
+            }
         }
     }
 
