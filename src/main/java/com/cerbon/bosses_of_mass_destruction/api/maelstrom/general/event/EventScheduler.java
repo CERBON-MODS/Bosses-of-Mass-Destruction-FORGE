@@ -5,6 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Manages cancelable scheduled events to run in the future.
+ *
+ * Note that there is no persistence with this system (yet!). This means that long
+ * term events are not ideal.
+ */
 public class EventScheduler {
     private int ticks = 0;
     private final List<IEvent> eventQueue = new ArrayList<>();
