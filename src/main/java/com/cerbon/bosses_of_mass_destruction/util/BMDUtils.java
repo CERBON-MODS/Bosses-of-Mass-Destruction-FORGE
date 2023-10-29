@@ -21,7 +21,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -126,4 +128,9 @@ public class BMDUtils {
         Vec3 xzOffset = VecUtils.xAxis.yRot((float)Math.toRadians(age * rotationSpeed + startingRotation));
         return pos.add(xzOffset.multiply(radius, radius, radius));
     }
+
+    public static ConfiguredFeature<?, ?> getConfiguredFeature(LevelReader levelReader, ResourceKey<ConfiguredFeature<?, ?>> key) {
+        return levelReader.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).getOrThrow(key);
+    }
+
 }
