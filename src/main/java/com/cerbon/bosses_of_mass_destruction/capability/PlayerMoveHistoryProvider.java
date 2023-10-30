@@ -14,11 +14,9 @@ import java.util.List;
 @AutoRegisterCapability
 public class PlayerMoveHistoryProvider implements ICapabilityProvider {
     public static Capability<HistoricalData<Vec3>> HISTORICAL_DATA = CapabilityManager.get(new CapabilityToken<>() {});
+
     private HistoricalData<Vec3> positionalHistory;
-
     private final LazyOptional<HistoricalData<Vec3>> optional = LazyOptional.of(this::createHistoricalData);
-
-    public PlayerMoveHistoryProvider(){}
 
     private HistoricalData<Vec3> createHistoricalData(){
         if(this.positionalHistory == null)
