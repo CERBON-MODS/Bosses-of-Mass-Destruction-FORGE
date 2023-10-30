@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction;
 
+import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
@@ -15,6 +16,7 @@ import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -83,6 +85,13 @@ public class BossesOfMassDestruction {
 
     @Mod.EventBusSubscriber(modid = BMDConstants.MOD_ID)
     public static class ForgeEvents {
+
+        @SubscribeEvent
+        public static void onAttachCapabilitiesChunk(AttachCapabilitiesEvent<LevelChunk> event){
+            if (event.getObject() != null)
+                if (!event.getObject().getCapability(ChunkBlockCacheProvider.CHUNK_BLOCK_CACHE).isPresent())
+                    event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "chunk_block_cache_capability"), new ChunkBlockCacheProvider());
+        }
 
         @SubscribeEvent
         public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
