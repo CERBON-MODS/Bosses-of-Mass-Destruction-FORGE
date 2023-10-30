@@ -76,4 +76,9 @@ public class CometProjectile extends BaseThrownItemProjectile implements GeoEnti
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return animationFactory;
     }
+
+    @Override
+    public float getXRot() {
+        return tickCount * 5f;
+    }
 }
