@@ -25,8 +25,8 @@ public class BMDCapabilities {
         return level.getCapability(ChunkBlockCacheProvider.CHUNK_BLOCK_CACHE).resolve();
     }
 
-    public static Optional<EventScheduler> getLevelEventScheduler(Level level){
-        return level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).resolve();
+    public static EventScheduler getLevelEventScheduler(Level level){
+        return level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).resolve().orElse(null);
 
     }
 
