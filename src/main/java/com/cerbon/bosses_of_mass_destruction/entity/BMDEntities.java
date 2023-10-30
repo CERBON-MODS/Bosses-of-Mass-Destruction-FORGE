@@ -15,6 +15,8 @@ import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.projectile.MagicMissileProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.PetalBladeProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.SporeBallProjectile;
+import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometCodeAnimations;
+import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometProjectile;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.mojang.blaze3d.Blaze3D;
@@ -23,6 +25,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.phys.Vec3;
@@ -39,6 +42,11 @@ public class BMDEntities {
             () -> EntityType.Builder.of(MagicMissileProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "blue_fireball").toString()));
+
+    public static final RegistryObject<EntityType<CometProjectile>> COMET = ENTITY_TYPES.register("comet",
+            () -> EntityType.Builder.of(CometProjectile::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f)
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "comet").toString()));
 
     public static final RegistryObject<EntityType<ChargedEnderPearlEntity>> CHARGED_ENDER_PEARL = ENTITY_TYPES.register("charged_ender_pearl",
             () -> EntityType.Builder.of(ChargedEnderPearlEntity::new, MobCategory.MISC)
@@ -57,6 +65,29 @@ public class BMDEntities {
 
     public static void initClient(){
         PauseAnimationTimer pauseSecondTimer = new PauseAnimationTimer(Blaze3D::getTime, () -> Minecraft.getInstance().isPaused());
+
+        EntityRenderers.register(COMET.get(), context ->
+                new SimpleLivingGeoRenderer<>(
+                        context,
+                        new GeoModel<>(
+                                geoAnimatable -> new ResourceLocation(BMDConstants.MOD_ID, "geo/comet.geo.json"),
+                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/comet.png"),
+                                new ResourceLocation(BMDConstants.MOD_ID, "animations/comet.animation.json"),
+                                new CometCodeAnimations(),
+                                RenderType::entityCutout
+                        ),
+                        new FullRenderLight<>(),
+                        null,
+                        new ConditionalRenderer<>(
+                                new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
+                                new LerpedPosRenderer<>(
+                                        vec3 -> ParticleFactories.cometTrail().build(vec3.add(RandomUtils.randVec().multiply(0.5, 0.5, 0.5)), Vec3.ZERO)
+                                )
+                        ),
+                        null,
+                        null,
+                        true
+                ));
 
         EntityRenderers.register(CHARGED_ENDER_PEARL.get(), ThrownItemRenderer::new);
 
