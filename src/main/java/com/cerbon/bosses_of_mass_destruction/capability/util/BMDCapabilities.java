@@ -2,6 +2,8 @@ package com.cerbon.bosses_of_mass_destruction.capability.util;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
+import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
+import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.LevelEventSchedulerProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +19,10 @@ public class BMDCapabilities {
         return player.getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA)
                 .map(HistoricalData::getAll)
                 .orElse(Collections.emptyList());
+    }
+
+    public static Optional<ChunkBlockCache> getChunkBlockCache(Level level){
+        return level.getCapability(ChunkBlockCacheProvider.CHUNK_BLOCK_CACHE).resolve();
     }
 
     public static Optional<EventScheduler> getLevelEventScheduler(Level level){
