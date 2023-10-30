@@ -2,14 +2,11 @@ package com.cerbon.bosses_of_mass_destruction.capability;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 @AutoRegisterCapability
 public class PlayerMoveHistoryProvider implements ICapabilityProvider {
