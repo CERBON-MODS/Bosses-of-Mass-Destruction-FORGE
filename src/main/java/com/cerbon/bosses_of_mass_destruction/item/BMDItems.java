@@ -18,6 +18,8 @@ public class BMDItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, BMDConstants.MOD_ID);
 
+    // TODO: Add the Soul Star item
+
     public static final RegistryObject<Item> ANCIENT_ANIMA = ITEMS.register("ancient_anima",
             () -> new MaterialItem(new Item.Properties().rarity(Rarity.RARE)));
 
