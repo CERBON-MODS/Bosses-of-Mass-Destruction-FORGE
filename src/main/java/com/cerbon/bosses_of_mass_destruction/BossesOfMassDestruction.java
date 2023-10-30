@@ -1,6 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction;
 
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
+import com.cerbon.bosses_of_mass_destruction.capability.LevelEventSchedulerProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
@@ -16,6 +18,7 @@ import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -87,6 +90,14 @@ public class BossesOfMassDestruction {
     public static class ForgeEvents {
 
         @SubscribeEvent
+        public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event){
+            if (event.getObject() != null)
+                if (!event.getObject().getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).isPresent())
+                    event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "event_scheduler"), new LevelEventSchedulerProvider());
+
+        }
+
+        @SubscribeEvent
         public static void onAttachCapabilitiesChunk(AttachCapabilitiesEvent<LevelChunk> event){
             if (event.getObject() != null)
                 if (!event.getObject().getCapability(ChunkBlockCacheProvider.CHUNK_BLOCK_CACHE).isPresent())
@@ -114,6 +125,12 @@ public class BossesOfMassDestruction {
                     data.set(newPosition);
                 });
             }
+        }
+
+        @SubscribeEvent
+        public static void onLevelTick(TickEvent.LevelTickEvent event){
+            if (event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT)
+                event.level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
         }
     }
 
