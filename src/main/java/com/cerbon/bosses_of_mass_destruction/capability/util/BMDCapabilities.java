@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class BMDCapabilityUtil {
+public class BMDCapabilities {
     public static List<Vec3> getPlayerPositions(ServerPlayer player){
         return player.getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA)
                 .map(HistoricalData::getAll)
