@@ -109,7 +109,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
     }
 
     @Override
-    void entityHit(EntityHitResult entityHitResult) {
+    public void entityHit(EntityHitResult entityHitResult) {
         if (level().isClientSide()) return;
         Entity owner = getOwner();
         Entity entity = entityHitResult.getEntity();

@@ -35,7 +35,7 @@ public class PetalBladeProjectile extends BaseThrownItemProjectile{
     }
 
     @Override
-    void entityHit(EntityHitResult entityHitResult) {
+    public void entityHit(EntityHitResult entityHitResult) {
         Entity entity = entityHitResult.getEntity();
         Entity owner = getOwner();
 

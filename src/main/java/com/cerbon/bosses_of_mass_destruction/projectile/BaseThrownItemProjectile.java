@@ -53,7 +53,7 @@ public abstract class BaseThrownItemProjectile extends ThrowableItemProjectile {
             entityHit(entityHitResult);
     }
 
-    abstract void entityHit(EntityHitResult entityHitResult);
+    protected abstract void entityHit(EntityHitResult entityHitResult);
 
     @ForOverride
     public void clientTick() {}
