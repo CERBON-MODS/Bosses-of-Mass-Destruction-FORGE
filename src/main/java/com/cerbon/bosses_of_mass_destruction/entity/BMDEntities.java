@@ -28,6 +28,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -44,7 +45,7 @@ public class BMDEntities {
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "blue_fireball").toString()));
 
     public static final RegistryObject<EntityType<CometProjectile>> COMET = ENTITY_TYPES.register("comet",
-            () -> EntityType.Builder.of(CometProjectile::new, MobCategory.MISC)
+            () -> EntityType.Builder.<CometProjectile>of(CometProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "comet").toString()));
 
