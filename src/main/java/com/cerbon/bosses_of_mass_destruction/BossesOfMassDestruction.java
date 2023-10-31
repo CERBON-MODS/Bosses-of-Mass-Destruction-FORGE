@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 
 @Mod(BMDConstants.MOD_ID)
 public class BossesOfMassDestruction {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public BossesOfMassDestruction() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
