@@ -5,6 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 
 public class SimpleMobSpawner implements IMobSpawner {
     private final ServerLevel serverLevel;
@@ -17,7 +18,7 @@ public class SimpleMobSpawner implements IMobSpawner {
     public void spawn(Vec3 pos, Entity entity) {
         entity.setPos(pos);
         if (entity instanceof Mob) {
-            ((Mob) entity).finalizeSpawn(serverLevel,
+            ForgeEventFactory.onFinalizeSpawn((Mob) entity, serverLevel,
                     serverLevel.getCurrentDifficultyAt(entity.blockPosition()),
                     MobSpawnType.MOB_SUMMONED,
                     null,
