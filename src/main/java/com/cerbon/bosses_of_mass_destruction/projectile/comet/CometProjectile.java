@@ -30,7 +30,7 @@ public class CometProjectile extends BaseThrownItemProjectile implements GeoEnti
         super(entityType, level);
     }
 
-    protected CometProjectile(LivingEntity livingEntity, Level level, Consumer<Vec3> impactAction, List<EntityType<?>> exemptEntities){
+    public CometProjectile(LivingEntity livingEntity, Level level, Consumer<Vec3> impactAction, List<EntityType<?>> exemptEntities){
         super(BMDEntities.COMET.get(), livingEntity, level, new ExemptEntities(exemptEntities));
         this.impactAction = impactAction;
     }
