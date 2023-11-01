@@ -25,11 +25,11 @@ public class MinionAction implements IActionWithCooldown {
     private final LichEntity entity;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
-    private static final int minionSummonCooldown = 80;
-    private static final int minionSummonDelay = 40;
-    private static final int minionRuneToMinionSpawnDelay = 40;
-    private static final String summonId = "minecraft:phantom";
-    private static final CompoundTag summonNbt;
+    public static final int minionSummonCooldown = 80;
+    public static final int minionSummonDelay = 40;
+    public static final int minionRuneToMinionSpawnDelay = 40;
+    public static final String summonId = "minecraft:phantom";
+    public static final CompoundTag summonNbt;
 
     static {
         try {
