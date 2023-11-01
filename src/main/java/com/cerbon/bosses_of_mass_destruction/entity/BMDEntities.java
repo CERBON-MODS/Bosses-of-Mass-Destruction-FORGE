@@ -5,6 +5,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.WeakHash
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
+import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichKillCounter;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallOverlay;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallSizeRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeCodeAnimations;
@@ -21,6 +23,7 @@ import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometProjectile;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.mojang.blaze3d.Blaze3D;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -36,6 +39,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BMDEntities {
+    private static final BMDConfig mobConfig = AutoConfig.getConfigHolder(BMDConfig.class).getConfig();
+
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BMDConstants.MOD_ID);
 
@@ -63,6 +68,8 @@ public class BMDEntities {
             () -> EntityType.Builder.of(PetalBladeProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "petal_blade").toString()));
+
+    public static LichKillCounter killCounter = new LichKillCounter(mobConfig.lichConfig.summonMechanic);
 
     public static void initClient(){
         PauseAnimationTimer pauseSecondTimer = new PauseAnimationTimer(Blaze3D::getTime, () -> Minecraft.getInstance().isPaused());

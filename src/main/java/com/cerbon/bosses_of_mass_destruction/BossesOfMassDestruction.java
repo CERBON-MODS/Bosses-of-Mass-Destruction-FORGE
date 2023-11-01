@@ -27,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -42,6 +43,10 @@ public class BossesOfMassDestruction {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public BossesOfMassDestruction() {
+        AutoConfig.register(BMDConfig.class, JanksonConfigSerializer::new);
+        AutoConfig.getConfigHolder(BMDConfig.class).getConfig().postInit();
+        AutoConfig.getConfigHolder(BMDConfig.class).save();
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         BMDCreativeModeTabs.register(modEventBus);
@@ -52,10 +57,6 @@ public class BossesOfMassDestruction {
         BMDParticles.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
-
-        AutoConfig.register(BMDConfig.class, JanksonConfigSerializer::new);
-        AutoConfig.getConfigHolder(BMDConfig.class).getConfig().postInit();
-        AutoConfig.getConfigHolder(BMDConfig.class).save();
     }
 
 
@@ -128,6 +129,14 @@ public class BossesOfMassDestruction {
         public static void onLevelTick(TickEvent.LevelTickEvent event){
             if (event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT)
                 event.level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
+        }
+
+        @SubscribeEvent
+        public static void onLivingDeath(LivingDeathEvent event){
+            Entity attacker = event.getSource().getEntity();
+
+            if (attacker != null)
+                BMDEntities.killCounter.afterKilledOtherEntity(attacker, event.getEntity());
         }
     }
 
