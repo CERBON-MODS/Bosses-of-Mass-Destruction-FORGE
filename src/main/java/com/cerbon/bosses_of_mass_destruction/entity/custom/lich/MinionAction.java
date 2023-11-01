@@ -26,6 +26,7 @@ public class MinionAction implements IActionWithCooldown {
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
     public static final int minionSummonCooldown = 80;
+    public static final int minionSummonParticleDelay = 10;
     public static final int minionSummonDelay = 40;
     public static final int minionRuneToMinionSpawnDelay = 40;
     public static final String summonId = "minecraft:phantom";
