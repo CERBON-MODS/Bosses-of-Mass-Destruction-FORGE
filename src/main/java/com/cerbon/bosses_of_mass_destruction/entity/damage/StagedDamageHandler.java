@@ -10,10 +10,10 @@ import java.util.function.Supplier;
 
 public class StagedDamageHandler implements IDamageHandler {
     private final List<Float> hpPercentRageModes;
-    private final Supplier<Void> whenHpBelowThreshold;
+    private final Runnable whenHpBelowThreshold;
     private float previousHpRatio = 1.0f;
 
-    public StagedDamageHandler(List<Float> hpPercentRageModes, Supplier<Void> whenHpBelowThreshold) {
+    public StagedDamageHandler(List<Float> hpPercentRageModes, Runnable whenHpBelowThreshold) {
         this.hpPercentRageModes = hpPercentRageModes;
         this.whenHpBelowThreshold = whenHpBelowThreshold;
     }
@@ -29,7 +29,7 @@ public class StagedDamageHandler implements IDamageHandler {
         float firstRageMode = MathUtils.roundedStep(previousHpRatio, hpPercentRageModes, false);
         float secondRageMode = MathUtils.roundedStep(newHpRatio, hpPercentRageModes, false);
         if (firstRageMode != secondRageMode) {
-            whenHpBelowThreshold.get();
+            whenHpBelowThreshold.run();
         }
     }
 
