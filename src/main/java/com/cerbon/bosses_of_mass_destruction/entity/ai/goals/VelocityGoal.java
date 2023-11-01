@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 import java.util.function.Consumer;
 
-public abstract class VelocityGoal extends Goal {
+public class VelocityGoal extends Goal {
     private final Consumer<Vec3> onTargetSelected;
     private final ISteering steering;
     private final ITargetSelector targetSelector;
