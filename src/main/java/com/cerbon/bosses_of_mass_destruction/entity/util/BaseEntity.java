@@ -28,7 +28,7 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
     private final EntityType<? extends PathfinderMob> entityType;
     private final Level level;
     private AnimatableInstanceCache animationFactory = null;
-    protected Vec3 idlePosition = Vec3.ZERO;
+    public Vec3 idlePosition = Vec3.ZERO;
     protected ServerBossEvent bossBar = null;
     protected IDamageHandler damageHandler = null;
     protected IEntityEventHandler entityEventHandler = null;
