@@ -87,10 +87,10 @@ public class CometRageAction implements IActionWithCooldown {
         );
     }
 
-    private static final int numCometsDuringRage = 6;
-    private static final int initialRageCometDelay = 60;
-    private static final int delayBetweenRageComets = 30;
-    private static final int rageCometsMoveDuration = initialRageCometDelay + (numCometsDuringRage * delayBetweenRageComets);
+    public static final int numCometsDuringRage = 6;
+    public static final int initialRageCometDelay = 60;
+    public static final int delayBetweenRageComets = 30;
+    public static final int rageCometsMoveDuration = initialRageCometDelay + (numCometsDuringRage * delayBetweenRageComets);
 
     public static List<Vec3> getRageCometOffsets(LichEntity entity) {
         List<Vec3> offsets = new ArrayList<>();
