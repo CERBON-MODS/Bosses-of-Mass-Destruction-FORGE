@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.function.Supplier;
 
-public abstract class ActionGoal extends Goal {
+public class ActionGoal extends Goal {
     private final Supplier<Boolean> hasTarget;
     private final Supplier<Boolean> canContinue;
     private IAction tickAction = () -> {};
