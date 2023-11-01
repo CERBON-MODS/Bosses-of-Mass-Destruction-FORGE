@@ -11,7 +11,7 @@ public class RandomUtils {
     /**
      * Creates a random value between -range and range
      */
-    public double randomDouble(double range) {
+    public static double randomDouble(double range) {
         return (rand.nextDouble() - 0.5) * 2 * range;
     }
 
