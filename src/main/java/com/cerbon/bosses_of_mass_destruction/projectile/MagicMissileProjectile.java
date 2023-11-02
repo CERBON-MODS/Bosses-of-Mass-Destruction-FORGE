@@ -23,7 +23,7 @@ public class MagicMissileProjectile extends BaseThrownItemProjectile {
         super(entityType, level);
     }
 
-    protected MagicMissileProjectile(LivingEntity livingEntity, Level level, Consumer<LivingEntity> entityHit, List<EntityType<?>> exemptEntities) {
+    public MagicMissileProjectile(LivingEntity livingEntity, Level level, Consumer<LivingEntity> entityHit, List<EntityType<?>> exemptEntities) {
         super(BMDEntities.MAGIC_MISSILE.get(), livingEntity, level, new ExemptEntities(exemptEntities));
         this.entityHit = entityHit;
     }

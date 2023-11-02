@@ -45,7 +45,7 @@ public class BMDEntities {
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BMDConstants.MOD_ID);
 
     public static final RegistryObject<EntityType<MagicMissileProjectile>> MAGIC_MISSILE = ENTITY_TYPES.register("blue_fireball",
-            () -> EntityType.Builder.of(MagicMissileProjectile::new, MobCategory.MISC)
+            () -> EntityType.Builder.<MagicMissileProjectile>of(MagicMissileProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "blue_fireball").toString()));
 
