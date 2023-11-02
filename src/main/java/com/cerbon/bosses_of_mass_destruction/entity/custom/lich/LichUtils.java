@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LichUtils {
@@ -22,13 +23,13 @@ public class LichUtils {
         return (currentTime - (currentTime % dayLength)) + midnight;
     }
 
-    public static void cappedHeal(IEntity iEntity, IEntityStats stats, List<Float> hpPercentRageModes, float healingStrength, Function<Float, Void> heal) {
+    public static void cappedHeal(IEntity iEntity, IEntityStats stats, List<Float> hpPercentRageModes, float healingStrength, Consumer<Float> heal) {
         if (iEntity.isAlive()) {
             float targetHealthRatio = MathUtils.roundedStep(stats.getHealth() / stats.getMaxHealth(), hpPercentRageModes, false);
             float healAmt = Mth.clamp(targetHealthRatio * stats.getMaxHealth() - stats.getHealth() - 1, 0f, healingStrength);
 
             if (healAmt > 0) {
-                heal.apply(healAmt);
+                heal.accept(healAmt);
             }
         }
     }
