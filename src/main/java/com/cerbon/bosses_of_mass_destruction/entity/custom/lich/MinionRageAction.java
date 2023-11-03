@@ -21,7 +21,7 @@ public class MinionRageAction implements IActionWithCooldown {
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
     private final MinionAction minionAction;
-    private List<Integer> delayTimes;
+    private List<Integer> delayTimes = List.of();
     private final int totalMoveTime;
 
     public MinionRageAction(LichEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel, MinionAction minionAction) {

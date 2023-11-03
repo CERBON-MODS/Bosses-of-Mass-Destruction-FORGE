@@ -17,6 +17,8 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -27,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -81,6 +84,15 @@ public class BossesOfMassDestruction {
             }
         }
 
+        @SubscribeEvent
+        public static void entityAttributeEvent(EntityAttributeCreationEvent event){
+            event.put(BMDEntities.LICH.get(), Mob.createMobAttributes()
+                    .add(Attributes.FLYING_SPEED, 5.0)
+                    .add(Attributes.MAX_HEALTH, BMDEntities.mobConfig.lichConfig.health)
+                    .add(Attributes.FOLLOW_RANGE, 64)
+                    .add(Attributes.ATTACK_DAMAGE, BMDEntities.mobConfig.lichConfig.missile.damage)
+                    .build());
+        }
 
     }
 

@@ -6,7 +6,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Rand
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
-import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichKillCounter;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.*;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallOverlay;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallSizeRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeCodeAnimations;
@@ -31,7 +31,6 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -39,10 +38,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BMDEntities {
-    private static final BMDConfig mobConfig = AutoConfig.getConfigHolder(BMDConfig.class).getConfig();
+    public static final BMDConfig mobConfig = AutoConfig.getConfigHolder(BMDConfig.class).getConfig();
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BMDConstants.MOD_ID);
+
+    public static final RegistryObject<EntityType<LichEntity>> LICH = ENTITY_TYPES.register("lich",
+            () -> EntityType.Builder.of(LichEntity::new, MobCategory.MONSTER)
+                    .sized(1.8f, 3.0f)
+                    .setUpdateInterval(1)
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "lich").toString()));
 
     public static final RegistryObject<EntityType<MagicMissileProjectile>> MAGIC_MISSILE = ENTITY_TYPES.register("blue_fireball",
             () -> EntityType.Builder.<MagicMissileProjectile>of(MagicMissileProjectile::new, MobCategory.MISC)
@@ -73,6 +78,26 @@ public class BMDEntities {
 
     public static void initClient(){
         PauseAnimationTimer pauseSecondTimer = new PauseAnimationTimer(Blaze3D::getTime, () -> Minecraft.getInstance().isPaused());
+
+        EntityRenderers.register(LICH.get(), context -> {
+            ResourceLocation texture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/lich.png");
+            return new SimpleLivingGeoRenderer<>(
+                    context,
+                    new GeoModel<>(
+                            lichEntity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/lich.geo.json"),
+                            entity -> texture,
+                            new ResourceLocation(BMDConstants.MOD_ID, "animations/lich.animation.json"),
+                            new LichCodeAnimations(),
+                            RenderType::entityCutoutNoCull
+                    ),
+                    new BoundedLighting<>(5),
+                    new LichBoneLight(),
+                    new EternalNightRenderer(),
+                    null,
+                    null,
+                    true
+            );
+        });
 
         EntityRenderers.register(COMET.get(), context ->
                 new SimpleLivingGeoRenderer<>(
