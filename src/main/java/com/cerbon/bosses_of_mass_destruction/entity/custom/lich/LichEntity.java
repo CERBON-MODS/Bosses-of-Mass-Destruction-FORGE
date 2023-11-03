@@ -202,7 +202,7 @@ public class LichEntity extends BaseEntity {
                 )
         );
 
-         level().getEntitiesOfClass(Phantom.class, new AABB(blockPosition()).expandTowards(100.0, 100.0, 100.0)).forEach(Phantom::kill);
+         level().getEntitiesOfClass(Phantom.class, new AABB(blockPosition()).inflate(100.0, 100.0, 100.0)).forEach(Phantom::kill);
 
          super.die(damageSource);
     }
