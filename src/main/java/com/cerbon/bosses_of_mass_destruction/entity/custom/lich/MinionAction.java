@@ -74,7 +74,7 @@ public class MinionAction implements IActionWithCooldown {
         MobEntitySpawnPredicate spawnPredicate = new MobEntitySpawnPredicate(target.level());
         IMobSpawner summonCircleBeforeSpawn = (pos, summon) -> {
             BMDUtils.spawnParticle(target.serverLevel(), BMDParticles.MAGIC_CIRCLE.get(), pos, Vec3.ZERO, 0, 0.0);
-            BMDUtils.playSound(target.serverLevel(), pos, BMDSounds.MINION_RUNE.get(), SoundSource.HOSTILE, 1.0f, null);
+            BMDUtils.playSound(target.serverLevel(), pos, BMDSounds.MINION_RUNE.get(), SoundSource.HOSTILE, 1.0f, 64, null);
             eventScheduler.addEvent(new TimedEvent(() -> {
                 mobSpawner.spawn(pos, summon);
                 entity.playSound(BMDSounds.MINION_SUMMON.get(), 0.7f, 1.0f);

@@ -58,10 +58,9 @@ public class BMDUtils {
             SoundSource soundSource,
             float volume,
             float pitch,
+            double range,
             Player player
     ) {
-        double range = volume > 1.0f ? 16.0f * volume : 16.0;
-
         Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(soundEvent.getLocation()));
         level.getServer().getPlayerList().broadcast(
                 player,
@@ -80,9 +79,10 @@ public class BMDUtils {
             SoundEvent soundEvent,
             SoundSource soundSource,
             float volume,
+            double range,
             Player player
     ) {
-        playSound(level, pos, soundEvent, soundSource, volume, randomPitch(level.random), player);
+        playSound(level, pos, soundEvent, soundSource, volume, randomPitch(level.random), range, player);
     }
 
     public static float randomPitch(@NotNull RandomSource random) {

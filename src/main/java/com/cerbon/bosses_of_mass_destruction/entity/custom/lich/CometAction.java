@@ -57,6 +57,7 @@ public class CometAction implements IActionWithCooldown {
                         BMDSounds.COMET_PREPARE.get(),
                         SoundSource.HOSTILE,
                         3.0f,
+                        64.0,
                         null
                 ),
                 10,
@@ -74,6 +75,7 @@ public class CometAction implements IActionWithCooldown {
                     BMDSounds.COMET_SHOOT.get(),
                     SoundSource.HOSTILE,
                     3.0f,
+                    64.0,
                     null);
             },
                 cometThrowDelay,

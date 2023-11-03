@@ -69,12 +69,12 @@ public class TeleportAction implements IActionWithCooldown {
                 spawnPredicate,
                 (pos, e) -> {
                     eventScheduler.addEvent(new TimedEvent(() -> {
-                        BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.TELEPORT_PREPARE.get(), SoundSource.HOSTILE, 3.0f, null);
+                        BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.TELEPORT_PREPARE.get(), SoundSource.HOSTILE, 3.0f, 64, null);
                         entity.collides = false;
                         eventScheduler.addEvent(new TimedEvent(() -> {
                             e.teleportTo(pos.x, pos.y, pos.z);
                             e.level().broadcastEntityEvent(e, LichActions.endTeleport);
-                            BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.LICH_TELEPORT.get(), SoundSource.HOSTILE, 2.0f, null);
+                            BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.LICH_TELEPORT.get(), SoundSource.HOSTILE, 2.0f, 64, null);
                             entity.collides = true;
                         }, teleportDelay - teleportStartSoundDelay));
                     }, teleportStartSoundDelay, 1, shouldCancel));

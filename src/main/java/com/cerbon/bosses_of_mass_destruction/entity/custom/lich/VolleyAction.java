@@ -83,6 +83,7 @@ public class VolleyAction implements IActionWithCooldown {
                                     BMDSounds.MISSILE_SHOOT.get(),
                                     SoundSource.HOSTILE,
                                     3.0f,
+                                    64,
                                     null
                             );
                         },

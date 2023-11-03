@@ -68,6 +68,7 @@ public class CometRageAction implements IActionWithCooldown {
                         BMDSounds.COMET_SHOOT.get(),
                         SoundSource.HOSTILE,
                         3.0f,
+                        64,
                         null
                 );
             },
@@ -83,6 +84,7 @@ public class CometRageAction implements IActionWithCooldown {
                 BMDSounds.RAGE_PREPARE.get(),
                 SoundSource.HOSTILE,
                 1.0f,
+                64,
                 null
         );
     }
