@@ -68,6 +68,7 @@ public class VolleyRageAction implements IActionWithCooldown {
                             return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
                         });
 
+        BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.MISSILE_PREPARE.get(), SoundSource.HOSTILE, 4.0f, 64, null);
         for (int i = 0; i < rageMissileVolleys; i++){
             int i1 = i;
             eventScheduler.addEvent(

@@ -92,6 +92,23 @@ public class VolleyAction implements IActionWithCooldown {
                         shouldCancel
                 )
         );
+
+        eventScheduler.addEvent(
+                new TimedEvent(
+                        () -> BMDUtils.playSound(
+                                target.serverLevel(),
+                                entity.position(),
+                                BMDSounds.MISSILE_PREPARE.get(),
+                                SoundSource.HOSTILE,
+                                4.0f,
+                                64,
+                                null
+                        ),
+                        10,
+                        1,
+                        shouldCancel
+                )
+        );
     }
 
     public static List<Vec3> getMissileLaunchOffsets(Entity entity) {
