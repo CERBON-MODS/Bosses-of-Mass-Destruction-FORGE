@@ -4,10 +4,10 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
-import com.cerbon.bosses_of_mass_destruction.util.CollectionUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -21,7 +21,7 @@ public class MinionRageAction implements IActionWithCooldown {
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
     private final MinionAction minionAction;
-    private List<Integer> delayTimes = List.of();
+    private final List<Integer> delayTimes = new ArrayList<>();
     private final int totalMoveTime;
 
     public MinionRageAction(LichEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel, MinionAction minionAction) {
@@ -30,12 +30,10 @@ public class MinionRageAction implements IActionWithCooldown {
         this.shouldCancel = shouldCancel;
         this.minionAction = minionAction;
 
-        for (int i = 0; i < numMobs; i++){
-            this.delayTimes = CollectionUtils.mapIndexed(CollectionUtils.map(delayTimes, integer -> MathUtils.consecutiveSum(0, integer)),
-                    (index, i1) -> initialSpawnTimeCooldown + (index * initialBetweenSpawnDelay) - (i1 * spawnDelayDecrease));
-        }
+        for (int i = 0; i < numMobs; i++)
+            delayTimes.add(initialSpawnTimeCooldown + (i * initialBetweenSpawnDelay) - (MathUtils.consecutiveSum(0, i) * spawnDelayDecrease));
 
-        this.totalMoveTime = !delayTimes.isEmpty() ? delayTimes.get(delayTimes.size() - 1) + MinionAction.minionRuneToMinionSpawnDelay : 0;
+        this.totalMoveTime = delayTimes.get(delayTimes.size() - 1) + MinionAction.minionRuneToMinionSpawnDelay;
     }
 
     @Override
