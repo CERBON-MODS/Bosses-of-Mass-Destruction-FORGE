@@ -68,9 +68,11 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event){
-        Entity attacker = event.getSource().getEntity();
+        if (BMDEntities.mobConfig.lichConfig.summonMechanic.isEnabled){
+            Entity attacker = event.getSource().getEntity();
 
-        if (attacker != null)
-            BMDEntities.killCounter.afterKilledOtherEntity(attacker, event.getEntity());
+            if (attacker != null)
+                BMDEntities.killCounter.afterKilledOtherEntity(attacker, event.getEntity());
+        }
     }
 }
