@@ -46,7 +46,7 @@ public class BMDEntities {
     public static final RegistryObject<EntityType<LichEntity>> LICH = ENTITY_TYPES.register("lich",
             () -> EntityType.Builder.of(LichEntity::new, MobCategory.MONSTER)
                     .sized(1.8f, 3.0f)
-                    .setUpdateInterval(1)
+                    .updateInterval(1)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "lich").toString()));
 
     public static final RegistryObject<EntityType<MagicMissileProjectile>> MAGIC_MISSILE = ENTITY_TYPES.register("blue_fireball",
