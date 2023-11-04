@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.util;
 
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
@@ -23,7 +24,7 @@ public class EntityAdapter implements IEntity {
 
     @Override
     public Vec3 getEyePos() {
-        return entity.getEyePosition();
+        return MobUtils.eyePos(entity);
     }
 
     @Override
