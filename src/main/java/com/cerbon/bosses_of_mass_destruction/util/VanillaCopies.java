@@ -47,7 +47,7 @@ public class VanillaCopies {
         if (entity.isInWater()) {
             entity.moveRelative(0.02F, relative);
             entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.8, 0.8, 0.8));
+            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.800000011920929, 0.800000011920929, 0.800000011920929));
 
         } else if (entity.isInLava()) {
             entity.moveRelative(0.02F, relative);
@@ -55,7 +55,7 @@ public class VanillaCopies {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5));
 
         } else {
-            float friction = entity.onGround() ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY(), entity.getZ())).getBlock()
+            float friction = entity.onGround() ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock()
                     .getFriction() * baseFrictionCoefficient : baseFrictionCoefficient;
             float g = 0.16277137F / (friction * friction * friction);
 
