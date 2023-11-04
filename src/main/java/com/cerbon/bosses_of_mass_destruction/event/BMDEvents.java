@@ -6,8 +6,6 @@ import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -44,6 +42,11 @@ public class BMDEvents {
         }
 
         @SubscribeEvent
+        public static void entityAttributeEvent(EntityAttributeCreationEvent event){
+            BMDEntities.createAttributes(event);
+        }
+
+        @SubscribeEvent
         protected static void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
             if (event.getTab() == BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION.get()) {
                 event.accept(BMDItems.ANCIENT_ANIMA);
@@ -54,16 +57,6 @@ public class BMDEvents {
                 event.accept(BMDItems.CRYSTAL_FRUIT);
                 event.accept(BMDItems.CHARGED_ENDER_PEARL);
             }
-        }
-
-        @SubscribeEvent
-        public static void entityAttributeEvent(EntityAttributeCreationEvent event){
-            event.put(BMDEntities.LICH.get(), Mob.createMobAttributes()
-                    .add(Attributes.FLYING_SPEED, 5.0)
-                    .add(Attributes.MAX_HEALTH, BMDEntities.mobConfig.lichConfig.health)
-                    .add(Attributes.FOLLOW_RANGE, 64)
-                    .add(Attributes.ATTACK_DAMAGE, BMDEntities.mobConfig.lichConfig.missile.damage)
-                    .build());
         }
     }
 }

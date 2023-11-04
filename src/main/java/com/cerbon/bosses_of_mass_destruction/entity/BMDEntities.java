@@ -30,8 +30,11 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -75,6 +78,15 @@ public class BMDEntities {
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "petal_blade").toString()));
 
     public static LichKillCounter killCounter = new LichKillCounter(mobConfig.lichConfig.summonMechanic);
+
+    public static void createAttributes(EntityAttributeCreationEvent event){
+        event.put(BMDEntities.LICH.get(), Mob.createMobAttributes()
+                .add(Attributes.FLYING_SPEED, 5.0)
+                .add(Attributes.MAX_HEALTH, BMDEntities.mobConfig.lichConfig.health)
+                .add(Attributes.FOLLOW_RANGE, 64)
+                .add(Attributes.ATTACK_DAMAGE, BMDEntities.mobConfig.lichConfig.missile.damage)
+                .build());
+    }
 
     public static void initClient(){
         PauseAnimationTimer pauseSecondTimer = new PauseAnimationTimer(Blaze3D::getTime, () -> Minecraft.getInstance().isPaused());
