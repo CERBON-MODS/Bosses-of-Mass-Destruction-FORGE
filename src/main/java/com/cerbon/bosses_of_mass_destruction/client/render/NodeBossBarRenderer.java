@@ -38,7 +38,7 @@ public class NodeBossBarRenderer {
 
             int i = (int) (bossEvent.getProgress() * 183.0f);
             if (i > 0){
-                float progressLocation = bossEvent.getColor().ordinal() * 5 * 2 * 5f;
+                float progressLocation = bossEvent.getColor().ordinal() * 5 * 2 + 5f;
                 guiGraphics.blit(
                         texture, x, y, 0f, progressLocation, i, 5,
                         textureSize,
