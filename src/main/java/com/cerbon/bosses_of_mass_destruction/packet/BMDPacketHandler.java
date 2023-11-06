@@ -1,6 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.packet;
 
 import com.cerbon.bosses_of_mass_destruction.packet.custom.ChargedEnderPearlS2CPacket;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -34,6 +35,12 @@ public class BMDPacketHandler {
                 .decoder(ChargedEnderPearlS2CPacket::new)
                 .encoder(ChargedEnderPearlS2CPacket::write)
                 .consumerMainThread(ChargedEnderPearlS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(SendDeltaMovementS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SendDeltaMovementS2CPacket::new)
+                .encoder(SendDeltaMovementS2CPacket::write)
+                .consumerMainThread(SendDeltaMovementS2CPacket::handle)
                 .add();
     }
 
