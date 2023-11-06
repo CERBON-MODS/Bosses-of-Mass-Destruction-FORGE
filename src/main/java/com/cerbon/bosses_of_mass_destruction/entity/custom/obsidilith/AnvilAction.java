@@ -24,10 +24,14 @@ import java.util.function.Supplier;
 public class AnvilAction implements IActionWithCooldown {
     private final Mob actor;
     private final float explosionPower;
+    private final EventScheduler eventScheduler;
+    private final List<Vec3> circlePoints;
 
     public AnvilAction(Mob actor, float explosionPower){
         this.actor = actor;
         this.explosionPower = explosionPower;
+        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(actor.level());
+        this.circlePoints = MathUtils.buildBlockCircle(2.0);
     }
 
     @Override
@@ -40,9 +44,6 @@ public class AnvilAction implements IActionWithCooldown {
     }
 
     private void performAttack(LivingEntity target, ServerLevel level){
-        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(actor.level());
-        List<Vec3> circlePoints = MathUtils.buildBlockCircle(2.0);
-
         BMDUtils.playSound(level, actor.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 1.0f, 64.0f, null);
 
         eventScheduler.addEvent(

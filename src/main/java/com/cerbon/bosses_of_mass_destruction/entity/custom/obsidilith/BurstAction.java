@@ -23,11 +23,15 @@ import java.util.List;
 
 public class BurstAction implements IActionWithCooldown {
     private final LivingEntity entity;
+    private final EventScheduler eventScheduler;
+    private final List<Vec3> circlePoints;
 
     public static int burstDelay = 30;
 
     public BurstAction(LivingEntity entity){
         this.entity = entity;
+        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
+        this.circlePoints = MathUtils.buildBlockCircle(7.0);
     }
 
     @Override
@@ -37,10 +41,7 @@ public class BurstAction implements IActionWithCooldown {
     }
 
     private void placeRifts(){
-        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
-        List<Vec3> circlePoints = MathUtils.buildBlockCircle(7.0);
         Level level = entity.level();
-
         RiftBurst riftBurst = new RiftBurst(
                 entity,
                 (ServerLevel) level,
