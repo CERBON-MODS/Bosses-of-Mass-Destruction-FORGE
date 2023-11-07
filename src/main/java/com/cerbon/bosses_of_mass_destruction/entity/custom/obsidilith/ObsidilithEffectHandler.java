@@ -96,7 +96,7 @@ public class ObsidilithEffectHandler {
     }
 
     private void anvilEffect(){
-        Vec3 entityPos = entity.position();
+        Vec3 entityPos = MobUtils.eyePos(entity);
         for (int i = 0; i <= 50; i++){
             Vec3 pos = entityPos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().multiply(3.0, 3.0, 3.0));
             anvilParticleFactory.continuousVelocity(
@@ -107,7 +107,7 @@ public class ObsidilithEffectHandler {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            Vec3 particlePos = entityPos.add(RandomUtils.randVec().multiply(3.0, 3.0, 3.0));
+                            Vec3 particlePos = entity.position().add(RandomUtils.randVec().multiply(3.0, 3.0, 3.0));
                             Vec3 vel = entity.getDeltaMovement().multiply(0.7, 0.7, 0.7);
                             teleportFactory.build(particlePos, vel);
                         },
