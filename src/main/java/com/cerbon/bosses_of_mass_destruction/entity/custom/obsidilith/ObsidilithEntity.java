@@ -66,7 +66,7 @@ public class ObsidilithEntity extends BaseEntity {
 
     private final List<BlockPos> activePillars = new ArrayList<>();
 
-    public static byte currentAttack = 0;
+    public byte currentAttack = 0;
 
     public ObsidilithEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
