@@ -115,22 +115,23 @@ public class MathUtils {
     }
 
     public static float roundedStep(float n, List<Float> steps, boolean floor) {
+        List<Float> sortableSteps = new ArrayList<>(steps);
         if (floor) {
-            steps.sort(Collections.reverseOrder());
-            for (Float step : steps) {
+            sortableSteps.sort(Collections.reverseOrder());
+            for (Float step : sortableSteps) {
                 if (step <= n) {
                     return step;
                 }
             }
-            return steps.get(0);
+            return sortableSteps.get(0);
         } else {
-            Collections.sort(steps);
-            for (Float step : steps) {
+            Collections.sort(sortableSteps);
+            for (Float step : sortableSteps) {
                 if (step > n) {
                     return step;
                 }
             }
-            return steps.get(steps.size() - 1);
+            return sortableSteps.get(sortableSteps.size() - 1);
         }
     }
 
