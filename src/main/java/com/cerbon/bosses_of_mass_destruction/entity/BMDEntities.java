@@ -7,6 +7,9 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecU
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.*;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithArmorRenderer;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithBoneLight;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallOverlay;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallSizeRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeCodeAnimations;
@@ -67,6 +70,12 @@ public class BMDEntities {
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "charged_ender_pearl").toString()));
 
+    public static final RegistryObject<EntityType<ObsidilithEntity>> OBSIDILITH = ENTITY_TYPES.register("obsidilith",
+            () -> EntityType.Builder.of(ObsidilithEntity::new, MobCategory.MONSTER)
+                    .sized(2.0f, 4.4f)
+                    .fireImmune()
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "obsidilith").toString()));
+
     public static final RegistryObject<EntityType<SporeBallProjectile>> SPORE_BALL = ENTITY_TYPES.register("spore_ball",
             () -> EntityType.Builder.of(SporeBallProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
@@ -85,6 +94,14 @@ public class BMDEntities {
                 .add(Attributes.MAX_HEALTH, BMDEntities.mobConfig.lichConfig.health)
                 .add(Attributes.FOLLOW_RANGE, 64)
                 .add(Attributes.ATTACK_DAMAGE, BMDEntities.mobConfig.lichConfig.missile.damage)
+                .build());
+
+        event.put(BMDEntities.OBSIDILITH.get(), Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, mobConfig.obsidilithConfig.health)
+                .add(Attributes.FOLLOW_RANGE, 32)
+                .add(Attributes.ATTACK_DAMAGE, mobConfig.obsidilithConfig.attack)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 10)
+                .add(Attributes.ARMOR, mobConfig.obsidilithConfig.armor)
                 .build());
     }
 
@@ -108,6 +125,28 @@ public class BMDEntities {
                     null,
                     null,
                     true
+            );
+        });
+
+        EntityRenderers.register(OBSIDILITH.get(), context -> {
+            ObsidilithBoneLight runeColorHandler = new ObsidilithBoneLight();
+            GeoModel<ObsidilithEntity> modelProvider = new GeoModel<>(
+                    entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/obsidilith.geo.json"),
+                    entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/obsidilith.png"),
+                    new ResourceLocation(BMDConstants.MOD_ID, "animations/obsidilith.animation.json"),
+                    (animatable, data, geoModel) -> {},
+                    RenderType::entityCutout
+            );
+            ObsidilithArmorRenderer armorRenderer = new ObsidilithArmorRenderer(modelProvider, context);
+            return new SimpleLivingGeoRenderer<>(
+                    context,
+                    modelProvider,
+                    null,
+                    runeColorHandler,
+                    new CompositeRenderer<>(armorRenderer, runeColorHandler),
+                    armorRenderer,
+                    null,
+                    false
             );
         });
 
