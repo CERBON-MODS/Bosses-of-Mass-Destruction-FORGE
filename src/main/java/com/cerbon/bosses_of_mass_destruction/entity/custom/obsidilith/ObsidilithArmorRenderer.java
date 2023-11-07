@@ -1,6 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.client.render.IBoneLight;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRendererWithModel;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
@@ -95,7 +96,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
         public void renderCube(PoseStack poseStack, GeoCube cube, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
             poseStack.pushPose();
             poseStack.scale(1.08f, 1.05f, 1.08f);
-            super.renderCube(poseStack, cube, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+            super.renderCube(poseStack, cube, buffer, IBoneLight.fullbright, packedOverlay, red, green, blue, alpha);
             poseStack.popPose();
         }
 
