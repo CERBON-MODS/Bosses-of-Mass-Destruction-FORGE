@@ -30,8 +30,7 @@ public class ObsidilithUtils {
     private static final ResourceLocation bossBarDividerTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/obsidilith_boss_bar_dividers.png");
     public static final List<Float> hpPillarShieldMilestones = List.of(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
     public static final EntityDataAccessor<Boolean> isShielded = SynchedEntityData.defineId(ObsidilithEntity.class, EntityDataSerializers.BOOLEAN);
-    //TODO: Uncomment
-    //public static final NodeBossBarRenderer obsidilithBossBarRenderer = new NodeBossBarRenderer(BMDEntities.OBSIDILITH.get().getTranslationKey(), hpPillarShieldMilestones, bossBarDividerTexture, textureSize);
+    public static final NodeBossBarRenderer obsidilithBossBarRenderer = new NodeBossBarRenderer(BMDEntities.OBSIDILITH.get().getDescriptionId(), hpPillarShieldMilestones, bossBarDividerTexture, textureSize);
     public static final List<Vec3> circlePos = MathUtils.buildBlockCircle(Math.pow(2.0, 2) + Math.pow(Math.pow(1.0, 2), 0.5));
 
     public static final byte deathStatus = 3;
