@@ -142,7 +142,7 @@ public class ObsidilithEntity extends BaseEntity {
             if (level().isClientSide)
                 effectHandler.handleStatus(ObsidilithUtils.deathStatus);
         }
-
+        super.die(damageSource);
     }
 
     public boolean canContinueAttack(){
@@ -175,7 +175,7 @@ public class ObsidilithEntity extends BaseEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar data) {
         data.add(new AnimationController<GeoAnimatable>(this, "summon", 0, animationState -> {
-            animationState.setAnimation(RawAnimation.begin().thenPlay("summon"));
+            animationState.getController().setAnimation(RawAnimation.begin().thenPlay("summon"));
             return PlayState.CONTINUE;
         }));
     }
