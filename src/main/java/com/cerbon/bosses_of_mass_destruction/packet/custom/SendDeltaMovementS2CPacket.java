@@ -32,7 +32,7 @@ public class SendDeltaMovementS2CPacket {
             LocalPlayer localPlayer = Minecraft.getInstance().player;
             if (localPlayer == null) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> localPlayer.setDeltaMovement(this.deltaMovement));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().execute(() -> localPlayer.setDeltaMovement(this.deltaMovement)));
         });
         ctx.setPacketHandled(true);
     }
