@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEv
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.config.mob.ObsidilithConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
@@ -34,7 +35,6 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,7 +109,7 @@ public class ObsidilithEntity extends BaseEntity {
     public void serverTick(ServerLevel serverLevel) {
         super.serverTick(serverLevel);
 
-        activePillars.removeIf(pos -> level().getBlockState(pos).getBlock() != Blocks.OAK_PLANKS //TODO: Change to obsidilith rune
+        activePillars.removeIf(pos -> level().getBlockState(pos).getBlock() != BMDBlocks.OBSIDILITH_RUNE.get()
                 || !pos.closerThan(blockPosition(), 64));
 
         getEntityData().set(ObsidilithUtils.isShielded, !activePillars.isEmpty());

@@ -6,6 +6,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Math
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
@@ -83,7 +84,7 @@ public class PillarAction implements IActionWithCooldown {
         int pillarHeight = 2;
         IntStream.range(0, pillarHeight).forEach(i -> entity.level().setBlockAndUpdate(pos.above(i), Blocks.OBSIDIAN.defaultBlockState()));
         BlockPos pillarTop = pos.above(pillarHeight);
-        entity.level().setBlockAndUpdate(pillarTop, Blocks.OAK_PLANKS.defaultBlockState()); //TODO: Change to OBSIDILITH_RUNE block
+        entity.level().setBlockAndUpdate(pillarTop, BMDBlocks.OBSIDILITH_RUNE.get().defaultBlockState());
         BMDUtils.playSound(serverLevel, VecUtils.asVec3(pos), SoundEvents.BASALT_PLACE, SoundSource.HOSTILE, 1.0f, 16.0, null);
     }
 }
