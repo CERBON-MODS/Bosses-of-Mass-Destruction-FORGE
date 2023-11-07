@@ -50,7 +50,7 @@ public class ObsidilithUtils {
                 .multiply(-0.5, -0.5, -0.5).add(currentPos);
     }
 
-    public void onDeath(LivingEntity actor, int experienceDrop){
+    public static void onDeath(LivingEntity actor, int experienceDrop){
         Level level = actor.level();
 
         if (!level.isClientSide()){
