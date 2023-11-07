@@ -29,10 +29,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -218,14 +215,14 @@ public class ObsidilithEntity extends BaseEntity {
         int[] activePillarsArray = activePillars.stream()
                 .flatMapToInt(p -> IntStream.of(p.getX(), p.getY(), p.getZ()))
                 .toArray();
-        compound.putIntArray(activePillars.toString(), activePillarsArray);
+        compound.putIntArray("activePillars", activePillarsArray);
         return super.saveWithoutId(compound);
     }
 
     @Override
     public void load(@NotNull CompoundTag compound) {
         super.load(compound);
-        if (compound.contains(activePillars.toString())) {
+        if (compound.contains("activePillars")) {
             int[] activePillarsArray = compound.getIntArray(activePillars.toString());
             for (int i = 0; i < activePillarsArray.length; i += 3) {
                 BlockPos pos = new BlockPos(activePillarsArray[i], activePillarsArray[i + 1], activePillarsArray[i + 2]);
