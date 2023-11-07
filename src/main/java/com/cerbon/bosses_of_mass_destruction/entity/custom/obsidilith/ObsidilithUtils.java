@@ -45,7 +45,7 @@ public class ObsidilithUtils {
     public static Vec3 approximatePlayerNextPosition(List<Vec3> previousPosition, Vec3 currentPos) {
         return previousPosition.stream()
                 .map(vec3 -> VecUtils.planeProject(vec3.subtract(currentPos), VecUtils.yAxis))
-                .reduce(Vec3.ZERO, Vec3::add)
+                .reduce(Vec3::add).orElse(Vec3.ZERO)
                 .multiply(-0.5, -0.5, -0.5).add(currentPos);
     }
 
