@@ -47,7 +47,7 @@ public class PillarAction implements IActionWithCooldown {
 
         pillarPositions.forEach(blockPos -> {
             MathUtils.lineCallback(MobUtils.eyePos(entity), VecUtils.asVec3(blockPos).add(0.5, 0.5, 0.5), (int) pillarXzDistance, (vec3, integer) -> BMDUtils.spawnParticle((ServerLevel) level, BMDParticles.PILLAR_SPAWN_INDICATOR_2.get(), vec3, Vec3.ZERO, 0, 0.0));
-            BMDUtils.spawnParticle((ServerLevel) level, BMDParticles.PILLAR_SPAWN_INDICATOR.get(), VecUtils.asVec3(blockPos.above()), new Vec3(0.3, 3.0, 0.3), 20, 0.0);
+            BMDUtils.spawnParticle((ServerLevel) level, BMDParticles.PILLAR_SPAWN_INDICATOR.get(), VecUtils.asVec3(blockPos.above(5)), new Vec3(0.3, 3.0, 0.3), 20, 0.0);
         });
 
         eventScheduler.addEvent(
