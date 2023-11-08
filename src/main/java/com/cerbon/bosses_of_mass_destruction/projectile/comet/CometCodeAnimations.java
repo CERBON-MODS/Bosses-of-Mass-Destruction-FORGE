@@ -1,10 +1,10 @@
 package com.cerbon.bosses_of_mass_destruction.projectile.comet;
 
-import com.cerbon.bosses_of_mass_destruction.entity.util.ICodeAnimations;
+import com.cerbon.bosses_of_mass_destruction.entity.GeoModel;
+import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimations;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.model.GeoModel;
 
 public class CometCodeAnimations implements ICodeAnimations<CometProjectile> {
     @Override
