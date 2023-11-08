@@ -30,7 +30,8 @@ public class CompositeDamageHandler implements IDamageHandler {
     @Override
     public boolean shouldDamage(LivingEntity actor, DamageSource damageSource, float amount) {
         for (IDamageHandler handler : handlerList)
-            return handler.shouldDamage(actor, damageSource, amount);
+            if (!handler.shouldDamage(actor, damageSource, amount))
+                return false;
 
         return true;
     }
