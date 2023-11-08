@@ -225,7 +225,7 @@ public class ObsidilithEntity extends BaseEntity {
     public void load(@NotNull CompoundTag compound) {
         super.load(compound);
         if (compound.contains("activePillars")) {
-            int[] activePillarsArray = compound.getIntArray(activePillars.toString());
+            int[] activePillarsArray = compound.getIntArray("activePillars");
             for (int i = 0; i < activePillarsArray.length; i += 3) {
                 BlockPos pos = new BlockPos(activePillarsArray[i], activePillarsArray[i + 1], activePillarsArray[i + 2]);
                 activePillars.add(pos);
