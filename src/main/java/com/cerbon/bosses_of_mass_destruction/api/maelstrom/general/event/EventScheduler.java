@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Manages cancelable scheduled events to run in the future.
@@ -14,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class EventScheduler {
     private int ticks = 0;
-    private final List<IEvent> eventQueue = new CopyOnWriteArrayList<>();
+    private final List<IEvent> eventQueue = new ArrayList<>();
     private final Set<IEvent> eventsToAdd = new HashSet<>();
 
     public void updateEvents() {
@@ -24,9 +23,9 @@ public class EventScheduler {
         for (IEvent iEvent : eventQueue){
             if (ticks % iEvent.tickSize() == 0 && iEvent.shouldDoEvent())
                 iEvent.doEvent();
-
-            eventQueue.removeIf(IEvent::shouldRemoveEvent);
         }
+        eventQueue.removeIf(IEvent::shouldRemoveEvent);
+
         this.ticks++;
     }
 
