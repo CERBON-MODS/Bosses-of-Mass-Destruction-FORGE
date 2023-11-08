@@ -44,6 +44,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 public class ObsidilithEntity extends BaseEntity {
@@ -112,15 +113,16 @@ public class ObsidilithEntity extends BaseEntity {
         getEntityData().set(ObsidilithUtils.isShielded, !activePillars.isEmpty());
 
         if (this.tickCount % 40 == 0){
-            activePillars.stream().findAny().ifPresent(
-                    pos -> MathUtils.lineCallback(VecUtils.asVec3(pos).add(0.5, 0.5, 0.5), MobUtils.eyePos(this), 15,
-                            (vec3, i) -> preTickEvents.addEvent(
-                                    new TimedEvent(
-                                            () -> BMDUtils.spawnParticle(serverLevel, BMDParticles.PILLAR_RUNE.get(), vec3, Vec3.ZERO, 0, 0.0),
-                                            i
-                                    )
-                            ))
-            );
+            if (!activePillars.isEmpty()){
+                BlockPos pos = activePillars.get(new Random().nextInt(activePillars.size()));
+                MathUtils.lineCallback(VecUtils.asVec3(pos).add(0.5, 0.5, 0.5), MobUtils.eyePos(this), 15, (vec3, i) ->
+                        preTickEvents.addEvent(
+                                new TimedEvent(
+                                        () -> BMDUtils.spawnParticle(serverLevel, BMDParticles.PILLAR_RUNE.get(), vec3, Vec3.ZERO, 0, 0.0),
+                                        i
+                                )
+                        ));
+            }
         }
     }
 
