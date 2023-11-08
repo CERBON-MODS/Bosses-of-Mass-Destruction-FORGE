@@ -105,6 +105,9 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
         super.load(compound);
         if (hasCustomName() && bossBar != null)
             bossBar.setName(this.getDisplayName());
+
+        if (nbtHandler != null)
+            nbtHandler.fromTag(compound);
     }
 
     @Override
@@ -188,7 +191,7 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
     @Override
     public @NotNull CompoundTag saveWithoutId(@NotNull CompoundTag compound) {
         CompoundTag superCompound = super.saveWithoutId(compound);
-        return nbtHandler != null ? nbtHandler.toTag(compound) : superCompound;
+        return nbtHandler != null ? nbtHandler.toTag(superCompound) : superCompound;
     }
 
     public Vec3 safeGetTargetPos(){
