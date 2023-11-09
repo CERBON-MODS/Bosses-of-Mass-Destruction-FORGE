@@ -46,7 +46,7 @@ public class ForgeEvents {
 
     @SubscribeEvent
     protected static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(event.side == LogicalSide.SERVER && event.player.tickCount % 2 == 0) {
+        if(event.side == LogicalSide.SERVER) {
             event.player.getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).ifPresent(data -> {
                 Vec3 previousPosition = data.get(0);
                 Vec3 newPosition = event.player.position();
