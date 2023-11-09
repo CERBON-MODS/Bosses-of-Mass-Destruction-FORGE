@@ -46,7 +46,7 @@ public class ForgeEvents {
 
     @SubscribeEvent
     protected static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(event.side == LogicalSide.SERVER) {
+        if(event.side == LogicalSide.SERVER && event.player.tickCount % 2 == 0) {
             event.player.getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).ifPresent(data -> {
                 Vec3 previousPosition = data.get(0);
                 Vec3 newPosition = event.player.position();
@@ -62,7 +62,7 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event){
-        if (event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT)
+        if ((event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT) && event.level.getGameTime() % 2 == 0)
             event.level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
     }
 

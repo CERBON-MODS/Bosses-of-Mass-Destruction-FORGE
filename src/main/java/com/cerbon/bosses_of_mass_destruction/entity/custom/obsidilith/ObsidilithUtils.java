@@ -40,7 +40,7 @@ public class ObsidilithUtils {
     public static final byte anvilAttackStatus = 8;
     public static final byte pillarDefenseStatus = 9;
     public static final int deathPillarHeight = 15;
-    public static final int ticksBetweenPillarLayer = 10;
+    public static final int ticksBetweenPillarLayer = 5;
 
     public static Vec3 approximatePlayerNextPosition(List<Vec3> previousPosition, Vec3 currentPos) {
         return previousPosition.stream()

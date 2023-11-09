@@ -75,7 +75,7 @@ public class AnvilAction implements IActionWithCooldown {
                                                                     actor.moveTo(originalPos.x, originalPos.y, originalPos.z, actor.getYRot(), actor.getXRot());
                                                                     BMDUtils.playSound(level, actor.position(), BMDSounds.OBSIDILITH_TELEPORT.get(), SoundSource.HOSTILE, 1.0f, 64, null);
                                                                 },
-                                                                40,
+                                                                20,
                                                                 1,
                                                                 () -> !actor.isAlive()
                                                         )
@@ -85,7 +85,7 @@ public class AnvilAction implements IActionWithCooldown {
                                     )
                             );
                         },
-                        40,
+                        20,
                         1,
                         () -> !actor.isAlive()
                 )

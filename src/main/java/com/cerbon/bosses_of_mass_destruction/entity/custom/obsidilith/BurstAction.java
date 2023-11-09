@@ -26,7 +26,7 @@ public class BurstAction implements IActionWithCooldown {
     private final EventScheduler eventScheduler;
     private final List<Vec3> circlePoints;
 
-    public static int burstDelay = 60;
+    public static int burstDelay = 30;
 
     public BurstAction(LivingEntity entity){
         this.entity = entity;
