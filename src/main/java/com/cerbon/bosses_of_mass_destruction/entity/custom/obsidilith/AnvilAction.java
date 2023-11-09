@@ -62,26 +62,35 @@ public class AnvilAction implements IActionWithCooldown {
                                     BMDUtils.spawnParticle(level, BMDParticles.OBSIDILITH_ANVIL_INDICATOR.get(), VecUtils.asVec3(particlePos).add(new Vec3(0.5, 0.1, 0.5)), Vec3.ZERO, 0, 0.0);
                             }
 
-                            Supplier<Boolean> shouldLand = () -> actor.onGround() || actor.getY() < 0;
-                            Supplier<Boolean> shouldCancelLand = () -> !actor.isAlive() || shouldLand.get();
+                            //Added other eventScheduler because without giving it a delay before getting the value of onGround method it was not working
                             eventScheduler.addEvent(
-                                    new Event(
-                                            shouldLand,
+                                    new TimedEvent(
                                             () -> {
-                                                actor.level().explode(actor, actor.getX(), actor.getY(), actor.getZ(), explosionPower, Level.ExplosionInteraction.MOB);
+                                                Supplier<Boolean> shouldLand = () -> actor.onGround() || actor.getY() < 0;
+                                                Supplier<Boolean> shouldCancelLand = () -> !actor.isAlive() || shouldLand.get();
+
                                                 eventScheduler.addEvent(
-                                                        new TimedEvent(
+                                                        new Event(
+                                                                shouldLand,
                                                                 () -> {
-                                                                    actor.moveTo(originalPos.x, originalPos.y, originalPos.z, actor.getYRot(), actor.getXRot());
-                                                                    BMDUtils.playSound(level, actor.position(), BMDSounds.OBSIDILITH_TELEPORT.get(), SoundSource.HOSTILE, 1.0f, 64, null);
+                                                                    actor.level().explode(actor, actor.getX(), actor.getY(), actor.getZ(), explosionPower, Level.ExplosionInteraction.MOB);
+                                                                    eventScheduler.addEvent(
+                                                                            new TimedEvent(
+                                                                                    () -> {
+                                                                                        actor.moveTo(originalPos.x, originalPos.y, originalPos.z, actor.getYRot(), actor.getXRot());
+                                                                                        BMDUtils.playSound(level, actor.position(), BMDSounds.OBSIDILITH_TELEPORT.get(), SoundSource.HOSTILE, 1.0f, 64, null);
+                                                                                    },
+                                                                                    20,
+                                                                                    1,
+                                                                                    () -> !actor.isAlive()
+                                                                            )
+                                                                    );
                                                                 },
-                                                                20,
-                                                                1,
-                                                                () -> !actor.isAlive()
+                                                                shouldCancelLand
                                                         )
                                                 );
                                             },
-                                            shouldCancelLand
+                                            1
                                     )
                             );
                         },
