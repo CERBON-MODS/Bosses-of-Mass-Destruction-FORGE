@@ -3,6 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.mixin;
 import com.cerbon.bosses_of_mass_destruction.client.render.NodeBossBarRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.BossHealthOverlay;
@@ -30,5 +31,6 @@ public class BossHealthOverlayMixin {
     @Inject(method = "drawBar(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/world/BossEvent;)V", at = @At("HEAD"), cancellable = true)
     private void drawCustomBossBar(GuiGraphics guiGraphics, int x, int y, BossEvent bossEvent, CallbackInfo ci){
         bmd_lichBossBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
+        ObsidilithUtils.obsidilithBossBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
     }
 }
