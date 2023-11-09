@@ -90,7 +90,9 @@ public class AnvilAction implements IActionWithCooldown {
                                                         )
                                                 );
                                             },
-                                            1
+                                            1,
+                                            1,
+                                            () -> !actor.isAlive()
                                     )
                             );
                         },
