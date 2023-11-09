@@ -65,7 +65,7 @@ public class BurstAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_HURT.get(), SoundSource.HOSTILE, 1.2f, 64, null),
+                        () -> BMDUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_BURST.get(), SoundSource.HOSTILE, 1.2f, 64, null),
                         burstDelay,
                         1,
                         () -> !entity.isAlive()
