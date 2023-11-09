@@ -28,8 +28,8 @@ public class WaveAction implements IActionWithCooldown {
     private final Level level;
     private final EventScheduler eventScheduler;
 
-    public static final int waveDelay = 20;
-    public static final int attackStartDelay = 20;
+    public static final int waveDelay = 40;
+    public static final int attackStartDelay = 40;
 
     public WaveAction(Mob entity){
         this.entity = entity;
@@ -81,7 +81,7 @@ public class WaveAction implements IActionWithCooldown {
                                                     for (Vec3 point : circlePoints)
                                                         riftBurst.tryPlaceRift(linePos.add(point));
                                                 },
-                                                i * 8,
+                                                i * 8 * 2,
                                                 1,
                                                 () -> !entity.isAlive()
                                         )

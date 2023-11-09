@@ -39,7 +39,7 @@ public class SpikeAction implements IActionWithCooldown {
     }
 
     private void placeSpikes(ServerPlayer target){
-        int riftTime = 20;
+        int riftTime = 40;
         RiftBurst riftBurst = new RiftBurst(
                 entity,
                 target.serverLevel(),
@@ -53,8 +53,8 @@ public class SpikeAction implements IActionWithCooldown {
         BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 1.2f, 64, null);
 
         for(int i = 0; i < 3; i++){
-            int timeBetweenRifts = 30;
-            int initialDelay = 30;
+            int timeBetweenRifts = 60;
+            int initialDelay = 60;
 
             eventScheduler.addEvent(
                     new TimedEvent(
