@@ -21,6 +21,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import java.util.Random;
 
+//TODO: Fix armor being opaque
 public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<ObsidilithEntity> {
     private final GeoModel<ObsidilithEntity> geoModel;
     private final EntityRendererProvider.Context context;
