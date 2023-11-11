@@ -1,10 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.item;
 
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlItem;
-import com.cerbon.bosses_of_mass_destruction.item.custom.CrystalFruitItem;
-import com.cerbon.bosses_of_mass_destruction.item.custom.EarthdiveSpear;
-import com.cerbon.bosses_of_mass_destruction.item.custom.MaterialItem;
+import com.cerbon.bosses_of_mass_destruction.item.custom.*;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +17,8 @@ public class BMDItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, BMDConstants.MOD_ID);
 
-    // TODO: Add the Soul Star item
+    public static final RegistryObject<Item> SOUL_STAR = ITEMS.register("soul_star",
+            () -> new SoulStarItem(new Item.Properties()));
 
     public static final RegistryObject<Item> ANCIENT_ANIMA = ITEMS.register("ancient_anima",
             () -> new MaterialItem(new Item.Properties().rarity(Rarity.RARE)));

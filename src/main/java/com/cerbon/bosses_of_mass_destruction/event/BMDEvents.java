@@ -49,6 +49,7 @@ public class BMDEvents {
         @SubscribeEvent
         protected static void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
             if (event.getTab() == BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION.get()) {
+                event.accept(BMDItems.SOUL_STAR);
                 event.accept(BMDItems.ANCIENT_ANIMA);
                 event.accept(BMDItems.BLAZING_EYE);
                 event.accept(BMDItems.OBSIDIAN_HEART);

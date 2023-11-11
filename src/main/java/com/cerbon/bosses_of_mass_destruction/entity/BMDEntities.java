@@ -15,6 +15,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBal
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeCodeAnimations;
 import com.cerbon.bosses_of_mass_destruction.entity.util.SimpleLivingGeoRenderer;
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlEntity;
+import com.cerbon.bosses_of_mass_destruction.item.custom.SoulStarEntity;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
@@ -32,6 +33,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -64,6 +66,11 @@ public class BMDEntities {
             () -> EntityType.Builder.<CometProjectile>of(CometProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "comet").toString()));
+
+    public static final RegistryObject<EntityType<SoulStarEntity>> SOUL_STAR = ENTITY_TYPES.register("soul_star",
+            () -> EntityType.Builder.<SoulStarEntity>of(SoulStarEntity::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f)
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "soul_star").toString()));
 
     public static final RegistryObject<EntityType<ChargedEnderPearlEntity>> CHARGED_ENDER_PEARL = ENTITY_TYPES.register("charged_ender_pearl",
             () -> EntityType.Builder.of(ChargedEnderPearlEntity::new, MobCategory.MISC)
@@ -172,6 +179,9 @@ public class BMDEntities {
                         null,
                         true
                 ));
+
+        EntityRenderers.register(SOUL_STAR.get(), context ->
+                new ThrownItemRenderer<>(context, 1.0f, true));
 
         EntityRenderers.register(CHARGED_ENDER_PEARL.get(), ThrownItemRenderer::new);
 
