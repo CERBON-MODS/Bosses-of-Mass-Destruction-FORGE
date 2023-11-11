@@ -1,14 +1,22 @@
 package com.cerbon.bosses_of_mass_destruction.projectile;
 
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.RiftBurst;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
+import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,8 +27,8 @@ import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -29,6 +37,7 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class SporeBallProjectile extends BaseThrownItemProjectile implements GeoEntity {
@@ -40,8 +49,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
             .brightness(BMDParticles.FULL_BRIGHT);
     private final byte particle = 5;
     public boolean impacted = false;
-    private final Predicate<HitResult> collisionPredicate = hitResult -> true;
-    private final float impactedPitch = 0f;
+    private float impactedPitch = 0f;
     public float impactedTicks = 0f;
 
     private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
@@ -55,7 +63,10 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
         super(BMDEntities.SPORE_BALL.get(), livingEntity, level, entityPredicate);
     }
 
-    // TODO: add onBlockHit method
+    @Override
+    protected void onHitBlock(@NotNull BlockHitResult result) {
+        onImpact();
+    }
 
     @Override
     public void clientTick() {
@@ -69,7 +80,17 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
         return !impacted ? super.getDeltaMovement() : Vec3.ZERO;
     }
 
-    // TODO: add onImpact method
+    private void onImpact(){
+        if (impacted) return;
+
+        impactedPitch = getXRot();
+        impacted = true;
+        Entity owner = getOwner();
+        if (owner instanceof LivingEntity livingEntity)
+            doExplosion(livingEntity);
+        else if (!level().isClientSide())
+            discard();
+    }
 
     @Override
     public float getXRot() {
@@ -81,7 +102,44 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
         return 0f;
     }
 
-    // TODO: Add doExplosion Method
+    private void doExplosion(LivingEntity owner){
+        level().broadcastEntityEvent(this, particle);
+        playSound(BMDSounds.SPORE_BALL_LAND.get(), 1.0f, BMDUtils.randomPitch(random) - 0.2f);
+        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level());
+        Consumer<LivingEntity> onImpact = entity -> {
+            float damage = (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE);
+            if (this.getOwner() != null){
+                entity.hurt(BMDUtils.shieldPiercing(level(), this.getOwner()), damage);
+                entity.addEffect(new MobEffectInstance(MobEffects.POISON, 140), this.getOwner());
+            }
+        };
+
+        RiftBurst riftBurst = new RiftBurst(
+                owner,
+                (ServerLevel) level(),
+                BMDParticles.SPORE_INDICATOR.get(),
+                BMDParticles.SPORE.get(),
+                explosionDelay,
+                eventScheduler,
+                onImpact,
+                this::isOpenBlock,
+                this::posFinder
+        );
+
+        eventScheduler.addEvent(
+                new TimedEvent(
+                        () -> {
+                            playSound(BMDSounds.SPORE_IMPACT.get(), 1.5f, BMDUtils.randomPitch(random));
+                            discard();
+                        },
+                        explosionDelay
+                )
+        );
+
+        Vec3 center = VecUtils.asVec3(blockPosition()).add(VecUtils.unit.multiply(0.5, 0.5, 0.5));
+        for (Vec3 point : circlePoints)
+            riftBurst.tryPlaceRift(center.add(point));
+    }
 
     private BlockPos posFinder(Vec3 pos){
         BlockPos above = BlockPos.containing(pos.add(VecUtils.yAxis.multiply(2.0, 2.0, 2.0)));
