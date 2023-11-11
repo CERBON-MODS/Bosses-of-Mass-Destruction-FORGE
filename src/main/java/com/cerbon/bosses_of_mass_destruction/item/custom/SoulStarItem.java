@@ -7,6 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Math
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
+import com.cerbon.bosses_of_mass_destruction.block.custom.ChiseledStoneAltarBlock;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichEntity;
@@ -124,7 +125,7 @@ public class SoulStarItem extends Item {
         MathUtils.circleCallback(0.5, 15, VecUtils.yAxis, vec3 -> {
             Vec3 particleVel = VecUtils.yAxis.multiply(0.03 + RandomUtils.randomDouble(0.01), 0.03 + RandomUtils.randomDouble(0.01), 0.03 + RandomUtils.randomDouble(0.01));
             Vec3 particlePos = centralPos.add(vec3);
-            //TODO: add particle
+            ChiseledStoneAltarBlock.Particles.blueFireParticleFactory.build(particlePos, particleVel);
         });
     }
 

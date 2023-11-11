@@ -18,20 +18,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//TODO: Fix Crash
-public class ChiseledStoneAltarBlock extends Block {
-//    private final ClientParticleBuilder paleSparkleParticleFactory = new ClientParticleBuilder(BMDParticles.DOWNSPARKLE.get())
-//            .color(f -> MathUtils.lerpVec(f, BMDColors.WHITE, BMDColors.GREY))
-//            .age(20, 30)
-//            .colorVariation(0.1)
-//            .scale(f -> 0.15f - (f * 0.1f));
-//
-//    public ClientParticleBuilder blueFireParticleFactory = ParticleFactories.soulFlame()
-//            .color(LichUtils.blueColorFade)
-//            .age(30, 40)
-//            .colorVariation(0.5)
-//            .scale(f -> 0.15f - (f * 0.1f));
 
+public class ChiseledStoneAltarBlock extends Block {
     public ChiseledStoneAltarBlock(Properties properties) {
         super(properties);
         this.stateDefinition.any().setValue(BlockStateProperties.LIT, false);
@@ -58,20 +46,34 @@ public class ChiseledStoneAltarBlock extends Block {
         builder.add(BlockStateProperties.LIT);
     }
 
-//    @Override
-//    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-//        if (state.getValue(BlockStateProperties.LIT)){
-//            if (random.nextInt(3) == 0){
-//                blueFireParticleFactory.build(
-//                        VecUtils.asVec3(pos).add(0.5, 1.0, 0.5).add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).multiply(0.5, 0.5, 0.5)),
-//                        VecUtils.yAxis.multiply(0.05, 0.05, 0.05)
-//                );
-//            }
-//        }else {
-//            paleSparkleParticleFactory.build(
-//                    VecUtils.asVec3(pos).add(0.5, 2.0, 0.5).add(RandomUtils.randVec().multiply(0.5, 0.5, 0.5)),
-//                    VecUtils.yAxis.multiply(-0.05, -0.05, -0.05)
-//            );
-//        }
-//    }
+    @Override
+    public void animateTick(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+        if (state.getValue(BlockStateProperties.LIT)){
+            if (random.nextInt(3) == 0){
+                Particles.blueFireParticleFactory.build(
+                        VecUtils.asVec3(pos).add(0.5, 1.0, 0.5).add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).multiply(0.5, 0.5, 0.5)),
+                        VecUtils.yAxis.multiply(0.05, 0.05, 0.05)
+                );
+            }
+        }else {
+            Particles.paleSparkleParticleFactory.build(
+                    VecUtils.asVec3(pos).add(0.5, 2.0, 0.5).add(RandomUtils.randVec().multiply(0.5, 0.5, 0.5)),
+                    VecUtils.yAxis.multiply(-0.05, -0.05, -0.05)
+            );
+        }
+    }
+
+    public static class Particles {
+        public static final ClientParticleBuilder paleSparkleParticleFactory = new ClientParticleBuilder(BMDParticles.DOWNSPARKLE.get())
+                .color(f -> MathUtils.lerpVec(f, BMDColors.WHITE, BMDColors.GREY))
+                .age(20, 30)
+                .colorVariation(0.1)
+                .scale(f -> 0.15f - (f * 0.1f));
+
+        public static final ClientParticleBuilder blueFireParticleFactory = ParticleFactories.soulFlame()
+                .color(LichUtils.blueColorFade)
+                .age(30, 40)
+                .colorVariation(0.5)
+                .scale(f -> 0.15f - (f * 0.1f));
+    }
 }
