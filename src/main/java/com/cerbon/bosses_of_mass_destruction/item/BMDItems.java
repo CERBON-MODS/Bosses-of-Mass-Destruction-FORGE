@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.item;
 
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlItem;
 import com.cerbon.bosses_of_mass_destruction.item.custom.CrystalFruitItem;
 import com.cerbon.bosses_of_mass_destruction.item.custom.EarthdiveSpear;
@@ -7,6 +8,7 @@ import com.cerbon.bosses_of_mass_destruction.item.custom.MaterialItem;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -40,6 +42,9 @@ public class BMDItems {
 
     public static final RegistryObject<Item> CHARGED_ENDER_PEARL = ITEMS.register("charged_ender_pearl",
             () -> new ChargedEnderPearlItem(new Item.Properties().fireResistant().stacksTo(1)));
+
+    public static final RegistryObject<Item> CHISELED_STONE_ALTAR = ITEMS.register("chiseled_stone_altar",
+            () -> new BlockItem(BMDBlocks.CHISELED_STONE_ALTAR.get(), new Item.Properties()));
 
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
