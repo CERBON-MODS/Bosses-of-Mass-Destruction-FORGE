@@ -10,7 +10,6 @@ import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
