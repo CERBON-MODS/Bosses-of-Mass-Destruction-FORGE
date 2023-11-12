@@ -5,11 +5,19 @@
   "refmap": "mixins.bosses_of_mass_destruction.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "multipart_entities.InvokerArrayVoxelShape",
+    "multipart_entities.MixinBox",
+    "multipart_entities.MixinEntity",
+    "multipart_entities.MixinProjectile",
+    "multipart_entities.MixinVoxelShape",
+    "multipart_entities.MixinVoxelShapes"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "BossHealthOverlayMixin"
+    "BossHealthOverlayMixin",
+    "multipart_entities.client.MixinEntityRenderDispatcher",
+    "multipart_entities.client.MixinMultiplayerGameMode"
   ]
 }
