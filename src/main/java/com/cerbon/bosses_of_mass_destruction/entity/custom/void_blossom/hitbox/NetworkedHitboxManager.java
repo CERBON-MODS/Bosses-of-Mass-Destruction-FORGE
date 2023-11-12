@@ -12,7 +12,7 @@ public class NetworkedHitboxManager implements ICompoundHitbox{
     private final BaseEntity entity;
     private final Map<Byte, ICompoundHitbox> hitboxMap;
 
-    public final EntityDataAccessor<Byte> hitbox = SynchedEntityData.defineId(BaseEntity.class, EntityDataSerializers.BYTE);
+    public static final EntityDataAccessor<Byte> hitbox = SynchedEntityData.defineId(BaseEntity.class, EntityDataSerializers.BYTE);
 
     public NetworkedHitboxManager(BaseEntity entity, Map<Byte, ICompoundHitbox> hitboxMap){
         this.entity = entity;
