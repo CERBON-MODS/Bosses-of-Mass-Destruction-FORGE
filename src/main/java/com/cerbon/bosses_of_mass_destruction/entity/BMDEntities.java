@@ -33,7 +33,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -89,7 +88,7 @@ public class BMDEntities {
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "spore_ball").toString()));
 
     public static final RegistryObject<EntityType<PetalBladeProjectile>> PETAL_BLADE = ENTITY_TYPES.register("petal_blade",
-            () -> EntityType.Builder.of(PetalBladeProjectile::new, MobCategory.MISC)
+            () -> EntityType.Builder.<PetalBladeProjectile>of(PetalBladeProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "petal_blade").toString()));
 

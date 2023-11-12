@@ -28,7 +28,7 @@ public class PetalBladeProjectile extends BaseThrownItemProjectile{
         getEntityData().define(renderRotation, 0f);
     }
 
-    protected PetalBladeProjectile(LivingEntity livingEntity, Level level, Consumer<LivingEntity> entityHit, List<EntityType<?>> exemptEntities, float rotation){
+    public PetalBladeProjectile(LivingEntity livingEntity, Level level, Consumer<LivingEntity> entityHit, List<EntityType<?>> exemptEntities, float rotation){
         super(BMDEntities.PETAL_BLADE.get(), livingEntity, level, new ExemptEntities(exemptEntities));
         getEntityData().define(renderRotation, rotation);
         this.entityHit = entityHit;
