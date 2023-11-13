@@ -45,16 +45,19 @@ public class VoidBlossomClientSpikeHandler implements IEntityTick<ClientLevel> {
         List<BlockPos> toRemove = new ArrayList<>();
 
         for (var kv : spikes.entrySet()){
-            int age = kv.getValue().age() + 1;
+            Spike oldSpike = kv.getValue();
+            int newAge = oldSpike.age() + 1;
+            Spike newSpike = new Spike(oldSpike.pos(), oldSpike.offset(), oldSpike.height(), oldSpike.maxAge(), newAge);
+            spikes.put(kv.getKey(), newSpike);
 
-            if (age == maxAge - 5) {
+            if (newAge == maxAge - 5) {
                 spikeParticleFactory.build(
                         VecUtils.asVec3(kv.getKey()).add(RandomUtils.randVec().add(VecUtils.yAxis.scale(2.5 + RandomUtils.randomDouble(2.0)))),
                         Vec3.ZERO
                 );
             }
 
-            if (age >= maxAge)
+            if (newAge >= maxAge)
                 toRemove.add(kv.getKey());
         }
 
