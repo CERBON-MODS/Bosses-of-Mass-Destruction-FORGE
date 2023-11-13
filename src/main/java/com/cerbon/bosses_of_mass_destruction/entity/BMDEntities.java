@@ -10,9 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.*;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithArmorRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithBoneLight;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEntity;
-import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallOverlay;
-import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeBallSizeRenderer;
-import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SporeCodeAnimations;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.*;
 import com.cerbon.bosses_of_mass_destruction.entity.util.SimpleLivingGeoRenderer;
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlEntity;
 import com.cerbon.bosses_of_mass_destruction.item.custom.SoulStarEntity;
@@ -33,6 +31,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -82,8 +81,15 @@ public class BMDEntities {
                     .fireImmune()
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "obsidilith").toString()));
 
+    public static final RegistryObject<EntityType<VoidBlossomEntity>> VOID_BLOSSOM = ENTITY_TYPES.register("void_blossom",
+            () -> EntityType.Builder.of(VoidBlossomEntity::new, MobCategory.MONSTER)
+                    .sized(8.0f, 10.0f)
+                    .fireImmune()
+                    .setTrackingRange(3)
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "void_blossom").toString()));
+
     public static final RegistryObject<EntityType<SporeBallProjectile>> SPORE_BALL = ENTITY_TYPES.register("spore_ball",
-            () -> EntityType.Builder.of(SporeBallProjectile::new, MobCategory.MISC)
+            () -> EntityType.Builder.<SporeBallProjectile>of(SporeBallProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "spore_ball").toString()));
 
@@ -108,6 +114,14 @@ public class BMDEntities {
                 .add(Attributes.ATTACK_DAMAGE, mobConfig.obsidilithConfig.attack)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 10)
                 .add(Attributes.ARMOR, mobConfig.obsidilithConfig.armor)
+                .build());
+
+        event.put(BMDEntities.VOID_BLOSSOM.get(), Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, mobConfig.voidBlossomConfig.health)
+                .add(Attributes.FOLLOW_RANGE, 32)
+                .add(Attributes.ATTACK_DAMAGE, mobConfig.voidBlossomConfig.attack)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 10.0)
+                .add(Attributes.ARMOR, mobConfig.voidBlossomConfig.armor)
                 .build());
     }
 
@@ -195,6 +209,29 @@ public class BMDEntities {
                                         new LerpedPosRenderer<>(vec3 -> ParticleFactories.soulFlame().build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), Vec3.ZERO)))),
                         entity -> missileTexture, new FullRenderLight<>()
                 ));
+
+        EntityRenderers.register(VOID_BLOSSOM.get(), context -> {
+            ResourceLocation texture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/void_blossom.png");
+            GeoModel<VoidBlossomEntity> modelProvider = new GeoModel<>(
+                    entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/void_blossom.geo.json"),
+                    entity -> texture,
+                    new ResourceLocation(BMDConstants.MOD_ID, "animations/void_blossom.animation.json"),
+                    new VoidBlossomCodeAnimations(),
+                    RenderType::entityCutout
+            );
+            VoidBlossomBoneLight boneLight = new VoidBlossomBoneLight();
+            NoRedOnDeathOverlay overlay = new NoRedOnDeathOverlay();
+            return new SimpleLivingGeoRenderer<>(
+                    context,
+                    modelProvider,
+                    null,
+                    boneLight,
+                    new CompositeRenderer<>(new VoidBlossomSpikeRenderer(), boneLight, overlay),
+                    null,
+                    overlay,
+                    false
+            );
+        });
 
         EntityRenderers.register(SPORE_BALL.get(), context -> {
             SporeBallOverlay explosionFlasher = new SporeBallOverlay();

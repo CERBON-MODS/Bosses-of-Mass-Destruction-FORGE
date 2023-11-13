@@ -59,7 +59,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
         super(entityType, level);
     }
 
-    protected SporeBallProjectile(LivingEntity livingEntity, Level level, Predicate<EntityHitResult> entityPredicate){
+    public SporeBallProjectile(LivingEntity livingEntity, Level level, Predicate<EntityHitResult> entityPredicate){
         super(BMDEntities.SPORE_BALL.get(), livingEntity, level, entityPredicate);
     }
 
