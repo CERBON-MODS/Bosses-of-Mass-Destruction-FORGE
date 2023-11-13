@@ -7,6 +7,9 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecU
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.NetworkedHitboxManager;
+import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.PlaceS2CPacket;
+import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.core.BlockPos;
@@ -93,7 +96,7 @@ public class BlossomAction implements IActionWithCooldown {
                                 BlockPos blossomPos = positions.get(i1);
                                 level.setBlockAndUpdate(blossomPos, Blocks.MOSS_BLOCK.defaultBlockState());
                                 level.setBlockAndUpdate(blossomPos.above(), Blocks.ACACIA_PLANKS.defaultBlockState()); //TODO: Change to VoidBlossom block
-                                //TODO: Add Packet
+                                BMDPacketHandler.sendToAllPlayersTrackingChunk(new PlaceS2CPacket(VecUtils.asVec3(blossomPos).add(VecUtils.unit.scale(0.5))), level, entity.position());
                                 BMDUtils.playSound(level, VecUtils.asVec3(blossomPos), BMDSounds.PETAL_BLADE.get(), SoundSource.HOSTILE, 1.0f, BMDUtils.randomPitch(entity.getRandom()), 64, null);
 
                                 if(i1 < protectedPositions) {

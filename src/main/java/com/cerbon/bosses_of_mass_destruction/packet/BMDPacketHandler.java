@@ -1,6 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.packet;
 
 import com.cerbon.bosses_of_mass_destruction.packet.custom.ChargedEnderPearlS2CPacket;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.PlaceS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityAttackC2SPacket;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityInteractC2SPacket;
@@ -43,6 +44,12 @@ public class BMDPacketHandler {
                 .decoder(SendDeltaMovementS2CPacket::new)
                 .encoder(SendDeltaMovementS2CPacket::write)
                 .consumerMainThread(SendDeltaMovementS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(PlaceS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlaceS2CPacket::new)
+                .encoder(PlaceS2CPacket::write)
+                .consumerMainThread(PlaceS2CPacket::handle)
                 .add();
 
         net.messageBuilder(MultipartEntityAttackC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
