@@ -28,7 +28,7 @@ public class SimpleParticle extends TextureSheetParticle {
 
     private float rotation = 0f;
     private float prevRotation = 0f;
-    private float ageRatio = 1f;
+    public float ageRatio = 1f;
 
     public SimpleParticle(ParticleContext particleContext, int particleAge, IParticleGeometry particleGeometry, boolean cycleSprites, boolean doCollision) {
         super(particleContext.level(), particleContext.pos().x(), particleContext.pos().y(), particleContext.pos().z());
