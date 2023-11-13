@@ -10,30 +10,32 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class SpikeS2CPacket {
     private final int id;
-    private List<BlockPos> spikesPositions;
-    private BlockPos spikePos;
+    private final List<BlockPos> spikePositions;
 
-    public SpikeS2CPacket(int id, List<BlockPos> spikesPositions) {
+    public SpikeS2CPacket(int id, List<BlockPos> spikePositions) {
         this.id = id;
-        this.spikesPositions = spikesPositions;
+        this.spikePositions = spikePositions;
     }
 
     public SpikeS2CPacket(FriendlyByteBuf buf) {
         this.id = buf.readInt();
-        this.spikePos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+        int size = buf.readInt();
+        this.spikePositions = new ArrayList<>();
+        for (int i = 0; i < size; i++)
+            this.spikePositions.add(buf.readBlockPos());
     }
 
     public void write(FriendlyByteBuf buf){
-        for (BlockPos spikePos : spikesPositions){
-            buf.writeInt(id);
-            buf.writeInt(spikePos.getX());
-            buf.writeInt(spikePos.getY());
-            buf.writeInt(spikePos.getZ());
+        buf.writeInt(id);
+        buf.writeInt(spikePositions.size());
+        for (BlockPos spikePos : spikePositions){
+            buf.writeBlockPos(spikePos);
         }
     }
 
@@ -48,7 +50,7 @@ public class SpikeS2CPacket {
                 Entity entity = clientLevel.getEntity(id);
 
                 if (entity instanceof VoidBlossomEntity){
-                    ((VoidBlossomEntity) entity).clientSpikeHandler.addSpike(spikePos);
+                    spikePositions.forEach(spikePos -> ((VoidBlossomEntity) entity).clientSpikeHandler.addSpike(spikePos));
                 }
             }));
         });
