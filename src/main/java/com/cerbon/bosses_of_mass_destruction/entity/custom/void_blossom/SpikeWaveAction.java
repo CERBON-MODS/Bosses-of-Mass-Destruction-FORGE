@@ -7,6 +7,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Math
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.NetworkedHitboxManager;
+import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
@@ -155,7 +157,7 @@ public class SpikeWaveAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> {}, //TODO: Add packet
+                        () -> BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), placedPositions), (ServerLevel) entity.level(), entity.position()),
                         indicatorDelay,
                         1,
                         shouldCancel
