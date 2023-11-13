@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class VoidBlossomHitboxes {
                         .overrideCollisionBox(collisionHitbox).getFactory().create(),
                 rootBoxYaw,
                 collisionHitbox,
-                List.of(neck, rootBoxYaw)
+                Arrays.asList(neck, rootBoxYaw)
         );
         idleHitbox.getBounds().getPart(neck).setRotation(-15.0, 0.0, 0.0, true);
         idleHitbox.getBounds().getPart(flower).setRotation(10.0, 0.0, 0.0, true);
@@ -47,7 +48,7 @@ public class VoidBlossomHitboxes {
                         .overrideCollisionBox(collisionHitbox).getFactory().create(),
                 rootBoxYaw,
                 collisionHitbox,
-                List.of(neck, rootBoxYaw)
+                Arrays.asList(neck, rootBoxYaw)
         );
         spikeHitbox.getBounds().getPart(flower).setRotation(20.0, 0.0, 0.0, true);
 
@@ -59,7 +60,7 @@ public class VoidBlossomHitboxes {
                         .overrideCollisionBox(collisionHitbox).getFactory().create(),
                 rootBoxYaw,
                 collisionHitbox,
-                List.of(rootBoxYaw)
+                Arrays.asList(rootBoxYaw)
         );
 
         VoidBlossomCompoundHitbox spikeHitbox1 = new VoidBlossomCompoundHitbox(
@@ -70,7 +71,7 @@ public class VoidBlossomHitboxes {
                         .overrideCollisionBox(collisionHitbox).getFactory().create(),
                 rootBoxYaw,
                 collisionHitbox,
-                List.of(rootBoxYaw)
+                Arrays.asList(rootBoxYaw)
         );
 
         VoidBlossomCompoundHitbox spikeHitbox2 = new VoidBlossomCompoundHitbox(
@@ -81,7 +82,7 @@ public class VoidBlossomHitboxes {
                         .overrideCollisionBox(collisionHitbox).getFactory().create(),
                 rootBoxYaw,
                 collisionHitbox,
-                List.of(rootBoxYaw)
+                Arrays.asList(rootBoxYaw)
         );
 
         VoidBlossomCompoundHitbox spikeHitbox3 = new VoidBlossomCompoundHitbox(
@@ -91,7 +92,7 @@ public class VoidBlossomHitboxes {
                         .overrideCollisionBox(collisionHitbox).getFactory().create(),
                 rootBoxYaw,
                 collisionHitbox,
-                List.of(rootBoxYaw)
+                Arrays.asList(rootBoxYaw)
         );
 
         VoidBlossomCompoundHitbox sporeHitbox = new VoidBlossomCompoundHitbox(
@@ -102,7 +103,7 @@ public class VoidBlossomHitboxes {
                         .overrideCollisionBox(collisionHitbox).getFactory().create(),
                 rootBoxYaw,
                 collisionHitbox,
-                List.of(rootBoxYaw)
+                Arrays.asList(rootBoxYaw)
         );
 
         this.hitboxMap = Map.of(
