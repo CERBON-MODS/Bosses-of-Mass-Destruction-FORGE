@@ -9,10 +9,13 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldow
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.NetworkedHitboxManager;
+import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -111,7 +114,7 @@ public class SpikeAction implements IActionWithCooldown {
                                                             32,
                                                             null
                                                     );
-                                                    //TODO: Add packet
+                                                    BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), successfulSpikes), (ServerLevel) entity.level(), entity.position());
                                                 },
                                                 indicatorDelay,
                                                 1,
