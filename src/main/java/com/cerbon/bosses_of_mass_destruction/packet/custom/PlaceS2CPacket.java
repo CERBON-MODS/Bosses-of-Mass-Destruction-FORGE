@@ -8,7 +8,6 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,10 +34,9 @@ public class PlaceS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
-            ClientLevel level = Minecraft.getInstance().level;
-            if (level == null) return;
+            Minecraft client = Minecraft.getInstance();
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleVoidBlossomPlace(pos));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> handleVoidBlossomPlace(pos)));
         });
         ctx.setPacketHandled(true);
     }
