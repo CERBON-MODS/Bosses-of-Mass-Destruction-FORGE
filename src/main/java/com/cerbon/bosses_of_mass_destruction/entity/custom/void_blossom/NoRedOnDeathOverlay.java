@@ -14,7 +14,7 @@ public class NoRedOnDeathOverlay implements IRenderer<VoidBlossomEntity>, IOverl
         if (entity == null)
             return OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false));
 
-        return OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(entity.hurtTime > 0 && entity.isDeadOrDying()));
+        return OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(entity.hurtTime > 0 && !entity.isDeadOrDying()));
     }
 
     @Override
