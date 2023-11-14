@@ -57,10 +57,12 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
 
     public SporeBallProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
         super(entityType, level);
+        collisionPredicate = hitResult -> true;
     }
 
     public SporeBallProjectile(LivingEntity livingEntity, Level level, Predicate<EntityHitResult> entityPredicate){
         super(BMDEntities.SPORE_BALL.get(), livingEntity, level, entityPredicate);
+        collisionPredicate = hitResult -> true;
     }
 
     @Override
@@ -114,31 +116,34 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
             }
         };
 
-        RiftBurst riftBurst = new RiftBurst(
-                owner,
-                (ServerLevel) level(),
-                BMDParticles.SPORE_INDICATOR.get(),
-                BMDParticles.SPORE.get(),
-                explosionDelay,
-                eventScheduler,
-                onImpact,
-                this::isOpenBlock,
-                this::posFinder
-        );
+        if (!level().isClientSide) {
+            RiftBurst riftBurst = new RiftBurst(
+                    owner,
+                    (ServerLevel) level(),
+                    BMDParticles.SPORE_INDICATOR.get(),
+                    BMDParticles.SPORE.get(),
+                    explosionDelay,
+                    eventScheduler,
+                    onImpact,
+                    this::isOpenBlock,
+                    this::posFinder
+            );
 
-        eventScheduler.addEvent(
-                new TimedEvent(
-                        () -> {
-                            playSound(BMDSounds.SPORE_IMPACT.get(), 1.5f, BMDUtils.randomPitch(random));
-                            discard();
-                        },
-                        explosionDelay
-                )
-        );
 
-        Vec3 center = VecUtils.asVec3(blockPosition()).add(VecUtils.unit.multiply(0.5, 0.5, 0.5));
-        for (Vec3 point : circlePoints)
-            riftBurst.tryPlaceRift(center.add(point));
+            eventScheduler.addEvent(
+                    new TimedEvent(
+                            () -> {
+                                playSound(BMDSounds.SPORE_IMPACT.get(), 1.5f, BMDUtils.randomPitch(random));
+                                discard();
+                            },
+                            explosionDelay
+                    )
+            );
+
+            Vec3 center = VecUtils.asVec3(blockPosition()).add(VecUtils.unit.multiply(0.5, 0.5, 0.5));
+            for (Vec3 point : circlePoints)
+                riftBurst.tryPlaceRift(center.add(point));
+        }
     }
 
     private BlockPos posFinder(Vec3 pos){
@@ -164,6 +169,8 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
         if (id == particle)
             for (Vec3 point : MathUtils.circlePoints(0.8, 16, VecUtils.yAxis))
                 projectileParticles.build(point.add(position()), point.multiply(0.1, 0.1, 0.1));
+
+        super.handleEntityEvent(id);
     }
 
     @Override
