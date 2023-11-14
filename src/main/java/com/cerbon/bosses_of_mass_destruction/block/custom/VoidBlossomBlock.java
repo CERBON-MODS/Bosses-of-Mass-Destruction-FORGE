@@ -89,9 +89,9 @@ public class VoidBlossomBlock extends Block {
 
     @Override
     public void destroy(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState state) {
-        for(int x = -1; x < 1; x++) {
-            for (int z = -1; z < 1; z++) {
-                for(int y = -1; y < 1; y ++) {
+        for(int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                for(int y = -1; y <= 1; y ++) {
                     if((x != 0 || z != 0)) {
                         BlockPos pos1 = pos.offset(x, y, z);
                         if(level.getBlockState(pos1).getBlock() == BMDBlocks.VINE_WALL.get()) {
