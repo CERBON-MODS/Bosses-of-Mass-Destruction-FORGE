@@ -3,8 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.mixin.multipart_entities.client;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.client.PlayerInteractMultipartEntity;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.MultipartAwareEntity;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityAttackC2SPacket;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityInteractC2SPacket;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityInteractionC2SPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.world.InteractionHand;
@@ -32,13 +31,18 @@ public abstract class MixinMultiplayerGameMode {
     private void attackHook(final Player player, final Entity target, final CallbackInfo ci) {
         if (target instanceof MultipartAwareEntity) {
             ensureHasSentCarriedItem();
-            BMDPacketHandler.sendToServer(new MultipartEntityAttackC2SPacket((MultipartAwareEntity) target));
+
+            Minecraft client = Minecraft.getInstance();
+            final Vec3 pos = client.cameraEntity.getEyePosition(client.getFrameTime());
+            final Vec3 dir = client.cameraEntity.getViewVector(client.getFrameTime());
+            final double reach = client.gameMode.getPickRange();
+            String part = ((MultipartAwareEntity) target).getBounds().raycast(pos, pos.add(dir.scale(reach)));
+            if (part == null) return;
+
+            BMDPacketHandler.sendToServer(new MultipartEntityInteractionC2SPacket(target.getId(), part, InteractionHand.MAIN_HAND, client.cameraEntity.isShiftKeyDown(), PlayerInteractMultipartEntity.InteractionType.ATTACK));
+
             if (localPlayerMode != GameType.SPECTATOR) {
-                final Minecraft client = Minecraft.getInstance();
-                final Vec3 pos = client.cameraEntity.getEyePosition(client.getFrameTime());
-                final Vec3 dir = client.cameraEntity.getViewVector(client.getFrameTime());
-                final double reach = client.gameMode.getPickRange();
-                ((MultipartAwareEntity) target).setNextDamagedPart(((MultipartAwareEntity) target).getBounds().raycast(pos, pos.add(dir.multiply(reach, reach, reach))));
+                ((MultipartAwareEntity) target).setNextDamagedPart(part);
                 player.attack(target);
                 player.resetAttackStrengthTicker();
             }
@@ -50,16 +54,19 @@ public abstract class MixinMultiplayerGameMode {
     private void interactHook(final Player player, final Entity entity, final InteractionHand hand, final CallbackInfoReturnable<InteractionResult> cir) {
         if (entity instanceof MultipartAwareEntity) {
             ensureHasSentCarriedItem();
-            BMDPacketHandler.sendToServer(new MultipartEntityInteractC2SPacket(hand, (MultipartAwareEntity) entity));
-            if (localPlayerMode != GameType.SPECTATOR){
-                final Minecraft client = Minecraft.getInstance();
-                final Vec3 pos = client.cameraEntity.getEyePosition(client.getFrameTime());
-                final Vec3 dir = client.cameraEntity.getViewVector(client.getFrameTime());
-                final double reach = client.gameMode.getPickRange();
-                final String part = ((MultipartAwareEntity) entity).getBounds().raycast(pos, pos.add(dir.multiply(reach, reach, reach)));
-                if (part != null)
-                    cir.setReturnValue(((MultipartAwareEntity) entity).interact(client.cameraEntity, hand, part));
-            }
+
+            Minecraft client = Minecraft.getInstance();
+            final Vec3 pos = client.cameraEntity.getEyePosition(client.getFrameTime());
+            final Vec3 dir = client.cameraEntity.getViewVector(client.getFrameTime());
+            final double reach = client.gameMode.getPickRange();
+            String part = ((MultipartAwareEntity) entity).getBounds().raycast(pos, pos.add(dir.scale(reach)));
+            if (part == null) return;
+
+            BMDPacketHandler.sendToServer(new MultipartEntityInteractionC2SPacket(entity.getId(), part, hand, client.cameraEntity.isShiftKeyDown(), PlayerInteractMultipartEntity.InteractionType.INTERACT));
+
+            if (localPlayerMode != GameType.SPECTATOR)
+                cir.setReturnValue(((MultipartAwareEntity) entity).interact(player, hand, part));
+
             cir.setReturnValue(InteractionResult.PASS);
         }
     }

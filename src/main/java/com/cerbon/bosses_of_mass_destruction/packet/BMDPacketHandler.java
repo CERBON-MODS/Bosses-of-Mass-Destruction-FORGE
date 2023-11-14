@@ -4,8 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.ChargedEnderPearlS2CP
 import com.cerbon.bosses_of_mass_destruction.packet.custom.PlaceS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityAttackC2SPacket;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityInteractC2SPacket;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityInteractionC2SPacket;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -59,16 +58,10 @@ public class BMDPacketHandler {
                 .consumerMainThread(SpikeS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(MultipartEntityAttackC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(MultipartEntityAttackC2SPacket::new)
-                .encoder(MultipartEntityAttackC2SPacket::write)
-                .consumerMainThread(MultipartEntityAttackC2SPacket::handle)
-                .add();
-
-        net.messageBuilder(MultipartEntityInteractC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(MultipartEntityInteractC2SPacket::new)
-                .encoder(MultipartEntityInteractC2SPacket::write)
-                .consumerMainThread(MultipartEntityInteractC2SPacket::handle)
+        net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(MultipartEntityInteractionC2SPacket::new)
+                .encoder(MultipartEntityInteractionC2SPacket::write)
+                .consumerMainThread(MultipartEntityInteractionC2SPacket::handle)
                 .add();
     }
 
