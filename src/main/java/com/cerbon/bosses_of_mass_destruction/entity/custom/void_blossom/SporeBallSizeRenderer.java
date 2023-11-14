@@ -18,7 +18,7 @@ public class SporeBallSizeRenderer implements IRenderer<SporeBallProjectile> {
             MultiBufferSource buffer,
             int light
     ) {
-        float deathProgress = (entity.impacted || entity.isRemoved()) ? 0f : ((entity.impactedTicks + partialTicks) / SporeBallProjectile.explosionDelay) * 0.5f;
+        float deathProgress = (!entity.impacted || entity.isRemoved()) ? 0f : ((entity.impactedTicks + partialTicks) / SporeBallProjectile.explosionDelay) * 0.5f;
         float scaledDeathProgress = (float) (Math.pow(deathProgress, 2f) + 1);
         poseStack.scale(scaledDeathProgress, scaledDeathProgress, scaledDeathProgress);
     }

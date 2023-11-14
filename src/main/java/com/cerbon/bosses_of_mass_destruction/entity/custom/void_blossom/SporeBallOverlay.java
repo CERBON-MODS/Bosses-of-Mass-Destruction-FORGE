@@ -28,13 +28,9 @@ public class SporeBallOverlay implements IRenderer<SporeBallProjectile>, IOverla
 
     @Override
     public int getOverlay() {
-        SporeBallProjectile entity;
-        if (this.entity != null)
-            entity = this.entity;
-        else
-            return OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false));
+        if (entity == null) return OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false));
         float partialTicks = (this.partialTicks != 0f) ? this.partialTicks : 0f;
-        float deathProgress = (entity.impacted || entity.isRemoved()) ? 0f : (entity.impactedTicks + partialTicks) / SporeBallProjectile.explosionDelay;
+        float deathProgress = (!entity.impacted || entity.isRemoved()) ? 0f : (entity.impactedTicks + partialTicks) / SporeBallProjectile.explosionDelay;
         float scaledDeathProgress = (float) Math.pow(deathProgress, 2f);
         return OverlayTexture.pack(OverlayTexture.u(scaledDeathProgress), OverlayTexture.v(false));
     }
