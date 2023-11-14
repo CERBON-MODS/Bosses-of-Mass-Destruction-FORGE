@@ -46,6 +46,12 @@ public class BMDItems {
     public static final RegistryObject<Item> CHISELED_STONE_ALTAR = ITEMS.register("chiseled_stone_altar",
             () -> new BlockItem(BMDBlocks.CHISELED_STONE_ALTAR.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> VOID_BLOSSOM = ITEMS.register("void_blossom",
+            () -> new BlockItem(BMDBlocks.VOID_BLOSSOM.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> VINE_WALL = ITEMS.register("vine_wall",
+            () -> new BlockItem(BMDBlocks.VINE_WALL.get(), new Item.Properties()));
+
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),

@@ -4,6 +4,7 @@
         "particle": "bosses_of_mass_destruction:block/vine_wall",
         "bars": "bosses_of_mass_destruction:block/vine_wall"
     },
+    "render_type": "cutout",
     "elements": [
         {   "from": [ 8, 0, 7 ],
             "to": [ 8, 16, 9 ],

@@ -1,9 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.packet;
 
-import com.cerbon.bosses_of_mass_destruction.packet.custom.ChargedEnderPearlS2CPacket;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.PlaceS2CPacket;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
+import com.cerbon.bosses_of_mass_destruction.packet.custom.*;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityInteractionC2SPacket;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.core.BlockPos;
@@ -56,6 +53,12 @@ public class BMDPacketHandler {
                 .decoder(SpikeS2CPacket::new)
                 .encoder(SpikeS2CPacket::write)
                 .consumerMainThread(SpikeS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(HealS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(HealS2CPacket::new)
+                .encoder(HealS2CPacket::write)
+                .consumerMainThread(HealS2CPacket::handle)
                 .add();
 
         net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
