@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.projectile;
 
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
-import com.cerbon.bosses_of_mass_destruction.entity.custom.GauntletEntity;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.GauntletEntity;
 import com.cerbon.bosses_of_mass_destruction.projectile.util.ExemptEntities;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
