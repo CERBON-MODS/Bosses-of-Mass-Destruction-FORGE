@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.client.render.NodeBossBarRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithUtils;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.VoidBlossomEntity;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.BossHealthOverlay;
@@ -28,9 +29,17 @@ public class BossHealthOverlayMixin {
             LichUtils.textureSize
     );
 
+    @Unique private static final NodeBossBarRenderer bmd_voidBlossomBarRenderer = new NodeBossBarRenderer(
+            BMDEntities.VOID_BLOSSOM.get().getDescriptionId(),
+            VoidBlossomEntity.hpMilestones,
+            new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/void_blossom_boss_bar_dividers.png"),
+            LichUtils.textureSize
+    );
+
     @Inject(method = "drawBar(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/world/BossEvent;)V", at = @At("HEAD"), cancellable = true)
     private void drawCustomBossBar(GuiGraphics guiGraphics, int x, int y, BossEvent bossEvent, CallbackInfo ci){
         bmd_lichBossBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
+        bmd_voidBlossomBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
         ObsidilithUtils.obsidilithBossBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
     }
 }
