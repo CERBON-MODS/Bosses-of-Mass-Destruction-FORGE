@@ -11,10 +11,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class VoidBlossomHitboxes {
-    private final Map<Byte, ICompoundHitbox> hitboxMap;
+    private final LinkedHashMap<Byte, ICompoundHitbox> hitboxMap;
 
     public VoidBlossomHitboxes(VoidBlossomEntity entity) {
 
@@ -105,15 +106,15 @@ public class VoidBlossomHitboxes {
                 Arrays.asList(rootBoxYaw)
         );
 
-        this.hitboxMap = Map.of(
-                HitboxId.Idle.getId(), idleHitbox,
-                HitboxId.Spike.getId(), spikeHitbox,
-                HitboxId.Petal.getId(), petalHitbox,
-                HitboxId.SpikeWave3.getId(), spikeHitbox3,
-                HitboxId.SpikeWave1.getId(), spikeHitbox1,
-                HitboxId.SpikeWave2.getId(), spikeHitbox2,
-                HitboxId.Spore.getId(), sporeHitbox
-        );
+        this.hitboxMap = new LinkedHashMap<>() {{
+            put(HitboxId.Idle.getId(), idleHitbox);
+            put(HitboxId.Spike.getId(), spikeHitbox);
+            put(HitboxId.Petal.getId(), petalHitbox);
+            put(HitboxId.SpikeWave3.getId(), spikeHitbox3);
+            put(HitboxId.SpikeWave1.getId(), spikeHitbox1);
+            put(HitboxId.SpikeWave2.getId(), spikeHitbox2);
+            put(HitboxId.Spore.getId(), sporeHitbox);
+        }};
     }
 
     public Map<Byte, ICompoundHitbox> getMap(){
