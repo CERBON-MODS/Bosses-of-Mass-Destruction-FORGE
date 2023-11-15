@@ -137,7 +137,7 @@ public class GauntletHitboxes implements IDamageHandler {
         if (!damageSource.is(DamageTypeTags.IS_PROJECTILE)){
             Entity entity1 = damageSource.getEntity();
             if (entity1 instanceof LivingEntity livingEntity){
-                livingEntity.knockback(0.5, actor.getX() - entity.getX(), actor.getZ() - entity.getZ());
+                livingEntity.knockback(0.5, actor.getX() - livingEntity.getX(), actor.getZ() - livingEntity.getZ());
             }
         }
 
