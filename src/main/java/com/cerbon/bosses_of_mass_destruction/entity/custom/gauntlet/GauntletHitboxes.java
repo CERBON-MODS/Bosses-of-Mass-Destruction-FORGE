@@ -123,7 +123,7 @@ public class GauntletHitboxes implements IDamageHandler {
         nextDamagedPart = null;
 
         if (disableHitboxesForCompatibility) return true;
-        if (part.equals(eyeBox) || damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return true;
+        if (part != null && part.equals(eyeBox) || damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return true;
 
         if (damageSource.is(DamageTypeTags.IS_EXPLOSION)){
             Vec3 pos = damageSource.getSourcePosition();
