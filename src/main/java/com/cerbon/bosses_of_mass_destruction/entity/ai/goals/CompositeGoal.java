@@ -5,7 +5,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CompositeGoal extends Goal {
+public class CompositeGoal extends Goal {
     private final List<Goal> goals;
 
     public CompositeGoal(Goal... goals) {

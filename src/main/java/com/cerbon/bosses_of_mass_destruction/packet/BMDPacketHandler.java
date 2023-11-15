@@ -61,6 +61,18 @@ public class BMDPacketHandler {
                 .consumerMainThread(HealS2CPacket::handle)
                 .add();
 
+        net.messageBuilder(BlindnessS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(BlindnessS2CPacket::new)
+                .encoder(BlindnessS2CPacket::write)
+                .consumerMainThread(BlindnessS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(ChangeHitboxS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ChangeHitboxS2CPacket::new)
+                .encoder(ChangeHitboxS2CPacket::write)
+                .consumerMainThread(ChangeHitboxS2CPacket::handle)
+                .add();
+
         net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(MultipartEntityInteractionC2SPacket::new)
                 .encoder(MultipartEntityInteractionC2SPacket::write)

@@ -6,6 +6,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Rand
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.*;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.*;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithArmorRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithBoneLight;
@@ -31,7 +32,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -81,6 +81,12 @@ public class BMDEntities {
                     .fireImmune()
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "obsidilith").toString()));
 
+    public static final RegistryObject<EntityType<GauntletEntity>> GAUNTLET = ENTITY_TYPES.register("gauntlet",
+            () -> EntityType.Builder.of(GauntletEntity::new, MobCategory.MONSTER)
+                    .sized(5.0f, 4.0f)
+                    .fireImmune()
+                    .build(new ResourceLocation(BMDConstants.MOD_ID, "gauntlet").toString()));
+
     public static final RegistryObject<EntityType<VoidBlossomEntity>> VOID_BLOSSOM = ENTITY_TYPES.register("void_blossom",
             () -> EntityType.Builder.of(VoidBlossomEntity::new, MobCategory.MONSTER)
                     .sized(8.0f, 10.0f)
@@ -114,6 +120,15 @@ public class BMDEntities {
                 .add(Attributes.ATTACK_DAMAGE, mobConfig.obsidilithConfig.attack)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 10)
                 .add(Attributes.ARMOR, mobConfig.obsidilithConfig.armor)
+                .build());
+
+        event.put(BMDEntities.GAUNTLET.get(), Mob.createMobAttributes()
+                .add(Attributes.FLYING_SPEED, 4.0)
+                .add(Attributes.FOLLOW_RANGE, 48.0)
+                .add(Attributes.MAX_HEALTH, mobConfig.gauntletConfig.health)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 10)
+                .add(Attributes.ATTACK_DAMAGE, mobConfig.gauntletConfig.attack)
+                .add(Attributes.ARMOR, mobConfig.gauntletConfig.armor)
                 .build());
 
         event.put(BMDEntities.VOID_BLOSSOM.get(), Mob.createMobAttributes()
@@ -209,6 +224,36 @@ public class BMDEntities {
                                         new LerpedPosRenderer<>(vec3 -> ParticleFactories.soulFlame().build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), Vec3.ZERO)))),
                         entity -> missileTexture, new FullRenderLight<>()
                 ));
+
+        EntityRenderers.register(GAUNTLET.get(), context -> {
+            GeoModel<GauntletEntity> modelProvider = new GeoModel<>(
+                    entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/gauntlet.geo.json"),
+                    new GauntletTextureProvider(),
+                    new ResourceLocation(BMDConstants.MOD_ID, "animations/gauntlet.animation.json"),
+                    new GauntletCodeAnimations(),
+                    RenderType::entityCutout
+            );
+            GauntletEnergyRenderer energyRenderer = new GauntletEnergyRenderer(modelProvider, context);
+            GauntletOverlay overlayOverride = new GauntletOverlay();
+            return new SimpleLivingGeoRenderer<>(
+                    context,
+                    modelProvider,
+                    null,
+                    null,
+                    new CompositeRenderer<>(
+                            new GauntletLaserRenderer(),
+                            new ConditionalRenderer<>(
+                                    new WeakHashPredicate<>(() -> new FrameLimiter(20f, pauseSecondTimer)::canDoFrame),
+                                    new LaserParticleRenderer()
+                            ),
+                            energyRenderer,
+                            overlayOverride
+                    ),
+                    energyRenderer,
+                    overlayOverride,
+                    false
+            );
+        });
 
         EntityRenderers.register(VOID_BLOSSOM.get(), context -> {
             ResourceLocation texture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/void_blossom.png");
