@@ -44,7 +44,7 @@ public class GauntletClientEnergyShieldHandler implements IDataAccessorHandler {
                             () -> !entity.isAlive() || !entity.getEntityData().get(GauntletEntity.isEnergized)
                     )
             );
-        }
+        }else energizedRenderAlpha = 0.0f;
     }
 
     private void spawnParticles(){
