@@ -55,6 +55,9 @@ public class BMDItems {
     public static final RegistryObject<Item> OBSIDILITH_SUMMON_BLOCK = ITEMS.register("obsidilith_end_frame",
             () -> new BlockItem(BMDBlocks.OBSIDILITH_SUMMON_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> GAUNTLET_BLACKSTONE = ITEMS.register("gauntlet_blackstone",
+            () -> new BlockItem(BMDBlocks.GAUNTLET_BLACKSTONE.get(), new Item.Properties()));
+
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),

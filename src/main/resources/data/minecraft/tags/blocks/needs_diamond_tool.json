@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "bosses_of_mass_destruction:obsidilith_rune"
+    "bosses_of_mass_destruction:obsidilith_rune",
+    "bosses_of_mass_destruction:gauntlet_blackstone"
   ]
 }

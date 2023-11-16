@@ -46,6 +46,13 @@ public class BMDBlocks {
     public static final RegistryObject<Block> OBSIDILITH_SUMMON_BLOCK = BLOCKS.register("obsidilith_end_frame",
             () -> new ObsidilithSummonBlock(BlockBehaviour.Properties.copy(Blocks.END_PORTAL_FRAME)));
 
+    public static final RegistryObject<Block> GAUNTLET_BLACKSTONE = BLOCKS.register("gauntlet_blackstone",
+            () -> new GauntletBlackstoneBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.COLOR_BLACK)
+                            .requiresCorrectToolForDrops()
+                            .strength(50.0F, 1200.0F)));
+
     public static final RegistryObject<Block> CHISELED_STONE_ALTAR = BLOCKS.register("chiseled_stone_altar",
             () -> new ChiseledStoneAltarBlock(
                     BlockBehaviour.Properties.copy(Blocks.BEDROCK)
