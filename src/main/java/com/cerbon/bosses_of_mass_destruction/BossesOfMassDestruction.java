@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction;
 
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
@@ -31,6 +32,7 @@ public class BossesOfMassDestruction {
         BMDCreativeModeTabs.register(modEventBus);
         BMDItems.register(modEventBus);
         BMDBlocks.register(modEventBus);
+        BMDBlockEntities.register(modEventBus);
         BMDEntities.register(modEventBus);
 
         BMDSounds.register(modEventBus);
