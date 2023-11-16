@@ -14,8 +14,8 @@ public class ChunkBlockCache implements IChunkBlockCache {
         HashMap<Block, HashSet<BlockPos>> chunk = map.getOrDefault(chunkPos, new HashMap<>());
         HashSet<BlockPos> blocks = chunk.getOrDefault(block, new HashSet<>());
         blocks.add(pos);
-        chunk.replace(block, blocks);
-        map.replace(chunkPos, chunk);
+        chunk.put(block, blocks);
+        map.put(chunkPos, chunk);
     }
 
     @Override
