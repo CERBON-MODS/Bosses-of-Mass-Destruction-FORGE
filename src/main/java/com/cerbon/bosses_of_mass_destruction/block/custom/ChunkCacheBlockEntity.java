@@ -29,7 +29,7 @@ public class ChunkCacheBlockEntity extends BlockEntity {
         super.setRemoved();
     }
 
-    public static void tick(Level level, BlockPos pos, ChunkCacheBlockEntity entity){
+    public static void tick(Level level, BlockPos pos, BlockState state, ChunkCacheBlockEntity entity){
         if (!entity.added){
             BMDCapabilities.getChunkBlockCache(level).ifPresent(chunkBlockCache ->
                     chunkBlockCache.addToChunk(new ChunkPos(pos), entity.block, pos));

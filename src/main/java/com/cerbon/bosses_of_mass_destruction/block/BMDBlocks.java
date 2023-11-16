@@ -38,6 +38,9 @@ public class BMDBlocks {
     public static final RegistryObject<Block> CHISELED_STONE_ALTAR = BLOCKS.register("chiseled_stone_altar",
             () -> new ChiseledStoneAltarBlock(BlockBehaviour.Properties.copy(Blocks.BEDROCK).lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 11 : 0)));
 
+    public static final RegistryObject<Block> MOB_WARD = BLOCKS.register("mob_ward",
+            () -> new MobWardBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops().noOcclusion().lightLevel(value -> 15).strength(10.0F, 1200.0F)));
+
     public static void register(IEventBus eventBus){
         BLOCKS.register(eventBus);
     }

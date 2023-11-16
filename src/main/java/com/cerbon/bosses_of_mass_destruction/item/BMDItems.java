@@ -61,6 +61,9 @@ public class BMDItems {
     public static final RegistryObject<Item> SEALED_BLACKSTONE = ITEMS.register("sealed_blackstone",
             () -> new BlockItem(BMDBlocks.SEALED_BLACKSTONE.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> MOB_WARD = ITEMS.register("mob_ward",
+            () -> new BlockItem(BMDBlocks.MOB_WARD.get(), new Item.Properties()));
+
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),
