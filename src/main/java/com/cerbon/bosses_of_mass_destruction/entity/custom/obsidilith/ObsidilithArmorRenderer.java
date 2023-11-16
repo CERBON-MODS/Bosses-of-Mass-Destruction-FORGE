@@ -56,7 +56,6 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
         if (type == null) return;
 
         if (entity.isShielded()){
-
             Vec3 color;
             switch (entity.currentAttack){
                 case ObsidilithUtils.burstAttackStatus -> color = BMDColors.ORANGE;
@@ -69,6 +68,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
             }
             color.add(VecUtils.unit).normalize().multiply(0.6, 0.6, 0.6);
 
+            if (geoModelProvider == null) return;
             geoModelProvider.actuallyRender(
                     poseStack,
                     entity,
