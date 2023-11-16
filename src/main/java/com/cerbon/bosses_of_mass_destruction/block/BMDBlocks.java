@@ -1,9 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.block;
 
-import com.cerbon.bosses_of_mass_destruction.block.custom.ChiseledStoneAltarBlock;
-import com.cerbon.bosses_of_mass_destruction.block.custom.ObsidilithRuneBlock;
-import com.cerbon.bosses_of_mass_destruction.block.custom.VineWallBlock;
-import com.cerbon.bosses_of_mass_destruction.block.custom.VoidBlossomBlock;
+import com.cerbon.bosses_of_mass_destruction.block.custom.*;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -45,6 +42,9 @@ public class BMDBlocks {
                             .sound(SoundType.WOOD)
                             .strength(2.0f, 6.0f)
             ));
+
+    public static final RegistryObject<Block> OBSIDILITH_SUMMON_BLOCK = BLOCKS.register("obsidilith_end_frame",
+            () -> new ObsidilithSummonBlock(BlockBehaviour.Properties.copy(Blocks.END_PORTAL_FRAME)));
 
     public static final RegistryObject<Block> CHISELED_STONE_ALTAR = BLOCKS.register("chiseled_stone_altar",
             () -> new ChiseledStoneAltarBlock(

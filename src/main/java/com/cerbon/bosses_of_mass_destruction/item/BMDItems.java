@@ -52,6 +52,9 @@ public class BMDItems {
     public static final RegistryObject<Item> VINE_WALL = ITEMS.register("vine_wall",
             () -> new BlockItem(BMDBlocks.VINE_WALL.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> OBSIDILITH_SUMMON_BLOCK = ITEMS.register("obsidilith_end_frame",
+            () -> new BlockItem(BMDBlocks.OBSIDILITH_SUMMON_BLOCK.get(), new Item.Properties()));
+
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),
