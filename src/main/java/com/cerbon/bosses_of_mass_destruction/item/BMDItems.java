@@ -64,6 +64,9 @@ public class BMDItems {
     public static final RegistryObject<Item> MOB_WARD = ITEMS.register("mob_ward",
             () -> new BlockItem(BMDBlocks.MOB_WARD.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> MONOLITH_BLOCK = ITEMS.register("monolith_block",
+            () -> new BlockItem(BMDBlocks.MONOLITH_BLOCK.get(), new Item.Properties()));
+
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),

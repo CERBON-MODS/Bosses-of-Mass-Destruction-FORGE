@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.event;
 
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDCreativeModeTabs;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
@@ -50,6 +51,7 @@ public class BMDEvents {
         protected static void addCreativeTab(@NotNull BuildCreativeModeTabContentsEvent event) {
             if (event.getTab() == BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION.get()) {
                 event.accept(BMDItems.MOB_WARD);
+                event.accept(BMDBlocks.MONOLITH_BLOCK);
                 event.accept(BMDItems.SOUL_STAR);
                 event.accept(BMDItems.ANCIENT_ANIMA);
                 event.accept(BMDItems.BLAZING_EYE);
