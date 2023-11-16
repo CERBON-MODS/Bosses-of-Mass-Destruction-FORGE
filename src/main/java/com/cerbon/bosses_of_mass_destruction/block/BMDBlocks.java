@@ -53,6 +53,9 @@ public class BMDBlocks {
                             .requiresCorrectToolForDrops()
                             .strength(50.0F, 1200.0F)));
 
+    public static final RegistryObject<Block> SEALED_BLACKSTONE = BLOCKS.register("sealed_blackstone",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.BEDROCK)));
+
     public static final RegistryObject<Block> CHISELED_STONE_ALTAR = BLOCKS.register("chiseled_stone_altar",
             () -> new ChiseledStoneAltarBlock(
                     BlockBehaviour.Properties.copy(Blocks.BEDROCK)
