@@ -6,7 +6,6 @@ import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
-import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
