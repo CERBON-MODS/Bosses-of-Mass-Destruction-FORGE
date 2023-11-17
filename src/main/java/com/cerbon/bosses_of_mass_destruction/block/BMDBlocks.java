@@ -47,6 +47,9 @@ public class BMDBlocks {
     public static final RegistryObject<Block> LEVITATION_BLOCK = BLOCKS.register("levitation_block",
             () -> new LevitationBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).requiresCorrectToolForDrops().noOcclusion().lightLevel(value -> 4).strength(10.0F, 1200.0F)));
 
+    public static final RegistryObject<Block> VOID_BLOSSOM_SUMMON_BLOCK = BLOCKS.register("void_blossom_block",
+            () -> new VoidBlossomSummonBlock(BlockBehaviour.Properties.copy(Blocks.BEDROCK)));
+
     public static void register(IEventBus eventBus){
         BLOCKS.register(eventBus);
     }
