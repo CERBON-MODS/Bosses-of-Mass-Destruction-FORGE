@@ -1,12 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.event;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
+import com.cerbon.bosses_of_mass_destruction.block.custom.LevitationBlock;
+import com.cerbon.bosses_of_mass_destruction.block.custom.LevitationBlockEntity;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.LevelEventSchedulerProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -53,6 +56,8 @@ public class ForgeEvents {
 
                 data.set(newPosition);
             });
+
+            LevitationBlockEntity.tickFlight((ServerPlayer) event.player);
         }
     }
 

@@ -44,6 +44,9 @@ public class BMDBlocks {
     public static final RegistryObject<Block> MONOLITH_BLOCK = BLOCKS.register("monolith_block",
             () -> new MonolithBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops().noOcclusion().lightLevel(value -> 4).strength(10.0F, 1200.0F)));
 
+    public static final RegistryObject<Block> LEVITATION_BLOCK = BLOCKS.register("levitation_block",
+            () -> new LevitationBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).requiresCorrectToolForDrops().noOcclusion().lightLevel(value -> 4).strength(10.0F, 1200.0F)));
+
     public static void register(IEventBus eventBus){
         BLOCKS.register(eventBus);
     }
