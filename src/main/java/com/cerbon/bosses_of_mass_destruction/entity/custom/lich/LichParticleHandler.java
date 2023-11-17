@@ -232,7 +232,6 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Cli
                 Vec3.ZERO);
     }
 
-    // TODO: Test if it's working correctly
     private void animatedParticleMagicCircle(double radius, int points, int time, float rotationDegrees){
         Vec3 spellPos = entity.position();
         Collection<Vec3> circlePoints = MathUtils.circlePoints(radius, points, entity.getLookAngle());

@@ -1,5 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.particle;
 
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.BurstAction;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.PillarAction;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.WaveAction;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SpikeAction;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.SpikeWaveAction;
+import com.cerbon.bosses_of_mass_destruction.projectile.SporeBallProjectile;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
@@ -153,8 +159,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.OBSIDILITH_BURST_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to burstDelay after creating the BurstAction class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 30 + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, BurstAction.burstDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
                             particle.setColorOverride(f -> BMDColors.ORANGE);
                             particle.setColorVariation(0.3);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);
@@ -176,8 +181,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.OBSIDILITH_WAVE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to waveDelay after creating the WaveAction class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 20 + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, WaveAction.waveDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
                             particle.setColorOverride(f -> BMDColors.RED);
                             particle.setColorVariation(0.3);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);
@@ -192,8 +196,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.OBSIDILITH_SPIKE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to waveDelay after creating the WaveAction class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 20 +  RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, WaveAction.waveDelay +  RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
                             particle.setColorOverride(f -> BMDColors.COMET_BLUE);
                             particle.setColorVariation(0.3);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);
@@ -225,8 +228,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.PILLAR_SPAWN_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to pillarDelay after creating the PillarAction class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 40, VanillaCopies::buildBillBoardGeometry, true, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, PillarAction.pillarDelay, VanillaCopies::buildBillBoardGeometry, true, true);
                             particle.setColorOverride(f -> BMDColors.ENDER_PURPLE);
                             particle.scale(2.0f);
                             particle.setColorVariation(0.25);
@@ -237,8 +239,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.PILLAR_SPAWN_INDICATOR_2.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to pillarDelay after creating the PillarAction class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 40, VanillaCopies::buildBillBoardGeometry, false, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, PillarAction.pillarDelay, VanillaCopies::buildBillBoardGeometry, false, true);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);
                             particle.setScaleOverride(f -> (float) ((Math.sin((double) f * Math.PI) + 1f) * 0.1f));
                             particle.setColorOverride(age -> MathUtils.lerpVec(age, BMDColors.WHITE, BMDColors.ENDER_PURPLE));
@@ -290,8 +291,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.VOID_BLOSSOM_SPIKE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to indicatorDelay after creating the SpikeAction class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 20 + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, SpikeAction.indicatorDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
                             particle.setColorOverride(f -> BMDColors.ENDER_PURPLE);
                             particle.setColorVariation(0.2);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);
@@ -302,8 +302,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.VOID_BLOSSOM_SPIKE_WAVE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to indicatorDelay after creating the SpikeWaveAction class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 30 + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, SpikeWaveAction.indicatorDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
                             particle.setColorOverride(f -> BMDColors.ENDER_PURPLE);
                             particle.setColorVariation(0.2);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);
@@ -343,8 +342,7 @@ public class BMDParticles {
         event.registerSpriteSet(BMDParticles.SPORE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
-                            //TODO: Change particle age to explosionDelay after creating the SporeBallProjectile class
-                            SimpleParticle particle = new SimpleParticle(particleContext, 30 + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
+                            SimpleParticle particle = new SimpleParticle(particleContext, SporeBallProjectile.explosionDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
                             particle.setColorOverride(f -> BMDColors.GREEN);
                             particle.setColorVariation(0.35);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);

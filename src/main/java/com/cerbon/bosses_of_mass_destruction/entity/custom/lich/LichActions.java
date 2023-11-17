@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.action.CooldownAction;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionStop;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.GauntletAttacks;
 
 import java.util.function.Supplier;
 
@@ -21,7 +22,7 @@ public class LichActions {
     public ActionGoal buildAttackGoal() {
         CooldownAction attackAction = new CooldownAction(this.attackAction, 80);
         IActionStop onCancel = () -> {
-            entity.level().broadcastEntityEvent(entity, (byte) 6); //TODO: Change (byte) 6 to GauntletAttacks.stopAttackAnimation
+            entity.level().broadcastEntityEvent(entity, GauntletAttacks.stopAttackAnimation);
             attackAction.stop();
         };
         return new ActionGoal(() -> !cancelAttackAction.get(), null, attackAction, null, onCancel);
