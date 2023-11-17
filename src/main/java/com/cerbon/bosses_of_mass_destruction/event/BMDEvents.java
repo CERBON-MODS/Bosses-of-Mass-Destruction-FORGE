@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.event;
 
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDCreativeModeTabs;
@@ -26,6 +27,7 @@ public class BMDEvents {
         protected static void onClientSetup(FMLClientSetupEvent event){
             BMDEntities.initClient();
             BMDItems.initClient();
+            BMDBlockEntities.initClient();
         }
 
         @SubscribeEvent
