@@ -55,6 +55,7 @@ public class BMDEvents {
                 event.accept(BMDItems.MOB_WARD);
                 event.accept(BMDBlocks.MONOLITH_BLOCK);
                 event.accept(BMDBlocks.LEVITATION_BLOCK);
+                event.accept(BMDBlocks.VOID_LILY_BLOCK);
                 event.accept(BMDItems.SOUL_STAR);
                 event.accept(BMDItems.ANCIENT_ANIMA);
                 event.accept(BMDItems.BLAZING_EYE);

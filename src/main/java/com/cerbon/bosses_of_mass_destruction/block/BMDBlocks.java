@@ -50,6 +50,9 @@ public class BMDBlocks {
     public static final RegistryObject<Block> VOID_BLOSSOM_SUMMON_BLOCK = BLOCKS.register("void_blossom_block",
             () -> new VoidBlossomSummonBlock(BlockBehaviour.Properties.copy(Blocks.BEDROCK)));
 
+    public static final RegistryObject<Block> VOID_LILY_BLOCK = BLOCKS.register("void_lily",
+            () -> new VoidLilyBlock(BlockBehaviour.Properties.of().noCollission().randomTicks().instabreak().sound(SoundType.GRASS).lightLevel(value -> 8)));
+
     public static void register(IEventBus eventBus){
         BLOCKS.register(eventBus);
     }

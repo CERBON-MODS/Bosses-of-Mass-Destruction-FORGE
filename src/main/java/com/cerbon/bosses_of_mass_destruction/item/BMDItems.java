@@ -73,6 +73,9 @@ public class BMDItems {
     public static final RegistryObject<Item> VOID_BLOSSOM_SUMMON_BLOCK = ITEMS.register("void_blossom_block",
             () -> new BlockItem(BMDBlocks.VOID_BLOSSOM_SUMMON_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> VOID_LILY = ITEMS.register("void_lily",
+            () -> new BlockItem(BMDBlocks.VOID_LILY_BLOCK.get(), new Item.Properties()));
+
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),

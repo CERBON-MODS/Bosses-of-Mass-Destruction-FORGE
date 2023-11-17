@@ -1,9 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.block;
 
-import com.cerbon.bosses_of_mass_destruction.block.custom.LevitationBlockEntity;
-import com.cerbon.bosses_of_mass_destruction.block.custom.MobWardBlockEntity;
-import com.cerbon.bosses_of_mass_destruction.block.custom.MonolithBlockEntity;
-import com.cerbon.bosses_of_mass_destruction.block.custom.VoidBlossomSummonBlockEntity;
+import com.cerbon.bosses_of_mass_destruction.block.custom.*;
 import com.cerbon.bosses_of_mass_destruction.client.render.BMDBlockEntityRenderer;
 import com.cerbon.bosses_of_mass_destruction.client.render.IBoneLight;
 import com.cerbon.bosses_of_mass_destruction.entity.GeoModel;
@@ -32,6 +29,9 @@ public class BMDBlockEntities {
 
     public static final RegistryObject<BlockEntityType<VoidBlossomSummonBlockEntity>> VOID_BLOSSOM_SUMMON_BLOCK_ENTITY = BLOCKS_ENTITIES.register("void_blossom_block",
             () -> BlockEntityType.Builder.of(VoidBlossomSummonBlockEntity::new, BMDBlocks.VOID_BLOSSOM_SUMMON_BLOCK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<VoidLilyBlockEntity>> VOID_LILY_BLOCK_ENTITY = BLOCKS_ENTITIES.register("void_lily",
+            () -> BlockEntityType.Builder.of(VoidLilyBlockEntity::new, BMDBlocks.VOID_LILY_BLOCK.get()).build(null));
 
     public static void initClient(){
         BlockEntityRenderers.register(LEVITATION_BLOCK_ENTITY.get(), context ->

@@ -73,6 +73,12 @@ public class BMDPacketHandler {
                 .consumerMainThread(ChangeHitboxS2CPacket::handle)
                 .add();
 
+        net.messageBuilder(SendParticleS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SendParticleS2CPacket::new)
+                .encoder(SendParticleS2CPacket::write)
+                .consumerMainThread(SendParticleS2CPacket::handle)
+                .add();
+
         net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(MultipartEntityInteractionC2SPacket::new)
                 .encoder(MultipartEntityInteractionC2SPacket::write)
