@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class VoidBlossomArenaStructureFeature extends Structure{
+public class VoidBlossomArenaStructureFeature extends Structure {
     public static Codec<VoidBlossomArenaStructureFeature> CODEC = simpleCodec(VoidBlossomArenaStructureFeature::new);
 
     protected VoidBlossomArenaStructureFeature(StructureSettings settings) {
@@ -27,7 +27,7 @@ public class VoidBlossomArenaStructureFeature extends Structure{
 
     @Override
     public @NotNull StructureType<?> type() {
-        return BMDStructures.VOID_BLOSSOM_STRUCTURE_TYPE;
+        return BMDStructures.VOID_BLOSSOM_STRUCTURE_TYPE.get();
     }
 
     public static void addPieces(StructurePiecesBuilder collector, GenerationContext context){
@@ -37,7 +37,7 @@ public class VoidBlossomArenaStructureFeature extends Structure{
 
         collector.addPiece(
                 new CodeStructurePiece(
-                        BMDStructures.VOID_BLOSSOM_CAVERN_PIECE,
+                        BMDStructures.VOID_BLOSSOM_CAVERN_PIECE.get(),
                         new BoundingBox(new BlockPos(x, y, z)).inflatedBy(32),
                         new VoidBlossomCavernPieceGenerator()
                 )

@@ -9,6 +9,7 @@ import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import com.cerbon.bosses_of_mass_destruction.util.BMDStructures;
 import com.mojang.logging.LogUtils;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
@@ -37,6 +38,7 @@ public class BossesOfMassDestruction {
 
         BMDSounds.register(modEventBus);
         BMDParticles.register(modEventBus);
+        BMDStructures.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
