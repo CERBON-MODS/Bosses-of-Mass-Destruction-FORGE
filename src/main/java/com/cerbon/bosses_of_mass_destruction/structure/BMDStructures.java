@@ -1,8 +1,9 @@
-package com.cerbon.bosses_of_mass_destruction.util;
+package com.cerbon.bosses_of_mass_destruction.structure;
 
-import com.cerbon.bosses_of_mass_destruction.structure.VoidBlossomArenaStructureFeature;
-import com.cerbon.bosses_of_mass_destruction.structure.VoidBlossomCavernPieceGenerator;
+import com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern.VoidBlossomArenaStructureFeature;
+import com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern.VoidBlossomCavernPieceGenerator;
 import com.cerbon.bosses_of_mass_destruction.structure.util.CodeStructurePiece;
+import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;

@@ -1,4 +1,4 @@
-package com.cerbon.bosses_of_mass_destruction.structure;
+package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 
 import com.cerbon.bosses_of_mass_destruction.structure.util.IStructurePiece;
 import net.minecraft.core.BlockPos;

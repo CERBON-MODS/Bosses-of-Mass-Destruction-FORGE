@@ -14,7 +14,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.*;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.cerbon.bosses_of_mass_destruction.util.BMDStructures;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

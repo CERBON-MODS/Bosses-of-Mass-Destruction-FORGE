@@ -1,7 +1,7 @@
-package com.cerbon.bosses_of_mass_destruction.structure;
+package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 
 import com.cerbon.bosses_of_mass_destruction.structure.util.CodeStructurePiece;
-import com.cerbon.bosses_of_mass_destruction.util.BMDStructures;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.Heightmap;
