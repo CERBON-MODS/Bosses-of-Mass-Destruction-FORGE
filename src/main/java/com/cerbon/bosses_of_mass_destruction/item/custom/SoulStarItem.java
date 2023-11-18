@@ -14,6 +14,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.*;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import com.cerbon.bosses_of_mass_destruction.util.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -24,7 +25,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.StructureTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -140,7 +140,7 @@ public class SoulStarItem extends Item {
         }else {
             player.startUsingItem(usedHand);
             if (level instanceof ServerLevel serverLevel){
-                BlockPos blockPos = serverLevel.findNearestMapStructure(StructureTags.SHIPWRECK, player.blockPosition(), 100, false); //TODO: Change structure to soulStarStructureKey
+                BlockPos blockPos = serverLevel.findNearestMapStructure(BMDStructures.SOUL_STAR_STRUCTURE_KEY, player.blockPosition(), 100, false);
                 if (blockPos != null){
                     SoulStarEntity entity = new SoulStarEntity(level, player.getX(), player.getEyeY(), player.getZ());
                     entity.setItem(itemStack);
