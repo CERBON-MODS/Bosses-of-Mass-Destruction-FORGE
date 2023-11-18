@@ -9,10 +9,10 @@ import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendParticleS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.StructureTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -59,7 +59,7 @@ public class VoidLilyBlockEntity extends BlockEntity {
     }
 
     private static void setNearestStructureDirection(ServerLevel level, BlockPos pos, VoidLilyBlockEntity entity){
-        BlockPos blockPos = level.findNearestMapStructure(StructureTags.MINESHAFT, pos, 50, false); //TODO: Change tag to voidLillyStructure
+        BlockPos blockPos = level.findNearestMapStructure(BMDStructures.VOID_LILY_STRUCTURE_KEY, pos, 50, false);
         if (blockPos != null)
             entity.structureDirection = VecUtils.asVec3(new BlockPos(blockPos.getX(), level.getMinBuildHeight(), blockPos.getZ()).subtract(pos)).normalize();
         else
