@@ -1,4 +1,4 @@
-package com.cerbon.bosses_of_mass_destruction.structure;
+package com.cerbon.bosses_of_mass_destruction.util;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
