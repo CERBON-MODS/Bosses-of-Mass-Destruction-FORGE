@@ -112,7 +112,7 @@ public class BMDUtils {
         return level.getEntities(toExclude, aabb, entity -> entity.getBoundingBox().clip(start, end).isPresent());
     }
 
-    record RotatingParticles(Vec3 pos, ClientParticleBuilder particleBuilder, double minRadius, double maxRadius, double minSpeed, double maxSpeed){}
+    public record RotatingParticles(Vec3 pos, ClientParticleBuilder particleBuilder, double minRadius, double maxRadius, double minSpeed, double maxSpeed){}
 
     public static void spawnRotatingParticles(RotatingParticles particleParams) {
         int startingRotation = new Random().nextInt(360);

@@ -13,6 +13,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
+
 public class BMDItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, BMDConstants.MOD_ID);
@@ -41,7 +43,8 @@ public class BMDItems {
     public static final RegistryObject<Item> CHARGED_ENDER_PEARL = ITEMS.register("charged_ender_pearl",
             () -> new ChargedEnderPearlItem(new Item.Properties().fireResistant().stacksTo(1)));
 
-    //TODO: Add brimstoneNectar item
+    public static final RegistryObject<Item> BRIMSTONE_NECTAR = ITEMS.register("brimstone_nectar",
+            () -> new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant(), List.of()));
 
     public static final RegistryObject<Item> CHISELED_STONE_ALTAR = ITEMS.register("chiseled_stone_altar",
             () -> new BlockItem(BMDBlocks.CHISELED_STONE_ALTAR.get(), new Item.Properties()));

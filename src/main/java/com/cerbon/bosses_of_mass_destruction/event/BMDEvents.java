@@ -64,6 +64,7 @@ public class BMDEvents {
                 event.accept(BMDItems.VOID_THORN);
                 event.accept(BMDItems.CRYSTAL_FRUIT);
                 event.accept(BMDItems.CHARGED_ENDER_PEARL);
+                event.accept(BMDItems.BRIMSTONE_NECTAR);
             }
         }
     }
