@@ -38,7 +38,7 @@ public class ObsidilithEffectHandler {
             .age(() -> RandomUtils.range(25, 30))
             .colorVariation(0.2);
 
-    private final ClientParticleBuilder deathParticleFactory = new ClientParticleBuilder(BMDParticles.DOWNSPARKLE.get())
+    private static final ClientParticleBuilder deathParticleFactory = new ClientParticleBuilder(BMDParticles.DOWNSPARKLE.get())
             .color(age -> MathUtils.lerpVec(age, BMDColors.ENDER_PURPLE, BMDColors.WHITE))
             .colorVariation(0.2)
             .brightness(BMDParticles.FULL_BRIGHT)
@@ -120,10 +120,10 @@ public class ObsidilithEffectHandler {
 
     private void deathEffect(){
         Vec3 entityPos = VecUtils.asVec3(entity.blockPosition()).add(0.5, 0.5, 0.5);
-        spawnPillarParticles(entityPos, eventScheduler);
+        ObsidilithEffectHandler.spawnPillarParticles(entityPos, eventScheduler);
     }
 
-    public void spawnPillarParticles(Vec3 entityPos, EventScheduler eventScheduler){
+    public static void spawnPillarParticles(Vec3 entityPos, EventScheduler eventScheduler){
         for (int i = 0; i <= ObsidilithUtils.deathPillarHeight; i++){
             int i1 = i;
             eventScheduler.addEvent(
@@ -135,4 +135,7 @@ public class ObsidilithEffectHandler {
             );
         }
     }
+
+
+
 }

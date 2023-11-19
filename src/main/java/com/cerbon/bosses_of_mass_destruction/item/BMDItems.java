@@ -2,6 +2,10 @@ package com.cerbon.bosses_of_mass_destruction.item;
 
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.item.custom.*;
+import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.GauntletStructureRepair;
+import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.LichStructureRepair;
+import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.ObsidilithStructureRepair;
+import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.VoidBlossomStructureRepair;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +48,9 @@ public class BMDItems {
             () -> new ChargedEnderPearlItem(new Item.Properties().fireResistant().stacksTo(1)));
 
     public static final RegistryObject<Item> BRIMSTONE_NECTAR = ITEMS.register("brimstone_nectar",
-            () -> new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant(), List.of()));
+            () -> new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant(), List.of(
+                    new GauntletStructureRepair(), new LichStructureRepair(), new ObsidilithStructureRepair(), new VoidBlossomStructureRepair()
+            )));
 
     public static final RegistryObject<Item> CHISELED_STONE_ALTAR = ITEMS.register("chiseled_stone_altar",
             () -> new BlockItem(BMDBlocks.CHISELED_STONE_ALTAR.get(), new Item.Properties()));

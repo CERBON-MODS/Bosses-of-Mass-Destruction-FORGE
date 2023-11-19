@@ -85,6 +85,18 @@ public class BMDPacketHandler {
                 .consumerMainThread(SendVec3S2CPacket::handle)
                 .add();
 
+        net.messageBuilder(ObsidilithReviveS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ObsidilithReviveS2CPacket::new)
+                .encoder(ObsidilithReviveS2CPacket::write)
+                .consumerMainThread(ObsidilithReviveS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(VoidBlossomReviveS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(VoidBlossomReviveS2CPacket::new)
+                .encoder(VoidBlossomReviveS2CPacket::write)
+                .consumerMainThread(VoidBlossomReviveS2CPacket::handle)
+                .add();
+
         net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(MultipartEntityInteractionC2SPacket::new)
                 .encoder(MultipartEntityInteractionC2SPacket::write)
