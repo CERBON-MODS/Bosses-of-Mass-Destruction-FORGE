@@ -66,7 +66,7 @@ public class SoulStarItem extends Item {
         BlockPos blockPos = context.getClickedPos();
         BlockState blockState = level.getBlockState(blockPos);
 
-        if (blockState.is(BMDBlocks.CHISELED_STONE_ALTAR.get()) && !blockState.getValue(BlockStateProperties.LIT)){
+        if (blockState.is(BMDBlocks.CHISELED_STONE_ALTAR.get()) && !blockState.getValue(ChiseledStoneAltarBlock.lit)){
             if (level.isClientSide()){
                 clientSoulStartPlace(blockPos);
                 return InteractionResult.SUCCESS;
@@ -89,14 +89,14 @@ public class SoulStarItem extends Item {
     }
 
     private void serverSoulStarPlace(BlockState blockState, Level level, BlockPos blockPos, UseOnContext context){
-        BlockState blockState2 = blockState.setValue(BlockStateProperties.LIT, true);
+        BlockState blockState2 = blockState.setValue(ChiseledStoneAltarBlock.lit, true);
         level.setBlock(blockPos, blockState2, 2);
         context.getItemInHand().shrink(1);
         List<BlockPos> quarterAltarPosition = List.of(new BlockPos(12, 0, 0), new BlockPos(6, 0, 6));
         List<BlockPos> allPotentialAltarPositions = Arrays.stream(Rotation.values()).flatMap(rot -> quarterAltarPosition.stream().map(blockPos1 -> blockPos1.rotate(rot))).toList();
         int numberOfAltarsFilled = (int) allPotentialAltarPositions.stream().filter(pos -> {
                     BlockState state = level.getBlockState(blockPos.offset(pos));
-                    return state.hasProperty(BlockStateProperties.LIT) && state.getValue(BlockStateProperties.LIT);
+                    return state.hasProperty(ChiseledStoneAltarBlock.lit) && state.getValue(ChiseledStoneAltarBlock.lit);
                 }).count();
 
         if (numberOfAltarsFilled == 3){
@@ -105,7 +105,7 @@ public class SoulStarItem extends Item {
                     new TimedEvent(
                             () -> {
                                 allPotentialAltarPositions.forEach(blockPos1 -> {
-                                    if (level.getBlockState(blockPos.offset(blockPos1)).hasProperty(BlockStateProperties.LIT))
+                                    if (level.getBlockState(blockPos.offset(blockPos1)).hasProperty(ChiseledStoneAltarBlock.lit))
                                         level.destroyBlock(blockPos.offset(blockPos1), false);
                                 });
 

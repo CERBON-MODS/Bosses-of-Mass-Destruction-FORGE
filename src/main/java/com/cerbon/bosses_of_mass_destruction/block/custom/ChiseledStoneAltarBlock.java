@@ -16,19 +16,22 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ChiseledStoneAltarBlock extends Block {
+    public static BooleanProperty lit = BlockStateProperties.LIT;
+
     public ChiseledStoneAltarBlock(Properties properties) {
         super(properties);
-        this.stateDefinition.any().setValue(BlockStateProperties.LIT, false);
+        registerDefaultState(this.stateDefinition.any().setValue(lit, false));
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-        return this.stateDefinition.any().setValue(BlockStateProperties.LIT, false);
+        return this.stateDefinition.any().setValue(lit, false);
     }
 
     @Override
@@ -38,17 +41,17 @@ public class ChiseledStoneAltarBlock extends Block {
 
     @Override
     public int getAnalogOutputSignal(BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
-        return state.getValue(BlockStateProperties.LIT) ? 15 : 0;
+        return state.getValue(lit) ? 15 : 0;
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.LIT);
+        builder.add(lit);
     }
 
     @Override
     public void animateTick(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
-        if (state.getValue(BlockStateProperties.LIT)){
+        if (state.getValue(lit)){
             if (random.nextInt(3) == 0){
                 Particles.blueFireParticleFactory.build(
                         VecUtils.asVec3(pos).add(0.5, 1.0, 0.5).add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).multiply(0.5, 0.5, 0.5)),
