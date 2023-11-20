@@ -22,6 +22,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class VoidBlossomStructureRepair implements StructureRepair{
     private static final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
@@ -60,6 +62,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
         return BossBlockDecorator.bossBlockOffset(pos, level.getMinBuildHeight());
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void handleVoidBlossomRevivePacket(Vec3 pos, ClientLevel level){
         BMDCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(

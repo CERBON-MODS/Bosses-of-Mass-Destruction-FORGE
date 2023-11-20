@@ -21,6 +21,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ObsidilithStructureRepair implements StructureRepair{
 
@@ -67,6 +69,7 @@ public class ObsidilithStructureRepair implements StructureRepair{
         return new BlockPos(centerPos.getX(), structureStart.getBoundingBox().maxY(), centerPos.getZ());
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void handleObsidilithRevivePacket(Vec3 pos, ClientLevel level){
         ObsidilithEffectHandler.spawnPillarParticles(pos, BMDCapabilities.getLevelEventScheduler(level));
     }

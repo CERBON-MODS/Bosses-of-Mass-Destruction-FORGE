@@ -10,6 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.SendParticleS2CPacket
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -67,7 +68,7 @@ public class VoidLilyBlockEntity extends BlockEntity {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void spawnVoidLilyParticles(Level level, Vec3 pos, Vec3 dir){
+    public static void spawnVoidLilyParticles(ClientLevel level, Vec3 pos, Vec3 dir){
         Vec3 streakPos = pos.add(new Vec3(0.5, 0.7, 0.5)).add(RandomUtils.randVec().scale(0.5));
         Vec3 right = dir.cross(VecUtils.yAxis).normalize();
         double sinCurve = RandomUtils.range(8.0, 11.0) * RandomUtils.randSign();
