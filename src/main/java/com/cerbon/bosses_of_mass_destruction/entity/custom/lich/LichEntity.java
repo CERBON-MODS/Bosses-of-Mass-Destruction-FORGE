@@ -48,7 +48,6 @@ import java.util.Map;
 public class LichEntity extends BaseEntity {
     private final LichConfig mobConfig;
     private final AnimationHolder animationHolder;
-    private final LichMoveLogic moveLogic;
     private final TeleportAction teleportAction;
     public HistoricalData<Vec3> velocityHistory;
     public boolean shouldSetToNighttime;
@@ -84,7 +83,7 @@ public class LichEntity extends BaseEntity {
                 LichActions.cometRageAttack, new CometRageAction(this, preTickEvents, this::cancelAttackAction, mobConfig),
                 LichActions.volleyRageAttack, new VolleyRageAction(this, mobConfig, preTickEvents, this::cancelAttackAction));
         DamageMemory damageMemory = new DamageMemory(5, this);
-        this.moveLogic = new LichMoveLogic(statusRegistry, this, damageMemory);
+        LichMoveLogic moveLogic = new LichMoveLogic(statusRegistry, this, damageMemory);
         LichParticleHandler lichParticles = new LichParticleHandler(this, preTickEvents);
 
         this.shouldSetToNighttime = mobConfig.eternalNighttime;
@@ -102,18 +101,17 @@ public class LichEntity extends BaseEntity {
         bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
         serverTick = new CompositeEntityTick<>(cappedHeal, moveLogic);
         clientTick = lichParticles;
-    }
 
-    @Override
-    protected void registerGoals() {
-        LichActions attackHelper = new LichActions(this, moveLogic);
-        LichMovement moveHelper = new LichMovement(this);
+        if (!level.isClientSide){
+            LichActions attackHelper = new LichActions(this, moveLogic);
+            LichMovement moveHelper = new LichMovement(this);
 
-        goalSelector.addGoal(1, new FloatGoal(this));
-        goalSelector.addGoal(3, new CompositeGoal(moveHelper.buildAttackMovement(), attackHelper.buildAttackGoal()));
-        goalSelector.addGoal(4, moveHelper.buildWanderGoal());
+            goalSelector.addGoal(1, new FloatGoal(this));
+            goalSelector.addGoal(3, new CompositeGoal(moveHelper.buildAttackMovement(), attackHelper.buildAttackGoal()));
+            goalSelector.addGoal(4, moveHelper.buildWanderGoal());
 
-        targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> this.getBoundingBox().inflate(d), 10, true, false, null));
+            targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> this.getBoundingBox().inflate(d), 10, true, false, null));
+        }
     }
 
     @Override
