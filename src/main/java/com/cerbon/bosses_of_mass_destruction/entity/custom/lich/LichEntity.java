@@ -5,7 +5,6 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEv
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.config.mob.LichConfig;
-import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.CompositeGoal;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.FindTargetGoal;
@@ -47,73 +46,74 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import java.util.Map;
 
 public class LichEntity extends BaseEntity {
-    private final AnimationHolder animationHolder = new AnimationHolder(this, Map.of(
-            LichActions.endTeleport, new AnimationHolder.Animation("unteleport", "idle"),
-            LichActions.cometRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
-            LichActions.volleyRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
-            LichActions.cometAttack, new AnimationHolder.Animation("summon_fireball", "idle"),
-            LichActions.minionAttack, new AnimationHolder.Animation("summon_minions", "idle"),
-            LichActions.minionRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
-            LichActions.teleportAction, new AnimationHolder.Animation("teleport", "teleporting"),
-            LichActions.volleyAttack, new AnimationHolder.Animation("summon_missiles", "idle"),
-            (byte) 3, new AnimationHolder.Animation("idle", "idle")
-    ),
-            LichActions.stopAttackAnimation, 0
-    );
+    private final LichConfig mobConfig;
+    private final AnimationHolder animationHolder;
+    private final LichMoveLogic moveLogic;
+    private final TeleportAction teleportAction;
+    public HistoricalData<Vec3> velocityHistory;
+    public boolean shouldSetToNighttime;
+    public boolean collides;
 
-    private final LichConfig mobConfig = BMDEntities.mobConfig.lichConfig;
-
-    private final MinionAction minionAction = new MinionAction(this, preTickEvents, this::cancelAttackAction);
-    private final TeleportAction teleportAction = new TeleportAction(this, preTickEvents, this::cancelAttackAction);
-    private final Map<Byte, IActionWithCooldown> statusRegistry = Map.of(
-            LichActions.cometAttack, new CometAction(this, preTickEvents, this::cancelAttackAction, mobConfig),
-            LichActions.volleyAttack, new VolleyAction(this, mobConfig, preTickEvents, this::cancelAttackAction),
-            LichActions.minionAttack, minionAction,
-            LichActions.minionRageAttack, new MinionRageAction(this, preTickEvents, this::cancelAttackAction, minionAction),
-            LichActions.teleportAction, teleportAction,
-            LichActions.cometRageAttack, new CometRageAction(this, preTickEvents, this::cancelAttackAction, mobConfig),
-            LichActions.volleyRageAttack, new VolleyRageAction(this, mobConfig, preTickEvents, this::cancelAttackAction)
-    );
-
-    private final DamageMemory damageMemory = new DamageMemory(5, this);
-    private final LichMoveLogic moveLogic = new LichMoveLogic(statusRegistry, this, damageMemory);
-    private final LichParticleHandler lichParticles = new LichParticleHandler(this, preTickEvents);
-
-    public boolean shouldSetToNighttime = mobConfig.eternalNighttime;
-    public HistoricalData<Vec3> velocityHistory = new HistoricalData<>(Vec3.ZERO, 2);
-    public boolean collides = true;
-
-    private final CappedHeal cappedHeal = new CappedHeal(this, LichUtils.hpPercentRageModes, mobConfig.idleHealingPerTick);
-
-    public LichEntity(EntityType<? extends LichEntity> entityType, Level level) {
+    public LichEntity(EntityType<? extends LichEntity> entityType, Level level, LichConfig mobConfig) {
         super(entityType, level);
+        this.mobConfig = mobConfig;
 
         noCulling = true;
 
-        if (!level().isClientSide()){
-            LichActions attackHelper = new LichActions(this, moveLogic);
-            LichMovement moveHelper = new LichMovement(this);
+        this.animationHolder = new AnimationHolder(this, Map.of(
+                LichActions.endTeleport, new AnimationHolder.Animation("unteleport", "idle"),
+                LichActions.cometRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
+                LichActions.volleyRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
+                LichActions.cometAttack, new AnimationHolder.Animation("summon_fireball", "idle"),
+                LichActions.minionAttack, new AnimationHolder.Animation("summon_minions", "idle"),
+                LichActions.minionRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
+                LichActions.teleportAction, new AnimationHolder.Animation("teleport", "teleporting"),
+                LichActions.volleyAttack, new AnimationHolder.Animation("summon_missiles", "idle"),
+                (byte) 3, new AnimationHolder.Animation("idle", "idle")),
+                LichActions.stopAttackAnimation, 0
+        );
 
-            goalSelector.addGoal(1, new FloatGoal(this));
-            goalSelector.addGoal(3, new CompositeGoal(moveHelper.buildAttackMovement(), attackHelper.buildAttackGoal()) {
-                @Override
-                public boolean canUse() {
-                    return super.canUse();
-                }
-            });
-            goalSelector.addGoal(4, moveHelper.buildWanderGoal());
-            targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> this.getBoundingBox().inflate(d), 10, true, false, null));
-        }
+        MinionAction minionAction = new MinionAction(this, preTickEvents, this::cancelAttackAction);
+        this.teleportAction = new TeleportAction(this, preTickEvents, this::cancelAttackAction);
+        Map<Byte, IActionWithCooldown> statusRegistry = Map.of(
+                LichActions.cometAttack, new CometAction(this, preTickEvents, this::cancelAttackAction, mobConfig),
+                LichActions.volleyAttack, new VolleyAction(this, mobConfig, preTickEvents, this::cancelAttackAction),
+                LichActions.minionAttack, minionAction,
+                LichActions.minionRageAttack, new MinionRageAction(this, preTickEvents, this::cancelAttackAction, minionAction),
+                LichActions.teleportAction, teleportAction,
+                LichActions.cometRageAttack, new CometRageAction(this, preTickEvents, this::cancelAttackAction, mobConfig),
+                LichActions.volleyRageAttack, new VolleyRageAction(this, mobConfig, preTickEvents, this::cancelAttackAction));
+        DamageMemory damageMemory = new DamageMemory(5, this);
+        this.moveLogic = new LichMoveLogic(statusRegistry, this, damageMemory);
+        LichParticleHandler lichParticles = new LichParticleHandler(this, preTickEvents);
 
+        this.shouldSetToNighttime = mobConfig.eternalNighttime;
+        this.velocityHistory = new HistoricalData<>(Vec3.ZERO, 2);
+        this.collides = true;
+
+        CappedHeal cappedHeal = new CappedHeal(this, LichUtils.hpPercentRageModes, mobConfig.idleHealingPerTick);
         entityEventHandler = new CompositeEntityEventHandler(animationHolder, lichParticles);
         damageHandler = new CompositeDamageHandler(
                 new StagedDamageHandler(LichUtils.hpPercentRageModes, () -> level.broadcastEntityEvent(this, LichActions.hpBelowThresholdStatus)),
                 new DamagedAttackerNotSeen(this, livingEntity -> {if (livingEntity instanceof ServerPlayer) teleportAction.performTeleport((ServerPlayer) livingEntity);}),
                 moveLogic, damageMemory
         );
+
         bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
         serverTick = new CompositeEntityTick<>(cappedHeal, moveLogic);
         clientTick = lichParticles;
+    }
+
+    @Override
+    protected void registerGoals() {
+        LichActions attackHelper = new LichActions(this, moveLogic);
+        LichMovement moveHelper = new LichMovement(this);
+
+        goalSelector.addGoal(1, new FloatGoal(this));
+        goalSelector.addGoal(3, new CompositeGoal(moveHelper.buildAttackMovement(), attackHelper.buildAttackGoal()));
+        goalSelector.addGoal(4, moveHelper.buildWanderGoal());
+
+        targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> this.getBoundingBox().inflate(d), 10, true, false, null));
     }
 
     @Override

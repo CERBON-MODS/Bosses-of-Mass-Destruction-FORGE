@@ -37,6 +37,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -50,7 +52,7 @@ public class BMDEntities {
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BMDConstants.MOD_ID);
 
     public static final RegistryObject<EntityType<LichEntity>> LICH = ENTITY_TYPES.register("lich",
-            () -> EntityType.Builder.of(LichEntity::new, MobCategory.MONSTER)
+            () -> EntityType.Builder.<LichEntity>of((entityType, level) -> new LichEntity(entityType, level, mobConfig.lichConfig), MobCategory.MONSTER)
                     .sized(1.8f, 3.0f)
                     .updateInterval(1)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "lich").toString()));
@@ -76,19 +78,19 @@ public class BMDEntities {
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "charged_ender_pearl").toString()));
 
     public static final RegistryObject<EntityType<ObsidilithEntity>> OBSIDILITH = ENTITY_TYPES.register("obsidilith",
-            () -> EntityType.Builder.of(ObsidilithEntity::new, MobCategory.MONSTER)
+            () -> EntityType.Builder.<ObsidilithEntity>of((entityType, level) -> new ObsidilithEntity(entityType, level, mobConfig.obsidilithConfig), MobCategory.MONSTER)
                     .sized(2.0f, 4.4f)
                     .fireImmune()
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "obsidilith").toString()));
 
     public static final RegistryObject<EntityType<GauntletEntity>> GAUNTLET = ENTITY_TYPES.register("gauntlet",
-            () -> EntityType.Builder.of(GauntletEntity::new, MobCategory.MONSTER)
+            () -> EntityType.Builder.<GauntletEntity>of((entityType, level) -> new GauntletEntity(entityType, level, mobConfig.gauntletConfig) , MobCategory.MONSTER)
                     .sized(5.0f, 4.0f)
                     .fireImmune()
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "gauntlet").toString()));
 
     public static final RegistryObject<EntityType<VoidBlossomEntity>> VOID_BLOSSOM = ENTITY_TYPES.register("void_blossom",
-            () -> EntityType.Builder.of(VoidBlossomEntity::new, MobCategory.MONSTER)
+            () -> EntityType.Builder.<VoidBlossomEntity>of((entityType, level) -> new VoidBlossomEntity(entityType, level, mobConfig.voidBlossomConfig), MobCategory.MONSTER)
                     .sized(8.0f, 10.0f)
                     .fireImmune()
                     .setTrackingRange(3)
@@ -140,6 +142,7 @@ public class BMDEntities {
                 .build());
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void initClient(){
         PauseAnimationTimer pauseSecondTimer = new PauseAnimationTimer(Blaze3D::getTime, () -> Minecraft.getInstance().isPaused());
 

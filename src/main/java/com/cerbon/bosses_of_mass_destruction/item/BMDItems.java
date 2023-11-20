@@ -12,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -85,6 +87,7 @@ public class BMDItems {
     public static final RegistryObject<Item> VOID_LILY = ITEMS.register("void_lily",
             () -> new BlockItem(BMDBlocks.VOID_LILY_BLOCK.get(), new Item.Properties()));
 
+    @OnlyIn(Dist.CLIENT)
     public static void initClient(){
         ItemProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),

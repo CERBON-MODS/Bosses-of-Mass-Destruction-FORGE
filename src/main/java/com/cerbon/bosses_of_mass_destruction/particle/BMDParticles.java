@@ -14,6 +14,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Rand
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -113,6 +115,7 @@ public class BMDParticles {
 
     public static final int FULL_BRIGHT = 15728880;
 
+    @OnlyIn(Dist.CLIENT)
     public static void initClient(RegisterParticleProvidersEvent event){
 
         event.registerSpriteSet(BMDParticles.DISAPPEARING_SWIRL.get(),

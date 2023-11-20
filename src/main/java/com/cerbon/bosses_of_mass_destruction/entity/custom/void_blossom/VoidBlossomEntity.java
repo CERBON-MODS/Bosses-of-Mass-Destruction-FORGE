@@ -7,7 +7,6 @@ import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.Entit
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.MultipartAwareEntity;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util.CompoundOrientedBox;
 import com.cerbon.bosses_of_mass_destruction.config.mob.VoidBlossomConfig;
-import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.TargetSwitcher;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.CompositeGoal;
@@ -44,49 +43,61 @@ import java.util.List;
 import java.util.Map;
 
 public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntity {
-    private final AnimationHolder animationHolder = new AnimationHolder(
-            this, Map.of(
-            VoidBlossomAttacks.spikeAttack, new AnimationHolder.Animation("spike", "idle"),
-            VoidBlossomAttacks.spikeWaveAttack, new AnimationHolder.Animation("spike_wave", "idle"),
-            VoidBlossomAttacks.sporeAttack, new AnimationHolder.Animation("spore", "idle"),
-            VoidBlossomAttacks.bladeAttack, new AnimationHolder.Animation("leaf_blade", "idle"),
-            VoidBlossomAttacks.blossomAction, new AnimationHolder.Animation("blossom", "idle"),
-            VoidBlossomAttacks.spawnAction, new AnimationHolder.Animation("spawn", "idle"),
-            (byte) 3, new AnimationHolder.Animation("death", "idle")),
-            VoidBlossomAttacks.stopAttackAnimation, 0);
+    private final AnimationHolder animationHolder;
+    private final NetworkedHitboxManager hitboxHelper;
 
+    public VoidBlossomClientSpikeHandler clientSpikeHandler;
     public static final List<Float> hpMilestones = List.of(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
-    private final VoidBlossomConfig voidBlossomConfig = BMDEntities.mobConfig.voidBlossomConfig;
 
-    private final VoidBlossomHitboxes hitboxes = new VoidBlossomHitboxes(this);
-    private final NetworkedHitboxManager hitboxHelper = new NetworkedHitboxManager(this, hitboxes.getMap());
-    private final DamageMemory damageMemory = new DamageMemory(10, this);
-    private final TargetSwitcher targetSwitcher = new TargetSwitcher(this, damageMemory);
-    private final BooleanFlag shouldSpawnBlossoms = new BooleanFlag();
-    private final StagedDamageHandler hpDetector = new StagedDamageHandler(hpMilestones, shouldSpawnBlossoms::flag);
-
-    public VoidBlossomClientSpikeHandler clientSpikeHandler = new VoidBlossomClientSpikeHandler();
-
-    public VoidBlossomEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
+    public VoidBlossomEntity(EntityType<? extends PathfinderMob> entityType, Level level, VoidBlossomConfig mobConfig) {
         super(entityType, level);
         noCulling = true;
 
+        this.animationHolder = new AnimationHolder(
+                this, Map.of(
+                VoidBlossomAttacks.spikeAttack, new AnimationHolder.Animation("spike", "idle"),
+                VoidBlossomAttacks.spikeWaveAttack, new AnimationHolder.Animation("spike_wave", "idle"),
+                VoidBlossomAttacks.sporeAttack, new AnimationHolder.Animation("spore", "idle"),
+                VoidBlossomAttacks.bladeAttack, new AnimationHolder.Animation("leaf_blade", "idle"),
+                VoidBlossomAttacks.blossomAction, new AnimationHolder.Animation("blossom", "idle"),
+                VoidBlossomAttacks.spawnAction, new AnimationHolder.Animation("spawn", "idle"),
+                (byte) 3, new AnimationHolder.Animation("death", "idle")),
+                VoidBlossomAttacks.stopAttackAnimation, 0);
+
+        VoidBlossomHitboxes hitboxes = new VoidBlossomHitboxes(this);
+        this.hitboxHelper = new NetworkedHitboxManager(this, hitboxes.getMap());
+        entityEventHandler = new CompositeEntityEventHandler(animationHolder, new ClientSporeEffectHandler(this, preTickEvents), new ClientDeathEffectHandler(this, preTickEvents));
+        DamageMemory damageMemory = new DamageMemory(10, this);
+        TargetSwitcher targetSwitcher = new TargetSwitcher(this, damageMemory);
+
+        BooleanFlag shouldSpawnBlossoms = new BooleanFlag();
+        StagedDamageHandler hpDetector = new StagedDamageHandler(hpMilestones, shouldSpawnBlossoms::flag);
+
+        bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.NOTCHED_12);
+
+        this.clientSpikeHandler = new VoidBlossomClientSpikeHandler();
+        clientTick = clientSpikeHandler;
+
+        serverTick = new CompositeEntityTick<>(
+                new LightBlockPlacer(this),
+                new VoidBlossomSpikeTick(this),
+                hitboxes.getTickers(),
+                new CappedHeal(this, hpMilestones, mobConfig.idleHealingPerTick)
+        );
+        deathServerTick = new CompositeEntityTick<>(
+                new LightBlockRemover(this),
+                new VoidBlossomDropExpDeathTick(this, preTickEvents, mobConfig.experienceDrop)
+        );
+
+        damageHandler = new CompositeDamageHandler(hpDetector, hitboxes.getDamageHandlers(), damageMemory);
+
         if (!level.isClientSide() && level instanceof ServerLevel){
             VoidBlossomAttacks attackHandler = new VoidBlossomAttacks(this, preTickEvents, shouldSpawnBlossoms::getAndReset, targetSwitcher);
-            goalSelector.addGoal(2, new CompositeGoal() {
-                @Override
-                public boolean canUse() {
-                    return super.canUse();
-                }
-            });
-            goalSelector.addGoal(1, new CompositeGoal(attackHandler.buildAttackGoal(), new ActionGoal(this::canContinueAttack, null, this::lookAtTarget, null, null)) {
-                @Override
-                public boolean canUse() {
-                    return super.canUse();
-                }
-            });
+            goalSelector.addGoal(2, new CompositeGoal());
+            goalSelector.addGoal(1, new CompositeGoal(attackHandler.buildAttackGoal(), new ActionGoal(this::canContinueAttack, null, this::lookAtTarget, null, null)));
 
             targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> getBoundingBox().inflate(d), 10, true, false, null));
+
             preTickEvents.addEvent(
                     new TimedEvent(
                             () -> playSound(BMDSounds.SPIKE_WAVE_INDICATOR.get(), 2.0f, 0.7f),
@@ -95,23 +106,6 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
             );
         }else if (level().isClientSide())
             animationHolder.handleEntityEvent(VoidBlossomAttacks.spawnAction);
-
-        entityEventHandler = new CompositeEntityEventHandler(animationHolder, new ClientSporeEffectHandler(this, preTickEvents), new ClientDeathEffectHandler(this, preTickEvents));
-        bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.NOTCHED_12);
-
-        clientTick = clientSpikeHandler;
-        serverTick = new CompositeEntityTick<>(
-                new LightBlockPlacer(this),
-                new VoidBlossomSpikeTick(this),
-                hitboxes.getTickers(),
-                new CappedHeal(this, hpMilestones, voidBlossomConfig.idleHealingPerTick)
-        );
-        deathServerTick = new CompositeEntityTick<>(
-                new LightBlockRemover(this),
-                new VoidBlossomDropExpDeathTick(this, preTickEvents, voidBlossomConfig.experienceDrop)
-        );
-
-        damageHandler = new CompositeDamageHandler(hpDetector, hitboxes.getDamageHandlers(), damageMemory);
     }
 
     private void lookAtTarget(){

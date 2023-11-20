@@ -5,7 +5,6 @@ import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.Multi
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util.CompoundOrientedBox;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.config.mob.GauntletConfig;
-import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.CompositeDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.DamageMemory;
 import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
@@ -45,29 +44,30 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     public GauntletBlindnessIndicatorParticles clientBlindnessHandler = new GauntletBlindnessIndicatorParticles(this, preTickEvents);
     public DamageMemory damageMemory = new DamageMemory(5, this);
 
-    private final GauntletConfig mobConfig = BMDEntities.mobConfig.gauntletConfig;
-    private final GauntletGoalHandler gauntletGoalHandler = new GauntletGoalHandler(this, goalSelector, targetSelector, postTickEvents, mobConfig);
-    private final AnimationHolder animationHandler = new AnimationHolder(
-            this, Map.of(
-            GauntletAttacks.punchAttack, new AnimationHolder.Animation("punch_start", "punch_loop"),
-            GauntletAttacks.stopPunchAnimation, new AnimationHolder.Animation("punch_stop", "idle"),
-            GauntletAttacks.stopPoundAnimation, new AnimationHolder.Animation("pound_stop", "idle"),
-            GauntletAttacks.laserAttack, new AnimationHolder.Animation("laser_eye_start", "laser_eye_loop"),
-            GauntletAttacks.laserAttackStop, new AnimationHolder.Animation("laser_eye_stop", "idle"),
-            GauntletAttacks.swirlPunchAttack, new AnimationHolder.Animation("swirl_punch", "idle"),
-            GauntletAttacks.blindnessAttack, new AnimationHolder.Animation("cast", "idle"),
-            (byte) 3, new AnimationHolder.Animation("death", "idle")
-    ), GauntletAttacks.stopAttackAnimation, 5);
+    private final AnimationHolder animationHandler;
 
     public static final EntityDataAccessor<Integer> laserTarget = SynchedEntityData.defineId(GauntletEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> isEnergized = SynchedEntityData.defineId(GauntletEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public GauntletEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
+    public GauntletEntity(EntityType<? extends PathfinderMob> entityType, Level level, GauntletConfig mobConfig) {
         super(entityType, level);
+
+        GauntletGoalHandler gauntletGoalHandler = new GauntletGoalHandler(this, goalSelector, targetSelector, postTickEvents, mobConfig);
+        animationHandler = new AnimationHolder(
+                this, Map.of(
+                GauntletAttacks.punchAttack, new AnimationHolder.Animation("punch_start", "punch_loop"),
+                GauntletAttacks.stopPunchAnimation, new AnimationHolder.Animation("punch_stop", "idle"),
+                GauntletAttacks.stopPoundAnimation, new AnimationHolder.Animation("pound_stop", "idle"),
+                GauntletAttacks.laserAttack, new AnimationHolder.Animation("laser_eye_start", "laser_eye_loop"),
+                GauntletAttacks.laserAttackStop, new AnimationHolder.Animation("laser_eye_stop", "idle"),
+                GauntletAttacks.swirlPunchAttack, new AnimationHolder.Animation("swirl_punch", "idle"),
+                GauntletAttacks.blindnessAttack, new AnimationHolder.Animation("cast", "idle"),
+                (byte) 3, new AnimationHolder.Animation("death", "idle")
+        ), GauntletAttacks.stopAttackAnimation, 5);
+
         noCulling = true;
         laserHandler.initDataTracker();
         energyShieldHandler.initDataTracker();
-
         damageHandler = new CompositeDamageHandler(hitboxHelper, gauntletGoalHandler, damageMemory);
         entityEventHandler = new CompositeEntityEventHandler(animationHandler, laserHandler, clientBlindnessHandler);
         dataAccessorHandler = new CompositeDataAccessorHandler(laserHandler, energyShieldHandler);

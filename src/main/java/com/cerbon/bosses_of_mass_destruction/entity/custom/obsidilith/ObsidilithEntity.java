@@ -7,7 +7,6 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecU
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.config.mob.ObsidilithConfig;
-import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.CooldownAction;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
@@ -29,7 +28,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -48,28 +50,30 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 public class ObsidilithEntity extends BaseEntity {
-    private final ObsidilithConfig mobConfig = BMDEntities.mobConfig.obsidilithConfig;
-
-    private final Map<Byte, IActionWithCooldown> statusRegistry = Map.of(
-            ObsidilithUtils.burstAttackStatus, new BurstAction(this),
-            ObsidilithUtils.waveAttackStatus, new WaveAction(this),
-            ObsidilithUtils.spikeAttackStatus, new SpikeAction(this),
-            ObsidilithUtils.anvilAttackStatus, new AnvilAction(this, mobConfig.anvilAttackExplosionStrength),
-            ObsidilithUtils.pillarDefenseStatus, new PillarAction(this)
-    );
-
-    private final DamageMemory damageMemory = new DamageMemory(10, this);
-    private final ObsidilithMoveLogic moveLogic = new ObsidilithMoveLogic(statusRegistry, this, damageMemory);
+    private final ObsidilithConfig mobConfig;
+    private final Map<Byte, IActionWithCooldown> statusRegistry;
+    private final ObsidilithMoveLogic moveLogic;
     private final ObsidilithEffectHandler effectHandler;
-
     private final List<BlockPos> activePillars = new ArrayList<>();
 
     public byte currentAttack = 0;
 
-    public ObsidilithEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
+    public ObsidilithEntity(EntityType<? extends PathfinderMob> entityType, Level level, ObsidilithConfig mobConfig) {
         super(entityType, level);
+        this.mobConfig = mobConfig;
+
         noCulling = true;
 
+        this.statusRegistry = Map.of(
+                ObsidilithUtils.burstAttackStatus, new BurstAction(this),
+                ObsidilithUtils.waveAttackStatus, new WaveAction(this),
+                ObsidilithUtils.spikeAttackStatus, new SpikeAction(this),
+                ObsidilithUtils.anvilAttackStatus, new AnvilAction(this, mobConfig.anvilAttackExplosionStrength),
+                ObsidilithUtils.pillarDefenseStatus, new PillarAction(this)
+        );
+
+        DamageMemory damageMemory = new DamageMemory(10, this);
+        this.moveLogic = new ObsidilithMoveLogic(statusRegistry, this, damageMemory);
         this.effectHandler = new ObsidilithEffectHandler(this, BMDCapabilities.getLevelEventScheduler(level));
 
         bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_12);
