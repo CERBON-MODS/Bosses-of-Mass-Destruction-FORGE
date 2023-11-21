@@ -9,15 +9,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
@@ -26,11 +19,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class VanillaCopies {
-    public static DamageSource create(Level level, ResourceKey<DamageType> key, Entity attacker) {
-        Holder<DamageType> damageType = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key);
-        return new DamageSource(damageType, attacker);
-    }
-
     public static void renderBillboard(
             PoseStack poseStack,
             MultiBufferSource buffer,
@@ -244,19 +232,4 @@ public class VanillaCopies {
         double f = Mth.lerp(delta, entity.zOld, entity.getZ());
         return new Vec3(d, e, f);
     }
-
-
-//    public static void onBreakInCreative(Level level, BlockPos pos, BlockState state, Player player) {
-//        DoubleBlockHalf doubleBlockHalf = state.getValue(DoublePlantBlock.HALF);
-//
-//        if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
-//            BlockPos blockPos = pos.below();
-//            BlockState blockState = level.getBlockState(blockPos);
-//
-//            if (blockState.getBlock() == state.getBlock() && blockState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER) {
-//                level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 35);
-//                level.levelEvent(player, 2001, blockPos, Block.getId(blockState));
-//            }
-//        }
-//    }
 }

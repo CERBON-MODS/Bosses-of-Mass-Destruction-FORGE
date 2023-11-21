@@ -1,8 +1,13 @@
 package com.cerbon.bosses_of_mass_destruction.util;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +24,11 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class VanillaCopiesServer {
+    public static DamageSource create(Level level, ResourceKey<DamageType> key, Entity attacker) {
+        Holder<DamageType> damageType = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key);
+        return new DamageSource(damageType, attacker);
+    }
+
     public static void travel(Vec3 relative, LivingEntity entity, float baseFrictionCoefficient) {
         if (entity.isInWater()) {
             entity.moveRelative(0.02F, relative);

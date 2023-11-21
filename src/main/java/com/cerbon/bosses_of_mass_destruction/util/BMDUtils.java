@@ -48,7 +48,7 @@ public class BMDUtils {
     }
 
     public static DamageSource shieldPiercing(Level level, Entity attacker) {
-        return VanillaCopies.create(level, ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(BMDConstants.MOD_ID, "shield_piercing")), attacker);
+        return VanillaCopiesServer.create(level, ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(BMDConstants.MOD_ID, "shield_piercing")), attacker);
     }
 
     public static void playSound(
