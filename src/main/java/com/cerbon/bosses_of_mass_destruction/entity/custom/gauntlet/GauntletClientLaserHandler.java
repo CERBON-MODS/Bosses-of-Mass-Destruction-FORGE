@@ -18,13 +18,14 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class GauntletClientLaserHandler implements IEntityTick<ClientLevel>, IDataAccessorHandler, IEntityEventHandler {
+public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAccessorHandler, IEntityEventHandler {
     private final GauntletEntity entity;
     private final EventScheduler eventScheduler;
 
@@ -43,7 +44,7 @@ public class GauntletClientLaserHandler implements IEntityTick<ClientLevel>, IDa
 
 
     @Override
-    public void tick(ClientLevel level) {
+    public void tick(Level level) {
         LivingEntity beamTarget = getBeamTarget();
         if (beamTarget != null){
             Vec3 centerBoxOffset = beamTarget.getBoundingBox().getCenter().subtract(beamTarget.position());

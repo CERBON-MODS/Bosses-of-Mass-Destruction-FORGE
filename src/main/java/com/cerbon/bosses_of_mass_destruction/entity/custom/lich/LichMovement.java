@@ -10,8 +10,9 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.InDesired
 import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.ValidDirectionAnd;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntity;
-import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 
@@ -62,7 +63,7 @@ public class LichMovement {
         LivingEntity target = entity.getTarget();
         if (target != null) {
             entity.getLookControl().setLookAt(target.position());
-            VanillaCopies.lookAtTarget(entity, target.position(), (float)entity.getHeadRotSpeed(), (float)entity.getMaxHeadXRot());
+            lookAtTarget(entity, target.position(), (float)entity.getHeadRotSpeed(), (float)entity.getMaxHeadXRot());
         }
     }
 
@@ -106,7 +107,33 @@ public class LichMovement {
 
         Vec3 lookTarget = entity.position().add(new Vec3(0.0, entity.getEyeHeight(), 0.0)).add(velocity);
         entity.getLookControl().setLookAt(lookTarget);
-        VanillaCopies.lookAtTarget(entity, lookTarget, (float)entity.getHeadRotSpeed(), (float)entity.getMaxHeadXRot());
+        lookAtTarget(entity, lookTarget, (float)entity.getHeadRotSpeed(), (float)entity.getMaxHeadXRot());
+    }
+
+    private void lookAtTarget(Mob mobEntity, Vec3 target, float maxYawChange, float maxPitchChange) {
+        if (mobEntity.level().isClientSide){
+            double d = target.x - mobEntity.getX();
+            double e = target.z - mobEntity.getZ();
+            double g = target.y - mobEntity.getEyeY();
+
+            double h = Math.sqrt(d * d + e * e);
+            float i = (float) ((Mth.atan2(e, d) * 57.2957763671875) - 90.0);
+            float j = (float) (-(Mth.atan2(g, h) * 57.2957763671875));
+            mobEntity.setXRot(changeAngle(mobEntity.getXRot(), j, maxPitchChange));
+            mobEntity.setYRot(changeAngle(mobEntity.getYRot(), i, maxYawChange));
+        }
+    }
+
+    private float changeAngle(float oldAngle, float newAngle, float maxChangeInAngle) {
+        float f = Mth.wrapDegrees(newAngle - oldAngle);
+
+        if (f > maxChangeInAngle)
+            f = maxChangeInAngle;
+
+        if (f < -maxChangeInAngle)
+            f = -maxChangeInAngle;
+
+        return oldAngle + f;
     }
 }
 

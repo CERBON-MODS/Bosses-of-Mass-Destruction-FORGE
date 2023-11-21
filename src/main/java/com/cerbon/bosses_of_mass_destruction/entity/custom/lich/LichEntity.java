@@ -34,9 +34,12 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -123,10 +126,21 @@ public class LichEntity extends BaseEntity {
     }
 
     public boolean inLineOfSight(Entity target){
-        boolean hasDirectLineOfSight = VanillaCopies.hasDirectLineOfSight(getEyePosition(), MobUtils.eyePos(target), level(), this);
+        boolean hasDirectLineOfSight = this.hasDirectLineOfSight(getEyePosition(), MobUtils.eyePos(target), level(), this);
         Vec3 directionToLich = MathUtils.unNormedDirection(MobUtils.eyePos(target), getEyePosition());
         boolean facingSameDirection = MathUtils.facingSameDirection(target.getLookAngle(), directionToLich);
         return hasDirectLineOfSight && facingSameDirection;
+    }
+
+    private boolean hasDirectLineOfSight(Vec3 to, Vec3 from, BlockGetter level, Entity entity) {
+        ClipContext context = new ClipContext(
+                to,
+                from,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                entity
+        );
+        return level.clip(context).getType() == HitResult.Type.MISS;
     }
 
     @Override
@@ -192,7 +206,7 @@ public class LichEntity extends BaseEntity {
         int expPerTick = (int) (mobConfig.experienceDrop / (float) expTicks);
         preTickEvents.addEvent(
                 new TimedEvent(
-                        () -> VanillaCopies.awardExperience(expPerTick, MobUtils.eyePos(this), level()), 0,
+                        () -> this.awardExperience(expPerTick, MobUtils.eyePos(this), level()), 0,
                         expTicks,
                         () -> false
                 )
@@ -208,6 +222,6 @@ public class LichEntity extends BaseEntity {
 
     @Override
     public void travel(@NotNull Vec3 movementInput) {
-        VanillaCopies.travel(movementInput, this, 0.91f);
+        this.travel(movementInput, this, 0.91f);
     }
 }

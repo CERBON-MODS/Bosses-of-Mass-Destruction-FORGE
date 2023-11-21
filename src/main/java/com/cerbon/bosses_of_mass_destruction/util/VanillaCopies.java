@@ -21,11 +21,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
@@ -62,29 +63,29 @@ public class VanillaCopies {
         entity.calculateEntityAnimation(false);
     }
 
-    public static void lookAtTarget(Mob mobEntity, Vec3 target, float maxYawChange, float maxPitchChange) {
-        double d = target.x - mobEntity.getX();
-        double e = target.z - mobEntity.getZ();
-        double g = target.y - mobEntity.getEyeY();
-
-        double h = Math.sqrt(d * d + e * e);
-        float i = (float) ((Mth.atan2(e, d) * 57.2957763671875) - 90.0);
-        float j = (float) (-(Mth.atan2(g, h) * 57.2957763671875));
-        mobEntity.setXRot(changeAngle(mobEntity.getXRot(), j, maxPitchChange));
-        mobEntity.setYRot(changeAngle(mobEntity.getYRot(), i, maxYawChange));
-    }
-
-    public static float changeAngle(float oldAngle, float newAngle, float maxChangeInAngle) {
-        float f = Mth.wrapDegrees(newAngle - oldAngle);
-
-        if (f > maxChangeInAngle)
-            f = maxChangeInAngle;
-
-        if (f < -maxChangeInAngle)
-            f = -maxChangeInAngle;
-
-        return oldAngle + f;
-    }
+//    public static void lookAtTarget(Mob mobEntity, Vec3 target, float maxYawChange, float maxPitchChange) {
+//        double d = target.x - mobEntity.getX();
+//        double e = target.z - mobEntity.getZ();
+//        double g = target.y - mobEntity.getEyeY();
+//
+//        double h = Math.sqrt(d * d + e * e);
+//        float i = (float) ((Mth.atan2(e, d) * 57.2957763671875) - 90.0);
+//        float j = (float) (-(Mth.atan2(g, h) * 57.2957763671875));
+//        mobEntity.setXRot(changeAngle(mobEntity.getXRot(), j, maxPitchChange));
+//        mobEntity.setYRot(changeAngle(mobEntity.getYRot(), i, maxYawChange));
+//    }
+//
+//    public static float changeAngle(float oldAngle, float newAngle, float maxChangeInAngle) {
+//        float f = Mth.wrapDegrees(newAngle - oldAngle);
+//
+//        if (f > maxChangeInAngle)
+//            f = maxChangeInAngle;
+//
+//        if (f < -maxChangeInAngle)
+//            f = -maxChangeInAngle;
+//
+//        return oldAngle + f;
+//    }
 
     public static void handleClientSpawnEntity(Minecraft client, ClientboundAddEntityPacket packet) {
         double d = packet.getX();
@@ -149,17 +150,6 @@ public class VanillaCopies {
                 .uv2(light)
                 .normal(normalMatrix, 0.0f, 1.0f, 0.0f)
                 .endVertex();
-    }
-
-    public static boolean hasDirectLineOfSight(Vec3 to, Vec3 from, BlockGetter level, Entity entity) {
-        ClipContext context = new ClipContext(
-                to,
-                from,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                entity
-        );
-        return level.clip(context).getType() == HitResult.Type.MISS;
     }
 
     public static int getBlockLight(Entity entity, BlockPos blockPos) {

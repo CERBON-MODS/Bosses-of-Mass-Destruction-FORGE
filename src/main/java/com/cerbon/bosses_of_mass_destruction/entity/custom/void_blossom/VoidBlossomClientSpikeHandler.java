@@ -8,6 +8,7 @@ import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VoidBlossomClientSpikeHandler implements IEntityTick<ClientLevel> {
+public class VoidBlossomClientSpikeHandler implements IEntityTick<Level> {
     private final int maxAge = 10;
     private final LinkedHashMap<BlockPos, VoidBlossomClientSpikeHandler.Spike> spikes = new LinkedHashMap<>();
     private final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
@@ -41,7 +42,7 @@ public class VoidBlossomClientSpikeHandler implements IEntityTick<ClientLevel> {
     }
 
     @Override
-    public void tick(ClientLevel level) {
+    public void tick(Level level) {
         List<BlockPos> toRemove = new ArrayList<>();
 
         for (var kv : spikes.entrySet()){

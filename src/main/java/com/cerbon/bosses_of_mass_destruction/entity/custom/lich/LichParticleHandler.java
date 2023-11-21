@@ -14,11 +14,12 @@ import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.CollectionUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
 
-public class LichParticleHandler implements IEntityEventHandler, IEntityTick<ClientLevel> {
+public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Level> {
     private final LichEntity entity;
     private final EventScheduler eventScheduler;
     private final ClientParticleBuilder summonMissileParticleBuilder;
@@ -70,7 +71,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Cli
     }
 
     @Override
-    public void tick(ClientLevel level) {
+    public void tick(Level level) {
         if (entity.getRandom().nextDouble() > 0.9)
             idleParticles.build(entity.position().subtract(VecUtils.yAxis).add(RandomUtils.randVec().multiply(0.2, 0.2, 0.2)), entity.getDeltaMovement());
     }
