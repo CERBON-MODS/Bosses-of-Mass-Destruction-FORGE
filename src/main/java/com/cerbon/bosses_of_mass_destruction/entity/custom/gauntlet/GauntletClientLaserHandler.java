@@ -42,7 +42,6 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
         this.eventScheduler = eventScheduler;
     }
 
-
     @Override
     public void tick(Level level) {
         LivingEntity beamTarget = getBeamTarget();
@@ -58,12 +57,10 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
             laserRenderPositions.clear();
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean shouldRenderLaser(){
         return laserRenderPositions.getSize() > 1;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public Pair<Vec3, Vec3> getLaserRenderPos(){
         Pair<Vec3, Vec3> laserPos = laserRenderPositions.getAll().get(0);
         Vec3 newPos = LaserAction.extendLaser(entity, laserPos.getFirst());
