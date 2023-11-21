@@ -21,14 +21,12 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import java.util.Random;
 
-//TODO: Fix armor being opaque
 public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<ObsidilithEntity> {
     private final GeoModel<ObsidilithEntity> geoModel;
     private final EntityRendererProvider.Context context;
 
     private final ResourceLocation armorTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
     private RenderHelper geoModelProvider = null;
-    private VertexConsumer energyBuffer = null;
     private ObsidilithEntity entity = null;
     private RenderType type = null;
 
@@ -51,22 +49,12 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
 
     @Override
     public void render(BakedGeoModel model, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        energyBuffer = buffer.getBuffer(type);
+        VertexConsumer energyBuffer = buffer.getBuffer(type);
         if(entity == null) return;
         if (type == null) return;
 
         if (entity.isShielded()){
-            Vec3 color;
-            switch (entity.currentAttack){
-                case ObsidilithUtils.burstAttackStatus -> color = BMDColors.ORANGE;
-                case ObsidilithUtils.waveAttackStatus -> color = BMDColors.RED;
-                case ObsidilithUtils.spikeAttackStatus -> color = BMDColors.COMET_BLUE;
-                case ObsidilithUtils.anvilAttackStatus -> color = BMDColors.ENDER_PURPLE;
-                case ObsidilithUtils.pillarDefenseStatus -> color = BMDColors.WHITE;
-                default -> color = BMDColors.WHITE;
-
-            }
-            color.add(VecUtils.unit).normalize().multiply(0.6, 0.6, 0.6);
+            Vec3 color = getColor().add(VecUtils.unit).normalize().scale(0.6);
 
             if (geoModelProvider == null) return;
             geoModelProvider.actuallyRender(
@@ -83,6 +71,19 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
                     (float) color.x, (float) color.y, (float) color.z, 1.0f
             );
         }
+    }
+
+    private Vec3 getColor() {
+        Vec3 color;
+        switch (entity.currentAttack){
+            case ObsidilithUtils.burstAttackStatus -> color = BMDColors.ORANGE;
+            case ObsidilithUtils.waveAttackStatus -> color = BMDColors.RED;
+            case ObsidilithUtils.spikeAttackStatus -> color = BMDColors.COMET_BLUE;
+            case ObsidilithUtils.anvilAttackStatus -> color = BMDColors.ENDER_PURPLE;
+            case ObsidilithUtils.pillarDefenseStatus -> color = BMDColors.WHITE;
+            default -> color = BMDColors.WHITE;
+        }
+        return color;
     }
 
     private static class RenderHelper extends GeoEntityRenderer<ObsidilithEntity> {
