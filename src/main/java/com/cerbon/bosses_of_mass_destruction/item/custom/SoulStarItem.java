@@ -185,7 +185,7 @@ public class SoulStarItem extends Item {
         if (!spawned){
             LichEntity entity = BMDEntities.LICH.get().create(level);
             if (entity != null){
-                Vec3 defaultSpawnPos = spawnPos.add(VecUtils.yAxis.multiply(5.0, 5.0, 5.0));
+                Vec3 defaultSpawnPos = spawnPos.add(VecUtils.xAxis.scale(5.0));
                 entity.syncPacketPositionCodec(defaultSpawnPos.x, defaultSpawnPos.y, defaultSpawnPos.z);
                 entity.absMoveTo(defaultSpawnPos.x, defaultSpawnPos.y, defaultSpawnPos.z);
                 level.addFreshEntity(entity);
