@@ -8,7 +8,6 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecU
 import com.cerbon.bosses_of_mass_destruction.config.mob.GauntletConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -68,7 +67,7 @@ public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            VanillaCopies.awardExperience(
+                            entity.awardExperience(
                                     expPerTick,
                                     pos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).scale(2.0)),
                                     entity.level()

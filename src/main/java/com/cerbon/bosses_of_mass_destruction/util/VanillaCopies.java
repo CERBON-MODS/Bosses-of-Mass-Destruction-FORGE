@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -14,19 +12,15 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
@@ -40,28 +34,28 @@ public class VanillaCopies {
         return new DamageSource(damageType, attacker);
     }
 
-    public static void travel(Vec3 relative, LivingEntity entity, float baseFrictionCoefficient) {
-        if (entity.isInWater()) {
-            entity.moveRelative(0.02F, relative);
-            entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.800000011920929, 0.800000011920929, 0.800000011920929));
-
-        } else if (entity.isInLava()) {
-            entity.moveRelative(0.02F, relative);
-            entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5));
-
-        } else {
-            float friction = entity.onGround() ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock()
-                    .getFriction() * baseFrictionCoefficient : baseFrictionCoefficient;
-            float g = 0.16277137F / (friction * friction * friction);
-
-            entity.moveRelative(entity.onGround() ? 0.1F * g : 0.02F, relative);
-            entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(friction, friction, friction));
-        }
-        entity.calculateEntityAnimation(false);
-    }
+//    public static void travel(Vec3 relative, LivingEntity entity, float baseFrictionCoefficient) {
+//        if (entity.isInWater()) {
+//            entity.moveRelative(0.02F, relative);
+//            entity.move(MoverType.SELF, entity.getDeltaMovement());
+//            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.800000011920929, 0.800000011920929, 0.800000011920929));
+//
+//        } else if (entity.isInLava()) {
+//            entity.moveRelative(0.02F, relative);
+//            entity.move(MoverType.SELF, entity.getDeltaMovement());
+//            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5));
+//
+//        } else {
+//            float friction = entity.onGround() ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock()
+//                    .getFriction() * baseFrictionCoefficient : baseFrictionCoefficient;
+//            float g = 0.16277137F / (friction * friction * friction);
+//
+//            entity.moveRelative(entity.onGround() ? 0.1F * g : 0.02F, relative);
+//            entity.move(MoverType.SELF, entity.getDeltaMovement());
+//            entity.setDeltaMovement(entity.getDeltaMovement().multiply(friction, friction, friction));
+//        }
+//        entity.calculateEntityAnimation(false);
+//    }
 
 //    public static void lookAtTarget(Mob mobEntity, Vec3 target, float maxYawChange, float maxPitchChange) {
 //        double d = target.x - mobEntity.getX();
@@ -87,28 +81,28 @@ public class VanillaCopies {
 //        return oldAngle + f;
 //    }
 
-    public static void handleClientSpawnEntity(Minecraft client, ClientboundAddEntityPacket packet) {
-        double d = packet.getX();
-        double e = packet.getY();
-        double f = packet.getZ();
-        EntityType<?> entityType = packet.getType();
-        ClientLevel level = client.level;
-
-        if (level != null) {
-            Entity entity15 = entityType.create(level);
-
-            if (entity15 != null) {
-                int i = packet.getId();
-                entity15.syncPacketPositionCodec(d, e, f);
-                entity15.moveTo(d, e, f);
-                entity15.setXRot((packet.getXRot() * 360) / 256.0F);
-                entity15.setYRot((packet.getYRot() * 360) / 256.0F);
-                entity15.setId(i);
-                entity15.setUUID(packet.getUUID());
-                level.putNonPlayerEntity(i, entity15);
-            }
-        }
-    }
+//    public static void handleClientSpawnEntity(Minecraft client, ClientboundAddEntityPacket packet) {
+//        double d = packet.getX();
+//        double e = packet.getY();
+//        double f = packet.getZ();
+//        EntityType<?> entityType = packet.getType();
+//        ClientLevel level = client.level;
+//
+//        if (level != null) {
+//            Entity entity15 = entityType.create(level);
+//
+//            if (entity15 != null) {
+//                int i = packet.getId();
+//                entity15.syncPacketPositionCodec(d, e, f);
+//                entity15.moveTo(d, e, f);
+//                entity15.setXRot((packet.getXRot() * 360) / 256.0F);
+//                entity15.setYRot((packet.getYRot() * 360) / 256.0F);
+//                entity15.setId(i);
+//                entity15.setUUID(packet.getUUID());
+//                level.putNonPlayerEntity(i, entity15);
+//            }
+//        }
+//    }
 
     public static void renderBillboard(
             PoseStack poseStack,
@@ -236,29 +230,29 @@ public class VanillaCopies {
         return vector3fs;
     }
 
-    public static boolean destroyBlocks(Entity entity, AABB aabb) {
-        int i = Mth.floor(aabb.minX);
-        int j = Mth.floor(aabb.minY);
-        int k = Mth.floor(aabb.minZ);
-        int l = Mth.floor(aabb.maxX);
-        int m = Mth.floor(aabb.maxY);
-        int n = Mth.floor(aabb.maxZ);
-        boolean bl = false;
-        boolean bl2 = false;
-        for (int o = i; o <= l; o++)
-            for (int p = j; p <= m; p++)
-                for (int q = k; q <= n; q++) {
-                    BlockPos blockPos = new BlockPos(o, p, q);
-                    BlockState blockState = entity.level().getBlockState(blockPos);
-
-                    if (!blockState.isAir() && blockState.getBlock() == Blocks.FIRE)
-                        if (entity.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !blockState.is(BlockTags.WITHER_IMMUNE))
-                            bl2 = entity.level().destroyBlock(blockPos, false) || bl2;
-                        else
-                            bl = true;
-                }
-        return bl;
-    }
+//    public static boolean destroyBlocks(Entity entity, AABB aabb) {
+//        int i = Mth.floor(aabb.minX);
+//        int j = Mth.floor(aabb.minY);
+//        int k = Mth.floor(aabb.minZ);
+//        int l = Mth.floor(aabb.maxX);
+//        int m = Mth.floor(aabb.maxY);
+//        int n = Mth.floor(aabb.maxZ);
+//        boolean bl = false;
+//        boolean bl2 = false;
+//        for (int o = i; o <= l; o++)
+//            for (int p = j; p <= m; p++)
+//                for (int q = k; q <= n; q++) {
+//                    BlockPos blockPos = new BlockPos(o, p, q);
+//                    BlockState blockState = entity.level().getBlockState(blockPos);
+//
+//                    if (!blockState.isAir() && blockState.getBlock() == Blocks.FIRE)
+//                        if (entity.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !blockState.is(BlockTags.WITHER_IMMUNE))
+//                            bl2 = entity.level().destroyBlock(blockPos, false) || bl2;
+//                        else
+//                            bl = true;
+//                }
+//        return bl;
+//    }
 
     public static void renderBeam(LivingEntity actor, Vec3 target, Vec3 prevTarget, float partialTicks, Vec3 color, PoseStack poseStack, MultiBufferSource buffer, RenderType renderType){
         float j = actor.level().getGameTime() + partialTicks;

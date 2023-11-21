@@ -223,7 +223,7 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
         entity.calculateEntityAnimation(false);
     }
 
-    protected void awardExperience(int amount, Vec3 pos, Level level) {
+    public void awardExperience(int amount, Vec3 pos, Level level) {
         int amt = amount;
         while (amt > 0) {
             int i = ExperienceOrb.getExperienceValue(amt);

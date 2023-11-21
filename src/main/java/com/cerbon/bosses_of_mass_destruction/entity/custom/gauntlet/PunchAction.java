@@ -9,7 +9,6 @@ import com.cerbon.bosses_of_mass_destruction.config.mob.GauntletConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -51,7 +50,7 @@ public class PunchAction implements IActionWithCooldown {
 
         BlockPos breakBoundCenter = BlockPos.containing(entity.position().add(entity.getLookAngle()));
         AABB breakBounds = new AABB(breakBoundCenter.subtract(new BlockPos(1, 1, 1)), breakBoundCenter.offset(1, 2, 1));
-        VanillaCopies.destroyBlocks(entity, breakBounds);
+        entity.destroyBlocks(breakBounds);
         entity.push(0.0, 0.7, 0.0);
 
         eventScheduler.addEvent(
