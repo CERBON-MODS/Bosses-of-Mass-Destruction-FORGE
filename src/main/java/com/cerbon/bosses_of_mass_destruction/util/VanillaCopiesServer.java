@@ -8,10 +8,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -50,6 +47,30 @@ public class VanillaCopiesServer {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(friction, friction, friction));
         }
         entity.calculateEntityAnimation(false);
+    }
+
+    public static void lookAtTarget(Mob mobEntity, Vec3 target, float maxYawChange, float maxPitchChange) {
+        double d = target.x - mobEntity.getX();
+        double e = target.z - mobEntity.getZ();
+        double g = target.y - mobEntity.getEyeY();
+
+        double h = Math.sqrt(d * d + e * e);
+        float i = (float) ((Mth.atan2(e, d) * 57.2957763671875) - 90.0);
+        float j = (float) (-(Mth.atan2(g, h) * 57.2957763671875));
+        mobEntity.setXRot(changeAngle(mobEntity.getXRot(), j, maxPitchChange));
+        mobEntity.setYRot(changeAngle(mobEntity.getYRot(), i, maxYawChange));
+    }
+
+    public static float changeAngle(float oldAngle, float newAngle, float maxChangeInAngle) {
+        float f = Mth.wrapDegrees(newAngle - oldAngle);
+
+        if (f > maxChangeInAngle)
+            f = maxChangeInAngle;
+
+        if (f < -maxChangeInAngle)
+            f = -maxChangeInAngle;
+
+        return oldAngle + f;
     }
 
     public static boolean hasDirectLineOfSight(Vec3 to, Vec3 from, BlockGetter level, Entity entity) {

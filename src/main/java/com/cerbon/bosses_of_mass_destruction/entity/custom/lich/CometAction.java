@@ -2,6 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.config.mob.LichConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
@@ -36,7 +37,7 @@ public class CometAction implements IActionWithCooldown {
             CometProjectile projectile = new CometProjectile(entity, entity.level(), it ->
                     entity.level().explode(entity, it.x, it.y, it.z, lichConfig.comet.explosionStrength, Level.ExplosionInteraction.MOB), Collections.singletonList(MinionAction.summonEntityType));
 
-            projectile.setPos(entity.getEyePosition().add(offset));
+            MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
             return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
         });
     }
@@ -45,7 +46,7 @@ public class CometAction implements IActionWithCooldown {
     public int perform() {
         Entity target = entity.getTarget();
         if (!(target instanceof ServerPlayer)) return cometThrowCooldown;
-        performCometThrow((ServerLevel) target.level());
+        performCometThrow(((ServerPlayer) target).serverLevel());
         return cometThrowCooldown;
     }
 

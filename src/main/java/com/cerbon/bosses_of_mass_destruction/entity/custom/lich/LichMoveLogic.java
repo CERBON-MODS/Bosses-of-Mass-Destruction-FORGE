@@ -9,7 +9,6 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.StagedDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
-import com.cerbon.bosses_of_mass_destruction.util.CollectionUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEntityTick<ServerLevel> {
     private final Map<Byte, IActionWithCooldown> actions;
@@ -83,7 +83,10 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
     }
 
     private double getTeleportWeight() {
-        double distanceTraveled = CollectionUtils.fold(CollectionUtils.zipWithNext(positionalHistory.getAll()), 0.0, (acc, pair) -> acc + pair.getFirst().distanceToSqr(pair.getSecond()));
+        List<Vec3> positions = positionalHistory.getAll();
+        double distanceTraveled = IntStream.range(0, positions.size() - 1)
+                .mapToDouble(i -> positions.get(i).distanceTo(positions.get(i + 1)))
+                .sum();
         Entity target = actor.getTarget();
         if (target == null) return 0.0;
         return (actor.inLineOfSight(target) ? 0.0 : 4.0)
