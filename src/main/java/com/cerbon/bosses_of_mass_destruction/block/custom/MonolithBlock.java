@@ -4,7 +4,6 @@ import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
-import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -87,9 +86,19 @@ public class MonolithBlock extends BaseEntityBlock {
 
     @Override
     public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
-        if (!level.isClientSide && player.isCreative())
-            VanillaCopies.onBreakInCreative(level, pos, state, player);
+        if (!level.isClientSide && player.isCreative()){
+            DoubleBlockHalf doubleBlockHalf = state.getValue(DoublePlantBlock.HALF);
 
+            if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
+                BlockPos blockPos = pos.below();
+                BlockState blockState = level.getBlockState(blockPos);
+
+                if (blockState.getBlock() == state.getBlock() && blockState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER) {
+                    level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 35);
+                    level.levelEvent(player, 2001, blockPos, Block.getId(blockState));
+                }
+            }
+        }
         super.playerWillDestroy(level, pos, state, player);
     }
 
