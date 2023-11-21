@@ -3,8 +3,6 @@ package com.cerbon.bosses_of_mass_destruction.entity.util;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.google.errorprone.annotations.ForOverride;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,7 +11,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -198,38 +199,6 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
             animationFactory = GeckoLibUtil.createInstanceCache(this);
         }
         return animationFactory;
-    }
-
-    protected void travel(Vec3 relative, LivingEntity entity, float baseFrictionCoefficient) {
-        if (entity.isInWater()) {
-            entity.moveRelative(0.02F, relative);
-            entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.800000011920929, 0.800000011920929, 0.800000011920929));
-
-        } else if (entity.isInLava()) {
-            entity.moveRelative(0.02F, relative);
-            entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5));
-
-        } else {
-            float friction = entity.onGround() ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock()
-                    .getFriction() * baseFrictionCoefficient : baseFrictionCoefficient;
-            float g = 0.16277137F / (friction * friction * friction);
-
-            entity.moveRelative(entity.onGround() ? 0.1F * g : 0.02F, relative);
-            entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(friction, friction, friction));
-        }
-        entity.calculateEntityAnimation(false);
-    }
-
-    public void awardExperience(int amount, Vec3 pos, Level level) {
-        int amt = amount;
-        while (amt > 0) {
-            int i = ExperienceOrb.getExperienceValue(amt);
-            amt -= i;
-            level.addFreshEntity(new ExperienceOrb(level, pos.x, pos.y, pos.z, i));
-        }
     }
 }
 

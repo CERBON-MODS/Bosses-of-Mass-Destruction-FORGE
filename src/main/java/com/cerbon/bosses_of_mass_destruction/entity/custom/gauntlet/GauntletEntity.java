@@ -13,14 +13,13 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityEventHan
 import com.cerbon.bosses_of_mass_destruction.entity.util.EffectsImmunity;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -28,9 +27,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -94,7 +91,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
 
     @Override
     public void travel(@NotNull Vec3 travelVector) {
-        this.travel(travelVector, this, 0.85f);
+        VanillaCopiesServer.travel(travelVector, this, 0.85f);
     }
 
     @Override
@@ -173,29 +170,5 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     @Override
     public void checkDespawn() {
         BMDUtils.preventDespawnExceptPeaceful(this, level());
-    }
-
-    protected boolean destroyBlocks(AABB aabb) {
-        int i = Mth.floor(aabb.minX);
-        int j = Mth.floor(aabb.minY);
-        int k = Mth.floor(aabb.minZ);
-        int l = Mth.floor(aabb.maxX);
-        int m = Mth.floor(aabb.maxY);
-        int n = Mth.floor(aabb.maxZ);
-        boolean bl = false;
-        boolean bl2 = false;
-        for (int o = i; o <= l; o++)
-            for (int p = j; p <= m; p++)
-                for (int q = k; q <= n; q++) {
-                    BlockPos blockPos = new BlockPos(o, p, q);
-                    BlockState blockState = this.level().getBlockState(blockPos);
-
-                    if (!blockState.isAir() && blockState.getBlock() == Blocks.FIRE)
-                        if (this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !blockState.is(BlockTags.WITHER_IMMUNE))
-                            bl2 = this.level().destroyBlock(blockPos, false) || bl2;
-                        else
-                            bl = true;
-                }
-        return bl;
     }
 }

@@ -6,6 +6,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Rand
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -40,7 +41,7 @@ public class VoidBlossomDropExpDeathTick implements IEntityTick<ServerLevel> {
                                     .add(RandomUtils.randVec().scale(2.0))
                                     .add(fallDirection.scale(RandomUtils.randomDouble(6.0) + 6.0));
 
-                            VanillaCopies.awardExperience(
+                            VanillaCopiesServer.awardExperience(
                                     expPerTick,
                                     pos,
                                     entity.level()

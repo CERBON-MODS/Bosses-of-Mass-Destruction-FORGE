@@ -20,7 +20,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityTick;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -34,12 +34,9 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -126,21 +123,10 @@ public class LichEntity extends BaseEntity {
     }
 
     public boolean inLineOfSight(Entity target){
-        boolean hasDirectLineOfSight = this.hasDirectLineOfSight(getEyePosition(), MobUtils.eyePos(target), level(), this);
+        boolean hasDirectLineOfSight = VanillaCopiesServer.hasDirectLineOfSight(getEyePosition(), MobUtils.eyePos(target), level(), this);
         Vec3 directionToLich = MathUtils.unNormedDirection(MobUtils.eyePos(target), getEyePosition());
         boolean facingSameDirection = MathUtils.facingSameDirection(target.getLookAngle(), directionToLich);
         return hasDirectLineOfSight && facingSameDirection;
-    }
-
-    private boolean hasDirectLineOfSight(Vec3 to, Vec3 from, BlockGetter level, Entity entity) {
-        ClipContext context = new ClipContext(
-                to,
-                from,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                entity
-        );
-        return level.clip(context).getType() == HitResult.Type.MISS;
     }
 
     @Override
@@ -206,7 +192,7 @@ public class LichEntity extends BaseEntity {
         int expPerTick = (int) (mobConfig.experienceDrop / (float) expTicks);
         preTickEvents.addEvent(
                 new TimedEvent(
-                        () -> this.awardExperience(expPerTick, MobUtils.eyePos(this), level()), 0,
+                        () -> VanillaCopiesServer.awardExperience(expPerTick, MobUtils.eyePos(this), level()), 0,
                         expTicks,
                         () -> false
                 )
@@ -222,6 +208,6 @@ public class LichEntity extends BaseEntity {
 
     @Override
     public void travel(@NotNull Vec3 movementInput) {
-        this.travel(movementInput, this, 0.91f);
+        VanillaCopiesServer.travel(movementInput, this, 0.91f);
     }
 }

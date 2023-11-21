@@ -9,6 +9,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobU
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -94,7 +95,7 @@ public class LaserAction implements IActionWithCooldown {
 
         if (result.getType() == HitResult.Type.BLOCK){
             if (entity.tickCount % 2 == 0)
-                entity.destroyBlocks(new AABB(result.getLocation(), result.getLocation()).inflate(0.1));
+                VanillaCopiesServer.destroyBlocks(entity, new AABB(result.getLocation(), result.getLocation()).inflate(0.1));
 
             applyLaserToEntities(result.getLocation());
         }else

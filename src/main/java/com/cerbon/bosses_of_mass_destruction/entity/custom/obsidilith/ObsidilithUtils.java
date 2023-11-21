@@ -11,6 +11,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -94,7 +95,7 @@ public class ObsidilithUtils {
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                VanillaCopies.awardExperience(
+                                VanillaCopiesServer.awardExperience(
                                         expPerTick,
                                         pillarTop.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).multiply(2.0, 2.0, 2.0)),
                                         level
