@@ -127,7 +127,9 @@ public class VoidBlossomCavernPieceGenerator implements IPieceGenerator {
                         samplePos,
                         structurePiece,
                         boundingBox,
-                samplePos.getY() > 0 ? Blocks.STONE.defaultBlockState() : Blocks.DEEPSLATE.defaultBlockState(), caveDecorators);
+                        samplePos.getY() > 0 ? Blocks.STONE.defaultBlockState() : Blocks.DEEPSLATE.defaultBlockState(),
+                        caveDecorators
+                );
             }
         }
     }
