@@ -19,8 +19,10 @@ public class MobPlacementLogic {
     public boolean tryPlacement(int tries) {
         Entity entity = entityProvider.getEntity();
         if (entity == null) return false;
+
         for (int i = 0; i < tries; i++) {
             Vec3 location = locationFinder.getPos();
+
             if (spawnPredicate.canSpawn(location, entity)) {
                 spawner.spawn(location, entity);
                 return true;

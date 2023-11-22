@@ -36,32 +36,43 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
         this.entity = entity;
         this.eventScheduler = eventScheduler;
 
-        this.summonMissileParticleBuilder = ParticleFactories.soulFlame().age(2).colorVariation(0.5);
+        this.summonMissileParticleBuilder = ParticleFactories.soulFlame()
+                .age(2)
+                .colorVariation(0.5);
+
         this.teleportParticleBuilder = new ClientParticleBuilder(BMDParticles.DISAPPEARING_SWIRL.get())
                 .color(BMDColors.TELEPORT_PURPLE)
                 .age(10, 15)
                 .brightness(BMDParticles.FULL_BRIGHT);
-        this.summonCometParticleBuilder = ParticleFactories.cometTrail().colorVariation(0.5);
+
+        this.summonCometParticleBuilder = ParticleFactories.cometTrail()
+                .colorVariation(0.5);
+
         this.flameRingFactory = ParticleFactories.soulFlame()
                 .color(t -> MathUtils.lerpVec(t, BMDColors.WHITE, BMDColors.WHITE.multiply(0.5, 0.5, 0.5)))
                 .age(0, 7);
+
         this.minionSummonParticleBuilder = ParticleFactories.soulFlame()
                 .color(BMDColors.WHITE);
         this.thresholdParticleBuilder = ParticleFactories.soulFlame()
                 .age(20)
                 .scale(0.5f);
+
         this.summonRingFactory = ParticleFactories.soulFlame()
                 .color(LichUtils.blueColorFade)
                 .colorVariation(0.5)
                 .age(10);
+
         this.summonRingCompleteFactory = ParticleFactories.soulFlame()
                 .color(BMDColors.WHITE)
                 .age(20, 30);
+
         this.deathParticleFactory = ParticleFactories.soulFlame()
                 .color(LichUtils.blueColorFade)
                 .age(40, 80)
                 .colorVariation(0.5)
                 .scale(t -> 0.5f - (t * 0.3f));
+
         this.idleParticles = ParticleFactories.soulFlame()
                 .color(LichUtils.blueColorFade)
                 .age(30, 40)
@@ -72,7 +83,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
     @Override
     public void tick(Level level) {
         if (entity.getRandom().nextDouble() > 0.9)
-            idleParticles.build(entity.position().subtract(VecUtils.yAxis).add(RandomUtils.randVec().multiply(0.2, 0.2, 0.2)), entity.getDeltaMovement());
+            idleParticles.build(entity.position().subtract(VecUtils.yAxis).add(RandomUtils.randVec().scale(0.2)), entity.getDeltaMovement());
     }
 
     @Override
@@ -113,8 +124,8 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
 
     private void cometEffect(){
         eventScheduler.addEvent(
-                new TimedEvent(() ->
-                        summonCometParticleBuilder.build(MobUtils.eyePos(entity).add(CometAction.getCometLaunchOffset()), Vec3.ZERO),
+                new TimedEvent(
+                        () -> summonCometParticleBuilder.build(MobUtils.eyePos(entity).add(CometAction.getCometLaunchOffset()), Vec3.ZERO),
                         CometAction.cometParticleSummonDelay,
                         CometAction.cometThrowDelay - CometAction.cometParticleSummonDelay,
                         this::shouldCancelParticles
@@ -138,32 +149,41 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
     }
 
     private void minionEffect() {
-        eventScheduler.addEvent(new TimedEvent(
-                () -> minionSummonParticleBuilder.build(MobUtils.eyePos(entity)
-                        .add(VecUtils.yAxis.multiply(1.0, 1.0, 1.0))
-                        .add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis)
-                                        .normalize()
-                                        .multiply(entity.getRandom().nextGaussian(), entity.getRandom().nextGaussian(), entity.getRandom().nextGaussian())),
-                        VecUtils.yAxis.multiply(RandomUtils.randomDouble(0.2), RandomUtils.randomDouble(0.2), RandomUtils.randomDouble(0.2))),
-                MinionAction.minionSummonDelay,
-                MinionAction.minionSummonDelay - MinionAction.minionSummonParticleDelay,
-                this::shouldCancelParticles));
+        eventScheduler.addEvent(
+                new TimedEvent(
+                        () -> minionSummonParticleBuilder.build(
+                                MobUtils.eyePos(entity)
+                                        .add(VecUtils.yAxis.scale(1.0))
+                                        .add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis)
+                                                .normalize()
+                                                .scale(entity.getRandom().nextGaussian())),
+                                VecUtils.yAxis.scale(RandomUtils.randomDouble(0.2))),
+                        MinionAction.minionSummonDelay,
+                        MinionAction.minionSummonDelay - MinionAction.minionSummonParticleDelay,
+                        this::shouldCancelParticles
+                )
+        );
     }
 
     private void minionRageEffect() {
-        eventScheduler.addEvent(new TimedEvent(() -> {
-            animatedParticleMagicCircle(3.0, 30, 12, 0f);
-            animatedParticleMagicCircle(6.0, 60, 24, 120f);
-            animatedParticleMagicCircle(9.0, 90, 36, 240f);
-        },
-                10,
-                1,
-                this::shouldCancelParticles));
+        eventScheduler.addEvent(
+                new TimedEvent(
+                        () -> {
+                            animatedParticleMagicCircle(3.0, 30, 12, 0f);
+                            animatedParticleMagicCircle(6.0, 60, 24, 120f);
+                            animatedParticleMagicCircle(9.0, 90, 36, 240f);
+                        },
+                        10,
+                        1,
+                        this::shouldCancelParticles
+                )
+        );
     }
 
     private void teleportEffect(){
         eventScheduler.addEvent(
-                new TimedEvent(this::spawnTeleportParticles,
+                new TimedEvent(
+                        this::spawnTeleportParticles,
                         TeleportAction.beginTeleportParticleDelay,
                         TeleportAction.teleportParticleDuration,
                         this::shouldCancelParticles)
@@ -172,7 +192,12 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
 
     private void endTeleportEffect(){
         eventScheduler.addEvent(
-                new TimedEvent(this::spawnTeleportParticles, 1, TeleportAction.teleportParticleDuration, this::shouldCancelParticles)
+                new TimedEvent(
+                        this::spawnTeleportParticles,
+                        1,
+                        TeleportAction.teleportParticleDuration,
+                        this::shouldCancelParticles
+                )
         );
     }
 
@@ -182,15 +207,24 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
         for (int i = 0; i < numComets; i++){
             int i1 = i;
             eventScheduler.addEvent(
-                    new TimedEvent(() -> {
-                        Vec3 cometOffset = CometRageAction.getRageCometOffsets(entity).get(i1);
-                        summonCometParticleBuilder.build(cometOffset.add(MobUtils.eyePos(entity)), Vec3.ZERO);
-                    }, i * CometRageAction.delayBetweenRageComets, CometRageAction.initialRageCometDelay, this::shouldCancelParticles)
+                    new TimedEvent(
+                            () -> {
+                                Vec3 cometOffset = CometRageAction.getRageCometOffsets(entity).get(i1);
+                                summonCometParticleBuilder.build(cometOffset.add(MobUtils.eyePos(entity)), Vec3.ZERO);
+                            },
+                            i * CometRageAction.delayBetweenRageComets,
+                            CometRageAction.initialRageCometDelay,
+                            this::shouldCancelParticles
+                    )
             );
         }
         eventScheduler.addEvent(
-                new TimedEvent(() -> MathUtils.circleCallback(3.0, 72, entity.getLookAngle(), vec3 -> flameRingFactory.build(vec3.add(MobUtils.eyePos(entity)), Vec3.ZERO)),
-                        0, CometRageAction.rageCometsMoveDuration, this::shouldCancelParticles)
+                new TimedEvent(
+                        () -> MathUtils.circleCallback(3.0, 72, entity.getLookAngle(), vec3 -> flameRingFactory.build(vec3.add(MobUtils.eyePos(entity)), Vec3.ZERO)),
+                        0,
+                        CometRageAction.rageCometsMoveDuration,
+                        this::shouldCancelParticles
+                )
         );
     }
 
@@ -219,17 +253,23 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
 
     private void deathEffect(){
         eventScheduler.addEvent(
-                new TimedEvent(()-> {
-                    for (int i = 0; i <=4; i++)
-                        deathParticleFactory.build(MobUtils.eyePos(entity), RandomUtils.randVec());
-                }, 0, 10, () -> false)
+                new TimedEvent(
+                        ()-> {
+                            for (int i = 0; i <=4; i++)
+                                deathParticleFactory.build(MobUtils.eyePos(entity), RandomUtils.randVec());
+                        },
+                        0,
+                        10,
+                        () -> false
+                )
         );
     }
 
     private void spawnTeleportParticles(){
         teleportParticleBuilder.build(
-                MobUtils.eyePos(entity).add(RandomUtils.randVec().multiply(3.0, 3.0, 3.0)),
-                Vec3.ZERO);
+                MobUtils.eyePos(entity).add(RandomUtils.randVec().scale(3.0)),
+                Vec3.ZERO
+        );
     }
 
     private void animatedParticleMagicCircle(double radius, int points, int time, float rotationDegrees){
@@ -256,7 +296,6 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
                         (int) (points * timeScale)
                 )
         );
-
     }
 
     private boolean shouldCancelParticles(){

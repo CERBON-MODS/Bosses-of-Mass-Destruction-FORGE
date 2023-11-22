@@ -11,7 +11,7 @@ import software.bernie.geckolib.cache.object.GeoBone;
 
 
 public class ObsidilithBoneLight implements IBoneLight, IRenderer<ObsidilithEntity> {
-    private ObsidilithEntity entity = null;
+    private ObsidilithEntity entity;
     private final Vector4f defaultBoneColor = new Vector4f(0.5f, 0.5f, 0.5f, 1f);
 
     @Override
@@ -20,7 +20,6 @@ public class ObsidilithBoneLight implements IBoneLight, IRenderer<ObsidilithEnti
             return IBoneLight.fullbright;
         else
             return packedLight;
-
     }
 
     @Override

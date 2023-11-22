@@ -8,9 +8,7 @@ public class HistoricalData<T> implements IHistoricalData<T> {
     private final int maxHistory;
 
     public HistoricalData(T defaultValue, int maxHistory) {
-        if (maxHistory < 2) {
-            throw new IllegalArgumentException("Max History cannot be less than 2");
-        }
+        if (maxHistory < 2) throw new IllegalArgumentException("Max History cannot be less than 2");
         this.maxHistory = maxHistory;
         this.history = new ArrayList<>();
         this.history.add(defaultValue);
@@ -19,16 +17,13 @@ public class HistoricalData<T> implements IHistoricalData<T> {
     @Override
     public void set(T value) {
         history.add(value);
-        if (history.size() > maxHistory) {
+        if (history.size() > maxHistory)
             history.remove(0);
-        }
     }
 
     @Override
     public T get(int past) {
-        if (past < 0) {
-            throw new IllegalArgumentException("Past cannot be negative");
-        }
+        if (past < 0) throw new IllegalArgumentException("Past cannot be negative");
         int clampedPast = Math.max(history.size() - 1 - past, 0);
         return history.get(clampedPast);
     }

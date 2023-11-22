@@ -34,8 +34,10 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
     public LichMoveLogic(Map<Byte, IActionWithCooldown> actions, LichEntity actor, DamageMemory damageMemory) {
         this.actions = actions;
         this.actor = actor;
-        this.stagedDamageHandler = new StagedDamageHandler(LichUtils.hpPercentRageModes,
-                () -> priorityMoves.addAll(List.of(LichActions.cometRageAttack, LichActions.volleyRageAttack, LichActions.minionRageAttack)));
+        this.stagedDamageHandler = new StagedDamageHandler(
+                LichUtils.hpPercentRageModes,
+                () -> priorityMoves.addAll(List.of(LichActions.cometRageAttack, LichActions.volleyRageAttack, LichActions.minionRageAttack))
+        );
         this.targetSwitcher = new TargetSwitcher(actor, damageMemory);
     }
 

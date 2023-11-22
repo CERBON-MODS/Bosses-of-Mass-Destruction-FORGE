@@ -21,6 +21,10 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
 
 public class TeleportAction implements IActionWithCooldown {
+    private final LichEntity entity;
+    private final EventScheduler eventScheduler;
+    private final Supplier<Boolean> shouldCancel;
+
     public static final double tooFarFromTargetDistance = 35.0;
     public static final double tooCloseToTargetDistance = 20.0;
     public static final int teleportCooldown = 80;
@@ -28,10 +32,6 @@ public class TeleportAction implements IActionWithCooldown {
     public static final int teleportDelay = 40;
     public static final int beginTeleportParticleDelay = 15;
     public static final int teleportParticleDuration = 10;
-
-    private final LichEntity entity;
-    private final EventScheduler eventScheduler;
-    private final Supplier<Boolean> shouldCancel;
 
     public TeleportAction(LichEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
         this.entity = entity;
@@ -83,7 +83,7 @@ public class TeleportAction implements IActionWithCooldown {
                                                     teleportDelay - teleportStartSoundDelay
                                             )
                                     );
-                                    },
+                                },
                                 teleportStartSoundDelay,
                                 1,
                                 shouldCancel

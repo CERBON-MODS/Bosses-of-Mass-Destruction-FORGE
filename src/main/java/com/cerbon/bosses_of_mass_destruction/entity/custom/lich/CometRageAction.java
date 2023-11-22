@@ -28,21 +28,25 @@ public class CometRageAction implements IActionWithCooldown {
     private final Supplier<Boolean> shouldCancel;
     private final Function<Vec3, ProjectileThrower> cometThrower;
 
+    public static final int numCometsDuringRage = 6;
+    public static final int initialRageCometDelay = 60;
+    public static final int delayBetweenRageComets = 30;
+    public static final int rageCometsMoveDuration = initialRageCometDelay + (numCometsDuringRage * delayBetweenRageComets);
+
     public CometRageAction(LichEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel, LichConfig lichConfig) {
         this.entity = entity;
         this.eventScheduler = eventScheduler;
         this.shouldCancel = shouldCancel;
 
-        this.cometThrower = offset -> new ProjectileThrower(() -> {
+        this.cometThrower = offset -> new ProjectileThrower(
+                () -> {
                     CometProjectile projectile = new CometProjectile(entity, entity.level(), vec3 ->
-                            entity.level().explode(entity, vec3.x(), vec3.y(), vec3.z(), lichConfig.comet.explosionStrength, Level.ExplosionInteraction.MOB), Collections.singletonList(MinionAction.summonEntityType)
-                    );
+                            entity.level().explode(entity, vec3.x, vec3.y, vec3.z, lichConfig.comet.explosionStrength, Level.ExplosionInteraction.MOB), Collections.singletonList(MinionAction.summonEntityType));
 
                     MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
                     return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
                 }
         );
-
     }
 
     @Override
@@ -59,23 +63,26 @@ public class CometRageAction implements IActionWithCooldown {
         for (int i = 0; i < offsets.size(); i++) {
             Vec3 offset = offsets.get(i);
 
-            eventScheduler.addEvent(new TimedEvent(() -> {
-                Vec3 targetPos = target.getBoundingBox().getCenter();
-                cometThrower.apply(offset).throwProjectile(targetPos);
-                BMDUtils.playSound(
-                        target.serverLevel(),
-                        entity.position(),
-                        BMDSounds.COMET_SHOOT.get(),
-                        SoundSource.HOSTILE,
-                        3.0f,
-                        64,
-                        null
-                );
-            },
-                    initialRageCometDelay + (i * delayBetweenRageComets),
-                    1,
-                    shouldCancel
-            ));
+            eventScheduler.addEvent(
+                    new TimedEvent(
+                            () -> {
+                                Vec3 targetPos = target.getBoundingBox().getCenter();
+                                cometThrower.apply(offset).throwProjectile(targetPos);
+                                BMDUtils.playSound(
+                                        target.serverLevel(),
+                                        entity.position(),
+                                        BMDSounds.COMET_SHOOT.get(),
+                                        SoundSource.HOSTILE,
+                                        3.0f,
+                                        64,
+                                        null
+                                );
+                            },
+                            initialRageCometDelay + (i * delayBetweenRageComets),
+                            1,
+                            shouldCancel
+                    )
+            );
         }
 
         BMDUtils.playSound(
@@ -88,11 +95,6 @@ public class CometRageAction implements IActionWithCooldown {
                 null
         );
     }
-
-    public static final int numCometsDuringRage = 6;
-    public static final int initialRageCometDelay = 60;
-    public static final int delayBetweenRageComets = 30;
-    public static final int rageCometsMoveDuration = initialRageCometDelay + (numCometsDuringRage * delayBetweenRageComets);
 
     public static List<Vec3> getRageCometOffsets(LichEntity entity) {
         List<Vec3> offsets = new ArrayList<>();

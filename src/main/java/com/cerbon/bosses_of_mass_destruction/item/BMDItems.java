@@ -97,7 +97,6 @@ public class BMDItems {
 
                     return (entity.isUsingItem() && entity.getUseItem() == stack) ? 1.0f : 0.0f;
                 });
-
     }
 
     public static void register(IEventBus eventBus){

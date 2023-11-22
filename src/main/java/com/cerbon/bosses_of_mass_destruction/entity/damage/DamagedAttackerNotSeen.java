@@ -24,9 +24,9 @@ public class DamagedAttackerNotSeen implements IDamageHandler {
     public void afterDamage(IEntityStats stats, DamageSource damageSource, float amount, boolean result) {
         if (actor.getTarget() == null) {
             Entity attacker = damageSource.getEntity();
-            if (attacker instanceof LivingEntity) {
+
+            if (attacker instanceof LivingEntity)
                 callback.accept((LivingEntity) attacker);
-            }
         }
     }
 

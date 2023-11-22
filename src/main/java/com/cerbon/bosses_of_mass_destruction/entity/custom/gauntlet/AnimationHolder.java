@@ -14,7 +14,7 @@ public class AnimationHolder implements IEntityEventHandler {
     private final Map<Byte, Animation> animationStatusFlags;
     private final Byte stopAttackByte;
     private final int transition;
-    private Animation nextAnimation = null;
+    private Animation nextAnimation;
     private boolean doIdleAnimation = true;
 
     public AnimationHolder(BaseEntity entity, Map<Byte, Animation> animationStatusFlags, Byte stopAttackByte, int transition) {

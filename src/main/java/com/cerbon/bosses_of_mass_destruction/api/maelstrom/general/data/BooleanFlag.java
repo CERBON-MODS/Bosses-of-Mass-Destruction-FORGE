@@ -9,9 +9,9 @@ public class BooleanFlag {
 
     public boolean getAndReset() {
         boolean toReturn = flag;
-        if (flag) {
+        if (flag)
             flag = false;
-        }
+
         return toReturn;
     }
 }

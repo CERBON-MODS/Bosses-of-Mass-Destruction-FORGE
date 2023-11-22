@@ -9,8 +9,8 @@ import org.joml.Vector4f;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 public class VoidBlossomBoneLight implements IBoneLight, IRenderer<VoidBlossomEntity> {
-    private VoidBlossomEntity entity = null;
-    private Float partialTicks = null;
+    private VoidBlossomEntity entity;
+    private Float partialTicks;
 
     @Override
     public int getLightForBone(GeoBone bone, int packedLight) {

@@ -30,21 +30,23 @@ public class VanillaCopiesServer {
         if (entity.isInWater()) {
             entity.moveRelative(0.02F, relative);
             entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.800000011920929, 0.800000011920929, 0.800000011920929));
+            entity.setDeltaMovement(entity.getDeltaMovement().scale(0.800000011920929));
 
         } else if (entity.isInLava()) {
             entity.moveRelative(0.02F, relative);
             entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5));
+            entity.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
 
         } else {
-            float friction = entity.onGround() ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock()
-                    .getFriction() * baseFrictionCoefficient : baseFrictionCoefficient;
+            float friction = entity.onGround()
+                    ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock().getFriction() * baseFrictionCoefficient
+                    : baseFrictionCoefficient;
+
             float g = 0.16277137F / (friction * friction * friction);
 
             entity.moveRelative(entity.onGround() ? 0.1F * g : 0.02F, relative);
             entity.move(MoverType.SELF, entity.getDeltaMovement());
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(friction, friction, friction));
+            entity.setDeltaMovement(entity.getDeltaMovement().scale(friction));
         }
         entity.calculateEntityAnimation(false);
     }
@@ -55,7 +57,7 @@ public class VanillaCopiesServer {
         double g = target.y - mobEntity.getEyeY();
 
         double h = Math.sqrt(d * d + e * e);
-        float i = (float) ((Mth.atan2(e, d) * 57.2957763671875) - 90.0);
+        float i = (float) ((Mth.atan2(e, d) * 57.2957763671875) - 90.0f);
         float j = (float) (-(Mth.atan2(g, h) * 57.2957763671875));
         mobEntity.setXRot(changeAngle(mobEntity.getXRot(), j, maxPitchChange));
         mobEntity.setYRot(changeAngle(mobEntity.getYRot(), i, maxYawChange));
@@ -94,10 +96,7 @@ public class VanillaCopiesServer {
     }
 
     public static int getBlockLight(Entity entity, BlockPos blockPos) {
-        if (entity.isOnFire())
-            return 15;
-        else
-            return entity.level().getBrightness(LightLayer.BLOCK, blockPos);
+        return entity.isOnFire() ? 15 : entity.level().getBrightness(LightLayer.BLOCK, blockPos);
     }
 
     public static void destroyBlocks(Entity entity, AABB aabb) {

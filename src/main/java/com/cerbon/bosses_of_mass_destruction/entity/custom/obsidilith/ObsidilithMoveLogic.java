@@ -16,7 +16,6 @@ import java.util.Map;
 public class ObsidilithMoveLogic implements IActionWithCooldown, IDamageHandler {
     private final Map<Byte, IActionWithCooldown> actions;
     private final ObsidilithEntity entity;
-
     private final HistoricalData<Byte> moveHistory;
     private boolean shouldDoPillarDefense;
     private final StagedDamageHandler damageHandler;
@@ -25,7 +24,6 @@ public class ObsidilithMoveLogic implements IActionWithCooldown, IDamageHandler 
     public ObsidilithMoveLogic(Map<Byte, IActionWithCooldown> actions, ObsidilithEntity entity, DamageMemory damageMemory){
         this.actions = actions;
         this.entity = entity;
-
         this.moveHistory = new HistoricalData<>((byte) 0, 2);
         this.shouldDoPillarDefense = false;
         this.damageHandler = new StagedDamageHandler(ObsidilithUtils.hpPillarShieldMilestones, () -> shouldDoPillarDefense = true);
@@ -36,8 +34,8 @@ public class ObsidilithMoveLogic implements IActionWithCooldown, IDamageHandler 
     public int perform() {
         targetSwitcher.trySwitchTarget();
         byte moveByte = chooseMove();
-        if (actions.get(moveByte) == null)
-            throw new IllegalArgumentException(moveByte + " action not registered as an attack");
+        if (actions.get(moveByte) == null) throw new IllegalArgumentException(moveByte + " action not registered as an attack");
+
         IActionWithCooldown action = actions.get(moveByte);
         entity.level().broadcastEntityEvent(entity, moveByte);
         return action.perform();

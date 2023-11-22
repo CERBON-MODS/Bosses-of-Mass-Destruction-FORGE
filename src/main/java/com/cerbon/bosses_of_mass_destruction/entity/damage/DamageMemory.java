@@ -23,9 +23,8 @@ public class DamageMemory implements IDamageHandler {
     @Override
     public void afterDamage(IEntityStats stats, DamageSource damageSource, float amount, boolean result) {
         int minimumDamageToNotice = 4;
-        if(result && damageSource.getEntity() != null && amount > minimumDamageToNotice) {
+        if(result && damageSource.getEntity() != null && amount > minimumDamageToNotice)
             historicalData.set(new DamageHistory(amount, damageSource, entity.tickCount));
-        }
     }
 
     @Override

@@ -52,9 +52,8 @@ public class BMDConfig implements ConfigData {
                     "minecraft:zombified_piglin"
             );
             lichConfig.summonMechanic.entitiesThatCountToSummonCounter = new ArrayList<>(defaultEntities);
-        } else {
-            lichConfig.summonMechanic.entitiesThatCountToSummonCounter =
-                    new ArrayList<>(new HashSet<>(entitiesThatCountToSummonCounter));
-        }
+        } else
+            lichConfig.summonMechanic.entitiesThatCountToSummonCounter = new ArrayList<>(new HashSet<>(entitiesThatCountToSummonCounter));
+
     }
 }

@@ -21,11 +21,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MixinMultiplayerGameMode {
-    @Shadow
-    protected abstract void ensureHasSentCarriedItem();
 
-    @Shadow
-    private GameType localPlayerMode;
+    @Shadow private GameType localPlayerMode;
+
+    @Shadow protected abstract void ensureHasSentCarriedItem();
 
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
     private void attackHook(final Player player, final Entity target, final CallbackInfo ci) {

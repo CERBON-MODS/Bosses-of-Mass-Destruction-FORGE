@@ -23,6 +23,7 @@ public class MixinEntityRenderDispatcher {
         if (box instanceof final CompoundOrientedBox compoundOrientedBox) {
             matrix.pushPose();
             matrix.translate(-entity.getX(), -entity.getY(), -entity.getZ());
+
             for (final OrientedBox orientedBox : compoundOrientedBox) {
                 matrix.pushPose();
                 final Vec3 center = orientedBox.getCenter();
@@ -31,6 +32,7 @@ public class MixinEntityRenderDispatcher {
                 LevelRenderer.renderLineBox(matrix, vertices, orientedBox.getExtents(), 0, 0, 1, 1);
                 matrix.popPose();
             }
+
             compoundOrientedBox.toVoxelShape().forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> LevelRenderer.renderLineBox(matrix, vertices, minX, minY, minZ, maxX, maxY, maxZ, 0, 1, 0, 1f));
             matrix.popPose();
         }

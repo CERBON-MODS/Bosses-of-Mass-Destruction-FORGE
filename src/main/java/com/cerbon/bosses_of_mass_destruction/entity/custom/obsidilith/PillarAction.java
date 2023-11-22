@@ -68,7 +68,7 @@ public class PillarAction implements IActionWithCooldown {
         List<BlockPos> pillars = new ArrayList<>();
 
         for (int i = 0; i < numPillars; i++){
-            Vec3 position = VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().multiply(pillarXzDistance, pillarXzDistance, pillarXzDistance).add(entity.position());
+            Vec3 position = VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().scale(pillarXzDistance).add(entity.position());
             BlockPos above = BMDUtils.findGroundBelow(entity.level(), BlockPos.containing(position).above(14), pos -> true);
             BlockPos ground = BMDUtils.findGroundBelow(entity.level(), above, pos -> true);
 

@@ -23,7 +23,7 @@ public class VoidBlossomCompoundHitbox implements ICompoundHitbox, IDamageHandle
     private final AABB collisionHitbox;
     private final List<String> spikedBoxes;
 
-    private String nextDamegedPart = null;
+    private String nextDamagedPart;
 
     public VoidBlossomCompoundHitbox(VoidBlossomEntity entity, EntityBounds hitboxes, String root, AABB collisionHitbox, List<String> spikedBoxes) {
         this.entity = entity;
@@ -53,17 +53,16 @@ public class VoidBlossomCompoundHitbox implements ICompoundHitbox, IDamageHandle
 
     @Override
     public void setNextDamagedPart(String part) {
-        nextDamegedPart = part;
+        nextDamagedPart = part;
     }
 
     @Override
-    public void beforeDamage(IEntityStats stats, DamageSource damageSource, float amount) {
-    }
+    public void beforeDamage(IEntityStats stats, DamageSource damageSource, float amount) {}
 
     @Override
     public void afterDamage(IEntityStats stats, DamageSource damageSource, float amount, boolean result) {
-        String part = nextDamegedPart;
-        nextDamegedPart = null;
+        String part = nextDamagedPart;
+        nextDamagedPart = null;
 
         if (result)
             if (spikedBoxes.contains(part) && !damageSource.is(DamageTypeTags.IS_PROJECTILE)){

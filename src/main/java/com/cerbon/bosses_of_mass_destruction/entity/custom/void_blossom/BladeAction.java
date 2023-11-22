@@ -58,8 +58,8 @@ public class BladeAction implements IActionWithCooldown {
             Vec3 left = dir.cross(VecUtils.yAxis).normalize();
             double rotation = RandomUtils.randSign() * 20.0;
             Vec3 angled = VecUtils.rotateVector(left, dir, rotation);
-            Vec3 lineStart = eyePos.add(angled.multiply(7.0, 7.0, 7.0));
-            Vec3 lineEnd = eyePos.add(angled.multiply(-7.0, -7.0, -7.0));
+            Vec3 lineStart = eyePos.add(angled.scale(7.0));
+            Vec3 lineEnd = eyePos.add(angled.scale(-7.0));
             ProjectileThrower projectileThrower = new ProjectileThrower(
                     () -> {
                         PetalBladeProjectile projectile = new PetalBladeProjectile(entity, entity.level(), livingEntity -> {}, List.of(entity.getType()), (float) rotation);

@@ -35,6 +35,7 @@ public class GauntletBlackstoneBlock extends Block {
         for (Direction dir : List.of(Direction.EAST, Direction.WEST, Direction.NORTH, Direction.SOUTH)){
             BlockPos centerPos = pos.offset(dir.getNormal());
             Block centerBlock = level.getBlockState(centerPos).getBlock();
+
             if (centerBlock == this){
                 spawnGauntlet(centerPos, level);
                 break;
@@ -46,6 +47,7 @@ public class GauntletBlackstoneBlock extends Block {
     private void spawnGauntlet(BlockPos centerPos, Level level){
         Vec3 spawnPos = VecUtils.asVec3(centerPos).add(new Vec3(0.5, -0.5, 0.5));
         GauntletEntity entity = BMDEntities.GAUNTLET.get().create(level);
+
         if (entity != null){
             entity.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
             level.addFreshEntity(entity);

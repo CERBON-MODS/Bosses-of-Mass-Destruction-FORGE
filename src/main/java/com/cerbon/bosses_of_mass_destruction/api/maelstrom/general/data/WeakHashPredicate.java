@@ -14,9 +14,9 @@ public class WeakHashPredicate<T> implements Predicate<T> {
 
     @Override
     public boolean test(T t) {
-        if (!conditionals.containsKey(t)) {
+        if (!conditionals.containsKey(t))
             conditionals.put(t, predicateFactory.get());
-        }
+
         return conditionals.get(t).get();
     }
 }

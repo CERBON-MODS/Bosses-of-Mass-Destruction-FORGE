@@ -15,15 +15,13 @@ public abstract class MixinEntity {
 
     @Inject(method = "getBoundingBox", at = @At("RETURN"), cancellable = true)
     private void getBoundingBox(CallbackInfoReturnable<AABB> cir) {
-        if (this instanceof MultipartEntity) {
+        if (this instanceof MultipartEntity)
             cir.setReturnValue(((MultipartEntity) this).getCompoundBoundingBox(cir.getReturnValue()));
-        }
     }
 
     @Inject(method = "setPosRaw", at = @At("TAIL"))
     private void setPos(double x, double y, double z, CallbackInfo ci) {
-        if (this instanceof MultipartAwareEntity) {
+        if (this instanceof MultipartAwareEntity)
             ((MultipartAwareEntity)this).onSetPos(x, y, z);
-        }
     }
 }

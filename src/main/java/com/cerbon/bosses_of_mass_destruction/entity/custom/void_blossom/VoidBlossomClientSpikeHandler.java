@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 public class VoidBlossomClientSpikeHandler implements IEntityTick<Level> {
-    private final int maxAge = 10;
     private final LinkedHashMap<BlockPos, VoidBlossomClientSpikeHandler.Spike> spikes = new LinkedHashMap<>();
     private final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
             .age(RandomUtils.range(10, 15))
             .color(BMDColors.VOID_PURPLE)
             .colorVariation(0.25)
             .brightness(BMDParticles.FULL_BRIGHT);
+    private final int maxAge = 10;
 
     public Map<BlockPos, VoidBlossomClientSpikeHandler.Spike> getSpikes(){
         return spikes;

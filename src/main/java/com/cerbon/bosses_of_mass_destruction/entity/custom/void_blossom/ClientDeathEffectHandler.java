@@ -30,12 +30,12 @@ public class ClientDeathEffectHandler implements IEntityEventHandler {
         if ((int) status == 3){
             int delay = 3;
             Vec3 fallDirection = VecUtils.planeProject(entity.getForward(), VecUtils.yAxis).yRot(180f);
-            Vec3 originPos = entity.position().add(VecUtils.yAxis.multiply(2.0, 2.0, 2.0));
+            Vec3 originPos = entity.position().add(VecUtils.yAxis.scale(2.0));
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
                                 Vec3 pos = originPos
-                                        .add(RandomUtils.randVec().multiply(5.0, 5.0, 5.0))
+                                        .add(RandomUtils.randVec().scale(5.0))
                                         .add(fallDirection.scale(RandomUtils.randomDouble(6.0) + 6.0));
                                 Vec3 vel = RandomUtils.randVec().add(VecUtils.yAxis).scale(0.05);
                                 deathParticle.build(pos, vel);

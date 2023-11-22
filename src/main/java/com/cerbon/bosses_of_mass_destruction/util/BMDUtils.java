@@ -126,7 +126,7 @@ public class BMDUtils {
 
     private static Vec3 rotateAroundPos(Vec3 pos, int age, int startingRotation, double radius, double rotationSpeed) {
         Vec3 xzOffset = VecUtils.xAxis.yRot((float)Math.toRadians(age * rotationSpeed + startingRotation));
-        return pos.add(xzOffset.multiply(radius, radius, radius));
+        return pos.add(xzOffset.scale(radius));
     }
 
     public static ConfiguredFeature<?, ?> getConfiguredFeature(LevelReader levelReader, ResourceKey<ConfiguredFeature<?, ?>> key) {

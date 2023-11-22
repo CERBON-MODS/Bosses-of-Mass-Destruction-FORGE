@@ -135,11 +135,7 @@ public final class OrientedBox {
     }
 
     private static double getPoint(final AABB box, final Direction.AxisDirection direction, final Direction.Axis axis) {
-        if (direction == Direction.AxisDirection.NEGATIVE) {
-            return box.min(axis);
-        } else {
-            return box.max(axis);
-        }
+        return direction == Direction.AxisDirection.NEGATIVE ? box.min(axis) : box.max(axis);
     }
 
     public boolean intersects(final AABB other) {
@@ -147,28 +143,25 @@ public final class OrientedBox {
     }
 
     public boolean intersects(final Vec3[] otherVertices) {
-        if (vertices == null) {
+        if (vertices == null)
             computeVertices();
-        }
+
         final Vec3[] vertices1 = vertices;
         final Vec3[] normals1 = getBasis();
         for (final Vec3 normal : normals1) {
-            if (!sat(normal, vertices1, otherVertices)) {
+            if (!sat(normal, vertices1, otherVertices))
                 return false;
-            }
         }
         final Vec3[] normals2 = Matrix3d.IDENTITY_BASIS;
         for (final Vec3 normal : normals2) {
-            if (!sat(normal, vertices1, otherVertices)) {
+            if (!sat(normal, vertices1, otherVertices))
                 return false;
-            }
         }
         for (int i = 0; i < normals1.length; i++) {
             for (int j = i; j < normals2.length; j++) {
                 final Vec3 normal = cross(normals1[i], normals2[j]);
-                if (!sat(normal, vertices1, otherVertices)) {
+                if (!sat(normal, vertices1, otherVertices))
                     return false;
-                }
             }
         }
         return true;
@@ -219,23 +212,20 @@ public final class OrientedBox {
     @Nullable
     private static Direction traceCollisionSide(final AABB box, final Vec3 intersectingVector, final double[] traceDistanceResult, final double xDelta, final double yDelta, final double zDelta) {
         Direction approachDirection = null;
-        if (xDelta > 1.0E-7D) {
+        if (xDelta > 1.0E-7D)
             approachDirection = traceCollisionSide(traceDistanceResult, approachDirection, xDelta, yDelta, zDelta, box.minX, box.minY, box.maxY, box.minZ, box.maxZ, Direction.WEST, intersectingVector.x, intersectingVector.y, intersectingVector.z);
-        } else if (xDelta < -1.0E-7D) {
+        else if (xDelta < -1.0E-7D)
             approachDirection = traceCollisionSide(traceDistanceResult, approachDirection, xDelta, yDelta, zDelta, box.maxX, box.minY, box.maxY, box.minZ, box.maxZ, Direction.EAST, intersectingVector.x, intersectingVector.y, intersectingVector.z);
-        }
 
-        if (yDelta > 1.0E-7D) {
+        if (yDelta > 1.0E-7D)
             approachDirection = traceCollisionSide(traceDistanceResult, approachDirection, yDelta, zDelta, xDelta, box.minY, box.minZ, box.maxZ, box.minX, box.maxX, Direction.DOWN, intersectingVector.y, intersectingVector.z, intersectingVector.x);
-        } else if (yDelta < -1.0E-7D) {
+        else if (yDelta < -1.0E-7D)
             approachDirection = traceCollisionSide(traceDistanceResult, approachDirection, yDelta, zDelta, xDelta, box.maxY, box.minZ, box.maxZ, box.minX, box.maxX, Direction.UP, intersectingVector.y, intersectingVector.z, intersectingVector.x);
-        }
 
-        if (zDelta > 1.0E-7D) {
+        if (zDelta > 1.0E-7D)
             approachDirection = traceCollisionSide(traceDistanceResult, approachDirection, zDelta, xDelta, yDelta, box.minZ, box.minX, box.maxX, box.minY, box.maxY, Direction.NORTH, intersectingVector.z, intersectingVector.x, intersectingVector.y);
-        } else if (zDelta < -1.0E-7D) {
+        else if (zDelta < -1.0E-7D)
             approachDirection = traceCollisionSide(traceDistanceResult, approachDirection, zDelta, xDelta, yDelta, box.maxZ, box.minX, box.maxX, box.minY, box.maxY, Direction.SOUTH, intersectingVector.z, intersectingVector.x, intersectingVector.y);
-        }
 
         return approachDirection;
     }
@@ -248,9 +238,8 @@ public final class OrientedBox {
         if (0.0D < d && d < traceDistanceResult[0] && minX - 1.0E-7D < e && e < maxX + 1.0E-7D && minZ - 1.0E-7D < f && f < maxZ + 1.0E-7D) {
             traceDistanceResult[0] = d;
             return resultDirection;
-        } else {
+        } else
             return approachDirection;
-        }
     }
 
     public boolean contains(double x, double y, double z) {

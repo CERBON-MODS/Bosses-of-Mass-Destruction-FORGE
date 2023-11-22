@@ -22,18 +22,17 @@ public class WeightedRandom<E> {
 
     public WeightedRandom<E> add(double weight, E result) {
         if (weight <= 0) return this;
-        if (Double.isNaN(weight) || Double.isInfinite(weight)) {
+        if (Double.isNaN(weight) || Double.isInfinite(weight))
             throw new IllegalArgumentException("The weight for random collection is invalid: " + weight);
-        }
+
         total += weight;
         map.put(total, result);
         return this;
     }
 
     public void addAll(Collection<Pair<Double, E>> collection) {
-        for (Pair<Double, E> pair : collection) {
+        for (Pair<Double, E> pair : collection)
             add(pair.getFirst(), pair.getSecond());
-        }
     }
 
     public E next() {

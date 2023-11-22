@@ -30,10 +30,11 @@ public class ChargedEnderPearlS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
-            ClientLevel level = Minecraft.getInstance().level;
+            Minecraft client = Minecraft.getInstance();
+            ClientLevel level = client.level;
             if (level == null) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ChargedEnderPearlEntity.handlePearlImpact(this.pos));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> ChargedEnderPearlEntity.handlePearlImpact(this.pos)));
         });
         ctx.setPacketHandled(true);
     }

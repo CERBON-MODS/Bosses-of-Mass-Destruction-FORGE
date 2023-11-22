@@ -162,9 +162,9 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     private void spawnTrailParticles(double rotationOffset){
         Vec3 look = getDeltaMovement();
         Vec3 cross = look.cross(VecUtils.yAxis).normalize();
-        Vec3 rotatedOffset = VecUtils.rotateVector(cross, look, rotationOffset + tickCount * 30.0).multiply(0.25, 0.25, 0.25);
+        Vec3 rotatedOffset = VecUtils.rotateVector(cross, look, rotationOffset + tickCount * 30.0).scale(0.25);
         Vec3 particlePos = position().add(rotatedOffset);
-        particleBuilder.build(particlePos, getDeltaMovement().multiply(0.1, 0.1, 0.1));
+        particleBuilder.build(particlePos, getDeltaMovement().scale(0.1));
     }
 
     private void spawnParticles(double d, Vec3 vec3, double e, double f){

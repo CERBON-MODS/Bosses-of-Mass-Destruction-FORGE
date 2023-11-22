@@ -32,6 +32,7 @@ public class LichKillCounter {
     public void afterKilledOtherEntity(Entity entity, LivingEntity killedEntity) {
         if (entity instanceof ServerPlayer && countedEntities.contains(killedEntity.getType())) {
             int entitiesKilled = getUndeadKilled((ServerPlayer) entity);
+
             if (entitiesKilled > 0 && entitiesKilled % config.numEntitiesKilledToDropSoulStar == 0) {
                 BMDUtils.spawnParticle(((ServerPlayer) entity).serverLevel(), BMDParticles.SOUL_FLAME.get(), killedEntity.position().add(VecUtils.yAxis), VecUtils.unit, 15, 0.0);
                 killedEntity.spawnAtLocation(BMDItems.SOUL_STAR.get());

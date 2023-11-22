@@ -18,9 +18,8 @@ public final class QuaternionD {
     }
 
     public QuaternionD(final Vec3 axis, double rotationAngle, final boolean degrees) {
-        if (degrees) {
+        if (degrees)
             rotationAngle *= 0.017453292F;
-        }
 
         final double f = Math.sin(rotationAngle / 2.0);
         x = axis.x * f;
@@ -82,24 +81,23 @@ public final class QuaternionD {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) {
+        if (this == o)
             return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
 
         final QuaternionD that = (QuaternionD) o;
 
-        if (Double.compare(that.x, x) != 0) {
+        if (Double.compare(that.x, x) != 0)
             return false;
-        }
-        if (Double.compare(that.y, y) != 0) {
+
+        if (Double.compare(that.y, y) != 0)
             return false;
-        }
-        if (Double.compare(that.z, z) != 0) {
+
+        if (Double.compare(that.z, z) != 0)
             return false;
-        }
+
         return Double.compare(that.w, w) == 0;
     }
 

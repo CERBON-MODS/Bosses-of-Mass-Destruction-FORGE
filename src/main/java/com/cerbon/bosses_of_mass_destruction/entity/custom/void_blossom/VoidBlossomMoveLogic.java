@@ -26,6 +26,7 @@ public class VoidBlossomMoveLogic implements IActionWithCooldown {
         targetSwitcher.trySwitchTarget();
         LivingEntity target = entity.getTarget();
         if (target == null) return 20;
+
         float healthPercentage = entity.getHealth() / entity.getMaxHealth();
         WeightedRandom<Byte> random = new WeightedRandom<>();
         double shortDistanceRate = target.distanceTo(entity) > 21 ? 0.0 : 1.0;

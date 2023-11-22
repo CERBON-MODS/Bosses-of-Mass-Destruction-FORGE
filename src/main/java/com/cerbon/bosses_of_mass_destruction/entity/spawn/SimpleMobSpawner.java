@@ -10,19 +10,22 @@ import net.minecraftforge.event.ForgeEventFactory;
 public class SimpleMobSpawner implements IMobSpawner {
     private final ServerLevel serverLevel;
 
-    public SimpleMobSpawner(ServerLevel serverWorld) {
-        this.serverLevel = serverWorld;
+    public SimpleMobSpawner(ServerLevel serverLevel) {
+        this.serverLevel = serverLevel;
     }
 
     @Override
     public void spawn(Vec3 pos, Entity entity) {
         entity.setPos(pos);
         if (entity instanceof Mob) {
-            ForgeEventFactory.onFinalizeSpawn((Mob) entity, serverLevel,
+            ForgeEventFactory.onFinalizeSpawn(
+                    (Mob) entity,
+                    serverLevel,
                     serverLevel.getCurrentDifficultyAt(entity.blockPosition()),
                     MobSpawnType.MOB_SUMMONED,
                     null,
-                    null);
+                    null
+            );
         }
 
         serverLevel.addFreshEntityWithPassengers(entity);

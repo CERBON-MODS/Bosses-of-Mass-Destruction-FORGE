@@ -25,6 +25,7 @@ public class MinionAction implements IActionWithCooldown {
     private final LichEntity entity;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
+
     public static final int minionSummonCooldown = 80;
     public static final int minionSummonParticleDelay = 10;
     public static final int minionSummonDelay = 40;
@@ -58,12 +59,13 @@ public class MinionAction implements IActionWithCooldown {
 
     private void performMinionSummon(ServerPlayer target) {
         eventScheduler.addEvent(
-                new TimedEvent(() -> beginSummonSingleMob(target),
+                new TimedEvent(
+                        () -> beginSummonSingleMob(target),
                         minionSummonDelay,
                         1,
-                        shouldCancel)
+                        shouldCancel
+                )
         );
-
     }
 
     void beginSummonSingleMob(ServerPlayer target){
@@ -75,13 +77,17 @@ public class MinionAction implements IActionWithCooldown {
         IMobSpawner summonCircleBeforeSpawn = (pos, summon) -> {
             BMDUtils.spawnParticle(target.serverLevel(), BMDParticles.MAGIC_CIRCLE.get(), pos, Vec3.ZERO, 0, 0.0);
             BMDUtils.playSound(target.serverLevel(), pos, BMDSounds.MINION_RUNE.get(), SoundSource.HOSTILE, 1.0f, 64, null);
-            eventScheduler.addEvent(new TimedEvent(() -> {
-                mobSpawner.spawn(pos, summon);
-                entity.playSound(BMDSounds.MINION_SUMMON.get(), 0.7f, 1.0f);
-            },
-                    minionRuneToMinionSpawnDelay,
-                    1,
-                    shouldCancel));
+            eventScheduler.addEvent(
+                    new TimedEvent(
+                            () -> {
+                                mobSpawner.spawn(pos, summon);
+                                entity.playSound(BMDSounds.MINION_SUMMON.get(), 0.7f, 1.0f);
+                            },
+                            minionRuneToMinionSpawnDelay,
+                            1,
+                            shouldCancel
+                    )
+            );
         };
 
         new MobPlacementLogic(
@@ -90,6 +96,5 @@ public class MinionAction implements IActionWithCooldown {
                 spawnPredicate,
                 summonCircleBeforeSpawn
         ).tryPlacement(30);
-
     }
 }

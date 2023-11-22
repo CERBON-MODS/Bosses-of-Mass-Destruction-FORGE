@@ -12,8 +12,7 @@ public class CompositeEntityEventHandler implements IEntityEventHandler {
 
     @Override
     public void handleEntityEvent(byte id) {
-        for (IEntityEventHandler entityEventHandler : entityEventHandlerList) {
+        for (IEntityEventHandler entityEventHandler : entityEventHandlerList)
             entityEventHandler.handleEntityEvent(id);
-        }
     }
 }

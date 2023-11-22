@@ -29,8 +29,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoBlockEntity {
-    public int animationAge = 0;
     private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
+    public int animationAge = 0;
 
     private static final HashSet<ServerPlayer> flight = new HashSet<>();
 
@@ -49,24 +49,22 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
         );
     }
 
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return animationFactory;
-    }
-
     public static void tick(Level level, BlockPos pos, BlockState state, LevitationBlockEntity entity){
         ChunkCacheBlockEntity.tick(level, pos, state, entity);
         if (level.isClientSide){
             entity.animationAge++;
+
             AABB box = getAffectingBox(level, VecUtils.asVec3(pos));
             List<Player> playersInBox = level.getEntitiesOfClass(Player.class, box);
+
             for (Player player : playersInBox) {
+
                 for (double x : List.of(box.minX, box.maxX)) {
                     double zRand = box.getCenter().z + box.getZsize() * RandomUtils.randomDouble(0.5);
                     Particles.particlesFactory.build(randYPos(x, player, zRand), Vec3.ZERO);
                 }
 
-                for (double z : List.of(box.minZ, box.maxZ)){
+                for (double z : List.of(box.minZ, box.maxZ)) {
                     double xRand = box.getCenter().x + box.getXsize() * RandomUtils.randomDouble(0.5);
                     Particles.particlesFactory.build(randYPos(xRand, player, z), Vec3.ZERO);
                 }
@@ -82,9 +80,8 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
         List<BlockPos> blockToCheck = new ArrayList<>();
 
         for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
+            for (int z = -1; z <= 1; z++)
                 blockToCheck.add(new BlockPos(x * 3, 0, z * 3));
-            }
         }
         Set<ChunkPos> chunksToCheck = blockToCheck.stream().map(pos -> new ChunkPos(pos.offset(player.blockPosition()))).collect(Collectors.toSet());
         boolean hasLevitationBlock = chunksToCheck.stream().anyMatch(chunkPos -> {
@@ -93,7 +90,8 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
             if (blockCache.isPresent()){
                 List<BlockPos> blocks = blockCache.get().getBlocksFromChunk(chunkPos, BMDBlocks.LEVITATION_BLOCK.get());
                 return blocks.stream().anyMatch(pos -> getAffectingBox(player.level(), VecUtils.asVec3(pos)).contains(player.position()));
-            } else return false;
+            } else
+                return false;
         });
 
         /*
@@ -124,6 +122,11 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
 
     private static AABB getAffectingBox(Level level, Vec3 pos){
         return new AABB(pos.x, level.getMinBuildHeight(), pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(3.0, 0.0, 3.0);
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return animationFactory;
     }
 
     private static class Particles {

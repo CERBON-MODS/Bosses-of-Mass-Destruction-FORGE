@@ -11,8 +11,6 @@ public class SporeBallOverlay implements IRenderer<SporeBallProjectile>, IOverla
     private SporeBallProjectile entity;
     private float partialTicks;
 
-    public SporeBallOverlay(){}
-
     @Override
     public void render(
             SporeBallProjectile entity,

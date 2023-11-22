@@ -16,18 +16,18 @@ import java.util.function.Function;
 public class SimpleParticle extends TextureSheetParticle {
     private final ParticleContext particleContext;
     private final IParticleGeometry particleGeometry;
-    private final boolean cycleSprites;
-    private Function<Float, Integer> brightnessOverride = null;
-    private Function<Float, Vec3> colorOverride = null;
-    private Function<Float, Float> scaleOverride = null;
+    private Function<Float, Integer> brightnessOverride;
+    private Function<Float, Float> scaleOverride;
+    private Function<Float, Vec3> colorOverride;
+    private Function<SimpleParticle, Vec3> velocityOverride;
+    private Function<SimpleParticle, Vec3> positionOverride;
+    private Function<SimpleParticle, Float> rotationOverride;
     private Vec3 colorVariation = Vec3.ZERO;
-    private Function<SimpleParticle, Vec3> velocityOverride = null;
-    private Function<SimpleParticle, Vec3> positionOverride = null;
-    private Function<SimpleParticle, Float> rotationOverride = null;
 
     private float rotation = 0f;
     private float prevRotation = 0f;
     public float ageRatio = 1f;
+    private final boolean cycleSprites;
 
     public SimpleParticle(ParticleContext particleContext, int particleAge, IParticleGeometry particleGeometry, boolean cycleSprites, boolean doCollision) {
         super(particleContext.level(), particleContext.pos().x(), particleContext.pos().y(), particleContext.pos().z());

@@ -19,10 +19,7 @@ public class RangedSpawnPosition implements ISpawnPosition {
     @Override
     public Vec3 getPos() {
         Vec3 randomOffset = random.getVector();
-        Vec3 coercedRandomOffset = randomOffset.normalize()
-                .multiply(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance),
-                        Math.max(Math.min(randomOffset.length(), maxDistance), minDistance),
-                        Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
+        Vec3 coercedRandomOffset = randomOffset.normalize().scale(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
         return position.add(coercedRandomOffset);
     }
 }

@@ -14,8 +14,7 @@ public class CompositeDataAccessorHandler implements IDataAccessorHandler {
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
-        for (IDataAccessorHandler handler : handlerList) {
+        for (IDataAccessorHandler handler : handlerList)
             handler.onSyncedDataUpdated(data);
-        }
     }
 }

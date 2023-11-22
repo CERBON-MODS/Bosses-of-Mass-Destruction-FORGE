@@ -19,9 +19,8 @@ public class ExplosionMixin {
     @ModifyVariable(at = @At(value = "HEAD"), method = "explode", argsOnly = true)
     private float Explosion(float g, @Nullable Entity source, @Nullable DamageSource damageSource, @Nullable ExplosionDamageCalculator damageCalculator, double x, double y, double z, float radius, boolean fire, Level.ExplosionInteraction explosionInteraction){
         Level level = (Level) (Object) this;
-        if (!level.isClientSide) {
+        if (!level.isClientSide)
             return MonolithBlock.getExplosionPower((ServerLevel) level, BlockPos.containing(x, y, z), g);
-        }
 
         return g;
     }

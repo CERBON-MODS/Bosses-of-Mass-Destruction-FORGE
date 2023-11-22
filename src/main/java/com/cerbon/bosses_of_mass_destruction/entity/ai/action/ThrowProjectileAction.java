@@ -14,8 +14,7 @@ public class ThrowProjectileAction implements IAction {
 
     @Override
     public void perform() {
-        if (entity.getTarget() != null) {
+        if (entity.getTarget() != null)
             projectileThrower.throwProjectile(entity.getTarget().getBoundingBox().getCenter());
-        }
     }
 }

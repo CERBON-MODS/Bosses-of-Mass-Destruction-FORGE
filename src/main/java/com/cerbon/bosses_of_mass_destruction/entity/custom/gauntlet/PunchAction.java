@@ -123,7 +123,7 @@ public class PunchAction implements IActionWithCooldown {
     }
 
     private void testEntityImpact(){
-        List<LivingEntity> collidedEntities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox(), it -> it != entity);
+        List<LivingEntity> collidedEntities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox(), livingEntity -> livingEntity != entity);
 
         for (LivingEntity target : collidedEntities){
             entity.doHurtTarget(target);

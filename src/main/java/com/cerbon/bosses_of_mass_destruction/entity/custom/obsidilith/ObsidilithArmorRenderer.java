@@ -26,9 +26,9 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
     private final EntityRendererProvider.Context context;
 
     private final ResourceLocation armorTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
-    private RenderHelper geoModelProvider = null;
-    private ObsidilithEntity entity = null;
-    private RenderType type = null;
+    private RenderHelper geoModelProvider;
+    private ObsidilithEntity obsidilithEntity;
+    private RenderType type;
 
     public ObsidilithArmorRenderer(GeoModel<ObsidilithEntity> geoModel, EntityRendererProvider.Context context){
         this.geoModel = geoModel;
@@ -41,25 +41,25 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
         float textureOffset = renderAge * new Random().nextFloat();
 
         if (geoModelProvider == null)
-            geoModelProvider = new RenderHelper(entity, context, geoModel);
+            geoModelProvider = new RenderHelper(entity, geoModel, context);
 
-        this.entity = entity;
+        this.obsidilithEntity = entity;
         type = RenderType.energySwirl(armorTexture, textureOffset, textureOffset);
     }
 
     @Override
     public void render(BakedGeoModel model, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         VertexConsumer energyBuffer = buffer.getBuffer(type);
-        if(entity == null) return;
+        if(obsidilithEntity == null) return;
         if (type == null) return;
 
-        if (entity.isShielded()){
+        if (obsidilithEntity.isShielded()){
             Vec3 color = getColor().add(VecUtils.unit).normalize().scale(0.6);
 
             if (geoModelProvider == null) return;
             geoModelProvider.actuallyRender(
                     poseStack,
-                    entity,
+                    obsidilithEntity,
                     model,
                     type,
                     buffer,
@@ -75,7 +75,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
 
     private Vec3 getColor() {
         Vec3 color;
-        switch (entity.currentAttack){
+        switch (obsidilithEntity.currentAttack){
             case ObsidilithUtils.burstAttackStatus -> color = BMDColors.ORANGE;
             case ObsidilithUtils.waveAttackStatus -> color = BMDColors.RED;
             case ObsidilithUtils.spikeAttackStatus -> color = BMDColors.COMET_BLUE;
@@ -89,7 +89,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
     private static class RenderHelper extends GeoEntityRenderer<ObsidilithEntity> {
         private final ObsidilithEntity entity;
 
-        public RenderHelper(ObsidilithEntity entity, EntityRendererProvider.Context context, GeoModel<ObsidilithEntity> parentModel) {
+        public RenderHelper(ObsidilithEntity entity, GeoModel<ObsidilithEntity> parentModel, EntityRendererProvider.Context context) {
             super(context, parentModel);
             this.entity = entity;
         }

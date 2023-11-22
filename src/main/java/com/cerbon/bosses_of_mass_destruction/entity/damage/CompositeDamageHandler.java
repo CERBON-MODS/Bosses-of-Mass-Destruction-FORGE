@@ -22,9 +22,8 @@ public class CompositeDamageHandler implements IDamageHandler {
 
     @Override
     public void afterDamage(IEntityStats stats, DamageSource damageSource, float amount, boolean result) {
-        for (IDamageHandler handler : handlerList) {
+        for (IDamageHandler handler : handlerList)
             handler.afterDamage(stats, damageSource, amount, result);
-        }
     }
 
     @Override

@@ -17,11 +17,11 @@ public class CanMoveThrough implements IValidDirection {
 
     @Override
     public boolean isValidDirection(Vec3 normedDirection) {
-        Vec3 reactionDirection = normedDirection.multiply(reactionDistance, reactionDistance, reactionDistance).add(entity.getDeltaMovement());
+        Vec3 reactionDirection = normedDirection.scale(reactionDistance).add(entity.getDeltaMovement());
         Vec3 target = entity.position().add(reactionDirection);
         boolean noBlockCollisions = MathUtils.willAABBFit(entity.getBoundingBox(), reactionDirection, box -> !entity.level().noCollision(entity, box));
         ClipContext context = new ClipContext(
-                entity.position().add(normedDirection.multiply(1.0, 1.0, 1.0)),
+                entity.position().add(normedDirection.scale(1.0)),
                 target,
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.ANY,

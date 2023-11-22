@@ -13,8 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinVoxelShape {
     @Inject(method = "collide", at = @At("HEAD"), cancellable = true)
     private void hook(final Direction.Axis axis, final AABB box, final double maxDist, final CallbackInfoReturnable<Double> cir) {
-        if (box instanceof CompoundOrientedBox) {
+        if (box instanceof CompoundOrientedBox)
             cir.setReturnValue(((CompoundOrientedBox) box).calculateMaxDistance(axis, (VoxelShape) (Object) this, maxDist));
-        }
     }
 }

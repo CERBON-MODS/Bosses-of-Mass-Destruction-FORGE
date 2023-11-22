@@ -41,11 +41,7 @@ public class SimpleEntityRenderer<T extends Entity> extends EntityRenderer<T> {
 
     @Override
     protected int getBlockLightLevel(@NotNull T entity, @NotNull BlockPos pos) {
-        if (brightness != null)
-            return brightness.getBlockLight(entity, pos);
-        else
-            return super.getBlockLightLevel(entity, pos);
-
+        return brightness != null ? brightness.getBlockLight(entity, pos) : super.getBlockLightLevel(entity, pos);
     }
 }
 

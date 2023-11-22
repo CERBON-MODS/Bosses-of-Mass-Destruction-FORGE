@@ -24,9 +24,8 @@ public class GauntletGoalHandler implements INbtHandler, IMoveHandler, IDamageHa
     private final GoalSelector targetSelector;
     private final EventScheduler eventScheduler;
     private final GauntletConfig mobConfig;
-
-    private boolean isAggroed = false;
     private final GauntletMovement movementHelper;
+    private boolean isAggroed = false;
 
     public GauntletGoalHandler(GauntletEntity entity, GoalSelector goalSelector, GoalSelector targetSelector, EventScheduler eventScheduler, GauntletConfig mobConfig) {
         this.entity = entity;
@@ -34,7 +33,6 @@ public class GauntletGoalHandler implements INbtHandler, IMoveHandler, IDamageHa
         this.targetSelector = targetSelector;
         this.eventScheduler = eventScheduler;
         this.mobConfig = mobConfig;
-
         this.movementHelper = new GauntletMovement(entity);
     }
 

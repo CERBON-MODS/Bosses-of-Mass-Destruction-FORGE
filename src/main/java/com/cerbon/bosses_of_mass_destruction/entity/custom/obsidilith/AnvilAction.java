@@ -50,7 +50,7 @@ public class AnvilAction implements IActionWithCooldown {
                 new TimedEvent(
                         () -> {
                             Vec3 targetPos = target.position();
-                            Vec3 teleportPos = targetPos.add(VecUtils.yAxis.multiply(24.0, 24.0, 24.0));
+                            Vec3 teleportPos = targetPos.add(VecUtils.yAxis.scale(24.0));
                             Vec3 originalPos = actor.position();
 
                             actor.moveTo(teleportPos.x, teleportPos.y, teleportPos.z, actor.getYRot(), actor.getXRot());

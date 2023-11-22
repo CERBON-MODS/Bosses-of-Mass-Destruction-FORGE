@@ -20,9 +20,9 @@ public class VelocitySteering implements ISteering {
     public Vec3 accelerateTo(Vec3 target) {
         return target.subtract(entity.getPos())
                 .normalize()
-                .multiply(maxVelocity, maxVelocity, maxVelocity)
+                .scale(maxVelocity)
                 .subtract(entity.getDeltaMovement())
-                .multiply(inverseMass, inverseMass, inverseMass);
+                .scale(inverseMass);
     }
 }
 

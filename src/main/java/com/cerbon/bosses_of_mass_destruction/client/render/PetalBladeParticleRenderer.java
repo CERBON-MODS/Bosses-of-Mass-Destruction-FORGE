@@ -13,12 +13,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class PetalBladeParticleRenderer<T extends Entity> implements IRenderer<T> {
     private final ClientParticleBuilder petalParticleFactory = new ClientParticleBuilder(BMDParticles.PETAL.get())
-            .color(f -> {
-                if (f < 0.7)
-                    return MathUtils.lerpVec(f, BMDColors.PINK, new Vec3(1.0, 0.85, 0.95));
-                else
-                    return MathUtils.lerpVec(f, new Vec3(1.0, 0.85, 0.95), BMDColors.ULTRA_DARK_PURPLE);
-            })
+            .color(f -> f < 0.7
+                    ? MathUtils.lerpVec(f, BMDColors.PINK, new Vec3(1.0, 0.85, 0.95))
+                    : MathUtils.lerpVec(f, new Vec3(1.0, 0.85, 0.95), BMDColors.ULTRA_DARK_PURPLE))
             .brightness(BMDParticles.FULL_BRIGHT)
             .colorVariation(0.15)
             .scale(f -> (float) RandomUtils.range(0.1, 0.2) * (1 - f * 0.25f));
@@ -41,11 +38,11 @@ public class PetalBladeParticleRenderer<T extends Entity> implements IRenderer<T
         petalParticleFactory
                 .continuousRotation(particle -> randomRot + particle.getAge() * angularMomentum)
                 .build(
-                        pos.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)),
+                        pos.add(RandomUtils.randVec().scale(0.25)),
                         VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis)
                                 .subtract(VecUtils.yAxis).normalize()
-                                .multiply(0.1, 0.1, 0.1)
-                                .add(dir.multiply(0.05, 0.05, 0.05))
+                                .scale(0.1)
+                                .add(dir.scale(0.05))
                 );
     }
 }

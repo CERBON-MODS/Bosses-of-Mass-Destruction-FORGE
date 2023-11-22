@@ -21,10 +21,7 @@ public class HorizontalRangedSpawnPosition implements ISpawnPosition {
     public Vec3 getPos() {
         Vec3 randomOffset = random.getVector().normalize();
         Vec3 horizontalAddition = VecUtils.planeProject(randomOffset, VecUtils.yAxis).normalize();
-        Vec3 coercedRandomOffset = randomOffset.add(horizontalAddition).normalize()
-                .multiply(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance),
-                        Math.max(Math.min(randomOffset.length(), maxDistance), minDistance),
-                        Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
+        Vec3 coercedRandomOffset = randomOffset.add(horizontalAddition).normalize().scale(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
         return position.add(coercedRandomOffset);
     }
 }

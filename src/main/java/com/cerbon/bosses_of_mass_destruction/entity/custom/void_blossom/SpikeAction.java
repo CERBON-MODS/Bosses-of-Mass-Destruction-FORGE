@@ -30,6 +30,7 @@ public class SpikeAction implements IActionWithCooldown {
     private final Supplier<Boolean> shouldCancel;
 
     private final List<Vec3> circlePoints = MathUtils.buildBlockCircle(2.0);
+
     public static final int indicatorDelay = 20;
 
     public SpikeAction(VoidBlossomEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {

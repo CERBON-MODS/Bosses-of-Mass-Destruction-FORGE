@@ -46,14 +46,12 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     @Override
     public @NotNull AABB inflate(final double x, final double y, final double z) {
         final List<OrientedBox> orientedBoxes = new ObjectArrayList<>(boxes.size());
-        for (final OrientedBox box : boxes) {
+        for (final OrientedBox box : boxes)
             orientedBoxes.add(box.expand(x,y,z));
-        }
 
         MutableBox overrideBox = null;
-        if(this.overrideBox != null) {
+        if(this.overrideBox != null)
             overrideBox = new MutableBox(this.overrideBox.getBox().inflate(x, y, z));
-        }
 
         if (cached != null) {
             return new CompoundOrientedBox(minX - x, minY - y, minZ - z, maxX + x, maxY + y, maxZ + z, orientedBoxes, cached.move(x, y, z), overrideBox);
@@ -64,14 +62,12 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     @Override
     public @NotNull AABB move(final double x, final double y, final double z) {
         final List<OrientedBox> orientedBoxes = new ObjectArrayList<>(boxes.size());
-        for (final OrientedBox box : boxes) {
+        for (final OrientedBox box : boxes)
             orientedBoxes.add(box.offset(x, y, z));
-        }
 
         MutableBox overrideBox = null;
-        if(this.overrideBox != null) {
+        if(this.overrideBox != null)
             overrideBox = new MutableBox(this.overrideBox.getBox().move(x, y, z));
-        }
 
         if (cached != null) {
             return new CompoundOrientedBox(minX + x, minY + y, minZ + z, maxX + x, maxY + y, maxZ + z, orientedBoxes, cached.move(x, y, z), overrideBox);
@@ -89,9 +85,8 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
         double t = Double.MAX_VALUE;
         for (final OrientedBox box : boxes) {
             final double tmp = box.raycast(min, max);
-            if (tmp != -1) {
+            if (tmp != -1)
                 t = Math.min(t, tmp);
-            }
         }
         if (t != Double.MAX_VALUE) {
             final double d = max.x - min.x;
@@ -117,9 +112,8 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     public boolean intersects(final @NotNull AABB box) {
         final Vec3[] vertices = OrientedBox.getVertices(box);
         for (final OrientedBox orientedBox : boxes) {
-            if (orientedBox.intersects(vertices)) {
+            if (orientedBox.intersects(vertices))
                 return true;
-            }
         }
         return false;
     }
@@ -152,33 +146,31 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
                 for (int k = 0; k < yResolution; k++) {
                     final double y = minY + k / resolution;
                     final AABB box = new AABB(x, y, z, x + 0.9999 / xResolution, y + 0.9999 / yResolution, z + 0.9999 / zResolution);
-                    if (intersects(box)) {
+                    if (intersects(box))
                         bitSet.fill(i, k, j);
-                    }
                 }
             }
         }
         final DoubleList xPoints = new DoubleArrayList(xResolution + 1);
-        for (int i = 0; i < xResolution + 1; i++) {
+        for (int i = 0; i < xResolution + 1; i++)
             xPoints.add(minX + i / resolution);
-        }
+
         final DoubleList yPoints = new DoubleArrayList(yResolution + 1);
-        for (int i = 0; i < yResolution + 1; i++) {
+        for (int i = 0; i < yResolution + 1; i++)
             yPoints.add(minY + i / resolution);
-        }
+
         final DoubleList zPoints = new DoubleArrayList(zResolution + 1);
-        for (int i = 0; i < zResolution + 1; i++) {
+        for (int i = 0; i < zResolution + 1; i++)
             zPoints.add(minZ + i / resolution);
-        }
+
         return cached = InvokerArrayVoxelShape.init(bitSet, xPoints, yPoints, zPoints);
     }
 
     @Override
     public boolean contains(final double x, final double y, final double z) {
         for (final OrientedBox box : boxes) {
-            if (box.contains(x, y, z)) {
+            if (box.contains(x, y, z))
                 return true;
-            }
         }
         return false;
     }
@@ -190,9 +182,8 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     public double calculateMaxDistance(final Direction.Axis axis, final VoxelShape voxelShape, double maxDist) {
         for (final AABB boundingBox : toVoxelShape().toAabbs()) {
             maxDist = voxelShape.collide(axis, boundingBox, maxDist);
-            if (Math.abs(maxDist) < 0.0001) {
+            if (Math.abs(maxDist) < 0.0001)
                 return 0;
-            }
         }
         return maxDist;
     }

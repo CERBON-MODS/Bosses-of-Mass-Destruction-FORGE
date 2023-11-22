@@ -73,9 +73,10 @@ public class BrimstoneNectarItem extends Item {
     }
 
     private void scheduleStructureRepair(ServerLevel level, List<StructureRepair> structureToRepair, BlockPos usePos){
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(new TimedEvent(
-                () -> structureToRepair.forEach(structure -> structure.repairStructure(level, getStructureStart(level, usePos, structure))),
-                30
+        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+                new TimedEvent(
+                        () -> structureToRepair.forEach(structure -> structure.repairStructure(level, getStructureStart(level, usePos, structure))),
+                        30
         ));
     }
 

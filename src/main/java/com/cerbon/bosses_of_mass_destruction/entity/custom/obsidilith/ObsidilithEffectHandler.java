@@ -63,8 +63,8 @@ public class ObsidilithEffectHandler {
     private void burstEffect(){
         Vec3 entityPos = MobUtils.eyePos(entity);
         for (int i = 0; i <= 50; i++){
-            Vec3 pos = entityPos.add(RandomUtils.randVec().normalize().multiply(3.0, 3.0, 3.0));
-            Vec3 vel = MathUtils.unNormedDirection(pos, entityPos).cross(VecUtils.yAxis).multiply(0.1, 0.1, 0.1);
+            Vec3 pos = entityPos.add(RandomUtils.randVec().normalize().scale(3.0));
+            Vec3 vel = MathUtils.unNormedDirection(pos, entityPos).cross(VecUtils.yAxis).scale(0.1);
             burstParticleFactory.build(pos, vel);
         }
     }
@@ -72,12 +72,12 @@ public class ObsidilithEffectHandler {
     private void waveEffect(){
         Vec3 entityPos = entity.position();
         for (int i = 0; i <= 50; i++){
-            Vec3 randomYOffset = VecUtils.yAxis.multiply(entity.getRandom().nextDouble(), entity.getRandom().nextDouble(), entity.getRandom().nextDouble());
-            Vec3 randomYVel = VecUtils.yAxis.multiply(entity.getRandom().nextDouble(), entity.getRandom().nextDouble(), entity.getRandom().nextDouble());
+            Vec3 randomYOffset = VecUtils.yAxis.scale(entity.getRandom().nextDouble());
+            Vec3 randomYVel = VecUtils.yAxis.scale(entity.getRandom().nextDouble());
 
-            Vec3 pos = entityPos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().multiply(3.0, 3.0, 3.0)).add(randomYOffset);
-            waveParticleFactory.continuousVelocity(
-                    simpleParticle -> MathUtils.unNormedDirection(simpleParticle.getPos(), entityPos).cross(VecUtils.yAxis).reverse().add(randomYVel).multiply(0.1, 0.1, 0.1)
+            Vec3 pos = entityPos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().scale(3.0)).add(randomYOffset);
+            waveParticleFactory.continuousVelocity(simpleParticle ->
+                    MathUtils.unNormedDirection(simpleParticle.getPos(), entityPos).cross(VecUtils.yAxis).reverse().add(randomYVel).scale(0.1)
             ).build(pos, Vec3.ZERO);
         }
     }
@@ -85,12 +85,12 @@ public class ObsidilithEffectHandler {
     private void spikeEffect(){
         Vec3 entityPos = entity.position();
         for (int i = 0; i <= 50; i++){
-            Vec3 randomYOffset = VecUtils.yAxis.multiply(entity.getRandom().nextDouble(), entity.getRandom().nextDouble(), entity.getRandom().nextDouble());
-            Vec3 randomYVel = VecUtils.yAxis.multiply(entity.getRandom().nextDouble(), entity.getRandom().nextDouble(), entity.getRandom().nextDouble());
+            Vec3 randomYOffset = VecUtils.yAxis.scale(entity.getRandom().nextDouble());
+            Vec3 randomYVel = VecUtils.yAxis.scale(entity.getRandom().nextDouble());
 
-            Vec3 pos = entityPos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().multiply(3.0, 3.0, 3.0)).add(randomYOffset);
-            spikeParticleFactory.continuousVelocity(
-                    simpleParticle -> MathUtils.unNormedDirection(simpleParticle.getPos(), entityPos).cross(VecUtils.yAxis).add(randomYVel).multiply(0.1, 0.1, 0.1)
+            Vec3 pos = entityPos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().scale(3.0)).add(randomYOffset);
+            spikeParticleFactory.continuousVelocity(simpleParticle ->
+                    MathUtils.unNormedDirection(simpleParticle.getPos(), entityPos).cross(VecUtils.yAxis).add(randomYVel).scale(0.1)
             ).build(pos, Vec3.ZERO);
         }
     }
@@ -99,16 +99,16 @@ public class ObsidilithEffectHandler {
         Vec3 entityPos = MobUtils.eyePos(entity);
         for (int i = 0; i <= 50; i++){
             Vec3 pos = entityPos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().multiply(3.0, 3.0, 3.0));
-            anvilParticleFactory.continuousVelocity(
-                    simpleParticle -> MathUtils.unNormedDirection(simpleParticle.getPos(), entityPos).cross(VecUtils.yAxis).add(VecUtils.yAxis.multiply(0.4, 0.4, 0.4)).multiply(0.1, 0.1, 0.1)
+            anvilParticleFactory.continuousVelocity(simpleParticle ->
+                    MathUtils.unNormedDirection(simpleParticle.getPos(), entityPos).cross(VecUtils.yAxis).add(VecUtils.yAxis.multiply(0.4, 0.4, 0.4)).multiply(0.1, 0.1, 0.1)
             ).build(pos, Vec3.ZERO);
         }
 
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            Vec3 particlePos = entity.position().add(RandomUtils.randVec().multiply(3.0, 3.0, 3.0));
-                            Vec3 vel = entity.getDeltaMovement().multiply(0.7, 0.7, 0.7);
+                            Vec3 particlePos = entity.position().add(RandomUtils.randVec().scale(3.0));
+                            Vec3 vel = entity.getDeltaMovement().scale(0.7);
                             teleportFactory.build(particlePos, vel);
                         },
                         0,
@@ -129,13 +129,10 @@ public class ObsidilithEffectHandler {
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> MathUtils.circleCallback(3.0, 30, VecUtils.yAxis, vec3 ->
-                                    deathParticleFactory.build(entityPos.add(vec3).add(VecUtils.yAxis.multiply(i1, i1, i1)), Vec3.ZERO)),
+                                    deathParticleFactory.build(entityPos.add(vec3).add(VecUtils.yAxis.scale(i1)), Vec3.ZERO)),
                             i * ObsidilithUtils.ticksBetweenPillarLayer
                     )
             );
         }
     }
-
-
-
 }

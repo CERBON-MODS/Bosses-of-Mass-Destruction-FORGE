@@ -15,9 +15,8 @@ public class CompositeEntityTick<T extends Level> implements IEntityTick<T> {
 
     @Override
     public void tick(T level) {
-        for (IEntityTick<T> tickHandler : tickList) {
+        for (IEntityTick<T> tickHandler : tickList)
             tickHandler.tick(level);
-        }
     }
 }
 

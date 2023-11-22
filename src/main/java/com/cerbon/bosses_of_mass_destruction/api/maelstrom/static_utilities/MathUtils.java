@@ -16,9 +16,7 @@ import java.util.function.Predicate;
 
 public class MathUtils {
     public static boolean withinDistance(Vec3 pos1, Vec3 pos2, double distance) {
-        if (distance < 0)
-            throw new IllegalArgumentException("Distance cannot be negative");
-
+        if (distance < 0) throw new IllegalArgumentException("Distance cannot be negative");
         return pos1.distanceToSqr(pos2) < Math.pow(distance, 2.0);
     }
 
@@ -37,7 +35,7 @@ public class MathUtils {
      * Callback returns the position and the point number from 1 to points
      */
     public static void lineCallback(Vec3 start, Vec3 end, int points, java.util.function.BiConsumer<Vec3, Integer> callback) {
-        Vec3 dir = end.subtract(start).multiply(1.0 / (points - 1), 1.0 / (points - 1), 1.0 / (points - 1));
+        Vec3 dir = end.subtract(start).scale(1.0 / (points - 1));
         Vec3 pos = start;
         for (int i = 0; i < points; i++) {
             callback.accept(pos, i);
@@ -51,8 +49,7 @@ public class MathUtils {
         ReferencedAxisRotator rotator = new ReferencedAxisRotator(VecUtils.yAxis, axis);
         for (int i = 0; i < points; i++) {
             double radians = i * degrees;
-            Vec3 offset = VecUtils.rotateVector(new Vec3(Math.sin(radians), 0.0, Math.cos(radians))
-                    .multiply(radius, radius, radius), VecUtils.yAxis, -axisYaw);
+            Vec3 offset = VecUtils.rotateVector(new Vec3(Math.sin(radians), 0.0, Math.cos(radians)).scale(radius), VecUtils.yAxis, -axisYaw);
             Vec3 rotated = rotator.rotate(offset);
             callback.accept(rotated);
         }
@@ -68,9 +65,8 @@ public class MathUtils {
         AtomicBoolean collided = new AtomicBoolean(false);
         int points = (int) Math.ceil(movement.length() / aabb.getSize());
         lineCallback(Vec3.ZERO, movement, points, (vec3, integer) -> {
-            if (collision.test(aabb.move(vec3))) {
+            if (collision.test(aabb.move(vec3)))
                 collided.set(true);
-            }
         });
         return !collided.get();
     }
@@ -102,7 +98,7 @@ public class MathUtils {
         Vec3 forward = direction.normalize();
         Vec3 side = forward.cross(VecUtils.yAxis).normalize();
         Vec3 up = side.cross(forward).normalize();
-        return forward.multiply(offset.x, offset.x, offset.x).add(side.multiply(offset.z, offset.z, offset.z)).add(up.multiply(offset.y, offset.y, offset.y));
+        return forward.scale(offset.x).add(side.scale(offset.z)).add(up.scale(offset.y));
     }
 
     public static boolean facingSameDirection(Vec3 direction1, Vec3 direction2) {
@@ -119,17 +115,15 @@ public class MathUtils {
         if (floor) {
             sortableSteps.sort(Collections.reverseOrder());
             for (Float step : sortableSteps) {
-                if (step <= n) {
+                if (step <= n)
                     return step;
-                }
             }
             return sortableSteps.get(0);
         } else {
             Collections.sort(sortableSteps);
             for (Float step : sortableSteps) {
-                if (step > n) {
+                if (step > n)
                     return step;
-                }
             }
             return sortableSteps.get(sortableSteps.size() - 1);
         }
@@ -142,9 +136,8 @@ public class MathUtils {
         for (int x = -intRadius; x <= intRadius; x++) {
             for (int z = -intRadius; z <= intRadius; z++) {
                 Vec3 pos = new Vec3(x, 0.0, z);
-                if (pos.lengthSqr() <= radiusSq) {
+                if (pos.lengthSqr() <= radiusSq)
                     points.add(pos);
-                }
             }
         }
         return points;

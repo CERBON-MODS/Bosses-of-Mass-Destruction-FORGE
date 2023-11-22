@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 public class PetalBladeProjectile extends BaseThrownItemProjectile{
     private Consumer<LivingEntity> entityHit;
+
     public static final EntityDataAccessor<Float> renderRotation = SynchedEntityData.defineId(GauntletEntity.class, EntityDataSerializers.FLOAT);
 
     public PetalBladeProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
@@ -30,8 +31,8 @@ public class PetalBladeProjectile extends BaseThrownItemProjectile{
 
     public PetalBladeProjectile(LivingEntity livingEntity, Level level, Consumer<LivingEntity> entityHit, List<EntityType<?>> exemptEntities, float rotation){
         super(BMDEntities.PETAL_BLADE.get(), livingEntity, level, new ExemptEntities(exemptEntities));
-        getEntityData().define(renderRotation, rotation);
         this.entityHit = entityHit;
+        getEntityData().define(renderRotation, rotation);
     }
 
     @Override

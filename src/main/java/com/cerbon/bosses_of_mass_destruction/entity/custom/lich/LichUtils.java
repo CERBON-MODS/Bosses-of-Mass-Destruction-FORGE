@@ -14,8 +14,8 @@ import java.util.function.Function;
 
 public class LichUtils {
     public static final List<Float> hpPercentRageModes = Arrays.asList(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
-    public static final int textureSize = 256;
     public static final Function<Float, Vec3> blueColorFade = f -> MathUtils.lerpVec(f, BMDColors.COMET_BLUE, BMDColors.FADED_COMET_BLUE);
+    public static final int textureSize = 256;
 
     public static long timeToNighttime(long currentTime) {
         long dayLength = 24000L;
@@ -28,9 +28,8 @@ public class LichUtils {
             float targetHealthRatio = MathUtils.roundedStep(stats.getHealth() / stats.getMaxHealth(), hpPercentRageModes, false);
             float healAmt = Mth.clamp(targetHealthRatio * stats.getMaxHealth() - stats.getHealth() - 1, 0f, healingStrength);
 
-            if (healAmt > 0) {
+            if (healAmt > 0)
                 heal.accept(healAmt);
-            }
         }
     }
 }

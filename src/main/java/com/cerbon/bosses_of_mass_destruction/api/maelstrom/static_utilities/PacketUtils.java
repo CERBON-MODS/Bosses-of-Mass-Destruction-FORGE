@@ -9,8 +9,7 @@ import java.util.List;
 
 public class PacketUtils {
     public static List<Float> readFloatList(FriendlyByteBuf buf, int count) {
-        if (count < 0)
-            throw new IllegalArgumentException("Count should be greater than zero");
+        if (count < 0) throw new IllegalArgumentException("Count should be greater than zero");
 
         List<Float> list = new ArrayList<>();
         for (int i = 0; i < count; i++)
@@ -32,5 +31,4 @@ public class PacketUtils {
         List<Float> floatList = readFloatList(buf, 3);
         return new Vec3(floatList.get(0), floatList.get(1), floatList.get(2));
     }
-
 }

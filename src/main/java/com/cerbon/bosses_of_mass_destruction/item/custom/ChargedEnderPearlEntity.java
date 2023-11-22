@@ -184,9 +184,9 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
             double radius,
             double rotationSpeed
     ){
-        Vec3 yOffset = VecUtils.yAxis.multiply(i / 15.0, i / 15.0, i / 15.0);
+        Vec3 yOffset = VecUtils.yAxis.scale(i / 15.0);
         Vec3 xzOffset = VecUtils.xAxis.yRot((float) Math.toRadians(age * rotationSpeed + startingRotation));
-        return pos.add(yOffset).add(xzOffset.multiply(radius, radius, radius));
+        return pos.add(yOffset).add(xzOffset.scale(radius));
     }
 
     private static void spawnVerticalRods(Vec3 pos){
@@ -197,8 +197,8 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
     private static void spawnVerticalRodRing(int y, Vec3 pos){
         MathUtils.circleCallback(radius, 30 - (y * 3), VecUtils.yAxis,
                 vec3 -> verticalRodParticle.build(
-                        pos.add(vec3).add(VecUtils.yAxis.multiply(y + RandomUtils.range(0.0, 1.0), y + RandomUtils.range(0.0, 1.0), y + RandomUtils.range(0.0, 1.0))),
-                        VecUtils.yAxis.multiply(0.1, 0.1, 0.1)
+                        pos.add(vec3).add(VecUtils.yAxis.scale(y + RandomUtils.range(0.0, 1.0))),
+                        VecUtils.yAxis.scale(0.1)
                 ));
     }
 }

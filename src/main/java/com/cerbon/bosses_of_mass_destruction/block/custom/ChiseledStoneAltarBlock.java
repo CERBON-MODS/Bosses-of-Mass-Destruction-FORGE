@@ -58,12 +58,11 @@ public class ChiseledStoneAltarBlock extends Block {
                         VecUtils.yAxis.multiply(0.05, 0.05, 0.05)
                 );
             }
-        }else {
+        } else
             Particles.paleSparkleParticleFactory.build(
                     VecUtils.asVec3(pos).add(0.5, 2.0, 0.5).add(RandomUtils.randVec().multiply(0.5, 0.5, 0.5)),
                     VecUtils.yAxis.multiply(-0.05, -0.05, -0.05)
             );
-        }
     }
 
     public static class Particles {

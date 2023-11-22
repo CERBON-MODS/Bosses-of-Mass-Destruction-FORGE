@@ -27,8 +27,10 @@ public class WallTeleport {
     public boolean tryTeleport(Vec3 direction, Vec3 position, Consumer<BlockPos> action){
         Context context = new Context(direction, position);
         BlockPos teleportStart = getTeleportStart(context);
+
         if (teleportStart != null){
             BlockPos teleportEnd = getTeleportEnd(context, teleportStart);
+
             if (teleportEnd != null){
                 action.accept(teleportEnd);
                 return true;
@@ -40,7 +42,7 @@ public class WallTeleport {
     private BlockPos getTeleportStart(Context context){
         BlockPos startPos = BlockPos.containing(context.position);
         double startRange = 3.0;
-        BlockPos endPos = BlockPos.containing(context.position.add(context.direction.multiply(startRange, startRange, startRange)));
+        BlockPos endPos = BlockPos.containing(context.position.add(context.direction.scale(startRange)));
         List<BlockPos> blocksToCheck = MathUtils.getBlocksInLine(startPos, endPos);
 
         for (BlockPos pos : blocksToCheck){
@@ -52,11 +54,12 @@ public class WallTeleport {
 
     private BlockPos getTeleportEnd(Context context, BlockPos startPos){
         double endRange = 20.0;
-        BlockPos endPos = startPos.offset(BlockPos.containing(context.direction.multiply(endRange, endRange, endRange)));
+        BlockPos endPos = startPos.offset(BlockPos.containing(context.direction.scale(endRange)));
         List<BlockPos> blocksToCheck = MathUtils.getBlocksInLine(startPos, endPos);
 
         for (BlockPos pos : blocksToCheck){
             BlockState blockState = level.getBlockState(pos);
+
             if (blockState.isAir() && level.getBlockState(pos.above()).isAir())
                 return pos;
 
@@ -71,6 +74,5 @@ public class WallTeleport {
         entity.teleportTo(pos.x, pos.y, pos.z);
     }
 
-    private record Context(Vec3 direction, Vec3 position) {
-    }
+    private record Context(Vec3 direction, Vec3 position) {}
 }

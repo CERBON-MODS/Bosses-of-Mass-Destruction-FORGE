@@ -12,14 +12,14 @@ import java.util.function.Supplier;
 
 public class ClientParticleBuilder {
     private final ParticleOptions options;
-    private Function<SimpleParticle, Vec3> getVel = null;
-    private Function<SimpleParticle, Vec3> continuousPos = null;
-    private Function<Float, Vec3> color = null;
-    private Function<Float, Integer> brightness = null;
-    private Function<Float, Float> scale = null;
-    private Supplier<Integer> age = null;
-    private Double colorVariation = null;
-    private Function<SimpleParticle, Float> getRotation = null;
+    private Function<SimpleParticle, Vec3> getVel;
+    private Function<SimpleParticle, Vec3> continuousPos;
+    private Function<Float, Vec3> color;
+    private Function<Float, Integer> brightness;
+    private Function<Float, Float> scale;
+    private Supplier<Integer> age;
+    private Function<SimpleParticle, Float> getRotation;
+    private Double colorVariation;
 
     public ClientParticleBuilder(ParticleOptions options){
         this.options = options;
@@ -96,43 +96,40 @@ public class ClientParticleBuilder {
 
         if (camera.isInitialized()) {
             Particle particle = client.particleEngine.createParticle(options, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
-            if (particle == null) {
-                return;
-            }
+            if (particle == null) return;
 
-            if (scale != null) {
+            if (scale != null)
                 particle.scale(scale.apply(0f));
-            }
+
             if (color != null) {
                 Vec3 clr = color.apply(0f);
                 particle.setColor((float) clr.x, (float) clr.y, (float) clr.z);
             }
-            if (age != null) {
+
+            if (age != null)
                 particle.setLifetime(age.get());
-            }
 
             if (particle instanceof SimpleParticle simpleParticle) {
-                if (brightness != null) {
+                if (brightness != null)
                     simpleParticle.setBrightnessOverride(brightness);
-                }
-                if (color != null) {
+
+                if (color != null)
                     simpleParticle.setColorOverride(color);
-                }
-                if (scale != null) {
+
+                if (scale != null)
                     simpleParticle.setScaleOverride(scale);
-                }
-                if (getVel != null) {
+
+                if (getVel != null)
                     simpleParticle.setVelocityOverride(getVel);
-                }
-                if (continuousPos != null) {
+
+                if (continuousPos != null)
                     simpleParticle.setPositionOverride(continuousPos);
-                }
-                if (colorVariation != null) {
+
+                if (colorVariation != null)
                     simpleParticle.setColorVariation(colorVariation);
-                }
-                if (getRotation != null) {
+
+                if (getRotation != null)
                     simpleParticle.setRotationOverride(getRotation);
-                }
             }
         }
     }

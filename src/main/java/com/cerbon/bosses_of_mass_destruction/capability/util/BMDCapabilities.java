@@ -27,7 +27,5 @@ public class BMDCapabilities {
 
     public static EventScheduler getLevelEventScheduler(Level level){
         return level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).resolve().orElse(null);
-
     }
-
 }

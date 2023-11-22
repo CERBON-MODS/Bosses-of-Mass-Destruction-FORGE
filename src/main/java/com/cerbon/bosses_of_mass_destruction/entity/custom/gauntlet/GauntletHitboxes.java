@@ -26,7 +26,7 @@ public class GauntletHitboxes implements IDamageHandler {
     private final AABB clampedCollisionHitbox = new AABB(Vec3.ZERO, new Vec3(2.0, 2.0, 2.0));
     private final String rootBoxPitch = "rootPitch";
     private final String rootBoxYaw = "rootYaw";
-    private String nextDamagedPart = null;
+    private String nextDamagedPart;
     private final String eyeBox = "eye";
     private final String fingersBox = "fingers";
     private final String thumbBox = "thumb";
@@ -44,9 +44,10 @@ public class GauntletHitboxes implements IDamageHandler {
     private final String rootFistBoxYaw = "rootFistYaw";
     private final EntityBounds clampedHitboxes = EntityBounds.builder()
             .add(rootFistBoxYaw).setBounds(0.0, 0.0, 0.0).build()
-        .add(rootFistBox).setBounds(2.0, 1.5, 2.0).setOffset(0.0, 1.0, 0.0).setParent(rootFistBoxYaw).build()
-        .overrideCollisionBox(clampedCollisionHitbox)
-        .getFactory().create();
+            .add(rootFistBox).setBounds(2.0, 1.5, 2.0).setOffset(0.0, 1.0, 0.0).setParent(rootFistBoxYaw).build()
+            .overrideCollisionBox(clampedCollisionHitbox)
+            .getFactory()
+            .create();
     private EntityBounds currentHitbox = hitboxes;
 
     private final boolean disableHitboxesForCompatibility = ModList.get().isLoaded("bettercombat");
@@ -99,12 +100,12 @@ public class GauntletHitboxes implements IDamageHandler {
         fistYaw.setZ(entity.getZ());
 
         MutableBox overrideBox = hitboxes.getOverrideBox();
-        if (overrideBox != null) overrideBox.setBox(
-                collisionHitbox.move(entity.position()).move(-1.0, 0.0, -1.0));
+        if (overrideBox != null)
+            overrideBox.setBox(collisionHitbox.move(entity.position()).move(-1.0, 0.0, -1.0));
 
         MutableBox overrideClampedHitbox = clampedHitboxes.getOverrideBox();
-        if (overrideClampedHitbox != null) overrideClampedHitbox.setBox(
-                clampedCollisionHitbox.move(entity.position()).move(-1.0, 0.0, -1.0));
+        if (overrideClampedHitbox != null)
+            overrideClampedHitbox.setBox(clampedCollisionHitbox.move(entity.position()).move(-1.0, 0.0, -1.0));
     }
 
     public void setNextDamagedPart(String part){

@@ -80,9 +80,9 @@ public class Spikes {
         );
     }
 
-    private void damageEntity(LivingEntity it){
+    private void damageEntity(LivingEntity livingEntity){
         float damage = (float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        it.hurt(BMDUtils.shieldPiercing(level, entity), damage);
+        livingEntity.hurt(BMDUtils.shieldPiercing(level, entity), damage);
     }
 
     private boolean isOpenBlock(BlockPos up){

@@ -66,18 +66,16 @@ public class VoidBlossomStructureRepair implements StructureRepair{
     public static void handleVoidBlossomRevivePacket(Vec3 pos, ClientLevel level){
         BMDCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
-                        () -> {
-                            BMDUtils.spawnRotatingParticles(
-                                    new BMDUtils.RotatingParticles(
-                                            pos.add(VecUtils.yAxis.scale(RandomUtils.range(1.0, 10.0))),
-                                            spikeParticleFactory,
-                                            1.0,
-                                            2.0,
-                                            3.0,
-                                            4.0
-                                    )
-                            );
-                        },
+                        () -> BMDUtils.spawnRotatingParticles(
+                                new BMDUtils.RotatingParticles(
+                                        pos.add(VecUtils.yAxis.scale(RandomUtils.range(1.0, 10.0))),
+                                        spikeParticleFactory,
+                                        1.0,
+                                        2.0,
+                                        3.0,
+                                        4.0
+                                )
+                        ),
                         0,
                         50,
                         () -> false

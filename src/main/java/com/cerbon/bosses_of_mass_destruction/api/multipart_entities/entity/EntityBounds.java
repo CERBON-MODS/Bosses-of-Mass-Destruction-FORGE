@@ -74,9 +74,9 @@ public final class EntityBounds {
         }
         if (changed) {
             final List<OrientedBox> parts = new ObjectArrayList<>(partMap.size());
-            for (final EntityPart value : partMap.values()) {
+            for (final EntityPart value : partMap.values())
                 parts.add(value.getBox());
-            }
+
             cache = new CompoundOrientedBox(bounds, parts, overrideBox);
         }
         return cache.withBounds(bounds);
@@ -100,13 +100,12 @@ public final class EntityBounds {
         private final Map<String, EntityPartInfo> partInfos = new Object2ObjectLinkedOpenHashMap<>();
         private AABB overrideBox = null;
 
-        EntityBoundsBuilder() {
-        }
+        EntityBoundsBuilder() {}
 
         EntityBoundsBuilder addInfo(final EntityPartInfo info) {
-            if (info.parent != null && !partInfos.containsKey(info.parent)) {
+            if (info.parent != null && !partInfos.containsKey(info.parent))
                 throw new RuntimeException("Unknown part: " + info.parent + ", did you register a child before a parent");
-            }
+
             partInfos.put(info.name, info);
             return this;
         }
@@ -123,9 +122,9 @@ public final class EntityBounds {
          * @return The hit box builder
          */
         public EntityPartInfoBuilder add(final String name) {
-            if (partInfos.containsKey(name)) {
+            if (partInfos.containsKey(name))
                 throw new RuntimeException("Duplicate part: " + name);
-            }
+
             return new EntityPartInfoBuilder(this, name);
         }
 
@@ -159,7 +158,6 @@ public final class EntityBounds {
             this.builder = builder;
             this.name = name;
         }
-
 
         /**
          * Set position relative to parent, or absolute position if parent is null
@@ -232,7 +230,5 @@ public final class EntityBounds {
         }
     }
 
-    private record EntityPartInfo(@Nullable String parent, String name, double x, double y, double z, double px,
-                                  double py, double pz, AABB bounds) {
-    }
+    private record EntityPartInfo(@Nullable String parent, String name, double x, double y, double z, double px, double py, double pz, AABB bounds) {}
 }

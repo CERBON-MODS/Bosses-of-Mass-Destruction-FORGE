@@ -18,12 +18,4 @@ public class MobUtils {
     public static Vec3 lastRenderPos(Entity entity) {
         return new Vec3(entity.xOld, entity.yOld, entity.zOld);
     }
-
-    public static String registryId(Entity entity) {
-        return Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType())).toString();
-    }
-
-
-
-
 }

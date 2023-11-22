@@ -23,9 +23,7 @@ public final class EntityPart {
         this.offY = offY;
         this.offZ = offZ;
         rotation = QuaternionD.IDENTITY;
-        if (center) {
-            box = box.move(-box.minX - box.getXsize() / 2, -box.minY - box.getXsize() / 2, -box.minZ - box.getXsize() / 2);
-        }
+        if (center) box = box.move(-box.minX - box.getXsize() / 2, -box.minY - box.getXsize() / 2, -box.minZ - box.getXsize() / 2);
         this.box = box;
         setX(0.0);
         setY(0.0);
@@ -136,9 +134,9 @@ public final class EntityPart {
     }
 
     private OrientedBox transformChild(OrientedBox orientedBox) {
-        if (parent != null) {
+        if (parent != null)
             orientedBox = parent.transformChild(orientedBox);
-        }
+
         return orientedBox.transform(x, y, z, px, py, pz, rotation);
     }
 }

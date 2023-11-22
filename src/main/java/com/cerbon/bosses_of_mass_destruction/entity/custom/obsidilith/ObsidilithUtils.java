@@ -90,13 +90,13 @@ public class ObsidilithUtils {
 
             int expTicks = 20;
             int expPerTick = (int) (experienceDrop / (float) expTicks);
-            Vec3 pillarTop = vecPos.add(VecUtils.yAxis.multiply(deathPillarHeight, deathPillarHeight, deathPillarHeight));
+            Vec3 pillarTop = vecPos.add(VecUtils.yAxis.scale(deathPillarHeight));
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
                                 VanillaCopiesServer.awardExperience(
                                         expPerTick,
-                                        pillarTop.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).multiply(2.0, 2.0, 2.0)),
+                                        pillarTop.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).scale(2.0)),
                                         level
                                 );
                             },

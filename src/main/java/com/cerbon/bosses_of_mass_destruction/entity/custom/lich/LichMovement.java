@@ -23,9 +23,10 @@ import java.util.function.Supplier;
 
 public class LichMovement {
     private final LichEntity entity;
+    private final IEntity iEntity;
+
     private final double reactionDistance = 4.0;
     private final double idleWanderDistance = 50.0;
-    private final IEntity iEntity;
     private final double tooFarFromTargetDistance = 30.0;
     private final double tooCloseToTargetDistance = 15.0;
 
@@ -102,7 +103,7 @@ public class LichMovement {
 
     private Predicate<Vec3> getWithinDistancePredicate(double distance, Supplier<Vec3> targetPos) {
         return v -> {
-            Vec3 target = entity.position().add(v.multiply(reactionDistance, reactionDistance, reactionDistance));
+            Vec3 target = entity.position().add(v.scale(reactionDistance));
             return MathUtils.withinDistance(target, targetPos.get(), distance);
         };
     }

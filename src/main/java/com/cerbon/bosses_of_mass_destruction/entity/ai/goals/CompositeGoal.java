@@ -10,9 +10,8 @@ public class CompositeGoal extends Goal {
 
     public CompositeGoal(Goal... goals) {
         this.goals = Arrays.asList(goals);
-        for (Goal goal : goals) {
+        for (Goal goal : goals)
             this.getFlags().addAll(goal.getFlags());
-        }
     }
 
     @Override

@@ -67,13 +67,11 @@ public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> {
-                            VanillaCopiesServer.awardExperience(
-                                    expPerTick,
-                                    pos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).scale(2.0)),
-                                    entity.level()
-                            );
-                        },
+                        () -> VanillaCopiesServer.awardExperience(
+                                expPerTick,
+                                pos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).scale(2.0)),
+                                entity.level()
+                        ),
                         0,
                         expTicks,
                         () -> false

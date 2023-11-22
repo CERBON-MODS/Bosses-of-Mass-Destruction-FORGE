@@ -12,7 +12,6 @@ import java.util.Map;
 public class GauntletMoveLogic implements IActionWithCooldown {
     private final Map<Byte, IActionWithCooldown> actions;
     private final GauntletEntity entity;
-
     private final HistoricalData<Byte> moveHistory = new HistoricalData<>((byte) 0, 4);
     private final TargetSwitcher targetSwitcher;
 
@@ -23,7 +22,6 @@ public class GauntletMoveLogic implements IActionWithCooldown {
     public GauntletMoveLogic(Map<Byte, IActionWithCooldown> actions, GauntletEntity entity, DamageMemory damageMemory) {
         this.actions = actions;
         this.entity = entity;
-
         this.targetSwitcher = new TargetSwitcher(entity, damageMemory);
     }
 

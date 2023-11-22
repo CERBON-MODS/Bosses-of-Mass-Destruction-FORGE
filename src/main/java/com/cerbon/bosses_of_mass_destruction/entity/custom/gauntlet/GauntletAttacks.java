@@ -13,7 +13,6 @@ import java.util.function.Supplier;
 
 public class GauntletAttacks {
     private final GauntletEntity entity;
-
     private final GauntletMoveLogic moveLogic;
 
     public static final byte punchAttack = 4;

@@ -22,7 +22,8 @@ public class ChunkCacheBlockEntity extends BlockEntity {
     public void setRemoved() {
         if (level != null){
             BMDCapabilities.getChunkBlockCache(level).ifPresent(chunkBlockCache ->
-                    chunkBlockCache.removeFromChunk(new ChunkPos(worldPosition), block, worldPosition));
+                    chunkBlockCache.removeFromChunk(new ChunkPos(worldPosition), block, worldPosition)
+            );
 
             added = false;
         }
@@ -32,7 +33,8 @@ public class ChunkCacheBlockEntity extends BlockEntity {
     public static void tick(Level level, BlockPos pos, BlockState state, ChunkCacheBlockEntity entity){
         if (!entity.added){
             BMDCapabilities.getChunkBlockCache(level).ifPresent(chunkBlockCache ->
-                    chunkBlockCache.addToChunk(new ChunkPos(pos), entity.block, pos));
+                    chunkBlockCache.addToChunk(new ChunkPos(pos), entity.block, pos)
+            );
 
             entity.added = true;
         }

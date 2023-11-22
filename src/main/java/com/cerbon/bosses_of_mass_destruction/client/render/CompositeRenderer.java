@@ -15,7 +15,6 @@ public class CompositeRenderer<T extends Entity> implements IRenderer<T> {
         this.rendererList = Arrays.asList(renderers);
     }
 
-
     @Override
     public void render(
             T entity,

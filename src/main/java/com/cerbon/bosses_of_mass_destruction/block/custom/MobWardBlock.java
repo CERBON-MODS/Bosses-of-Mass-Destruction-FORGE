@@ -43,8 +43,7 @@ public class MobWardBlock extends BaseEntityBlock {
 
     public MobWardBlock(Properties properties) {
         super(properties);
-        registerDefaultState(getStateDefinition().any()
-                .setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH));
+        registerDefaultState(getStateDefinition().any().setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH));
     }
 
     @Nullable
@@ -76,10 +75,9 @@ public class MobWardBlock extends BaseEntityBlock {
         BlockState air = Blocks.AIR.defaultBlockState();
         boolean otherState = newState.is(this);
         BlockState facingState;
-        if (otherState)
-            facingState = state.setValue(HorizontalDirectionalBlock.FACING, newState.getValue(HorizontalDirectionalBlock.FACING));
-        else
-            facingState = air;
+        facingState = otherState
+                ? state.setValue(HorizontalDirectionalBlock.FACING, newState.getValue(HorizontalDirectionalBlock.FACING))
+                : air;
 
         return switch (thisState) {
             case BOTTOM -> switch (direction) {

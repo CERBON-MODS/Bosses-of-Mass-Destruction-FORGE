@@ -23,10 +23,10 @@ import java.util.List;
 
 public class WaveAction implements IActionWithCooldown {
     private final Mob entity;
-    private final double riftRadius = 4.0;
     private final List<Vec3> circlePoints;
     private final Level level;
     private final EventScheduler eventScheduler;
+    private final double riftRadius = 4.0;
 
     public static final int waveDelay = 20;
     public static final int attackStartDelay = 20;
@@ -60,10 +60,10 @@ public class WaveAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            Vec3 direction = MathUtils.unNormedDirection(entity.position(), target.position()).normalize().multiply(riftRadius, riftRadius, riftRadius);
+                            Vec3 direction = MathUtils.unNormedDirection(entity.position(), target.position()).normalize().scale(riftRadius);
                             int numRifts = 5;
                             Vec3 startRiftPos = entity.position().add(direction);
-                            Vec3 endRiftPos = startRiftPos.add(direction.multiply((double) numRifts * 1.5, (double) numRifts * 1.5, (double) numRifts * 1.5));
+                            Vec3 endRiftPos = startRiftPos.add(direction.scale((double) numRifts * 1.5));
                             MathUtils.lineCallback(startRiftPos, endRiftPos, numRifts, (linePos, i) -> {
                                 eventScheduler.addEvent(
                                         new TimedEvent(

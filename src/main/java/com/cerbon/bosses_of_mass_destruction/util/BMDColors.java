@@ -22,7 +22,7 @@ public class BMDColors {
     public static final Vec3 PINK = new Vec3(0.9, 0.6, 0.8);
     public static final Vec3 ULTRA_DARK_PURPLE = new Vec3(0.3, 0.0, 0.2);
     public static final Vec3 DARK_GREY = new Vec3(0.3, 0.3, 0.3);
-    public static final Vec3 LIGHT_ENDER_PEARL = new Vec3(140.0, 244.0, 226.0).multiply(colorFactor, colorFactor, colorFactor);
-    public static final Vec3 DARK_ENDER_PEARL = new Vec3(3.0, 38.0, 32.0).multiply(colorFactor, colorFactor, colorFactor);
-    public static final Vec3 GOLD = new Vec3(255.0, 211.0, 125.0).multiply(colorFactor, colorFactor, colorFactor);
+    public static final Vec3 LIGHT_ENDER_PEARL = new Vec3(140.0, 244.0, 226.0).scale(colorFactor);
+    public static final Vec3 DARK_ENDER_PEARL = new Vec3(3.0, 38.0, 32.0).scale(colorFactor);
+    public static final Vec3 GOLD = new Vec3(255.0, 211.0, 125.0).scale(colorFactor);
 }

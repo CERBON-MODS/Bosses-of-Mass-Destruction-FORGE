@@ -29,10 +29,11 @@ public class SendDeltaMovementS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
-            LocalPlayer localPlayer = Minecraft.getInstance().player;
+            Minecraft client = Minecraft.getInstance();
+            LocalPlayer localPlayer = client.player;
             if (localPlayer == null) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().execute(() -> localPlayer.setDeltaMovement(this.deltaMovement)));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> localPlayer.setDeltaMovement(this.deltaMovement)));
         });
         ctx.setPacketHandled(true);
     }

@@ -122,7 +122,7 @@ public class SoulStarItem extends Item {
     private void clientSoulStartPlace(BlockPos blockPos){
         Vec3 centralPos = VecUtils.asVec3(blockPos).add(new Vec3(0.5, 1.2, 0.5));
         MathUtils.circleCallback(0.5, 15, VecUtils.yAxis, vec3 -> {
-            Vec3 particleVel = VecUtils.yAxis.multiply(0.03 + RandomUtils.randomDouble(0.01), 0.03 + RandomUtils.randomDouble(0.01), 0.03 + RandomUtils.randomDouble(0.01));
+            Vec3 particleVel = VecUtils.yAxis.scale(0.03 + RandomUtils.randomDouble(0.01));
             Vec3 particlePos = centralPos.add(vec3);
             ChiseledStoneAltarBlock.Particles.blueFireParticleFactory.build(particlePos, particleVel);
         });

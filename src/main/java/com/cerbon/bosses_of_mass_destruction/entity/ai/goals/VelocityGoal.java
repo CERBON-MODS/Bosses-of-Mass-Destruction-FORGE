@@ -17,7 +17,7 @@ public class VelocityGoal extends Goal {
         this.onTargetSelected = onTargetSelected;
         this.steering = steering;
         this.targetSelector = targetSelector;
-        EnumSet<Flag> controls = EnumSet.of(Flag.MOVE, Flag.LOOK);
+        setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override

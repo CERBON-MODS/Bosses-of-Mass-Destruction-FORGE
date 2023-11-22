@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public class ChunkBlockCacheProvider implements ICapabilityProvider {
     public static final Capability<ChunkBlockCache> CHUNK_BLOCK_CACHE = CapabilityManager.get(new CapabilityToken<>() {});
 
-    private ChunkBlockCache chunkBlockCache = null;
+    private ChunkBlockCache chunkBlockCache;
     private final LazyOptional<ChunkBlockCache> optional = LazyOptional.of(this::createChunkCache);
 
     private ChunkBlockCache createChunkCache() {

@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class SporeBallProjectile extends BaseThrownItemProjectile implements GeoEntity {
+    private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
     private final List<Vec3> circlePoints = MathUtils.buildBlockCircle(7.0);
     private final ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.DISAPPEARING_SWIRL.get())
             .color(BMDColors.GREEN)
@@ -48,11 +49,12 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
             .scale(0.2f)
             .brightness(BMDParticles.FULL_BRIGHT);
     private final byte particle = 5;
-    public boolean impacted = false;
     private float impactedPitch = 0f;
-    public float impactedTicks = 0f;
 
-    private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
+
+    public float impactedTicks = 0f;
+    public boolean impacted = false;
+
     public static final int explosionDelay = 30;
 
     public SporeBallProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
@@ -140,14 +142,14 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
                     )
             );
 
-            Vec3 center = VecUtils.asVec3(blockPosition()).add(VecUtils.unit.multiply(0.5, 0.5, 0.5));
+            Vec3 center = VecUtils.asVec3(blockPosition()).add(VecUtils.unit.scale(0.5));
             for (Vec3 point : circlePoints)
                 riftBurst.tryPlaceRift(center.add(point));
         }
     }
 
     private BlockPos posFinder(Vec3 pos){
-        BlockPos above = BlockPos.containing(pos.add(VecUtils.yAxis.multiply(2.0, 2.0, 2.0)));
+        BlockPos above = BlockPos.containing(pos.add(VecUtils.yAxis.scale(2.0)));
         BlockPos groundPos = BMDUtils.findGroundBelow(level(), above, pos1 -> true);
         BlockPos up = groundPos.above();
         return (up.getY() + 8 >= above.getY() && isOpenBlock(up)) ? up : null;
@@ -168,7 +170,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
     public void handleEntityEvent(byte id) {
         if (id == particle)
             for (Vec3 point : MathUtils.circlePoints(0.8, 16, VecUtils.yAxis))
-                projectileParticles.build(point.add(position()), point.multiply(0.1, 0.1, 0.1));
+                projectileParticles.build(point.add(position()), point.scale(0.1));
 
         super.handleEntityEvent(id);
     }

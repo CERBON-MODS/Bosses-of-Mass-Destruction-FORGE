@@ -27,9 +27,9 @@ public class StagedDamageHandler implements IDamageHandler {
         float newHpRatio = hpPercent(stats);
         float firstRageMode = MathUtils.roundedStep(previousHpRatio, hpPercentRageModes, false);
         float secondRageMode = MathUtils.roundedStep(newHpRatio, hpPercentRageModes, false);
-        if (firstRageMode != secondRageMode) {
+
+        if (firstRageMode != secondRageMode)
             whenHpBelowThreshold.run();
-        }
     }
 
     @Override

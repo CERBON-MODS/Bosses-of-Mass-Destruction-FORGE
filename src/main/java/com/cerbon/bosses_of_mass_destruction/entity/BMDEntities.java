@@ -202,9 +202,7 @@ public class BMDEntities {
                         null,
                         new ConditionalRenderer<>(
                                 new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
-                                new LerpedPosRenderer<>(
-                                        vec3 -> ParticleFactories.cometTrail().build(vec3.add(RandomUtils.randVec().multiply(0.5, 0.5, 0.5)), Vec3.ZERO)
-                                )
+                                new LerpedPosRenderer<>(vec3 -> ParticleFactories.cometTrail().build(vec3.add(RandomUtils.randVec().multiply(0.5, 0.5, 0.5)), Vec3.ZERO))
                         ),
                         null,
                         null,
@@ -225,7 +223,8 @@ public class BMDEntities {
                                 new ConditionalRenderer<>(
                                         new WeakHashPredicate<>(() -> new FrameLimiter(20f, pauseSecondTimer)::canDoFrame),
                                         new LerpedPosRenderer<>(vec3 -> ParticleFactories.soulFlame().build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), Vec3.ZERO)))),
-                        entity -> missileTexture, new FullRenderLight<>()
+                        entity -> missileTexture,
+                        new FullRenderLight<>()
                 ));
 
         EntityRenderers.register(GAUNTLET.get(), context -> {
@@ -321,7 +320,8 @@ public class BMDEntities {
                                         new WeakHashPredicate<>(() -> new FrameLimiter(30f, pauseSecondTimer)::canDoFrame),
                                         new PetalBladeParticleRenderer<>()
                                 )),
-                        entity -> petalTexture, new FullRenderLight<>()));
+                        entity -> petalTexture,
+                        new FullRenderLight<>()));
     }
 
     public static void register(IEventBus eventBus){

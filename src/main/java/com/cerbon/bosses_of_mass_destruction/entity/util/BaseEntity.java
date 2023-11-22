@@ -24,19 +24,19 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
-    private AnimatableInstanceCache animationFactory = null;
+    private AnimatableInstanceCache animationFactory;
     public Vec3 idlePosition = Vec3.ZERO;
-    protected ServerBossEvent bossBar = null;
-    protected IDamageHandler damageHandler = null;
-    protected IEntityEventHandler entityEventHandler = null;
-    protected IEntityTick<Level> clientTick = null;
-    protected IEntityTick<ServerLevel> serverTick = null;
-    protected IDataAccessorHandler dataAccessorHandler = null;
-    protected IMobEffectFilter mobEffectHandler = null;
-    protected IMoveHandler moveHandler = null;
-    protected INbtHandler nbtHandler = null;
-    protected IEntityTick<Level> deathClientTick = null;
-    protected IEntityTick<ServerLevel> deathServerTick = null;
+    protected ServerBossEvent bossBar;
+    protected IDamageHandler damageHandler;
+    protected IEntityEventHandler entityEventHandler;
+    protected IEntityTick<Level> clientTick;
+    protected IEntityTick<ServerLevel> serverTick;
+    protected IDataAccessorHandler dataAccessorHandler;
+    protected IMobEffectFilter mobEffectHandler;
+    protected IMoveHandler moveHandler;
+    protected INbtHandler nbtHandler;
+    protected IEntityTick<Level> deathClientTick;
+    protected IEntityTick<ServerLevel> deathServerTick;
     protected final EventScheduler preTickEvents = new EventScheduler();
     protected final EventScheduler postTickEvents = new EventScheduler();
 
@@ -47,31 +47,36 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         preTickEvents.updateEvents();
+
         if (idlePosition == Vec3.ZERO)
             idlePosition = position();
 
-        Level sideLevel = level();
-        if (sideLevel.isClientSide()){
+        if (level().isClientSide()){
             clientTick();
+
             if (clientTick != null)
-                clientTick.tick(sideLevel);
-        }else if (sideLevel instanceof ServerLevel serverLevel){
+                clientTick.tick(level());
+
+        }else if (level() instanceof ServerLevel serverLevel){
             serverTick(serverLevel);
+
             if (serverTick != null)
                 serverTick.tick(serverLevel);
         }
 
         super.tick();
+
         postTickEvents.updateEvents();
     }
 
     @Override
     protected void tickDeath() {
-        Level sideLevel = level();
-        if (sideLevel.isClientSide() && deathClientTick != null)
-            deathClientTick.tick(sideLevel);
-        else if (sideLevel instanceof ServerLevel serverLevel && deathServerTick != null)
+        if (level().isClientSide() && deathClientTick != null)
+            deathClientTick.tick(level());
+
+        else if (level() instanceof ServerLevel serverLevel && deathServerTick != null)
             deathServerTick.tick(serverLevel);
+
         else
             super.tickDeath();
     }
@@ -135,6 +140,7 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
     public void handleEntityEvent(byte id) {
         if (entityEventHandler != null)
             entityEventHandler.handleEntityEvent(id);
+
         super.handleEntityEvent(id);
     }
 
@@ -147,16 +153,14 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean canBeAffected(@NotNull MobEffectInstance effectInstance) {
-        IMobEffectFilter mobEffectHandler1 = mobEffectHandler;
-        if (mobEffectHandler1 != null)
-            return mobEffectHandler1.canBeAffected(effectInstance);
-        return super.canBeAffected(effectInstance);
+        return mobEffectHandler != null ? mobEffectHandler.canBeAffected(effectInstance) : super.canBeAffected(effectInstance);
     }
 
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
         EntityStats stats = new EntityStats(this);
         IDamageHandler handler = damageHandler;
+
         if (!level().isClientSide() && handler != null)
             handler.beforeDamage(stats, source, amount);
 
@@ -195,9 +199,9 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
     }
 
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        if (animationFactory == null) {
+        if (animationFactory == null)
             animationFactory = GeckoLibUtil.createInstanceCache(this);
-        }
+
         return animationFactory;
     }
 }

@@ -31,10 +31,11 @@ public class BossesOfMassDestruction {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         BMDCreativeModeTabs.register(modEventBus);
-        BMDItems.register(modEventBus);
         BMDBlocks.register(modEventBus);
-        BMDBlockEntities.register(modEventBus);
+        BMDItems.register(modEventBus);
+
         BMDEntities.register(modEventBus);
+        BMDBlockEntities.register(modEventBus);
 
         BMDSounds.register(modEventBus);
         BMDParticles.register(modEventBus);

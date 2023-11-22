@@ -64,17 +64,15 @@ public class SpikeAction implements IActionWithCooldown {
 
                                 eventScheduler.addEvent(
                                         new TimedEvent(
-                                                () -> {
-                                                    BMDUtils.playSound(
-                                                            target.serverLevel(),
-                                                            placement,
-                                                            BMDSounds.SPIKE.get(),
-                                                            SoundSource.HOSTILE,
-                                                            1.2f,
-                                                            32,
-                                                            null
-                                                    );
-                                                },
+                                                () -> BMDUtils.playSound(
+                                                        target.serverLevel(),
+                                                        placement,
+                                                        BMDSounds.SPIKE.get(),
+                                                        SoundSource.HOSTILE,
+                                                        1.2f,
+                                                        32,
+                                                        null
+                                                ),
                                                 riftTime,
                                                 1,
                                                 () -> !entity.isAlive()

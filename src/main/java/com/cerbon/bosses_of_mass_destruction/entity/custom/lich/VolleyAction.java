@@ -29,14 +29,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class VolleyAction implements IActionWithCooldown {
-    public static final int missileThrowDelay = 46;
-    public static final int missileThrowCooldown = 80;
-    public static final int missileParticleSummonDelay = 16;
-
     private final LichEntity entity;
     private final LichConfig mobConfig;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
+
+    public static final int missileThrowDelay = 46;
+    public static final int missileThrowCooldown = 80;
+    public static final int missileParticleSummonDelay = 16;
 
     public VolleyAction(LichEntity entity, LichConfig mobConfig, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
         this.entity = entity;
@@ -119,11 +119,11 @@ public class VolleyAction implements IActionWithCooldown {
 
     public static List<Vec3> getMissileLaunchOffsets(Entity entity) {
         List<Vec3> offsets = new ArrayList<>();
-        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.add(VecUtils.zAxis.multiply(2.0, 2.0, 2.0))));
-        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.multiply(1.5, 1.5, 1.5).add(VecUtils.zAxis)));
-        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.multiply(2.0, 2.0, 2.0)));
-        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.multiply(1.5, 1.5, 1.5).add(VecUtils.negateServer(VecUtils.zAxis))));
-        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.add(VecUtils.negateServer(VecUtils.zAxis).multiply(2.0, 2.0, 2.0))));
+        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.add(VecUtils.zAxis.scale(2.0))));
+        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.scale(1.5).add(VecUtils.zAxis)));
+        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.scale(2.0)));
+        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.scale(1.5).add(VecUtils.negateServer(VecUtils.zAxis))));
+        offsets.add(MathUtils.axisOffset(entity.getLookAngle(), VecUtils.yAxis.add(VecUtils.negateServer(VecUtils.zAxis).scale(2.0))));
         return offsets;
     }
 }

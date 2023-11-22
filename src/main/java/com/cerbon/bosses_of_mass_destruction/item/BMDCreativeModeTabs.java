@@ -10,8 +10,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BMDCreativeModeTabs {
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB,
-            BMDConstants.MOD_ID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, BMDConstants.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> BOSSES_OF_MASS_DESTRUCTION = CREATIVE_MODE_TABS.register("bosses_of_mass_destruction",
             ()-> CreativeModeTab.builder()

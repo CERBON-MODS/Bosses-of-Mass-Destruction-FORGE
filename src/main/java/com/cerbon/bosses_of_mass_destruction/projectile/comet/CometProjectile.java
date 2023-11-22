@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class CometProjectile extends BaseThrownItemProjectile implements GeoEntity {
-    private boolean impacted = false;
-    private Consumer<Vec3> impactAction;
     private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
+    private Consumer<Vec3> impactAction;
+    private boolean impacted = false;
 
     public CometProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
         super(entityType, level);
@@ -70,15 +70,15 @@ public class CometProjectile extends BaseThrownItemProjectile implements GeoEnti
     }
 
     @Override
+    public float getXRot() {
+        return tickCount * 5f;
+    }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {}
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return animationFactory;
-    }
-
-    @Override
-    public float getXRot() {
-        return tickCount * 5f;
     }
 }

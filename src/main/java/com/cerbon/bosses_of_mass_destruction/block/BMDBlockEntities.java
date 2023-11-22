@@ -47,7 +47,8 @@ public class BMDBlockEntities {
                                 RenderType::entityCutout
                         ),
                         (bone, packedLight) -> IBoneLight.fullbright
-                ));
+                )
+        );
     }
 
     public static void register(IEventBus eventBus){

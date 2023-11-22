@@ -8,9 +8,7 @@ public class EventSeries implements IEvent {
     private IEvent currentEvent;
 
     public EventSeries(IEvent... events) {
-        if (events.length < 1) {
-            throw new IllegalArgumentException("Must have at least one event");
-        }
+        if (events.length < 1) throw new IllegalArgumentException("Must have at least one event");
         this.iterator = List.of(events).iterator();
         this.currentEvent = iterator.next();
     }
@@ -28,11 +26,10 @@ public class EventSeries implements IEvent {
     @Override
     public boolean shouldRemoveEvent() {
         while (currentEvent.shouldRemoveEvent()) {
-            if (iterator.hasNext()) {
+            if (iterator.hasNext())
                 currentEvent = iterator.next();
-            } else {
+            else
                 return true;
-            }
         }
         return false;
     }

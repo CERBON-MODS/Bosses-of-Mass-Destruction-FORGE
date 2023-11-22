@@ -54,6 +54,7 @@ public class ObsidilithEntity extends BaseEntity {
     private final Map<Byte, IActionWithCooldown> statusRegistry;
     private final ObsidilithMoveLogic moveLogic;
     private final ObsidilithEffectHandler effectHandler;
+
     private final List<BlockPos> activePillars = new ArrayList<>();
 
     public byte currentAttack = 0;
@@ -111,7 +112,8 @@ public class ObsidilithEntity extends BaseEntity {
     public void serverTick(ServerLevel serverLevel) {
         super.serverTick(serverLevel);
 
-        activePillars.removeIf(pos -> level().getBlockState(pos).getBlock() != BMDBlocks.OBSIDILITH_RUNE.get()
+        activePillars.removeIf(
+                pos -> level().getBlockState(pos).getBlock() != BMDBlocks.OBSIDILITH_RUNE.get()
                 || !pos.closerThan(blockPosition(), 64));
 
         getEntityData().set(ObsidilithUtils.isShielded, !activePillars.isEmpty());

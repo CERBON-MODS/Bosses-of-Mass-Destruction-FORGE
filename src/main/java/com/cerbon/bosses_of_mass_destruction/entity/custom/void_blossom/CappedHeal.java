@@ -26,9 +26,8 @@ public class CappedHeal implements IEntityTick<ServerLevel> {
 
     @Override
     public void tick(ServerLevel level) {
-        if (entity.getTarget() == null) {
+        if (entity.getTarget() == null)
             LichUtils.cappedHeal(adapter, stats, hpMilestones, healingPerTick, entity::heal);
-        }
     }
 }
 

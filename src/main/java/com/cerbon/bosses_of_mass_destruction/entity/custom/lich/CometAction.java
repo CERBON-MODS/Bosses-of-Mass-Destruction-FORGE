@@ -28,18 +28,24 @@ public class CometAction implements IActionWithCooldown {
     private final Supplier<Boolean> shouldCancel;
     private final Function<Vec3, ProjectileThrower> cometThrower;
 
+    public static final int cometThrowDelay = 60;
+    public static final int cometParticleSummonDelay = 15;
+    public static final int cometThrowCooldown = 80;
+
     public CometAction(LichEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel, LichConfig lichConfig) {
         this.entity = entity;
         this.eventScheduler = eventScheduler;
         this.shouldCancel = shouldCancel;
 
-        this.cometThrower = offset -> new ProjectileThrower(() -> {
-            CometProjectile projectile = new CometProjectile(entity, entity.level(), it ->
-                    entity.level().explode(entity, it.x, it.y, it.z, lichConfig.comet.explosionStrength, Level.ExplosionInteraction.MOB), Collections.singletonList(MinionAction.summonEntityType));
+        this.cometThrower = offset -> new ProjectileThrower(
+                () -> {
+                    CometProjectile projectile = new CometProjectile(entity, entity.level(), vec3 ->
+                            entity.level().explode(entity, vec3.x, vec3.y, vec3.z, lichConfig.comet.explosionStrength, Level.ExplosionInteraction.MOB), Collections.singletonList(MinionAction.summonEntityType));
 
-            MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
-            return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
-        });
+                    MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
+                    return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
+                }
+        );
     }
 
     @Override
@@ -51,46 +57,49 @@ public class CometAction implements IActionWithCooldown {
     }
 
     private void performCometThrow(ServerLevel serverLevel) {
-        eventScheduler.addEvent(new TimedEvent(() ->
-                BMDUtils.playSound(
-                        serverLevel,
-                        entity.position(),
-                        BMDSounds.COMET_PREPARE.get(),
-                        SoundSource.HOSTILE,
-                        3.0f,
-                        64.0,
-                        null
-                ),
-                10,
-                1,
-                shouldCancel
-        ));
+        eventScheduler.addEvent(
+                new TimedEvent(
+                        () -> BMDUtils.playSound(
+                                serverLevel,
+                                entity.position(),
+                                BMDSounds.COMET_PREPARE.get(),
+                                SoundSource.HOSTILE,
+                                3.0f,
+                                64.0,
+                                null
+                        ),
+                        10,
+                        1,
+                        shouldCancel
+                )
+        );
 
-        eventScheduler.addEvent(new TimedEvent(() -> {
-            new ThrowProjectileAction(
-                    entity,
-                    cometThrower.apply(getCometLaunchOffset())).perform();
-            BMDUtils.playSound(
-                    serverLevel,
-                    entity.position(),
-                    BMDSounds.COMET_SHOOT.get(),
-                    SoundSource.HOSTILE,
-                    3.0f,
-                    64.0,
-                    null);
-            },
-                cometThrowDelay,
-                1,
-                shouldCancel
-        ));
+        eventScheduler.addEvent(
+                new TimedEvent(
+                        () -> {
+                            new ThrowProjectileAction(
+                                    entity,
+                                    cometThrower.apply(getCometLaunchOffset())).perform();
+
+                            BMDUtils.playSound(
+                                    serverLevel,
+                                    entity.position(),
+                                    BMDSounds.COMET_SHOOT.get(),
+                                    SoundSource.HOSTILE,
+                                    3.0f,
+                                    64.0,
+                                    null
+                            );
+                        },
+                        cometThrowDelay,
+                        1,
+                        shouldCancel
+                )
+        );
     }
 
-    public static final int cometThrowDelay = 60;
-    public static final int cometParticleSummonDelay = 15;
-    public static final int cometThrowCooldown = 80;
-
     public static Vec3 getCometLaunchOffset() {
-        return VecUtils.yAxis.multiply(2.0, 2.0, 2.0);
+        return VecUtils.yAxis.scale(2.0);
     }
 }
 

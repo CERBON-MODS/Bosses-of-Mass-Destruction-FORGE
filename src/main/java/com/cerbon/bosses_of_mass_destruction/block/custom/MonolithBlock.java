@@ -79,10 +79,10 @@ public class MonolithBlock extends BaseEntityBlock {
         if (direction.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP)){
             if (newState.is(this) && newState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) != doubleBlockHalf)
                 return state.setValue(HorizontalDirectionalBlock.FACING, newState.getValue(HorizontalDirectionalBlock.FACING));
-            else return airState;
-        } else {
+            else
+                return airState;
+        } else
             return super.updateShape(state, direction, newState, level, pos, posFrom);
-        }
     }
 
     @Override
@@ -101,7 +101,8 @@ public class MonolithBlock extends BaseEntityBlock {
         if (blockPos.getY() < 255 && ctx.getLevel().getBlockState(blockPos.above()).canBeReplaced(ctx))
             return getStateDefinition().any().setValue(HorizontalDirectionalBlock.FACING, ctx.getHorizontalDirection())
                     .setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER);
-        else return null;
+        else
+            return null;
     }
 
     @Override
@@ -152,7 +153,6 @@ public class MonolithBlock extends BaseEntityBlock {
                     }
                 }
         }
-
         return power;
     }
 }

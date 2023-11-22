@@ -23,17 +23,13 @@ public class RandomUtils {
      * @return
      */
     public static int range(int min, int max) {
-        if (min > max) {
-            throw new IllegalArgumentException("Minimum is greater than maximum");
-        }
+        if (min > max) throw new IllegalArgumentException("Minimum is greater than maximum");
         int range = max - min;
         return min + rand.nextInt(range);
     }
 
     public static double range(double min, double max) {
-        if (min > max) {
-            throw new IllegalArgumentException("Minimum is greater than maximum");
-        }
+        if (min > max) throw new IllegalArgumentException("Minimum is greater than maximum");
         double range = max - min;
         return min + rand.nextDouble() * range;
     }

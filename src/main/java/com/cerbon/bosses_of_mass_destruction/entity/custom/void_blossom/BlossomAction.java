@@ -39,7 +39,7 @@ public class BlossomAction implements IActionWithCooldown {
             VecUtils.xAxis.add(VecUtils.zAxis.reverse()),
             VecUtils.xAxis.reverse().add(VecUtils.zAxis),
             VecUtils.xAxis.reverse().add(VecUtils.zAxis.reverse())
-    ).map(vec3 -> vec3.normalize().multiply(15.0, 15.0, 15.0)).toList();
+    ).map(vec3 -> vec3.normalize().scale(15.0)).toList();
 
     public BlossomAction(VoidBlossomEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
         this.entity = entity;
@@ -78,13 +78,13 @@ public class BlossomAction implements IActionWithCooldown {
 
         float hpRatio = entity.getHealth() / entity.getMaxHealth();
         int protectedPositions;
+
         if (hpRatio < VoidBlossomEntity.hpMilestones.get(1))
             protectedPositions = 6;
         else if (hpRatio < VoidBlossomEntity.hpMilestones.get(2))
             protectedPositions = 3;
-        else {
+        else
             protectedPositions = 0;
-        }
 
         BMDUtils.playSound(level, entity.position(), BMDSounds.SPIKE_WAVE_INDICATOR.get(), SoundSource.HOSTILE, 2.0f, 0.7f, 64.0, null);
 

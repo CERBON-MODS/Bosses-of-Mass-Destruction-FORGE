@@ -15,9 +15,8 @@ public class CooldownAction implements IAction, IActionStop {
     public void perform() {
         currentTime--;
 
-        if (currentTime <= 0) {
+        if (currentTime <= 0)
             currentTime = action.perform();
-        }
     }
 
     @Override

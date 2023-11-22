@@ -28,14 +28,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class VolleyRageAction implements IActionWithCooldown {
-    public static final int ragedMissileVolleyInitialDelay = 60;
-    public static final int ragedMissileVolleyBetweenVolleyDelay = 30;
-    public static final int ragedMissileParticleDelay = 30;
-
     private final LichEntity entity;
     private final LichConfig mobConfig;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
+
+    public static final int ragedMissileVolleyInitialDelay = 60;
+    public static final int ragedMissileVolleyBetweenVolleyDelay = 30;
+    public static final int ragedMissileParticleDelay = 30;
 
     public VolleyRageAction(LichEntity entity, LichConfig mobConfig, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
         this.entity = entity;
@@ -83,8 +83,6 @@ public class VolleyRageAction implements IActionWithCooldown {
             );
         }
 
-
-
         return ragedMissileVolleyInitialDelay + (rageMissileVolleys * ragedMissileVolleyBetweenVolleyDelay);
     }
 
@@ -112,8 +110,8 @@ public class VolleyRageAction implements IActionWithCooldown {
         double zOffset = 4.0;
         int numPoints = 9;
 
-        Vec3 lineStart = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.multiply(xOffset, xOffset, xOffset).add(VecUtils.zAxis.multiply(zOffset, zOffset, zOffset)));
-        Vec3 lineEnd = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.multiply(xOffset, xOffset, xOffset).add(VecUtils.zAxis.multiply(-zOffset, -zOffset, -zOffset)));
+        Vec3 lineStart = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.scale(xOffset).add(VecUtils.zAxis.scale(zOffset)));
+        Vec3 lineEnd = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.scale(xOffset).add(VecUtils.zAxis.scale(-zOffset)));
 
         ArrayList<Vec3> lineAcross = new ArrayList<>();
         MathUtils.lineCallback(lineStart, lineEnd, numPoints, (vec3, integer) -> lineAcross.add(vec3));

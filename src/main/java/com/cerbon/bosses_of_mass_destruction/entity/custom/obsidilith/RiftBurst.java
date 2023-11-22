@@ -76,7 +76,7 @@ public class RiftBurst {
                 new TimedEvent(
                         () -> {
                             RandomSource rand = serverLevel.random;
-                            Vec3 columVel = VecUtils.yAxis.multiply(rand.nextDouble() + 1, rand.nextDouble() + 1, rand.nextDouble() + 1).multiply(0.25, 0.25, 0.25);
+                            Vec3 columVel = VecUtils.yAxis.scale(rand.nextDouble() + 1).scale(0.25);
                             AtomicInteger ticks = new AtomicInteger();
                             eventScheduler.addEvent(
                                     new TimedEvent(
@@ -85,7 +85,7 @@ public class RiftBurst {
                                                 BMDUtils.spawnParticle(
                                                         serverLevel,
                                                         columnParticle,
-                                                        VecUtils.asVec3(impactPos).add(VecUtils.unit.multiply(0.5, 0.5, 0.5)).add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)),
+                                                        VecUtils.asVec3(impactPos).add(VecUtils.unit.scale(0.5)).add(RandomUtils.randVec().scale(0.25)),
                                                         columVel,
                                                         0,
                                                         0.0
@@ -116,7 +116,7 @@ public class RiftBurst {
 
     private Function<Vec3, BlockPos> defaultPosFinder(ServerLevel serverLevel, Function<BlockPos, Boolean> isOpenBlock) {
         return vec3 -> {
-            BlockPos above = BlockPos.containing(vec3.add(VecUtils.yAxis.multiply(14.0, 14.0, 14.0)));
+            BlockPos above = BlockPos.containing(vec3.add(VecUtils.yAxis.scale(14.0)));
             BlockPos groundPos = BMDUtils.findGroundBelow(serverLevel, above, pos -> true);
             BlockPos up = groundPos.above();
             return (up.getY() + 28 >= above.getY() && isOpenBlock.apply(up)) ? up : null;
