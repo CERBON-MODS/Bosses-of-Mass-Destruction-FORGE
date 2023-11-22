@@ -8,15 +8,12 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 
 public class DamageMemory implements IDamageHandler {
-    private final DamageHistory defaultDamageHistory;
     private final HistoricalData<DamageHistory> historicalData;
     private final LivingEntity entity;
-    private final int hitsToRemember;
 
     public DamageMemory(int hitsToRemember, LivingEntity entity) {
-        this.hitsToRemember = hitsToRemember;
         this.entity = entity;
-        this.defaultDamageHistory = new DamageHistory(0f, entity.level().damageSources().fellOutOfWorld(), 0);
+        DamageHistory defaultDamageHistory = new DamageHistory(0f, entity.level().damageSources().fellOutOfWorld(), 0);
         this.historicalData = new HistoricalData<>(defaultDamageHistory, hitsToRemember);
     }
 

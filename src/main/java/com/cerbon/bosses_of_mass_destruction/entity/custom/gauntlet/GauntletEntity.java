@@ -38,11 +38,11 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import java.util.Map;
 
 public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
-    public GauntletHitboxes hitboxHelper = new GauntletHitboxes(this);
-    public GauntletClientLaserHandler laserHandler = new GauntletClientLaserHandler(this, postTickEvents);
-    public GauntletClientEnergyShieldHandler energyShieldHandler = new GauntletClientEnergyShieldHandler(this, postTickEvents);
-    public GauntletBlindnessIndicatorParticles clientBlindnessHandler = new GauntletBlindnessIndicatorParticles(this, preTickEvents);
-    public DamageMemory damageMemory = new DamageMemory(5, this);
+    public final GauntletHitboxes hitboxHelper = new GauntletHitboxes(this);
+    public final GauntletClientLaserHandler laserHandler = new GauntletClientLaserHandler(this, postTickEvents);
+    public final GauntletClientEnergyShieldHandler energyShieldHandler = new GauntletClientEnergyShieldHandler(this, postTickEvents);
+    public final GauntletBlindnessIndicatorParticles clientBlindnessHandler = new GauntletBlindnessIndicatorParticles(this, preTickEvents);
+    public final DamageMemory damageMemory = new DamageMemory(5, this);
 
     private final AnimationHolder animationHandler;
 

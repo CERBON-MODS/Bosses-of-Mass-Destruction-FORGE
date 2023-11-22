@@ -34,10 +34,10 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class ObsidilithSummonBlock extends Block {
-    public static BooleanProperty eye = BlockStateProperties.EYE;
-    protected VoxelShape frameShape = box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0);
-    protected VoxelShape eyeShape = box(4.0, 13.0, 4.0, 12.0, 16.0, 12.0);
-    protected VoxelShape frameWithEyeShape = Shapes.or(frameShape, eyeShape);
+    public static final BooleanProperty eye = BlockStateProperties.EYE;
+    protected final VoxelShape frameShape = box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0);
+    protected final VoxelShape eyeShape = box(4.0, 13.0, 4.0, 12.0, 16.0, 12.0);
+    protected final VoxelShape frameWithEyeShape = Shapes.or(frameShape, eyeShape);
 
     public ObsidilithSummonBlock(Properties properties) {
         super(properties);
@@ -50,7 +50,7 @@ public class ObsidilithSummonBlock extends Block {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return state.getValue(eye) ? frameWithEyeShape : frameShape;
     }
 

@@ -37,8 +37,8 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
     protected INbtHandler nbtHandler = null;
     protected IEntityTick<Level> deathClientTick = null;
     protected IEntityTick<ServerLevel> deathServerTick = null;
-    protected EventScheduler preTickEvents = new EventScheduler();
-    protected EventScheduler postTickEvents = new EventScheduler();
+    protected final EventScheduler preTickEvents = new EventScheduler();
+    protected final EventScheduler postTickEvents = new EventScheduler();
 
     public BaseEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);

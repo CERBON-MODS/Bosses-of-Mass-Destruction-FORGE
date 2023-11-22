@@ -46,7 +46,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
     private final AnimationHolder animationHolder;
     private final NetworkedHitboxManager hitboxHelper;
 
-    public VoidBlossomClientSpikeHandler clientSpikeHandler;
+    public final VoidBlossomClientSpikeHandler clientSpikeHandler;
     public static final List<Float> hpMilestones = List.of(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
 
     public VoidBlossomEntity(EntityType<? extends PathfinderMob> entityType, Level level, VoidBlossomConfig mobConfig) {
@@ -152,7 +152,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return BMDSounds.VOID_BLOSSOM_HURT.get();
     }
 

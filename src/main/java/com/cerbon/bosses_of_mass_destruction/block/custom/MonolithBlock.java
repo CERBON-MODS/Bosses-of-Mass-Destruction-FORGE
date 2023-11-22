@@ -51,7 +51,7 @@ public class MonolithBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, @NotNull BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new MonolithBlockEntity(pos, state);
     }
 

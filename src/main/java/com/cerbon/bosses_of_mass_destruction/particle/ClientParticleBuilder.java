@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ClientParticleBuilder {
-    private ParticleOptions options;
+    private final ParticleOptions options;
     private Function<SimpleParticle, Vec3> getVel = null;
     private Function<SimpleParticle, Vec3> continuousPos = null;
     private Function<Float, Vec3> color = null;

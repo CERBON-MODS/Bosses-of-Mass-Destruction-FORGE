@@ -13,7 +13,7 @@ public class BMDCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB,
             BMDConstants.MOD_ID);
 
-    public static RegistryObject<CreativeModeTab> BOSSES_OF_MASS_DESTRUCTION = CREATIVE_MODE_TABS.register("bosses_of_mass_destruction",
+    public static final RegistryObject<CreativeModeTab> BOSSES_OF_MASS_DESTRUCTION = CREATIVE_MODE_TABS.register("bosses_of_mass_destruction",
             ()-> CreativeModeTab.builder()
                     .icon(()-> new ItemStack(BMDItems.BLAZING_EYE.get()))
                     .title(Component.translatable("itemGroup.bosses_of_mass_destruction.items"))

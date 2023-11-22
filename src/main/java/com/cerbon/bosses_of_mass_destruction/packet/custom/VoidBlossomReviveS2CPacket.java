@@ -1,7 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.packet.custom;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.PacketUtils;
-import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.ObsidilithStructureRepair;
 import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.VoidBlossomStructureRepair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

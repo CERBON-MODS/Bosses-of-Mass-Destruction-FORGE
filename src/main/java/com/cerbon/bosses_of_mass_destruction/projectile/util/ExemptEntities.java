@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ExemptEntities implements Predicate<EntityHitResult> {
-    List<EntityType<?>> exemptEntities;
+    final List<EntityType<?>> exemptEntities;
 
     public ExemptEntities(List<EntityType<?>> exemptEntities){
         this.exemptEntities = exemptEntities;

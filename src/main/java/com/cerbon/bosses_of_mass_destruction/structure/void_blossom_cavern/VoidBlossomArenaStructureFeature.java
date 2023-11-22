@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class VoidBlossomArenaStructureFeature extends Structure {
-    public static Codec<VoidBlossomArenaStructureFeature> CODEC = simpleCodec(VoidBlossomArenaStructureFeature::new);
+    public static final Codec<VoidBlossomArenaStructureFeature> CODEC = simpleCodec(VoidBlossomArenaStructureFeature::new);
 
     protected VoidBlossomArenaStructureFeature(StructureSettings settings) {
         super(settings);

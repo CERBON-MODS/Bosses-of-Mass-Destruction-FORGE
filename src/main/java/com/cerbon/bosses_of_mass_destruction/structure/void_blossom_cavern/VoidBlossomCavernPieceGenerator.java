@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public class VoidBlossomCavernPieceGenerator implements IPieceGenerator {
 
     @Override
-    public boolean generate(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos, IStructurePiece structurePiece) {
+    public void generate(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos, IStructurePiece structurePiece) {
         int minY = chunkGenerator.getMinY();
         List<ICaveDecorator> caveDecorators = Arrays.asList(
                 new SpikeCaveDecorator(minY, random),
@@ -45,7 +45,6 @@ public class VoidBlossomCavernPieceGenerator implements IPieceGenerator {
         for (ICaveDecorator caveDecorator : caveDecorators)
             caveDecorator.generate(level, chunkGenerator, random, boundingBox, pos, structurePiece);
 
-        return true;
     }
 
     private void generateCave(WorldGenLevel level, BlockPos pos, IStructurePiece structurePiece, RandomSource random, BoundingBox boundingBox, List<ICaveDecorator> caveDecorators, int bottomOfWorld){

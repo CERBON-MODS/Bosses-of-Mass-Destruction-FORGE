@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Predicate;
 
 public abstract class BaseThrownItemProjectile extends ThrowableItemProjectile {
-    protected Predicate<EntityHitResult> entityCollisionPredicate;
+    protected final Predicate<EntityHitResult> entityCollisionPredicate;
     protected Predicate<HitResult> collisionPredicate = hitResult -> !level().isClientSide();
 
     public BaseThrownItemProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {

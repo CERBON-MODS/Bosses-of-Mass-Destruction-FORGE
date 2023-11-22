@@ -14,10 +14,9 @@ import org.joml.Vector3f;
 import java.util.function.Function;
 
 public class SimpleParticle extends TextureSheetParticle {
-    private ParticleContext particleContext;
-    private IParticleGeometry particleGeometry;
+    private final ParticleContext particleContext;
+    private final IParticleGeometry particleGeometry;
     private final boolean cycleSprites;
-    private boolean doCollision;
     private Function<Float, Integer> brightnessOverride = null;
     private Function<Float, Vec3> colorOverride = null;
     private Function<Float, Float> scaleOverride = null;
@@ -35,7 +34,6 @@ public class SimpleParticle extends TextureSheetParticle {
         this.particleContext = particleContext;
         this.particleGeometry = particleGeometry;
         this.cycleSprites = cycleSprites;
-        this.doCollision = doCollision;
         this.lifetime = particleAge;
 
         if (cycleSprites)
@@ -46,7 +44,7 @@ public class SimpleParticle extends TextureSheetParticle {
         xd = particleContext.vel().x();
         yd = particleContext.vel().y();
         zd = particleContext.vel().z();
-        hasPhysics = this.doCollision;
+        hasPhysics = doCollision;
     }
 
 

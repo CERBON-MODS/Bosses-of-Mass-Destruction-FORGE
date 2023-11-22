@@ -100,14 +100,13 @@ public class VanillaCopiesServer {
             return entity.level().getBrightness(LightLayer.BLOCK, blockPos);
     }
 
-    public static boolean destroyBlocks(Entity entity, AABB aabb) {
+    public static void destroyBlocks(Entity entity, AABB aabb) {
         int i = Mth.floor(aabb.minX);
         int j = Mth.floor(aabb.minY);
         int k = Mth.floor(aabb.minZ);
         int l = Mth.floor(aabb.maxX);
         int m = Mth.floor(aabb.maxY);
         int n = Mth.floor(aabb.maxZ);
-        boolean bl = false;
         boolean bl2 = false;
         for (int o = i; o <= l; o++)
             for (int p = j; p <= m; p++)
@@ -118,10 +117,7 @@ public class VanillaCopiesServer {
                     if (!blockState.isAir() && blockState.getBlock() == Blocks.FIRE)
                         if (entity.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !blockState.is(BlockTags.WITHER_IMMUNE))
                             bl2 = entity.level().destroyBlock(blockPos, false) || bl2;
-                        else
-                            bl = true;
                 }
-        return bl;
     }
 
     public static void onBreakInCreative(Level level, BlockPos pos, BlockState state, Player player) {

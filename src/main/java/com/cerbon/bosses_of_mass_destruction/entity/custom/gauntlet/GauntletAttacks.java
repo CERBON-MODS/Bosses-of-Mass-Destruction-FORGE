@@ -13,9 +13,6 @@ import java.util.function.Supplier;
 
 public class GauntletAttacks {
     private final GauntletEntity entity;
-    private final EventScheduler eventScheduler;
-    private final GauntletConfig mobConfig;
-    private final ServerLevel serverLevel;
 
     private final GauntletMoveLogic moveLogic;
 
@@ -30,9 +27,6 @@ public class GauntletAttacks {
 
     public GauntletAttacks(GauntletEntity entity, EventScheduler eventScheduler, GauntletConfig mobConfig, ServerLevel serverLevel) {
         this.entity = entity;
-        this.eventScheduler = eventScheduler;
-        this.mobConfig = mobConfig;
-        this.serverLevel = serverLevel;
 
         Supplier<Boolean> cancelAttackAction = () -> entity.isDeadOrDying() || entity.getTarget() == null;
         Map<Byte, IActionWithCooldown> statusRegistry = Map.of(

@@ -61,7 +61,7 @@ public final class EntityBounds {
     }
 
     /**
-     * @param bounds Bounding box outside of which no collisions will be processed, should be the normal bounding box of the entity
+     * @param bounds Bounding box outside which no collisions will be processed, should be the normal bounding box of the entity
      * @return Box compatible hierarchy of all the EntityParts
      */
     public CompoundOrientedBox getBox(final AABB bounds) {
@@ -232,23 +232,7 @@ public final class EntityBounds {
         }
     }
 
-    private static final class EntityPartInfo {
-        private final @Nullable String parent;
-        private final String name;
-        private final double x, y, z;
-        private final double px, py, pz;
-        private final AABB bounds;
-
-        private EntityPartInfo(final @Nullable String parent, final String name, final double x, final double y, final double z, final double px, final double py, final double pz, final AABB bounds) {
-            this.parent = parent;
-            this.name = name;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.px = px;
-            this.py = py;
-            this.pz = pz;
-            this.bounds = bounds;
-        }
+    private record EntityPartInfo(@Nullable String parent, String name, double x, double y, double z, double px,
+                                  double py, double pz, AABB bounds) {
     }
 }

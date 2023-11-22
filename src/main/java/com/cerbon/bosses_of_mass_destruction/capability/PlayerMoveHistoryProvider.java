@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 @AutoRegisterCapability
 public class PlayerMoveHistoryProvider implements ICapabilityProvider {
-    public static Capability<HistoricalData<Vec3>> HISTORICAL_DATA = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<HistoricalData<Vec3>> HISTORICAL_DATA = CapabilityManager.get(new CapabilityToken<>() {});
 
     private HistoricalData<Vec3> positionalHistory;
     private final LazyOptional<HistoricalData<Vec3>> optional = LazyOptional.of(this::createHistoricalData);

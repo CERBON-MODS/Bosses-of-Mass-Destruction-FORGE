@@ -114,7 +114,7 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     }
 
     @Override
-    public boolean intersects(final AABB box) {
+    public boolean intersects(final @NotNull AABB box) {
         final Vec3[] vertices = OrientedBox.getVertices(box);
         for (final OrientedBox orientedBox : boxes) {
             if (orientedBox.intersects(vertices)) {

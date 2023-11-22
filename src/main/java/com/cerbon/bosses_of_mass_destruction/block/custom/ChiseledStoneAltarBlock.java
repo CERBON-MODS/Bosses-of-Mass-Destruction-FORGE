@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ChiseledStoneAltarBlock extends Block {
-    public static BooleanProperty lit = BlockStateProperties.LIT;
+    public static final BooleanProperty lit = BlockStateProperties.LIT;
 
     public ChiseledStoneAltarBlock(Properties properties) {
         super(properties);

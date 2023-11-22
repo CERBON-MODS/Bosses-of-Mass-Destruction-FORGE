@@ -12,12 +12,8 @@ import java.util.function.Supplier;
 
 public class VoidBlossomAttacks {
     private final VoidBlossomEntity entity;
-    private final EventScheduler eventScheduler;
-    private final Supplier<Boolean> doBlossom;
-    private final TargetSwitcher targetSwitcher;
 
     private final Supplier<Boolean> cancelAttackAction;
-    private final Map<Byte, IActionWithCooldown> statusRegistry;
     private final VoidBlossomMoveLogic moveLogic;
 
     public static final byte spikeAttack = 4;
@@ -30,12 +26,9 @@ public class VoidBlossomAttacks {
 
     public VoidBlossomAttacks(VoidBlossomEntity entity, EventScheduler eventScheduler, Supplier<Boolean> doBlossom, TargetSwitcher targetSwitcher) {
         this.entity = entity;
-        this.eventScheduler = eventScheduler;
-        this.doBlossom = doBlossom;
-        this.targetSwitcher = targetSwitcher;
 
         this.cancelAttackAction = () -> entity.isDeadOrDying() || entity.getTarget() == null;
-        this.statusRegistry = Map.of(
+        Map<Byte, IActionWithCooldown> statusRegistry = Map.of(
                 spikeAttack, new SpikeAction(entity, eventScheduler, cancelAttackAction),
                 spikeWaveAttack, new SpikeWaveAction(entity, eventScheduler, cancelAttackAction),
                 sporeAttack, new SporeAction(entity, eventScheduler, cancelAttackAction),

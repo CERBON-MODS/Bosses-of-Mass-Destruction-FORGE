@@ -9,7 +9,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 public interface IPieceGenerator {
-    boolean generate(
+    void generate(
             WorldGenLevel level,
             StructureManager structureManager,
             ChunkGenerator chunkGenerator,

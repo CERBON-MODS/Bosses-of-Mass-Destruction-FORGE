@@ -3,7 +3,6 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.AABB;
 

@@ -49,8 +49,8 @@ public class LichEntity extends BaseEntity {
     private final LichConfig mobConfig;
     private final AnimationHolder animationHolder;
     private final TeleportAction teleportAction;
-    public HistoricalData<Vec3> velocityHistory;
-    public boolean shouldSetToNighttime;
+    public final HistoricalData<Vec3> velocityHistory;
+    public final boolean shouldSetToNighttime;
     public boolean collides;
 
     public LichEntity(EntityType<? extends LichEntity> entityType, Level level, LichConfig mobConfig) {

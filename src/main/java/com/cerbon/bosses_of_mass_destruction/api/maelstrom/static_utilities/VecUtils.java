@@ -17,14 +17,6 @@ public class VecUtils {
         return vec.subtract(planeVector.multiply(vec.dot(planeVector), vec.dot(planeVector), vec.dot(planeVector)));
     }
 
-    public static Vec3 newVec3(double x, double y, double z) {
-        return new Vec3(x, y, z);
-    }
-
-    public static Vec3 newVec3d() {
-        return new Vec3(0.0, 0.0, 0.0);
-    }
-
     public static Vec3 asVec3(BlockPos blockPos) {
         return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
@@ -61,9 +53,10 @@ public class VecUtils {
         double u = normedAxis.x();
         double v = normedAxis.y();
         double w = normedAxis.z();
-        double xPrime = u * (u * x + v * y + w * z) * (1.0 - Math.cos(theta)) + x * Math.cos(theta) + (-w * y + v * z) * Math.sin(theta);
-        double yPrime = v * (u * x + v * y + w * z) * (1.0 - Math.cos(theta)) + y * Math.cos(theta) + (w * x - u * z) * Math.sin(theta);
-        double zPrime = w * (u * x + v * y + w * z) * (1.0 - Math.cos(theta)) + z * Math.cos(theta) + (-v * x + u * y) * Math.sin(theta);
+        double v1 = u * x + v * y + w * z;
+        double xPrime = u * v1 * (1.0 - Math.cos(theta)) + x * Math.cos(theta) + (-w * y + v * z) * Math.sin(theta);
+        double yPrime = v * v1 * (1.0 - Math.cos(theta)) + y * Math.cos(theta) + (w * x - u * z) * Math.sin(theta);
+        double zPrime = w * v1 * (1.0 - Math.cos(theta)) + z * Math.cos(theta) + (-v * x + u * y) * Math.sin(theta);
         return new Vec3(xPrime, yPrime, zPrime);
     }
 }

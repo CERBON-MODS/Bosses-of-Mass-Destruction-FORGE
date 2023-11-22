@@ -13,6 +13,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 public class GauntletMovement {
     private final GauntletEntity entity;
     private final double reactionDistance = 4.0;
-    private EntityAdapter iEntity;
+    private final EntityAdapter iEntity;
     private final double tooFarFromTargetDistance = 25.0;
     private final double tooCloseToTargetDistance = 5.0;
 
@@ -32,16 +33,7 @@ public class GauntletMovement {
 
     public VelocityGoal buildAttackMovement(){
         Supplier<Vec3> targetPos = entity::safeGetTargetPos;
-        Function<Vec3, Boolean> tooCloseToTarget = vec3 -> getWithinDistancePredicate(tooCloseToTargetDistance, targetPos).apply(vec3);
-        Function<Vec3, Boolean> tooFarFromTarget = vec3 -> !getWithinDistancePredicate(tooFarFromTargetDistance, targetPos).apply(vec3);
-        Function<Vec3, Boolean> movingToTarget = vec3 -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), vec3);
-
-        ValidDirectionAnd canMoveTowardsPositionValidator = new ValidDirectionAnd(
-                Arrays.asList(
-                        new CanMoveThrough(entity, reactionDistance),
-                        new InDesiredRange(tooCloseToTarget, tooFarFromTarget, movingToTarget)
-                )
-        );
+        ValidDirectionAnd canMoveTowardsPositionValidator = getValidDirectionAnd(targetPos);
 
         ValidatedTargetSelector targetSelector = new ValidatedTargetSelector(
                 iEntity,
@@ -53,6 +45,20 @@ public class GauntletMovement {
                 this::moveAndLookAtTarget,
                 new VelocitySteering(iEntity, entity.getAttributeValue(Attributes.FLYING_SPEED), 120.0),
                 targetSelector
+        );
+    }
+
+    @NotNull
+    private ValidDirectionAnd getValidDirectionAnd(Supplier<Vec3> targetPos) {
+        Function<Vec3, Boolean> tooCloseToTarget = vec3 -> getWithinDistancePredicate(tooCloseToTargetDistance, targetPos).apply(vec3);
+        Function<Vec3, Boolean> tooFarFromTarget = vec3 -> !getWithinDistancePredicate(tooFarFromTargetDistance, targetPos).apply(vec3);
+        Function<Vec3, Boolean> movingToTarget = vec3 -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), vec3);
+
+        return new ValidDirectionAnd(
+                Arrays.asList(
+                        new CanMoveThrough(entity, reactionDistance),
+                        new InDesiredRange(tooCloseToTarget, tooFarFromTarget, movingToTarget)
+                )
         );
     }
 

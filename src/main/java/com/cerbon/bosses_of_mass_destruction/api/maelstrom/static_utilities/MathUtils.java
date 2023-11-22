@@ -33,7 +33,7 @@ public class MathUtils {
 
     /**
      * Calls a function that linearly interpolates between two points. Includes both ends of the line
-     *
+     * <p>
      * Callback returns the position and the point number from 1 to points
      */
     public static void lineCallback(Vec3 start, Vec3 end, int points, java.util.function.BiConsumer<Vec3, Integer> callback) {

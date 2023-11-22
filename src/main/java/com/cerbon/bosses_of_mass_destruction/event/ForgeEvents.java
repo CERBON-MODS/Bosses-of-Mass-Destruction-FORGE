@@ -1,7 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.event;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.block.custom.LevitationBlock;
 import com.cerbon.bosses_of_mass_destruction.block.custom.LevitationBlockEntity;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.LevelEventSchedulerProvider;

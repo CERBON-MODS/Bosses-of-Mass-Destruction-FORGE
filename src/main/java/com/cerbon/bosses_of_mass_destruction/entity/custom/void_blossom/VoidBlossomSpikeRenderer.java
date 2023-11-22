@@ -29,7 +29,6 @@ public class VoidBlossomSpikeRenderer implements IRenderer<VoidBlossomEntity> {
                     entity,
                     kv.getValue(),
                     partialTicks,
-                    BMDColors.WHITE,
                     poseStack,
                     buffer,
                     type
@@ -37,7 +36,7 @@ public class VoidBlossomSpikeRenderer implements IRenderer<VoidBlossomEntity> {
         }
     }
 
-    private void renderBeam(LivingEntity actor, VoidBlossomClientSpikeHandler.Spike spike, float tickDelta, Vec3 color, PoseStack poseStack, MultiBufferSource bufferSource, RenderType type){
+    private void renderBeam(LivingEntity actor, VoidBlossomClientSpikeHandler.Spike spike, float tickDelta, PoseStack poseStack, MultiBufferSource bufferSource, RenderType type){
         float numTextures = 8.0f;
         float lifeRatio = 2.0f;
         float textureProgress = Math.max(0f, ((spike.age() + tickDelta) * lifeRatio / spike.maxAge()) - lifeRatio + 1);
@@ -57,9 +56,9 @@ public class VoidBlossomSpikeRenderer implements IRenderer<VoidBlossomEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees((1.5707964f - o) * 57.295776f));
         poseStack.mulPose(Axis.XP.rotationDegrees(n * 57.295776f));
         float q = 0.0F;
-        int red = (int) (color.x * 255);
-        int green = (int) (color.y * 255);
-        int blue = (int) (color.z * 255);
+        int red = (int) (BMDColors.WHITE.x * 255);
+        int green = (int) (BMDColors.WHITE.y * 255);
+        int blue = (int) (BMDColors.WHITE.z * 255);
         float af = Mth.cos(q + 3.1415927f) * spikeWidth;
         float ag = Mth.sin(q + 3.1415927f) * spikeWidth;
         float ah = Mth.cos(q + 0.0f) * spikeWidth;

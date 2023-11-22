@@ -10,7 +10,6 @@ import com.cerbon.bosses_of_mass_destruction.client.render.NodeBossBarRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;

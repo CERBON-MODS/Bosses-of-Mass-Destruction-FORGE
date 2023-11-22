@@ -20,7 +20,7 @@ public abstract class MixinEntity {
         }
     }
 
-    @Inject(method = "setPosRaw", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "setPosRaw", at = @At("TAIL"))
     private void setPos(double x, double y, double z, CallbackInfo ci) {
         if (this instanceof MultipartAwareEntity) {
             ((MultipartAwareEntity)this).onSetPos(x, y, z);

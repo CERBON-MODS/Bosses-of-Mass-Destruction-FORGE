@@ -106,7 +106,7 @@ public class BMDEntities {
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "petal_blade").toString()));
 
-    public static LichKillCounter killCounter = new LichKillCounter(mobConfig.lichConfig.summonMechanic);
+    public static final LichKillCounter killCounter = new LichKillCounter(mobConfig.lichConfig.summonMechanic);
 
     public static void createAttributes(EntityAttributeCreationEvent event){
         event.put(BMDEntities.LICH.get(), Mob.createMobAttributes()

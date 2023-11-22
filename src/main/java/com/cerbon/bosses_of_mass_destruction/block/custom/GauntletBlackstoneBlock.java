@@ -68,7 +68,7 @@ public class GauntletBlackstoneBlock extends Block {
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         Vec3 particlePos = VecUtils.asVec3(pos).add(VecUtils.unit.scale(0.5)).add(RandomUtils.randVec().normalize());
         Particles.laserChargeParticles.build(particlePos,Vec3.ZERO);
     }

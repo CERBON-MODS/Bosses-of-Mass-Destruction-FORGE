@@ -6,7 +6,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public class StagedDamageHandler implements IDamageHandler {
     private final List<Float> hpPercentRageModes;

@@ -14,8 +14,6 @@ import java.util.function.Consumer;
 public class WallTeleport {
     private final ServerLevel level;
     private final Entity entity;
-    private final double startRange = 3.0;
-    private final double endRange = 20.0;
 
     public WallTeleport(ServerLevel level, Entity entity) {
         this.level = level;
@@ -41,6 +39,7 @@ public class WallTeleport {
 
     private BlockPos getTeleportStart(Context context){
         BlockPos startPos = BlockPos.containing(context.position);
+        double startRange = 3.0;
         BlockPos endPos = BlockPos.containing(context.position.add(context.direction.multiply(startRange, startRange, startRange)));
         List<BlockPos> blocksToCheck = MathUtils.getBlocksInLine(startPos, endPos);
 
@@ -52,6 +51,7 @@ public class WallTeleport {
     }
 
     private BlockPos getTeleportEnd(Context context, BlockPos startPos){
+        double endRange = 20.0;
         BlockPos endPos = startPos.offset(BlockPos.containing(context.direction.multiply(endRange, endRange, endRange)));
         List<BlockPos> blocksToCheck = MathUtils.getBlocksInLine(startPos, endPos);
 

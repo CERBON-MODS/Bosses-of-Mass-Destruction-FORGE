@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 @AutoRegisterCapability
 public class LevelEventSchedulerProvider implements ICapabilityProvider {
-    public static Capability<EventScheduler> EVENT_SCHEDULER = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<EventScheduler> EVENT_SCHEDULER = CapabilityManager.get(new CapabilityToken<>() {});
 
     private EventScheduler eventScheduler = null;
     private final LazyOptional<EventScheduler> optional = LazyOptional.of(this::createEventScheduler);

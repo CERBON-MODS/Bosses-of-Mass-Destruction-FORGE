@@ -37,9 +37,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 public class MobWardBlock extends BaseEntityBlock {
-    public static VoxelShape blockShape = box(5.0, 0.0, 5.0, 11.0, 16.0, 11.0);
-    public static VoxelShape thinBlockShape = box(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
-    public static EnumProperty<TripleBlockPart> tripleBlockPart = EnumProperty.create("triple_part", TripleBlockPart.class);
+    public static final VoxelShape blockShape = box(5.0, 0.0, 5.0, 11.0, 16.0, 11.0);
+    public static final VoxelShape thinBlockShape = box(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
+    public static final EnumProperty<TripleBlockPart> tripleBlockPart = EnumProperty.create("triple_part", TripleBlockPart.class);
 
     public MobWardBlock(Properties properties) {
         super(properties);
@@ -137,7 +137,7 @@ public class MobWardBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         level.setBlock(pos.above(), state.setValue(tripleBlockPart, TripleBlockPart.MIDDLE), 3);
         level.setBlock(pos.above(2), state.setValue(tripleBlockPart, TripleBlockPart.TOP), 3);
     }
