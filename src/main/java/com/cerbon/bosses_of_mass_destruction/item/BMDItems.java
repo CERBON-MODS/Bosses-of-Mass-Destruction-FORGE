@@ -54,6 +54,9 @@ public class BMDItems {
                     new GauntletStructureRepair(), new LichStructureRepair(), new ObsidilithStructureRepair(), new VoidBlossomStructureRepair()
             )));
 
+    public static final RegistryObject<Item> OBSIDILITH_RUNE = ITEMS.register("obsidilith_rune",
+            () -> new BlockItem(BMDBlocks.OBSIDILITH_RUNE.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> CHISELED_STONE_ALTAR = ITEMS.register("chiseled_stone_altar",
             () -> new BlockItem(BMDBlocks.CHISELED_STONE_ALTAR.get(), new Item.Properties()));
 
