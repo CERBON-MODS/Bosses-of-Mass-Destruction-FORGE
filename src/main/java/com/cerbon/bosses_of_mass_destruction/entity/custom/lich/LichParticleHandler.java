@@ -12,11 +12,11 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import com.cerbon.bosses_of_mass_destruction.util.CollectionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Level> {
     private final LichEntity entity;
@@ -234,21 +234,29 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
 
     private void animatedParticleMagicCircle(double radius, int points, int time, float rotationDegrees){
         Vec3 spellPos = entity.position();
-        Collection<Vec3> circlePoints = MathUtils.circlePoints(radius, points, entity.getLookAngle());
+        List<Vec3> circlePoints = MathUtils.circlePoints(radius, points, entity.getLookAngle()).stream().toList();
         float timeScale = time / (float) points;
 
-        Collection<Vec3> newCirclePoints = CollectionUtils.mapIndexed(circlePoints, (index, off) -> {
-            eventScheduler.addEvent(new TimedEvent(() -> {
-                off.yRot(rotationDegrees);
-                summonRingFactory.build(off.add(spellPos), Vec3.ZERO);
-            }, (int) (index * timeScale)));
-            return off;
+        IntStream.range(0, circlePoints.size()).forEach(index -> {
+            Vec3 off = circlePoints.get(index);
+            eventScheduler.addEvent(
+                    new TimedEvent(
+                            () -> {
+                                off.yRot(rotationDegrees);
+                                summonRingFactory.build(off.add(spellPos), Vec3.ZERO);
+                                },
+                            (int) (index * timeScale)
+                    )
+            );
         });
 
-        eventScheduler.addEvent(new TimedEvent(() -> newCirclePoints.stream().map(vec3 -> {
-            summonRingCompleteFactory.build(vec3.add(spellPos), Vec3.ZERO);
-            return vec3;
-        }), (int) (points * timeScale)));
+        eventScheduler.addEvent(
+                new TimedEvent(
+                        () -> circlePoints.stream().peek(vec3 -> summonRingCompleteFactory.build(vec3.add(spellPos), Vec3.ZERO)),
+                        (int) (points * timeScale)
+                )
+        );
+
     }
 
     private boolean shouldCancelParticles(){
