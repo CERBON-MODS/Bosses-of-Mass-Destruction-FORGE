@@ -59,7 +59,7 @@ public class SpikeCaveDecorator implements ICaveDecorator{
         Set<BlockPos> blockSet = baseBlocks.stream().map(BlockPos::containing).collect(Collectors.toSet());
         Set<BlockPos> innerBlockSet = blockSet.stream().filter(pos -> pos.distToCenterSqr(centerDirectionPos) < Math.pow(2.0, 2)).collect(Collectors.toSet());
         Set<BlockPos> middleBlockSet = blockSet.stream().filter(block -> !innerBlockSet.contains(block)).filter(block -> block.distToCenterSqr(centerDirectionPos) < Math.pow(3.7, 2)).collect(Collectors.toSet());
-        Set<BlockPos> outerBlockSet = blockSet.stream().filter(pos -> !middleBlockSet.contains(pos)).filter(pos -> !innerBlockSet.contains(pos)).collect(Collectors.toSet());
+        Set<BlockPos> outerBlockSet = blockSet.stream().filter(pos -> !middleBlockSet.contains(pos) && !innerBlockSet.contains(pos)).collect(Collectors.toSet());
 
         for (BlockPos blockPos : innerBlockSet){
             List<BlockPos> blocksInLine = MathUtils.getBlocksInLine(blockPos.offset(origin), tip);
