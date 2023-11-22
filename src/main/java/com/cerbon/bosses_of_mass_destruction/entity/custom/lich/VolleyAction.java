@@ -20,6 +20,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,21 +55,7 @@ public class VolleyAction implements IActionWithCooldown {
 
     public void performVolley(ServerPlayer target) {
         final Optional<MobEffect> missileMobEffect = Optional.ofNullable(ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.tryParse(mobConfig.missile.mobEffectId)));
-        final int missileEffectDuration = mobConfig.missile.mobEffectDuration;
-        final int missileEffectAmplifier = mobConfig.missile.mobEffectAmplifier;
-
-        final Function<Vec3, ProjectileThrower> missileThrower = offset ->
-                new ProjectileThrower(
-                        () -> {
-                            MagicMissileProjectile projectile = new MagicMissileProjectile(
-                                    entity,
-                                    entity.level()
-                                    ,livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new MobEffectInstance(effect, missileEffectDuration, missileEffectAmplifier))),
-                                    MinionAction.summonEntityType != null ? List.of(MinionAction.summonEntityType) : List.of());
-
-                            MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
-                            return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
-                        });
+        final Function<Vec3, ProjectileThrower> missileThrower = getMissileThrower(missileMobEffect);
 
         eventScheduler.addEvent(
                 new TimedEvent(
@@ -109,6 +96,25 @@ public class VolleyAction implements IActionWithCooldown {
                         shouldCancel
                 )
         );
+    }
+
+    @NotNull
+    private Function<Vec3, ProjectileThrower> getMissileThrower(Optional<MobEffect> missileMobEffect) {
+        final int missileEffectDuration = mobConfig.missile.mobEffectDuration;
+        final int missileEffectAmplifier = mobConfig.missile.mobEffectAmplifier;
+
+        return offset ->
+                new ProjectileThrower(
+                        () -> {
+                            MagicMissileProjectile projectile = new MagicMissileProjectile(
+                                    entity,
+                                    entity.level(),
+                                    livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new MobEffectInstance(effect, missileEffectDuration, missileEffectAmplifier))),
+                                    MinionAction.summonEntityType != null ? List.of(MinionAction.summonEntityType) : List.of());
+
+                            MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
+                            return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
+                        });
     }
 
     public static List<Vec3> getMissileLaunchOffsets(Entity entity) {

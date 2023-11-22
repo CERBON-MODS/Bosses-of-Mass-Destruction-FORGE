@@ -14,6 +14,7 @@ import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -35,15 +36,7 @@ public class LichMovement {
 
     public VelocityGoal buildAttackMovement() {
         Function<Vec3, Boolean> tooCloseToTarget = v -> getWithinDistancePredicate(tooCloseToTargetDistance, entity::safeGetTargetPos).test(v);
-        Function<Vec3, Boolean> tooFarFromTarget = v -> !getWithinDistancePredicate(tooFarFromTargetDistance, entity::safeGetTargetPos).test(v);
-        Function<Vec3, Boolean> movingToTarget = v -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), v);
-
-        ValidDirectionAnd canMoveTowardsPositionValidator = new ValidDirectionAnd(
-                Arrays.asList(
-                        new CanMoveThrough(entity, reactionDistance),
-                        new InDesiredRange(tooCloseToTarget, tooFarFromTarget, movingToTarget)
-                )
-        );
+        ValidDirectionAnd canMoveTowardsPositionValidator = getValidDirectionAnd(tooCloseToTarget);
         ValidatedTargetSelector targetSelector = new ValidatedTargetSelector(
                 iEntity,
                 canMoveTowardsPositionValidator,
@@ -53,6 +46,19 @@ public class LichMovement {
                 this::moveWhileAttacking,
                 createSteering(),
                 targetSelector
+        );
+    }
+
+    @NotNull
+    private ValidDirectionAnd getValidDirectionAnd(Function<Vec3, Boolean> tooCloseToTarget) {
+        Function<Vec3, Boolean> tooFarFromTarget = v -> !getWithinDistancePredicate(tooFarFromTargetDistance, entity::safeGetTargetPos).test(v);
+        Function<Vec3, Boolean> movingToTarget = v -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), v);
+
+        return new ValidDirectionAnd(
+                Arrays.asList(
+                        new CanMoveThrough(entity, reactionDistance),
+                        new InDesiredRange(tooCloseToTarget, tooFarFromTarget, movingToTarget)
+                )
         );
     }
 
