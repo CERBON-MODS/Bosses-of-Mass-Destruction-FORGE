@@ -202,7 +202,7 @@ public class BMDEntities {
                         null,
                         new ConditionalRenderer<>(
                                 new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
-                                new LerpedPosRenderer<>(vec3 -> ParticleFactories.cometTrail().build(vec3.add(RandomUtils.randVec().multiply(0.5, 0.5, 0.5)), Vec3.ZERO))
+                                new LerpedPosRenderer<>(vec3 -> ParticleFactories.cometTrail().build(vec3.add(RandomUtils.randVec().scale(0.5)), Vec3.ZERO))
                         ),
                         null,
                         null,
@@ -222,7 +222,7 @@ public class BMDEntities {
                                 new BillboardRenderer<>(context.getEntityRenderDispatcher(), magicMissileRenderType, f -> 0.5f),
                                 new ConditionalRenderer<>(
                                         new WeakHashPredicate<>(() -> new FrameLimiter(20f, pauseSecondTimer)::canDoFrame),
-                                        new LerpedPosRenderer<>(vec3 -> ParticleFactories.soulFlame().build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), Vec3.ZERO)))),
+                                        new LerpedPosRenderer<>(vec3 -> ParticleFactories.soulFlame().build(vec3.add(RandomUtils.randVec().scale(0.25)), Vec3.ZERO)))),
                         entity -> missileTexture,
                         new FullRenderLight<>()
                 ));
@@ -301,7 +301,7 @@ public class BMDEntities {
                                                 .colorVariation(0.4)
                                                 .scale(0.5f)
                                                 .brightness(BMDParticles.FULL_BRIGHT);
-                                        projectileParticles.build(vec3.add(RandomUtils.randVec().multiply(0.25, 0.25, 0.25)), VecUtils.yAxis.multiply(0.1, 0.1, 0.1));
+                                        projectileParticles.build(vec3.add(RandomUtils.randVec().scale(0.25)), VecUtils.yAxis.scale(0.1));
                                     })),
                             explosionFlasher,
                             new SporeBallSizeRenderer()),
