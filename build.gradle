@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'eclipse'
     id 'idea'
@@ -5,6 +7,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.16'
 }
 
 version = mod_version
@@ -103,6 +106,18 @@ dependencies {
 mixin {
     add sourceSets.main, "mixins.${mod_id}.refmap.json"
     config "mixins.${mod_id}.json"
+}
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    apiToken = System.getenv('CURSEFORGE_TOKEN')
+
+    def mainFile = upload(941573, jar)
+    mainFile.changelog = rootProject.file(changelog).getText('UTF-8')
+    mainFile.changelogType = 'markdown'
+    mainFile.releaseType = release_type
+    mainFile.addGameVersion("${minecraft_version}")
+    mainFile.addRequirement(geckolib)
+    mainFile.addRequirement(cloth_config)
 }
 
 tasks.named('processResources', ProcessResources).configure {
