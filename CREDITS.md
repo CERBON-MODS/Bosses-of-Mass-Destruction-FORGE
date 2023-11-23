@@ -1,0 +1,1 @@
+The original mod was created by [Barribob](https://www.curseforge.com/members/barribob/projects) for fabric. You can find the original project on this [link](https://www.curseforge.com/minecraft/mc-mods/bosses-of-mass-destruction).
