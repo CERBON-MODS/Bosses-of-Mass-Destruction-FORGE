@@ -125,7 +125,7 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
         if (entityCenterInRadius) return true;
 
         Vec3 xzDirectionTowardEntity = xzLineToEntity.normalize();
-        Vec3 xzPointTowardEntity = xzDirectionTowardEntity.multiply(radius, radius, radius).add(position());
+        Vec3 xzPointTowardEntity = xzDirectionTowardEntity.scale(radius).add(position());
         return entity.getBoundingBox().inflate(0.0, 10.0, 0.0).contains(xzPointTowardEntity);
     }
 
