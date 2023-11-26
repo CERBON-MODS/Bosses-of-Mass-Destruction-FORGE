@@ -11,12 +11,11 @@ import java.util.function.Predicate;
 
 public class FindTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private final Function<Double, AABB> searchBoxProvider;
-    final int maxTimeWithoutVisibility;
 
     public FindTargetGoal(Mob mob, Class<T> targetClass, Function<Double, AABB> searchBoxProvider, int reciprocalChance, boolean checkVisibility, boolean checkCanNavigate, Predicate<LivingEntity> targetPredicate) {
         super(mob, targetClass, reciprocalChance, checkVisibility, checkCanNavigate, targetPredicate);
         this.searchBoxProvider = searchBoxProvider;
-        this.maxTimeWithoutVisibility = 200;
+        unseenMemoryTicks = 200;
     }
 
     @Override
