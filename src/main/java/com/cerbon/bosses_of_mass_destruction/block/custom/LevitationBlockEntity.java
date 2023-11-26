@@ -6,10 +6,12 @@ import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 
 public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoBlockEntity {
     private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
+    private static final double tableOfElevationRadius = AutoConfig.getConfigHolder(BMDConfig.class).getConfig().generalConfig.tableOfElevationRadius;
     public int animationAge = 0;
 
     private static final HashSet<ServerPlayer> flight = new HashSet<>();
@@ -81,7 +84,7 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
 
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++)
-                blockToCheck.add(new BlockPos(x * 3, 0, z * 3));
+                blockToCheck.add(new BlockPos(x * (int) tableOfElevationRadius, 0, z * (int) tableOfElevationRadius));
         }
         Set<ChunkPos> chunksToCheck = blockToCheck.stream().map(pos -> new ChunkPos(pos.offset(player.blockPosition()))).collect(Collectors.toSet());
         boolean hasLevitationBlock = chunksToCheck.stream().anyMatch(chunkPos -> {
@@ -121,7 +124,7 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
     }
 
     private static AABB getAffectingBox(Level level, Vec3 pos){
-        return new AABB(pos.x, level.getMinBuildHeight(), pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(3.0, 0.0, 3.0);
+        return new AABB(pos.x, level.getMinBuildHeight(), pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(tableOfElevationRadius, 0.0, tableOfElevationRadius);
     }
 
     @Override

@@ -32,6 +32,10 @@ public class BMDConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public final VoidBlossomConfig voidBlossomConfig = new VoidBlossomConfig();
 
+    @ConfigEntry.Category("General")
+    @ConfigEntry.Gui.TransitiveObject
+    public final GeneralConfig generalConfig = new GeneralConfig();
+
     public void postInit() {
         List<String> entitiesThatCountToSummonCounter = lichConfig.summonMechanic.entitiesThatCountToSummonCounter;
         if (entitiesThatCountToSummonCounter == null) {
