@@ -93,13 +93,11 @@ public class ObsidilithUtils {
             Vec3 pillarTop = vecPos.add(VecUtils.yAxis.scale(deathPillarHeight));
             eventScheduler.addEvent(
                     new TimedEvent(
-                            () -> {
-                                VanillaCopiesServer.awardExperience(
-                                        expPerTick,
-                                        pillarTop.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).scale(2.0)),
-                                        level
-                                );
-                            },
+                            () -> VanillaCopiesServer.awardExperience(
+                                    expPerTick,
+                                    pillarTop.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).scale(2.0)),
+                                    level
+                            ),
                             deathPillarHeight * ticksBetweenPillarLayer,
                             expTicks,
                             () -> false

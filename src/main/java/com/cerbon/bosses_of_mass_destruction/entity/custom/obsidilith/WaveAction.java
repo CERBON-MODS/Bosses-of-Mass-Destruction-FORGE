@@ -64,29 +64,27 @@ public class WaveAction implements IActionWithCooldown {
                             int numRifts = 5;
                             Vec3 startRiftPos = entity.position().add(direction);
                             Vec3 endRiftPos = startRiftPos.add(direction.scale((double) numRifts * 1.5));
-                            MathUtils.lineCallback(startRiftPos, endRiftPos, numRifts, (linePos, i) -> {
-                                eventScheduler.addEvent(
-                                        new TimedEvent(
-                                                () -> {
-                                                    BMDUtils.playSound((ServerLevel) level, linePos, BMDSounds.WAVE_INDICATOR.get(), SoundSource.HOSTILE, 0.7f, 32, null);
-                                                    eventScheduler.addEvent(
-                                                            new TimedEvent(
-                                                                    () -> BMDUtils.playSound((ServerLevel) level, linePos, BMDSounds.OBSIDILITH_WAVE.get(), SoundSource.HOSTILE, 1.2f, 32, null),
-                                                                    waveDelay,
-                                                                    1,
-                                                                    () -> !entity.isAlive()
-                                                            )
-                                                    );
+                            MathUtils.lineCallback(startRiftPos, endRiftPos, numRifts, (linePos, i) -> eventScheduler.addEvent(
+                                    new TimedEvent(
+                                            () -> {
+                                                BMDUtils.playSound((ServerLevel) level, linePos, BMDSounds.WAVE_INDICATOR.get(), SoundSource.HOSTILE, 0.7f, 32, null);
+                                                eventScheduler.addEvent(
+                                                        new TimedEvent(
+                                                                () -> BMDUtils.playSound((ServerLevel) level, linePos, BMDSounds.OBSIDILITH_WAVE.get(), SoundSource.HOSTILE, 1.2f, 32, null),
+                                                                waveDelay,
+                                                                1,
+                                                                () -> !entity.isAlive()
+                                                        )
+                                                );
 
-                                                    for (Vec3 point : circlePoints)
-                                                        riftBurst.tryPlaceRift(linePos.add(point));
-                                                },
-                                                i * 8,
-                                                1,
-                                                () -> !entity.isAlive()
-                                        )
-                                );
-                            });
+                                                for (Vec3 point : circlePoints)
+                                                    riftBurst.tryPlaceRift(linePos.add(point));
+                                            },
+                                            i * 8,
+                                            1,
+                                            () -> !entity.isAlive()
+                                    )
+                            ));
                         },
                         attackStartDelay,
                         1,

@@ -2,9 +2,6 @@ package com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Objects;
 
 public class MobUtils {
     public static void setPos(Entity entity, Vec3 vec) {
