@@ -3,6 +3,9 @@ package com.cerbon.bosses_of_mass_destruction.entity.util;
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,12 +16,12 @@ import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.geo.render.built.*;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib3.util.RenderUtils;
 
 import java.util.function.Function;
 
@@ -94,6 +97,30 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
     @Override
     public int getPackedOverlay(LivingEntity entity, float u) {
         return overlayOverride != null ? overlayOverride.getOverlay() : super.getPackedOverlay(entity, u);
+    }
+
+    @Override
+    public void renderCube(GeoCube cube, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        RenderUtils.moveToPivot(cube, poseStack);
+        RenderUtils.rotate(cube, poseStack);
+        RenderUtils.moveBackFromPivot(cube, poseStack);
+        Matrix3f matrix3f = poseStack.last().normal();
+        Matrix4f matrix4f = poseStack.last().pose();
+
+        for (GeoQuad quad : cube.quads){
+            if (quad == null) continue;
+
+            Vector3f normal = quad.normal.copy();
+            normal.transform(matrix3f);
+            for (GeoVertex vertex : quad.vertices){
+                Vector4f vector4f = new Vector4f(vertex.position.x(), vertex.position.y(), vertex.position.z(), 1.0f);
+                vector4f.transform(matrix4f);
+                buffer.vertex(
+                        vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha,
+                        vertex.textureU, vertex.textureV, packedOverlay, packedLight, normal.x(), normal.y(),
+                        normal.z());
+            }
+        }
     }
 
     @Override
