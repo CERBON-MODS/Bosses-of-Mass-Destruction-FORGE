@@ -6,6 +6,8 @@ import com.cerbon.bosses_of_mass_destruction.client.render.IBoneLight;
 import com.cerbon.bosses_of_mass_destruction.entity.GeoModel;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -35,21 +37,22 @@ public class BMDBlockEntities {
     public static final RegistryObject<BlockEntityType<VoidLilyBlockEntity>> VOID_LILY_BLOCK_ENTITY = BLOCKS_ENTITIES.register("void_lily",
             () -> BlockEntityType.Builder.of(VoidLilyBlockEntity::new, BMDBlocks.VOID_LILY_BLOCK.get()).build(null));
 
-//    @OnlyIn(Dist.CLIENT)
-//    public static void initClient(){
-//        BlockEntityRenderers.register(LEVITATION_BLOCK_ENTITY.get(), context ->
-//                new BMDBlockEntityRenderer<>(
-//                        context,
-//                        new GeoModel<>(
-//                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/levitation_block.geo.json"),
-//                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/block/levitation_block.png"),
-//                                new ResourceLocation(BMDConstants.MOD_ID, "animations/levitation_block.animation.json"),
-//                                (animatable, data, geoModel) -> {}
-//                        ),
-//                        (bone, packedLight) -> IBoneLight.fullbright
-//                )
-//        );
-//    }
+    @OnlyIn(Dist.CLIENT)
+    public static void initClient() {
+        //TODO: Fix animation not working
+        BlockEntityRenderers.register(LEVITATION_BLOCK_ENTITY.get(), context ->
+                new BMDBlockEntityRenderer<LevitationBlockEntity>(
+                        context,
+                        new GeoModel<>(
+                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/levitation_block.geo.json"),
+                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/block/levitation_block.png"),
+                                new ResourceLocation(BMDConstants.MOD_ID, "animations/levitation_block.animation.json"),
+                                (animatable, data, geoModel) -> {}
+                        ),
+                        (bone, packedLight) -> IBoneLight.fullbright
+                )
+        );
+    }
 
     public static void register(IEventBus eventBus){
         BLOCKS_ENTITIES.register(eventBus);

@@ -28,7 +28,7 @@ public class BMDEvents {
         protected static void onClientSetup(FMLClientSetupEvent event){
             BMDEntities.initClient();
             BMDItems.initClient();
-            //BMDBlockEntities.initClient();
+            BMDBlockEntities.initClient();
             ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> AutoConfig.getConfigScreen(BMDConfig.class, parent).get()));
         }
 
