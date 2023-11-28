@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,8 +16,11 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
+import java.util.function.Function;
 
 public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> extends GeoEntityRenderer<T> {
     private final IRenderLight<T> brightness;
@@ -24,9 +28,12 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
     private final IRenderer<T> renderer;
     private final IRendererWithModel renderWithModel;
     private final IOverlayOverride overlayOverride;
+    private final RenderType renderType;
     private final boolean deathRotation;
 
-    public SimpleLivingGeoRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> model, IRenderLight<T> brightness, IBoneLight iBoneLight, IRenderer<T> renderer, IRendererWithModel renderWithModel, IOverlayOverride overlayOverride, boolean deathRotation) {
+    private final GeoRenderer<T> renderHelper = new GeoRenderer<>(modelProvider, this::getTextureLocation, this);
+
+    public SimpleLivingGeoRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> model, IRenderLight<T> brightness, IBoneLight iBoneLight, IRenderer<T> renderer, IRendererWithModel renderWithModel, IOverlayOverride overlayOverride, RenderType renderType, boolean deathRotation) {
         super(renderManager, model);
         this.brightness = brightness;
         this.iBoneLight = iBoneLight;
@@ -34,6 +41,12 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
         this.renderWithModel = renderWithModel;
         this.overlayOverride = overlayOverride;
         this.deathRotation = deathRotation;
+        this.renderType = renderType;
+    }
+
+    @Override
+    public RenderType getRenderType(T animatable, float partialTick, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, ResourceLocation texture) {
+        return renderType != null ? renderHelper.getRenderType(animatable, partialTick, poseStack, bufferSource, buffer, packedLight, texture) : super.getRenderType(animatable, partialTick, poseStack, bufferSource, buffer, packedLight, texture);
     }
 
     @Override
@@ -86,5 +99,44 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
     @Override
     protected float getDeathMaxRotation(T animatable) {
         return deathRotation ? 90f : 0f;
+    }
+
+    private static class GeoRenderer<T extends LivingEntity & IAnimatable> implements IGeoRenderer<T> {
+        private final AnimatedGeoModel<T> geoModel;
+        private final Function<T, ResourceLocation> textureLocation;
+        private final SimpleLivingGeoRenderer<T> renderer;
+
+        private MultiBufferSource provider;
+
+        public GeoRenderer(AnimatedGeoModel<T> geoModel, Function<T, ResourceLocation> textureLocation, SimpleLivingGeoRenderer<T> renderer) {
+            this.geoModel = geoModel;
+            this.textureLocation = textureLocation;
+            this.renderer = renderer;
+        }
+
+        @Override
+        public GeoModelProvider<T> getGeoModelProvider() {
+            return geoModel;
+        }
+
+        @Override
+        public void renderRecursively(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+            renderer.renderRecursively(bone, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        }
+
+        @Override
+        public void setCurrentRTB(MultiBufferSource bufferSource) {
+            provider = bufferSource;
+        }
+
+        @Override
+        public MultiBufferSource getCurrentRTB() {
+            return provider;
+        }
+
+        @Override
+        public ResourceLocation getTextureLocation(T t) {
+            return textureLocation.apply(t);
+        }
     }
 }

@@ -162,6 +162,7 @@ public class BMDEntities {
                     new EternalNightRenderer(),
                     null,
                     null,
+                    RenderType.entityCutoutNoCull(texture),
                     true
             );
         });
@@ -182,6 +183,7 @@ public class BMDEntities {
                     runeColorHandler,
                     new CompositeRenderer<>(armorRenderer, runeColorHandler),
                     armorRenderer,
+                    null,
                     null,
                     false
             );
@@ -250,6 +252,7 @@ public class BMDEntities {
                     ),
                     energyRenderer,
                     overlayOverride,
+                    null,
                     false
             );
         });
@@ -272,6 +275,7 @@ public class BMDEntities {
                     new CompositeRenderer<>(new VoidBlossomSpikeRenderer(), boneLight, overlay),
                     null,
                     overlay,
+                    null,
                     false
             );
         });
