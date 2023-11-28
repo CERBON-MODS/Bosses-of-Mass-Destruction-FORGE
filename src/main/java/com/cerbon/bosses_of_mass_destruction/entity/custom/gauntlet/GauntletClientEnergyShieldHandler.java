@@ -35,7 +35,7 @@ public class GauntletClientEnergyShieldHandler implements IDataAccessorHandler {
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
-        if (GauntletEntity.isEnergized == data && entity.getEntityData().get(GauntletEntity.isEnergized) && entity.level().isClientSide()){
+        if (GauntletEntity.isEnergized == data && entity.getEntityData().get(GauntletEntity.isEnergized) && entity.level.isClientSide()){
             eventScheduler.addEvent(new TimedEvent(() -> energizedRenderAlpha += 0.1f, 0, 10, () -> false));
             eventScheduler.addEvent(
                     new Event(

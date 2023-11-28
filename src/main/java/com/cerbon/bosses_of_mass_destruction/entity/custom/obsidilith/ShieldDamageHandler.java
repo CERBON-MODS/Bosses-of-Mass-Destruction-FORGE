@@ -4,7 +4,6 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,8 +25,8 @@ public class ShieldDamageHandler implements IDamageHandler {
 
     @Override
     public boolean shouldDamage(LivingEntity actor, DamageSource damageSource, float amount) {
-        if (isShielded.get() && !damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)){
-            if (!damageSource.is(DamageTypeTags.IS_PROJECTILE)){
+        if (isShielded.get() && !damageSource.isBypassInvul()){
+            if (!damageSource.isProjectile()){
                 Entity entity = damageSource.getEntity();
 
                 if (entity instanceof LivingEntity livingEntity)

@@ -37,7 +37,7 @@ public class ObsidilithMoveLogic implements IActionWithCooldown, IDamageHandler 
         if (actions.get(moveByte) == null) throw new IllegalArgumentException(moveByte + " action not registered as an attack");
 
         IActionWithCooldown action = actions.get(moveByte);
-        entity.level().broadcastEntityEvent(entity, moveByte);
+        entity.level.broadcastEntityEvent(entity, moveByte);
         return action.perform();
     }
 

@@ -71,12 +71,12 @@ public class MinionAction implements IActionWithCooldown {
     void beginSummonSingleMob(ServerPlayer target){
         CompoundTag compoundTag = summonNbt.copy();
         compoundTag.putString("id", summonId);
-        SimpleMobSpawner mobSpawner = new SimpleMobSpawner(target.serverLevel());
-        CompoundTagEntityProvider entityProvider = new CompoundTagEntityProvider(compoundTag, target.serverLevel());
-        MobEntitySpawnPredicate spawnPredicate = new MobEntitySpawnPredicate(target.level());
+        SimpleMobSpawner mobSpawner = new SimpleMobSpawner(target.getLevel());
+        CompoundTagEntityProvider entityProvider = new CompoundTagEntityProvider(compoundTag, target.getLevel());
+        MobEntitySpawnPredicate spawnPredicate = new MobEntitySpawnPredicate(target.level);
         IMobSpawner summonCircleBeforeSpawn = (pos, summon) -> {
-            BMDUtils.spawnParticle(target.serverLevel(), BMDParticles.MAGIC_CIRCLE.get(), pos, Vec3.ZERO, 0, 0.0);
-            BMDUtils.playSound(target.serverLevel(), pos, BMDSounds.MINION_RUNE.get(), SoundSource.HOSTILE, 1.0f, 64, null);
+            BMDUtils.spawnParticle(target.getLevel(), BMDParticles.MAGIC_CIRCLE.get(), pos, Vec3.ZERO, 0, 0.0);
+            BMDUtils.playSound(target.getLevel(), pos, BMDSounds.MINION_RUNE.get(), SoundSource.HOSTILE, 1.0f, 64, null);
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {

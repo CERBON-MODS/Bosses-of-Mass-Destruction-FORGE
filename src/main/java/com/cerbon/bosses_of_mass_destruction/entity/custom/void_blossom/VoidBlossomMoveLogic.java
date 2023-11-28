@@ -48,7 +48,7 @@ public class VoidBlossomMoveLogic implements IActionWithCooldown {
 
         IActionWithCooldown action = actions.get(moveByte);
         if (action == null) throw new IllegalArgumentException(moveByte + " action not registered as an attack");
-        entity.level().broadcastEntityEvent(entity, moveByte);
+        entity.level.broadcastEntityEvent(entity, moveByte);
         return action.perform();
     }
 }

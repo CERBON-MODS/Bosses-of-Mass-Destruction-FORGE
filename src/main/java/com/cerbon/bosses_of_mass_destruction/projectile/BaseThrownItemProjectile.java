@@ -2,7 +2,6 @@ package com.cerbon.bosses_of_mass_destruction.projectile;
 
 import com.google.errorprone.annotations.ForOverride;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -17,7 +16,7 @@ import java.util.function.Predicate;
 
 public abstract class BaseThrownItemProjectile extends ThrowableItemProjectile {
     protected final Predicate<EntityHitResult> entityCollisionPredicate;
-    protected Predicate<HitResult> collisionPredicate = hitResult -> !level().isClientSide();
+    protected Predicate<HitResult> collisionPredicate = hitResult -> !level.isClientSide();
 
     public BaseThrownItemProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
         super(entityType, level);
@@ -32,12 +31,12 @@ public abstract class BaseThrownItemProjectile extends ThrowableItemProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide)
+        if (level.isClientSide)
             clientTick();
     }
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return super.getAddEntityPacket();
     }
 

@@ -2,10 +2,11 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
 import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import com.cerbon.bosses_of_mass_destruction.entity.util.animation.AnimationPredicate;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public class AnimationHolder implements IEntityEventHandler {
         this.transition = transition;
     }
 
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-        data.add(new AnimationController<>(entity, transition, attack));
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(entity, "attack", transition, attack));
     }
 
     @Override
@@ -37,20 +38,26 @@ public class AnimationHolder implements IEntityEventHandler {
         if (status == stopAttackByte) doIdleAnimation = true;
     }
 
-    private final AnimationController.AnimationStateHandler<BaseEntity> attack = animationState -> {
+    private final AnimationPredicate<BaseEntity> attack = new AnimationPredicate<>(animationState -> {
         Animation animationData = nextAnimation;
         nextAnimation = null;
 
         if (animationData != null){
-            animationState.getController().forceAnimationReset();
-            animationState.setAnimation(RawAnimation.begin().thenPlay(animationData.animationName).thenLoop(animationData.idleAnimationName));
+            animationState.getController().markNeedsReload();
+            animationState.getController().setAnimation(
+                    new AnimationBuilder()
+                            .addAnimation(animationData.animationName, false)
+                            .addAnimation(animationData.idleAnimationName, true)
+            );
         }
 
         if (doIdleAnimation)
-            animationState.setAnimation(RawAnimation.begin().thenLoop("idle"));
+            animationState.getController().setAnimation(
+                    new AnimationBuilder().addAnimation("idle", true)
+            );
 
         return PlayState.CONTINUE;
-    };
+    });
 
     public record Animation(String animationName, String idleAnimationName) {}
 }

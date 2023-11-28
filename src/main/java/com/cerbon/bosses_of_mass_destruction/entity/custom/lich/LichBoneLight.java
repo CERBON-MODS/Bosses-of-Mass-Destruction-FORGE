@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
 import com.cerbon.bosses_of_mass_destruction.client.render.IBoneLight;
-import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 
 import java.util.Arrays;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.client.render;
 import com.cerbon.bosses_of_mass_destruction.projectile.PetalBladeProjectile;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -29,7 +29,7 @@ public class PetalBladeRenderer implements IRenderer<PetalBladeProjectile>{
         float scale = 0.5f;
         poseStack.pushPose();
         poseStack.scale(scale, scale, scale);
-        VanillaCopies.renderBillboard(poseStack, buffer, light, dispatcher, renderType, Axis.ZP.rotationDegrees(-entity.getEntityData().get(PetalBladeProjectile.renderRotation)));
+        VanillaCopies.renderBillboard(poseStack, buffer, light, dispatcher, renderType, Vector3f.ZP.rotationDegrees(-entity.getEntityData().get(PetalBladeProjectile.renderRotation)));
         poseStack.popPose();
     }
 }

@@ -40,9 +40,9 @@ public class WallTeleport {
     }
 
     private BlockPos getTeleportStart(Context context){
-        BlockPos startPos = BlockPos.containing(context.position);
+        BlockPos startPos = new BlockPos(context.position);
         double startRange = 3.0;
-        BlockPos endPos = BlockPos.containing(context.position.add(context.direction.scale(startRange)));
+        BlockPos endPos = new BlockPos(context.position.add(context.direction.scale(startRange)));
         List<BlockPos> blocksToCheck = MathUtils.getBlocksInLine(startPos, endPos);
 
         for (BlockPos pos : blocksToCheck){
@@ -54,7 +54,7 @@ public class WallTeleport {
 
     private BlockPos getTeleportEnd(Context context, BlockPos startPos){
         double endRange = 20.0;
-        BlockPos endPos = startPos.offset(BlockPos.containing(context.direction.scale(endRange)));
+        BlockPos endPos = startPos.offset(new BlockPos(context.direction.scale(endRange)));
         List<BlockPos> blocksToCheck = MathUtils.getBlocksInLine(startPos, endPos);
 
         for (BlockPos pos : blocksToCheck){

@@ -17,7 +17,7 @@ public class ProjectileThrower {
         Vec3 direction = target.subtract(projectileData.projectile().position());
         double h = Math.sqrt(direction.x * direction.x + direction.z * direction.z) * projectileData.gravityCompensation();
         projectileData.projectile().shoot(direction.x, direction.y + h, direction.z, projectileData.speed(), projectileData.divergence());
-        projectileData.projectile().level().addFreshEntity(projectileData.projectile());
+        projectileData.projectile().level.addFreshEntity(projectileData.projectile());
     }
 
     public record ProjectileData(Projectile projectile, float speed, float divergence, double gravityCompensation) {}

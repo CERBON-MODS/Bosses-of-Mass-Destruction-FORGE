@@ -61,7 +61,7 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
         Byte moveByte = !priorityMoves.isEmpty() ? priorityMoves.remove(0) : chooseRegularMove();
         IActionWithCooldown action = actions.get(moveByte);
         if (action == null) throw new RuntimeException(moveByte + " action not registered as an attack");
-        actor.level().broadcastEntityEvent(actor, moveByte);
+        actor.level.broadcastEntityEvent(actor, moveByte);
         return action.perform();
     }
 

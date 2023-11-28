@@ -3,6 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.damagesource.UnshieldableDamageSource;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,7 +41,7 @@ public class Spikes {
     public List<BlockPos> tryPlaceRift(Vec3 pos) {
         List<BlockPos> blockPosList = new ArrayList<>();
         for (int i = 0; i <= 12; i += 6) {
-            BlockPos above = BlockPos.containing(pos.add(VecUtils.yAxis.scale(i)));
+            BlockPos above = new BlockPos(pos.add(VecUtils.yAxis.scale(i)));
             BlockPos groundPos = BMDUtils.findGroundBelow(level, above, this::isOpenBlock);
             BlockPos up = groundPos.above();
             if (up.getY() + 5 >= above.getY()) {
@@ -82,7 +83,7 @@ public class Spikes {
 
     private void damageEntity(LivingEntity livingEntity){
         float damage = (float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        livingEntity.hurt(BMDUtils.shieldPiercing(level, entity), damage);
+        livingEntity.hurt(new UnshieldableDamageSource(entity), damage);
     }
 
     private boolean isOpenBlock(BlockPos up){

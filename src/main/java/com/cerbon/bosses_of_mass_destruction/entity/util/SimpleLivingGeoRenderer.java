@@ -3,22 +3,22 @@ package com.cerbon.bosses_of_mass_destruction.entity.util;
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector4f;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 
-
-public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends GeoEntityRenderer<T> {
+public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> extends GeoEntityRenderer<T> {
     private final IRenderLight<T> brightness;
     private final IBoneLight iBoneLight;
     private final IRenderer<T> renderer;
@@ -26,7 +26,7 @@ public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends G
     private final IOverlayOverride overlayOverride;
     private final boolean deathRotation;
 
-    public SimpleLivingGeoRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, IRenderLight<T> brightness, IBoneLight iBoneLight, IRenderer<T> renderer, IRendererWithModel renderWithModel, IOverlayOverride overlayOverride, boolean deathRotation) {
+    public SimpleLivingGeoRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> model, IRenderLight<T> brightness, IBoneLight iBoneLight, IRenderer<T> renderer, IRendererWithModel renderWithModel, IOverlayOverride overlayOverride, boolean deathRotation) {
         super(renderManager, model);
         this.brightness = brightness;
         this.iBoneLight = iBoneLight;
@@ -42,50 +42,27 @@ public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends G
     }
 
     @Override
-    public void renderRecursively(
-            PoseStack poseStack,
-            T animatable,
-            GeoBone bone,
-            RenderType renderType,
-            MultiBufferSource bufferSource,
-            VertexConsumer buffer,
-            boolean isReRender,
-            float partialTick,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderRecursively(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         int packedLight1 = iBoneLight != null ? iBoneLight.getLightForBone(bone, packedLight) : packedLight;
         Vector4f color = new Vector4f(red, green, blue, alpha);
         Vector4f newColor = iBoneLight != null ? iBoneLight.getColorForBone(bone, color) :color;
         super.renderRecursively(
-                poseStack,
-                animatable,
                 bone,
-                renderType,
-                bufferSource,
+                poseStack,
                 buffer,
-                isReRender,
-                partialTick,
                 packedLight1,
                 packedOverlay,
-                newColor.x(),
-                newColor.y(),
-                newColor.z(),
-                newColor.w()
+                newColor.x(), newColor.y(), newColor.z(), newColor.w()
         );
     }
 
     @Override
     public void render(
-            T entity,
+            @NotNull T entity,
             float entityYaw,
             float partialTick,
-            PoseStack poseStack,
-            MultiBufferSource bufferSource,
+            @NotNull PoseStack poseStack,
+            @NotNull MultiBufferSource bufferSource,
             int packedLight
     ) {
         if (renderer != null) renderer.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
@@ -95,30 +72,15 @@ public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends G
     }
 
     @Override
-    public void actuallyRender(
-            PoseStack poseStack,
-            T animatable,
-            BakedGeoModel model,
-            RenderType renderType,
-            MultiBufferSource bufferSource,
-            VertexConsumer buffer,
-            boolean isReRender,
-            float partialTick,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
-        super.actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+    public void render(GeoModel model, T animatable, float partialTick, RenderType type, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        super.render(model, animatable, partialTick, type, poseStack, bufferSource, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         int packetOverlay = overlayOverride != null ? overlayOverride.getOverlay() : packedOverlay;
         if (renderWithModel != null) renderWithModel.render(model, partialTick, poseStack, bufferSource, packedLight, packetOverlay, red, green, blue, alpha);
     }
 
     @Override
-    public int getPackedOverlay(T animatable, float u) {
-        return overlayOverride != null ? overlayOverride.getOverlay() : super.getPackedOverlay(animatable, u);
+    public int getPackedOverlay(LivingEntity entity, float u) {
+        return overlayOverride != null ? overlayOverride.getOverlay() : super.getPackedOverlay(entity, u);
     }
 
     @Override

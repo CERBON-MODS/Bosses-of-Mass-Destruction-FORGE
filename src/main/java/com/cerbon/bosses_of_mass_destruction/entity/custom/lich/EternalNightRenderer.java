@@ -11,7 +11,7 @@ public class EternalNightRenderer implements IRenderer<LichEntity> {
 
     @Override
     public void render(LichEntity entity, float yaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light) {
-        Level level = entity.level();
+        Level level = entity.level;
         boolean isAddedToWorld = level.getEntity(entity.getId()) != null;
 
         if (entity.shouldSetToNighttime && level instanceof ClientLevel && isAddedToWorld) {

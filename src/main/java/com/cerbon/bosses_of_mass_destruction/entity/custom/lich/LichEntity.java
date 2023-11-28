@@ -40,8 +40,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import java.util.Map;
 
@@ -115,15 +115,15 @@ public class LichEntity extends BaseEntity {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+    public void registerControllers(AnimationData data) {
         animationHolder.registerControllers(data);
-        data.add(new AnimationController<>(this, "skull_float", 0, AnimationUtils.createIdlePredicate("skull_float")));
-        data.add(new AnimationController<>(this, "float", 0, AnimationUtils.createIdlePredicate("float")));
-        data.add(new AnimationController<>(this, "book_idle", 0, AnimationUtils.createIdlePredicate("book_idle")));
+        data.addAnimationController(new AnimationController<>(this, "skull_float", 0, AnimationUtils.createIdlePredicate("skull_float")));
+        data.addAnimationController(new AnimationController<>(this, "float", 0, AnimationUtils.createIdlePredicate("float")));
+        data.addAnimationController(new AnimationController<>(this, "book_idle", 0, AnimationUtils.createIdlePredicate("book_idle")));
     }
 
     public boolean inLineOfSight(Entity target){
-        boolean hasDirectLineOfSight = VanillaCopiesServer.hasDirectLineOfSight(getEyePosition(), MobUtils.eyePos(target), level(), this);
+        boolean hasDirectLineOfSight = VanillaCopiesServer.hasDirectLineOfSight(getEyePosition(), MobUtils.eyePos(target), level, this);
         Vec3 directionToLich = MathUtils.unNormedDirection(MobUtils.eyePos(target), getEyePosition());
         boolean facingSameDirection = MathUtils.facingSameDirection(target.getLookAngle(), directionToLich);
         return hasDirectLineOfSight && facingSameDirection;
@@ -157,7 +157,7 @@ public class LichEntity extends BaseEntity {
 
     @Override
     public void checkDespawn() {
-        BMDUtils.preventDespawnExceptPeaceful(this, level());
+        BMDUtils.preventDespawnExceptPeaceful(this, level);
     }
 
     @Nullable
@@ -192,13 +192,13 @@ public class LichEntity extends BaseEntity {
         int expPerTick = (int) (mobConfig.experienceDrop / (float) expTicks);
         preTickEvents.addEvent(
                 new TimedEvent(
-                        () -> VanillaCopiesServer.awardExperience(expPerTick, MobUtils.eyePos(this), level()), 0,
+                        () -> VanillaCopiesServer.awardExperience(expPerTick, MobUtils.eyePos(this), level), 0,
                         expTicks,
                         () -> false
                 )
         );
 
-         level().getEntitiesOfClass(Phantom.class, new AABB(blockPosition()).inflate(100.0, 100.0, 100.0)).forEach(Phantom::kill);
+         level.getEntitiesOfClass(Phantom.class, new AABB(blockPosition()).inflate(100.0, 100.0, 100.0)).forEach(Phantom::kill);
 
          super.die(damageSource);
     }

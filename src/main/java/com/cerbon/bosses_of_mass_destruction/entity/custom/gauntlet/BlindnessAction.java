@@ -51,7 +51,7 @@ public class BlindnessAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            List<Player> players = entity.level().getNearbyPlayers(
+                            List<Player> players = entity.level.getNearbyPlayers(
                                     TargetingConditions.forCombat().range(64),
                                     entity,
                                     new AABB(entity.position(), entity.position()).inflate(64.0, 32.0, 64.0)

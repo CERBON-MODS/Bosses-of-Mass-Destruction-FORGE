@@ -71,7 +71,7 @@ public class LaserAction implements IActionWithCooldown {
                 () -> {
                     laserRenderPositions.clear();
                     entity.getEntityData().set(GauntletEntity.laserTarget, 0);
-                    entity.level().broadcastEntityEvent(entity, GauntletAttacks.laserAttackStop);
+                    entity.level.broadcastEntityEvent(entity, GauntletAttacks.laserAttackStop);
                 },
                 0
         );
@@ -83,7 +83,7 @@ public class LaserAction implements IActionWithCooldown {
     private void applyLaser(HistoricalData<Vec3> laserRenderPositions){
         Vec3 targetLaserPos = laserRenderPositions.getAll().get(0);
         Vec3 extendedLaserPos = extendLaser(entity, targetLaserPos);
-        BlockHitResult result = entity.level().clip(
+        BlockHitResult result = entity.level.clip(
                 new ClipContext(
                         MobUtils.eyePos(entity),
                         extendedLaserPos,
@@ -103,7 +103,7 @@ public class LaserAction implements IActionWithCooldown {
     }
 
     private void applyLaserToEntities(Vec3 laserTargetPos){
-        List<LivingEntity> entitiesHit = BMDUtils.findEntitiesInLine(entity.level(), MobUtils.eyePos(entity), laserTargetPos, entity)
+        List<LivingEntity> entitiesHit = BMDUtils.findEntitiesInLine(entity.level, MobUtils.eyePos(entity), laserTargetPos, entity)
                 .stream().filter(LivingEntity.class::isInstance).map(entity1 -> (LivingEntity) entity1).toList();
 
         for (LivingEntity hitEntity : entitiesHit){

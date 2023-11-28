@@ -63,7 +63,7 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
         Vec3 newPos = LaserAction.extendLaser(entity, laserPos.getFirst());
         Vec3 prevPos = LaserAction.extendLaser(entity, laserPos.getSecond());
 
-        BlockHitResult newResult = entity.level().clip(
+        BlockHitResult newResult = entity.level.clip(
                 new ClipContext(
                         MobUtils.eyePos(entity),
                         newPos,
@@ -73,7 +73,7 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
                 )
         );
 
-        BlockHitResult prevResult = entity.level().clip(
+        BlockHitResult prevResult = entity.level.clip(
                 new ClipContext(
                         MobUtils.eyePos(entity),
                         prevPos,
@@ -91,11 +91,11 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
     private LivingEntity getBeamTarget(){
         if (!hasBeamTarget())
             return null;
-        else if (entity.level().isClientSide())
+        else if (entity.level.isClientSide())
             if (this.cachedBeamTarget != null)
                 return this.cachedBeamTarget;
             else {
-                Entity entity1 = entity.level().getEntity(entity.getEntityData().get(GauntletEntity.laserTarget));
+                Entity entity1 = entity.level.getEntity(entity.getEntityData().get(GauntletEntity.laserTarget));
                 if (entity1 instanceof LivingEntity livingEntity){
                     this.cachedBeamTarget = livingEntity;
                     return this.cachedBeamTarget;

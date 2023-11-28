@@ -35,21 +35,21 @@ public class BMDBlockEntities {
     public static final RegistryObject<BlockEntityType<VoidLilyBlockEntity>> VOID_LILY_BLOCK_ENTITY = BLOCKS_ENTITIES.register("void_lily",
             () -> BlockEntityType.Builder.of(VoidLilyBlockEntity::new, BMDBlocks.VOID_LILY_BLOCK.get()).build(null));
 
-    @OnlyIn(Dist.CLIENT)
-    public static void initClient(){
-        BlockEntityRenderers.register(LEVITATION_BLOCK_ENTITY.get(), context ->
-                new BMDBlockEntityRenderer<>(
-                        new GeoModel<>(
-                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/levitation_block.geo.json"),
-                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/block/levitation_block.png"),
-                                new ResourceLocation(BMDConstants.MOD_ID, "animations/levitation_block.animation.json"),
-                                (animatable, data, geoModel) -> {},
-                                RenderType::entityCutout
-                        ),
-                        (bone, packedLight) -> IBoneLight.fullbright
-                )
-        );
-    }
+//    @OnlyIn(Dist.CLIENT)
+//    public static void initClient(){
+//        BlockEntityRenderers.register(LEVITATION_BLOCK_ENTITY.get(), context ->
+//                new BMDBlockEntityRenderer<>(
+//                        context,
+//                        new GeoModel<>(
+//                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/levitation_block.geo.json"),
+//                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/block/levitation_block.png"),
+//                                new ResourceLocation(BMDConstants.MOD_ID, "animations/levitation_block.animation.json"),
+//                                (animatable, data, geoModel) -> {}
+//                        ),
+//                        (bone, packedLight) -> IBoneLight.fullbright
+//                )
+//        );
+//    }
 
     public static void register(IEventBus eventBus){
         BLOCKS_ENTITIES.register(eventBus);

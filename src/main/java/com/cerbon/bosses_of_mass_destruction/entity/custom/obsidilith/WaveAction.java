@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.damagesource.UnshieldableDamageSource;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
@@ -34,7 +35,7 @@ public class WaveAction implements IActionWithCooldown {
     public WaveAction(Mob entity){
         this.entity = entity;
         this.circlePoints = MathUtils.buildBlockCircle(riftRadius);
-        this.level = entity.level();
+        this.level = entity.level;
         this.eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
     }
 
@@ -98,6 +99,6 @@ public class WaveAction implements IActionWithCooldown {
         if (livingEntity instanceof ServerPlayer serverPlayer)
             BMDPacketHandler.sendToPlayer(new SendDeltaMovementS2CPacket(new Vec3(livingEntity.getDeltaMovement().x, 0.8, livingEntity.getDeltaMovement().z)), serverPlayer);
         livingEntity.setSecondsOnFire(5);
-        livingEntity.hurt(BMDUtils.shieldPiercing(livingEntity.level(), this.entity), damage);
+        livingEntity.hurt(new UnshieldableDamageSource(this.entity), damage);
     }
 }

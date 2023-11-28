@@ -63,7 +63,7 @@ public class GauntletMovement {
     }
 
     private void moveAndLookAtTarget(Vec3 velocity){
-        entity.addDeltaMovement(velocity);
+        entity.setDeltaMovement(velocity);
 
         LivingEntity target = entity.getTarget();
         if (target != null){

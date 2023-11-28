@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -49,7 +49,7 @@ public class PunchAction implements IActionWithCooldown {
         int accelerateStartTime = 16;
         int unclenchTime = 56;
 
-        BlockPos breakBoundCenter = BlockPos.containing(entity.position().add(entity.getLookAngle()));
+        BlockPos breakBoundCenter = new BlockPos(entity.position().add(entity.getLookAngle()));
         AABB breakBounds = new AABB(breakBoundCenter.subtract(new BlockPos(1, 1, 1)), breakBoundCenter.offset(1, 2, 1));
         VanillaCopiesServer.destroyBlocks(entity, breakBounds);
         entity.push(0.0, 0.7, 0.0);
@@ -91,7 +91,7 @@ public class PunchAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> entity.level().broadcastEntityEvent(entity, GauntletAttacks.stopPunchAnimation),
+                        () -> entity.level.broadcastEntityEvent(entity, GauntletAttacks.stopPunchAnimation),
                         unclenchTime,
                         1,
                         cancelAction
@@ -111,29 +111,29 @@ public class PunchAction implements IActionWithCooldown {
     private void testBlockPhysicalImpact(){
         if ((entity.horizontalCollision || entity.verticalCollision) && previousSpeed > 0.55f){
             Vec3 pos = entity.position();
-            entity.level().explode(
+            entity.level.explode(
                     entity,
                     pos.x,
                     pos.y,
                     pos.z,
                     (float) (previousSpeed * mobConfig.normalPunchExplosionMultiplier),
-                    Level.ExplosionInteraction.MOB
+                    Explosion.BlockInteraction.DESTROY // TODO: Check if it's correct
             );
         }
     }
 
     private void testEntityImpact(){
-        List<LivingEntity> collidedEntities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox(), livingEntity -> livingEntity != entity);
+        List<LivingEntity> collidedEntities = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox(), livingEntity -> livingEntity != entity);
 
         for (LivingEntity target : collidedEntities){
             entity.doHurtTarget(target);
-            target.addDeltaMovement(entity.getDeltaMovement().scale(0.5));
+            target.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
         }
     }
 
     public static void accelerateTowardsTarget(Entity entity, Vec3 target, double velocity){
         Vec3 dir = MathUtils.unNormedDirection(MobUtils.eyePos(entity), target).normalize();
         Vec3 velocityCorrection = VecUtils.planeProject(entity.getDeltaMovement(), dir);
-        entity.addDeltaMovement(dir.subtract(velocityCorrection).scale(velocity));
+        entity.setDeltaMovement(dir.subtract(velocityCorrection).scale(velocity));
     }
 }

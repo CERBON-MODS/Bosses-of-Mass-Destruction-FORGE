@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
@@ -39,8 +39,8 @@ public class CometAction implements IActionWithCooldown {
 
         this.cometThrower = offset -> new ProjectileThrower(
                 () -> {
-                    CometProjectile projectile = new CometProjectile(entity, entity.level(), vec3 ->
-                            entity.level().explode(entity, vec3.x, vec3.y, vec3.z, lichConfig.comet.explosionStrength, Level.ExplosionInteraction.MOB), Collections.singletonList(MinionAction.summonEntityType));
+                    CometProjectile projectile = new CometProjectile(entity, entity.level, vec3 ->
+                            entity.level.explode(entity, vec3.x, vec3.y, vec3.z, lichConfig.comet.explosionStrength, Explosion.BlockInteraction.DESTROY), Collections.singletonList(MinionAction.summonEntityType));
 
                     MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
                     return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
@@ -52,7 +52,7 @@ public class CometAction implements IActionWithCooldown {
     public int perform() {
         Entity target = entity.getTarget();
         if (!(target instanceof ServerPlayer)) return cometThrowCooldown;
-        performCometThrow(((ServerPlayer) target).serverLevel());
+        performCometThrow(((ServerPlayer) target).getLevel());
         return cometThrowCooldown;
     }
 

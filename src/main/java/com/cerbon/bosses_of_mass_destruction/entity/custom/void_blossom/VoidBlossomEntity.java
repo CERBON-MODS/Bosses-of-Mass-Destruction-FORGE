@@ -37,7 +37,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import java.util.List;
 import java.util.Map;
@@ -104,7 +104,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
                             1
                     )
             );
-        }else if (level().isClientSide())
+        }else if (level.isClientSide())
             animationHolder.handleEntityEvent(VoidBlossomAttacks.spawnAction);
     }
 
@@ -117,7 +117,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+    public void registerControllers(AnimationData data) {
         animationHolder.registerControllers(data);
     }
 
@@ -169,7 +169,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
 
     @Override
     public void checkDespawn() {
-        BMDUtils.preventDespawnExceptPeaceful(this, level());
+        BMDUtils.preventDespawnExceptPeaceful(this, level);
     }
 
     @Override

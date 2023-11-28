@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.damagesource.UnshieldableDamageSource;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
@@ -30,7 +31,7 @@ public class BurstAction implements IActionWithCooldown {
 
     public BurstAction(LivingEntity entity){
         this.entity = entity;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level);
         this.circlePoints = MathUtils.buildBlockCircle(7.0);
     }
 
@@ -41,7 +42,7 @@ public class BurstAction implements IActionWithCooldown {
     }
 
     private void placeRifts(){
-        Level level = entity.level();
+        Level level = entity.level;
         RiftBurst riftBurst = new RiftBurst(
                 entity,
                 (ServerLevel) level,
@@ -82,7 +83,7 @@ public class BurstAction implements IActionWithCooldown {
             BMDPacketHandler.sendToPlayer(new SendDeltaMovementS2CPacket(new Vec3(livingEntity.getDeltaMovement().x, 1.3, livingEntity.getDeltaMovement().z)), serverPlayer);
 
         livingEntity.hurt(
-                BMDUtils.shieldPiercing(entity.level(), entity),
+                new UnshieldableDamageSource(entity),
                 damage
         );
     }

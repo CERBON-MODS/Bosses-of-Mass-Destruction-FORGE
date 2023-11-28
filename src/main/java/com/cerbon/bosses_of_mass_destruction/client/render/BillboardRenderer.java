@@ -3,11 +3,11 @@ package com.cerbon.bosses_of_mass_destruction.client.render;
 
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
-import org.joml.Quaternionf;
 
 public class BillboardRenderer<T extends Entity> implements IRenderer<T> {
     private final EntityRenderDispatcher dispatcher;
@@ -25,7 +25,7 @@ public class BillboardRenderer<T extends Entity> implements IRenderer<T> {
         float scaleValue = scale.apply(entity);
         poseStack.pushPose();
         poseStack.scale(scaleValue, scaleValue, scaleValue);
-        VanillaCopies.renderBillboard(poseStack, buffer, light, dispatcher, renderType, new Quaternionf());
+        VanillaCopies.renderBillboard(poseStack, buffer, light, dispatcher, renderType, Quaternion.ONE);
         poseStack.popPose();
     }
 

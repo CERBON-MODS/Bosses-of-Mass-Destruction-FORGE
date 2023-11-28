@@ -50,13 +50,13 @@ public class SpikeCaveDecorator implements ICaveDecorator{
             Vec3 tip = centerDirection
                     .scale(5 + random.nextInt(3))
                     .add(VecUtils.yAxis.scale((7 + random.nextInt(5))));
-            generateSpike(outerPos, outerPos.offset(BlockPos.containing(tip)), structurePiece, level, boundingBox, centerDirection);
+            generateSpike(outerPos, outerPos.offset(new BlockPos(tip)), structurePiece, level, boundingBox, centerDirection);
         }
     }
 
     private void generateSpike(BlockPos origin, BlockPos tip, IStructurePiece structurePiece, WorldGenLevel level, BoundingBox boundingBox, Vec3 centerDirection){
         Vec3 centerDirectionPos = centerDirection.scale(3.0);
-        Set<BlockPos> blockSet = baseBlocks.stream().map(BlockPos::containing).collect(Collectors.toSet());
+        Set<BlockPos> blockSet = baseBlocks.stream().map(BlockPos::new).collect(Collectors.toSet());
         Set<BlockPos> innerBlockSet = blockSet.stream().filter(pos -> pos.distToCenterSqr(centerDirectionPos) < Math.pow(2.0, 2)).collect(Collectors.toSet());
         Set<BlockPos> middleBlockSet = blockSet.stream().filter(block -> !innerBlockSet.contains(block)).filter(block -> block.distToCenterSqr(centerDirectionPos) < Math.pow(3.7, 2)).collect(Collectors.toSet());
         Set<BlockPos> outerBlockSet = blockSet.stream().filter(pos -> !middleBlockSet.contains(pos) && !innerBlockSet.contains(pos)).collect(Collectors.toSet());

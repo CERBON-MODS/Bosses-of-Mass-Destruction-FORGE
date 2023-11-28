@@ -63,7 +63,7 @@ public class SpikeWaveAction implements IActionWithCooldown {
         int firstBurstDelay = 20;
         int secondBurstDelay = 45;
         int thirdBurstDelay = 70;
-        ServerLevel level = target.serverLevel();
+        ServerLevel level = target.getLevel();
 
         eventScheduler.addEvent(
                 new EventSeries(
@@ -157,7 +157,7 @@ public class SpikeWaveAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), placedPositions), (ServerLevel) entity.level(), entity.position()),
+                        () -> BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), placedPositions), (ServerLevel) entity.level, entity.position()),
                         indicatorDelay,
                         1,
                         shouldCancel

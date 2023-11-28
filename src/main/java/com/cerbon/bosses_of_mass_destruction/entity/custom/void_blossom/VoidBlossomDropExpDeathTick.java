@@ -43,7 +43,7 @@ public class VoidBlossomDropExpDeathTick implements IEntityTick<ServerLevel> {
                             VanillaCopiesServer.awardExperience(
                                     expPerTick,
                                     pos,
-                                    entity.level()
+                                    entity.level
                             );
                         },
                         (int) (LightBlockRemover.deathMaxAge - expTicks - 1),

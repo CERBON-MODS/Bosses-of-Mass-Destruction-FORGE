@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util;
 
+import com.mojang.math.Quaternion;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 
 public final class QuaternionD {
     public static final QuaternionD IDENTITY = new QuaternionD(0, 0, 0, 1);
@@ -75,8 +75,8 @@ public final class QuaternionD {
         return new QuaternionD(i * j + f * m + g * l - h * k, i * k - f * l + g * m + h * j, i * l + f * k - g * j + h * m, i * m - f * j - g * k - h * l);
     }
 
-    public Quaternionf toFloatQuat() {
-        return new Quaternionf((float) x, (float) y, (float) z, (float) w);
+    public Quaternion toFloatQuat() {
+        return new Quaternion((float) x, (float) y, (float) z, (float) w);
     }
 
     @Override

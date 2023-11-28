@@ -11,27 +11,30 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.mojang.blaze3d.vertex.PoseStack;
 import me.shedaniel.autoconfig.AutoConfig;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoBlockEntity {
-    private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
+public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAnimatable, IAnimationTickable {
     private static final double tableOfElevationRadius = AutoConfig.getConfigHolder(BMDConfig.class).getConfig().generalConfig.tableOfElevationRadius;
     public int animationAge = 0;
 
@@ -42,14 +45,20 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-        data.add(
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(
                 new AnimationController<>(
                         this,
+                        "idle",
                         0,
                         AnimationUtils.createIdlePredicate("rotate")
                 )
         );
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return new AnimationFactory(this);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, LevitationBlockEntity entity){
@@ -88,11 +97,11 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
         }
         Set<ChunkPos> chunksToCheck = blockToCheck.stream().map(pos -> new ChunkPos(pos.offset(player.blockPosition()))).collect(Collectors.toSet());
         boolean hasLevitationBlock = chunksToCheck.stream().anyMatch(chunkPos -> {
-            Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(player.level());
+            Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(player.level);
 
             if (blockCache.isPresent()){
                 List<BlockPos> blocks = blockCache.get().getBlocksFromChunk(chunkPos, BMDBlocks.LEVITATION_BLOCK.get());
-                return blocks.stream().anyMatch(pos -> getAffectingBox(player.level(), VecUtils.asVec3(pos)).contains(player.position()));
+                return blocks.stream().anyMatch(pos -> getAffectingBox(player.level, VecUtils.asVec3(pos)).contains(player.position()));
             } else
                 return false;
         });
@@ -127,9 +136,14 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
         return new AABB(pos.x, level.getMinBuildHeight(), pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(tableOfElevationRadius, 0.0, tableOfElevationRadius);
     }
 
+
+
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return animationFactory;
+    public void tick() {}
+
+    @Override
+    public int tickTimer() {
+        return animationAge;
     }
 
     private static class Particles {

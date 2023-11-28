@@ -62,14 +62,14 @@ public class BladeAction implements IActionWithCooldown {
             Vec3 lineEnd = eyePos.add(angled.scale(-7.0));
             ProjectileThrower projectileThrower = new ProjectileThrower(
                     () -> {
-                        PetalBladeProjectile projectile = new PetalBladeProjectile(entity, entity.level(), livingEntity -> {}, List.of(entity.getType()), (float) rotation);
+                        PetalBladeProjectile projectile = new PetalBladeProjectile(entity, entity.level, livingEntity -> {}, List.of(entity.getType()), (float) rotation);
                         projectile.setPos(entity.getEyePosition().add(VecUtils.yAxis));
                         projectile.setNoGravity(true);
                         return new ProjectileThrower.ProjectileData(projectile, 0.9f, 0f, 0.0);
                     }
             );
 
-            BMDUtils.playSound(((ServerPlayer) target).serverLevel(), entity.position(), BMDSounds.PETAL_BLADE.get(), SoundSource.HOSTILE, 3.0f, BMDUtils.randomPitch(target.getRandom()), 64.0, null);
+            BMDUtils.playSound(((ServerPlayer) target).getLevel(), entity.position(), BMDSounds.PETAL_BLADE.get(), SoundSource.HOSTILE, 3.0f, BMDUtils.randomPitch(target.getRandom()), 64.0, null);
             MathUtils.lineCallback(lineStart, lineEnd, 11, (vec3, integer) -> projectileThrower.throwProjectile(vec3));
         };
 

@@ -1,13 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.util;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
@@ -21,11 +16,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class VanillaCopiesServer {
-    public static DamageSource create(Level level, ResourceKey<DamageType> key, Entity attacker) {
-        Holder<DamageType> damageType = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key);
-        return new DamageSource(damageType, attacker);
-    }
-
     public static void travel(Vec3 relative, LivingEntity entity, float baseFrictionCoefficient) {
         if (entity.isInWater()) {
             entity.moveRelative(0.02F, relative);
@@ -38,17 +28,17 @@ public class VanillaCopiesServer {
             entity.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
 
         } else {
-            float friction = entity.onGround()
-                    ? entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock().getFriction() * baseFrictionCoefficient
+            float friction = entity.isOnGround()
+                    ? entity.level.getBlockState(new BlockPos(entity.getX(), entity.getY() - 1.0, entity.getZ())).getBlock().getFriction() * baseFrictionCoefficient
                     : baseFrictionCoefficient;
 
             float g = 0.16277137F / (friction * friction * friction);
 
-            entity.moveRelative(entity.onGround() ? 0.1F * g : 0.02F, relative);
+            entity.moveRelative(entity.isOnGround() ? 0.1F * g : 0.02F, relative);
             entity.move(MoverType.SELF, entity.getDeltaMovement());
             entity.setDeltaMovement(entity.getDeltaMovement().scale(friction));
         }
-        entity.calculateEntityAnimation(false);
+        entity.calculateEntityAnimation(entity, false);
     }
 
     public static void lookAtTarget(Mob mobEntity, Vec3 target, float maxYawChange, float maxPitchChange) {
@@ -96,7 +86,7 @@ public class VanillaCopiesServer {
     }
 
     public static int getBlockLight(Entity entity, BlockPos blockPos) {
-        return entity.isOnFire() ? 15 : entity.level().getBrightness(LightLayer.BLOCK, blockPos);
+        return entity.isOnFire() ? 15 : entity.level.getBrightness(LightLayer.BLOCK, blockPos);
     }
 
     public static void destroyBlocks(Entity entity, AABB aabb) {
@@ -111,11 +101,11 @@ public class VanillaCopiesServer {
             for (int p = j; p <= m; p++)
                 for (int q = k; q <= n; q++) {
                     BlockPos blockPos = new BlockPos(o, p, q);
-                    BlockState blockState = entity.level().getBlockState(blockPos);
+                    BlockState blockState = entity.level.getBlockState(blockPos);
 
                     if (!blockState.isAir() && blockState.getBlock() == Blocks.FIRE)
-                        if (entity.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !blockState.is(BlockTags.WITHER_IMMUNE))
-                            bl2 = entity.level().destroyBlock(blockPos, false) || bl2;
+                        if (entity.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && !blockState.is(BlockTags.WITHER_IMMUNE))
+                            bl2 = entity.level.destroyBlock(blockPos, false) || bl2;
                 }
     }
 

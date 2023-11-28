@@ -10,11 +10,12 @@ import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -55,7 +56,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
 
     public void setItem(ItemStack stack){
         if (stack.getItem() != Items.ENDER_EYE || stack.hasTag())
-            getEntityData().set(ITEM, stack.copyWithCount(1));
+            getEntityData().set(ITEM, Util.make(stack.copy(), stack1 -> stack1.setCount(1)));
     }
 
     private ItemStack getTrackedItem(){
@@ -113,9 +114,9 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
 
     @Override
     public void tick() {
-        if (level().isClientSide() && tickCount == 1){
+        if (level.isClientSide() && tickCount == 1){
             double rotationOffset = random.nextDouble() * 360;
-            BMDCapabilities.getLevelEventScheduler(level()).addEvent(
+            BMDCapabilities.getLevelEventScheduler(level).addEvent(
                     new Event(
                             () -> true,
                             () -> spawnTrailParticles(rotationOffset),
@@ -133,7 +134,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
         setXRot(updateRotation(xRotO, (float) (Mth.atan2(vec3.y, g) * 57.2957763671875)));
         setYRot(updateRotation(yRotO, (float) (Mth.atan2(vec3.x, vec3.z) * 57.2957763671875)));
 
-        if (!level().isClientSide()){
+        if (!level.isClientSide()){
             double xd = targetX - d;
             double zd = targetZ - f;
             float distance = (float) Math.sqrt(xd * xd + zd * zd);
@@ -146,7 +147,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
 
                 playSound(BMDSounds.SOUL_STAR.get(), 1.0f, 1.0f);
                 discard();
-                level().addFreshEntity(new ItemEntity(level(), this.getX(), this.getY(), this.getZ(), this.getItem()));
+                level.addFreshEntity(new ItemEntity(level, this.getX(), this.getY(), this.getZ(), this.getItem()));
             }
             int n = this.getY() < targetY ? 1 : -1;
             vec3 = new Vec3(Math.cos(k) * l, m + (n - m) * 0.014999999664723873, Math.sin(k) * l);
@@ -170,7 +171,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     private void spawnParticles(double d, Vec3 vec3, double e, double f){
         if (this.isInWater()){
             for (int p = 0; p <= 3; p++){
-                level().addParticle(
+                level.addParticle(
                         ParticleTypes.BUBBLE,
                         d - vec3.x * 0.25,
                         e - vec3.y * 0.25,
@@ -207,8 +208,8 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return super.getAddEntityPacket();
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
     }
 
     private float updateRotation(float f, float g){

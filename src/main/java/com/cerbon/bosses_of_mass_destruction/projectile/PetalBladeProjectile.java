@@ -6,6 +6,7 @@ import com.cerbon.bosses_of_mass_destruction.projectile.util.ExemptEntities;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,7 +43,7 @@ public class PetalBladeProjectile extends BaseThrownItemProjectile{
 
         if (owner instanceof LivingEntity livingEntity){
             entity.hurt(
-                    entity.level().damageSources().thrown(this, owner),
+                    DamageSource.thrown(this, owner),
                     (float) livingEntity.getAttributeValue(Attributes.ATTACK_DAMAGE)
             );
 

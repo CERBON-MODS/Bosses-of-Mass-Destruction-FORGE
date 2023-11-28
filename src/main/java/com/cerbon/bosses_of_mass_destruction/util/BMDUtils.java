@@ -5,23 +5,19 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecU
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.AABB;
@@ -47,10 +43,6 @@ public class BMDUtils {
         );
     }
 
-    public static DamageSource shieldPiercing(Level level, Entity attacker) {
-        return VanillaCopiesServer.create(level, ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(BMDConstants.MOD_ID, "shield_piercing")), attacker);
-    }
-
     public static void playSound(
             ServerLevel level,
             Vec3 pos,
@@ -61,7 +53,6 @@ public class BMDUtils {
             double range,
             Player player
     ) {
-        Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(soundEvent.getLocation()));
         level.getServer().getPlayerList().broadcast(
                 player,
                 pos.x,
@@ -69,7 +60,7 @@ public class BMDUtils {
                 pos.z,
                 range,
                 level.dimension(),
-                new ClientboundSoundPacket(holder, soundSource, pos.x, pos.y, pos.z, volume, pitch, level.random.nextLong())
+                new ClientboundSoundPacket(soundEvent, soundSource, pos.x, pos.y, pos.z, volume, pitch, level.random.nextLong())
         );
     }
 
@@ -129,8 +120,8 @@ public class BMDUtils {
         return pos.add(xzOffset.scale(radius));
     }
 
-    public static ConfiguredFeature<?, ?> getConfiguredFeature(LevelReader levelReader, ResourceKey<ConfiguredFeature<?, ?>> key) {
-        return levelReader.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).getOrThrow(key);
+    public static ConfiguredFeature<?, ?> getConfiguredFeature(ServerLevel serverLevel, ResourceKey<ConfiguredFeature<?, ?>> key) {
+        return serverLevel.registryAccess().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY).getOrThrow(key);
     }
 
 }

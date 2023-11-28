@@ -64,7 +64,7 @@ public class LichMovement {
     }
 
     private void moveWhileAttacking(Vec3 velocity) {
-        entity.addDeltaMovement(velocity);
+        entity.setDeltaMovement(velocity);
 
         LivingEntity target = entity.getTarget();
         if (target != null) {
@@ -109,7 +109,7 @@ public class LichMovement {
     }
 
     private void moveTowards(Vec3 velocity) {
-        entity.addDeltaMovement(velocity);
+        entity.setDeltaMovement(velocity);
 
         Vec3 lookTarget = entity.position().add(new Vec3(0.0, entity.getEyeHeight(), 0.0)).add(velocity);
         entity.getLookControl().setLookAt(lookTarget);

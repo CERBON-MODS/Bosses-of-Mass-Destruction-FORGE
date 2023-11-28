@@ -19,12 +19,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
-    private AnimatableInstanceCache animationFactory;
+public abstract class BaseEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
     public Vec3 idlePosition = Vec3.ZERO;
     protected ServerBossEvent bossBar;
     protected IDamageHandler damageHandler;
@@ -51,13 +50,13 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
         if (idlePosition == Vec3.ZERO)
             idlePosition = position();
 
-        if (level().isClientSide()){
+        if (level.isClientSide()){
             clientTick();
 
             if (clientTick != null)
-                clientTick.tick(level());
+                clientTick.tick(level);
 
-        }else if (level() instanceof ServerLevel serverLevel){
+        }else if (level instanceof ServerLevel serverLevel){
             serverTick(serverLevel);
 
             if (serverTick != null)
@@ -71,10 +70,10 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected void tickDeath() {
-        if (level().isClientSide() && deathClientTick != null)
-            deathClientTick.tick(level());
+        if (level.isClientSide() && deathClientTick != null)
+            deathClientTick.tick(level);
 
-        else if (level() instanceof ServerLevel serverLevel && deathServerTick != null)
+        else if (level instanceof ServerLevel serverLevel && deathServerTick != null)
             deathServerTick.tick(serverLevel);
 
         else
@@ -161,14 +160,14 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
         EntityStats stats = new EntityStats(this);
         IDamageHandler handler = damageHandler;
 
-        if (!level().isClientSide() && handler != null)
+        if (!level.isClientSide() && handler != null)
             handler.beforeDamage(stats, source, amount);
 
         boolean result = handler != null
                 ? handler.shouldDamage(this, source, amount) && super.hurt(source, amount)
                 : super.hurt(source, amount);
 
-        if (!level().isClientSide() && handler != null)
+        if (!level.isClientSide() && handler != null)
             handler.afterDamage(stats, source, amount, result);
 
         return result;
@@ -193,16 +192,19 @@ public abstract class BaseEntity extends PathfinderMob implements GeoEntity {
         return nbtHandler != null ? nbtHandler.toTag(superCompound) : superCompound;
     }
 
+    @Override
+    public int tickTimer() {
+        return tickCount;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return new AnimationFactory(this);
+    }
+
     public Vec3 safeGetTargetPos(){
         LivingEntity target = getTarget();
         return target == null ? Vec3.ZERO : target.position();
-    }
-
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        if (animationFactory == null)
-            animationFactory = GeckoLibUtil.createInstanceCache(this);
-
-        return animationFactory;
     }
 }
 

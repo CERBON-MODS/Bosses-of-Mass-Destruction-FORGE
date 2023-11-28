@@ -118,11 +118,11 @@ public class BMDParticles {
     @OnlyIn(Dist.CLIENT)
     public static void initClient(RegisterParticleProvidersEvent event){
 
-        event.registerSpriteSet(BMDParticles.DISAPPEARING_SWIRL.get(),
+        event.register(BMDParticles.DISAPPEARING_SWIRL.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(15,20), VanillaCopies::buildBillBoardGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.SOUL_FLAME.get(),
+        event.register(BMDParticles.SOUL_FLAME.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, true, true);
@@ -131,7 +131,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.MAGIC_CIRCLE.get(),
+        event.register(BMDParticles.MAGIC_CIRCLE.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, 40, VanillaCopies::buildBillBoardGeometry, true, true);
@@ -140,7 +140,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.OBSIDILITH_BURST.get(),
+        event.register(BMDParticles.OBSIDILITH_BURST.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(7, 15), VanillaCopies::buildBillBoardGeometry, true, true);
@@ -150,7 +150,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.ENCHANT.get(),
+        event.register(BMDParticles.ENCHANT.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(30, 50), VanillaCopies::buildBillBoardGeometry, false, true);
@@ -159,7 +159,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.OBSIDILITH_BURST_INDICATOR.get(),
+        event.register(BMDParticles.OBSIDILITH_BURST_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, BurstAction.burstDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
@@ -170,7 +170,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.OBSIDILITH_WAVE.get(),
+        event.register(BMDParticles.OBSIDILITH_WAVE.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(7, 15), VanillaCopies::buildBillBoardGeometry, true, true);
@@ -181,7 +181,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.OBSIDILITH_WAVE_INDICATOR.get(),
+        event.register(BMDParticles.OBSIDILITH_WAVE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, WaveAction.waveDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
@@ -192,11 +192,11 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.DOWNSPARKLE.get(),
+        event.register(BMDParticles.DOWNSPARKLE.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.OBSIDILITH_SPIKE_INDICATOR.get(),
+        event.register(BMDParticles.OBSIDILITH_SPIKE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, WaveAction.waveDelay +  RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
@@ -207,7 +207,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.OBSIDILITH_SPIKE.get(),
+        event.register(BMDParticles.OBSIDILITH_SPIKE.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, true, true);
@@ -217,7 +217,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.PILLAR_RUNE.get(),
+        event.register(BMDParticles.PILLAR_RUNE.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, 10, VanillaCopies::buildBillBoardGeometry, false, true);
@@ -228,7 +228,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.PILLAR_SPAWN_INDICATOR.get(),
+        event.register(BMDParticles.PILLAR_SPAWN_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, PillarAction.pillarDelay, VanillaCopies::buildBillBoardGeometry, true, true);
@@ -239,7 +239,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.PILLAR_SPAWN_INDICATOR_2.get(),
+        event.register(BMDParticles.PILLAR_SPAWN_INDICATOR_2.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, PillarAction.pillarDelay, VanillaCopies::buildBillBoardGeometry, false, true);
@@ -250,7 +250,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.OBSIDILITH_ANVIL_INDICATOR.get(),
+        event.register(BMDParticles.OBSIDILITH_ANVIL_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(25, 27), VanillaCopies::buildFlatGeometry, true, true);
@@ -261,11 +261,11 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.SPARKLES.get(),
+        event.register(BMDParticles.SPARKLES.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.GAUNTLET_REVIVE_SPARKLES.get(),
+        event.register(BMDParticles.GAUNTLET_REVIVE_SPARKLES.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, true, true);
@@ -275,23 +275,23 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.EYE_OPEN.get(),
+        event.register(BMDParticles.EYE_OPEN.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(60, 70), VanillaCopies::buildBillBoardGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.LINE.get(),
+        event.register(BMDParticles.LINE.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(20, 30), VanillaCopies::buildBillBoardGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.ROD.get(),
+        event.register(BMDParticles.ROD.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(8, 10), VanillaCopies::buildBillBoardGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.GROUND_ROD.get(),
+        event.register(BMDParticles.GROUND_ROD.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(8, 10), VanillaCopies::buildFlatGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.VOID_BLOSSOM_SPIKE_INDICATOR.get(),
+        event.register(BMDParticles.VOID_BLOSSOM_SPIKE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, SpikeAction.indicatorDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
@@ -302,7 +302,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.VOID_BLOSSOM_SPIKE_WAVE_INDICATOR.get(),
+        event.register(BMDParticles.VOID_BLOSSOM_SPIKE_WAVE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, SpikeWaveAction.indicatorDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
@@ -313,11 +313,11 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.PETAL.get(),
+        event.register(BMDParticles.PETAL.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, false, true)));
 
-        event.registerSpriteSet(BMDParticles.POLLEN.get(),
+        event.register(BMDParticles.POLLEN.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, false, true);
@@ -331,7 +331,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.SPORE.get(),
+        event.register(BMDParticles.SPORE.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(7, 15), VanillaCopies::buildBillBoardGeometry, true, true);
@@ -342,7 +342,7 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.SPORE_INDICATOR.get(),
+        event.register(BMDParticles.SPORE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, SporeBallProjectile.explosionDelay + RandomUtils.range(-1, 2), VanillaCopies::buildFlatGeometry, true, true);
@@ -353,11 +353,11 @@ public class BMDParticles {
                             return particle;
                         }));
 
-        event.registerSpriteSet(BMDParticles.FLUFF.get(),
+        event.register(BMDParticles.FLUFF.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, true, true)));
 
-        event.registerSpriteSet(BMDParticles.EARTHDIVE_INDICATOR.get(),
+        event.register(BMDParticles.EARTHDIVE_INDICATOR.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, true, false);

@@ -35,12 +35,12 @@ public class PillarAction implements IActionWithCooldown {
 
     public PillarAction(LivingEntity entity){
         this.entity = entity;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level);
     }
 
     @Override
     public int perform() {
-        Level level = entity.level();
+        Level level = entity.level;
         if (!(level instanceof ServerLevel)) return 80;
         List<BlockPos> pillarPositions = getPillarPositions();
         BMDUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 1.4f, 64, null);
@@ -69,8 +69,8 @@ public class PillarAction implements IActionWithCooldown {
 
         for (int i = 0; i < numPillars; i++){
             Vec3 position = VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).normalize().scale(pillarXzDistance).add(entity.position());
-            BlockPos above = BMDUtils.findGroundBelow(entity.level(), BlockPos.containing(position).above(14), pos -> true);
-            BlockPos ground = BMDUtils.findGroundBelow(entity.level(), above, pos -> true);
+            BlockPos above = BMDUtils.findGroundBelow(entity.level, new BlockPos(position).above(14), pos -> true);
+            BlockPos ground = BMDUtils.findGroundBelow(entity.level, above, pos -> true);
 
             if (above.getY() - ground.getY() > maxYDistance) continue;
 
@@ -82,9 +82,9 @@ public class PillarAction implements IActionWithCooldown {
 
     private void buildPillar(BlockPos pos, ServerLevel serverLevel){
         int pillarHeight = 2;
-        IntStream.range(0, pillarHeight).forEach(i -> entity.level().setBlockAndUpdate(pos.above(i), Blocks.OBSIDIAN.defaultBlockState()));
+        IntStream.range(0, pillarHeight).forEach(i -> entity.level.setBlockAndUpdate(pos.above(i), Blocks.OBSIDIAN.defaultBlockState()));
         BlockPos pillarTop = pos.above(pillarHeight);
-        entity.level().setBlockAndUpdate(pillarTop, BMDBlocks.OBSIDILITH_RUNE.get().defaultBlockState());
+        entity.level.setBlockAndUpdate(pillarTop, BMDBlocks.OBSIDILITH_RUNE.get().defaultBlockState());
         BMDUtils.playSound(serverLevel, VecUtils.asVec3(pos), SoundEvents.BASALT_PLACE, SoundSource.HOSTILE, 1.0f, 16.0, null);
     }
 }

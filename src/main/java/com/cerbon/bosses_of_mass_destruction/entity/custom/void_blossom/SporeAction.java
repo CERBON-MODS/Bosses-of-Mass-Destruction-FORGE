@@ -54,7 +54,7 @@ public class SporeAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDUtils.playSound(((ServerPlayer) target).serverLevel(), entity.position(), BMDSounds.SPORE_PREPARE.get(), SoundSource.HOSTILE, 1.5f, 32, null),
+                        () -> BMDUtils.playSound(((ServerPlayer) target).getLevel(), entity.position(), BMDSounds.SPORE_PREPARE.get(), SoundSource.HOSTILE, 1.5f, 32, null),
                         26
                 )
         );
@@ -63,7 +63,7 @@ public class SporeAction implements IActionWithCooldown {
                 new TimedEvent(
                         () -> new ProjectileThrower(
                                 () -> {
-                                    SporeBallProjectile projectile = new SporeBallProjectile(entity, entity.level(), new ExemptEntities(List.of(BMDEntities.VOID_BLOSSOM.get())));
+                                    SporeBallProjectile projectile = new SporeBallProjectile(entity, entity.level, new ExemptEntities(List.of(BMDEntities.VOID_BLOSSOM.get())));
                                     projectile.setPos(entity.getEyePosition());
                                     return new ProjectileThrower.ProjectileData(projectile, 0.75f, 0f, 0.2);
                                 }

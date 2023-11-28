@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.particle;
 
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
-import org.joml.Vector3f;
 
 @FunctionalInterface
 public interface IParticleGeometry {

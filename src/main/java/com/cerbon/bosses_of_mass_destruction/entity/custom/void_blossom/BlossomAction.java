@@ -49,7 +49,7 @@ public class BlossomAction implements IActionWithCooldown {
 
     @Override
     public int perform() {
-        Level level = entity.level();
+        Level level = entity.level;
         if (!(level instanceof ServerLevel)) return 80;
 
         eventScheduler.addEvent(
@@ -72,7 +72,7 @@ public class BlossomAction implements IActionWithCooldown {
 
     private void placeBlossoms(ServerLevel level){
         List<BlockPos> positions = blossomPositions.stream()
-                .map(pos -> BlockPos.containing(pos.add(entity.position())))
+                .map(pos -> new BlockPos(pos.add(entity.position())))
                 .collect(Collectors.toList());
         Collections.shuffle(positions);
 

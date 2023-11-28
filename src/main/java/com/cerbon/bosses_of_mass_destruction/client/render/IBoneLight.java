@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.client.render;
 
-import org.joml.Vector4f;
-import software.bernie.geckolib.cache.object.GeoBone;
+import com.mojang.math.Vector4f;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 
 @FunctionalInterface
 public interface IBoneLight {

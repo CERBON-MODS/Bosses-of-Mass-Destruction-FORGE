@@ -33,7 +33,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import java.util.Map;
 
@@ -82,7 +82,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+    public void registerControllers(AnimationData data) {
         animationHandler.registerControllers(data);
     }
 
@@ -169,6 +169,6 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
 
     @Override
     public void checkDespawn() {
-        BMDUtils.preventDespawnExceptPeaceful(this, level());
+        BMDUtils.preventDespawnExceptPeaceful(this, level);
     }
 }

@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -30,14 +31,14 @@ public class AnvilAction implements IActionWithCooldown {
     public AnvilAction(Mob actor, float explosionPower){
         this.actor = actor;
         this.explosionPower = explosionPower;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(actor.level());
+        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(actor.level);
         this.circlePoints = MathUtils.buildBlockCircle(2.0);
     }
 
     @Override
     public int perform() {
         LivingEntity target = actor.getTarget();
-        Level level = actor.level();
+        Level level = actor.level;
         if (!(level instanceof ServerLevel)) return 80;
         performAttack(target, (ServerLevel) level);
         return 80;
@@ -57,7 +58,7 @@ public class AnvilAction implements IActionWithCooldown {
                             BMDUtils.playSound(level, teleportPos, BMDSounds.OBSIDILITH_TELEPORT.get(), SoundSource.HOSTILE, 3.0f, 64, null);
 
                             for (Vec3 pos : circlePoints){
-                                BlockPos particlePos = BMDUtils.findGroundBelow(actor.level(), BlockPos.containing(pos.add(targetPos)).above(3), pos1 -> true).above();
+                                BlockPos particlePos = BMDUtils.findGroundBelow(actor.level, new BlockPos(pos.add(targetPos)).above(3), pos1 -> true).above();
                                 if (particlePos.getY() != 0)
                                     BMDUtils.spawnParticle(level, BMDParticles.OBSIDILITH_ANVIL_INDICATOR.get(), VecUtils.asVec3(particlePos).add(new Vec3(0.5, 0.1, 0.5)), Vec3.ZERO, 0, 0.0);
                             }
@@ -66,14 +67,14 @@ public class AnvilAction implements IActionWithCooldown {
                             eventScheduler.addEvent(
                                     new TimedEvent(
                                             () -> {
-                                                Supplier<Boolean> shouldLand = () -> actor.onGround() || actor.getY() < 0;
+                                                Supplier<Boolean> shouldLand = () -> actor.isOnGround() || actor.getY() < 0;
                                                 Supplier<Boolean> shouldCancelLand = () -> !actor.isAlive() || shouldLand.get();
 
                                                 eventScheduler.addEvent(
                                                         new Event(
                                                                 shouldLand,
                                                                 () -> {
-                                                                    actor.level().explode(actor, actor.getX(), actor.getY(), actor.getZ(), explosionPower, Level.ExplosionInteraction.MOB);
+                                                                    actor.level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), explosionPower, Explosion.BlockInteraction.DESTROY);
                                                                     eventScheduler.addEvent(
                                                                             new TimedEvent(
                                                                                     () -> {

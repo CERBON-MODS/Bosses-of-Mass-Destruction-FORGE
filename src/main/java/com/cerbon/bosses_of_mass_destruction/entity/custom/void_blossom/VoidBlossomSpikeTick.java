@@ -2,6 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.AABB;
@@ -23,7 +24,7 @@ public class VoidBlossomSpikeTick implements IEntityTick<ServerLevel> {
         for (LivingEntity target : targets){
             float damage = (float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
             if (target.position().distanceToSqr(entity.position()) < Math.pow(3.0, 2))
-                target.hurt(entity.level().damageSources().thorns(entity), damage);
+                target.hurt(DamageSource.thorns(entity), damage);
         }
     }
 }

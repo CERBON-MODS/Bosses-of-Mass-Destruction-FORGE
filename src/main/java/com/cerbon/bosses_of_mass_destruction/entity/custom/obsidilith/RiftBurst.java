@@ -116,7 +116,7 @@ public class RiftBurst {
 
     private Function<Vec3, BlockPos> defaultPosFinder(ServerLevel serverLevel, Function<BlockPos, Boolean> isOpenBlock) {
         return vec3 -> {
-            BlockPos above = BlockPos.containing(vec3.add(VecUtils.yAxis.scale(14.0)));
+            BlockPos above = new BlockPos(vec3.add(VecUtils.yAxis.scale(14.0)));
             BlockPos groundPos = BMDUtils.findGroundBelow(serverLevel, above, pos -> true);
             BlockPos up = groundPos.above();
             return (up.getY() + 28 >= above.getY() && isOpenBlock.apply(up)) ? up : null;

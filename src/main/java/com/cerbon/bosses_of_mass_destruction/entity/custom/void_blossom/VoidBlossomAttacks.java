@@ -42,7 +42,7 @@ public class VoidBlossomAttacks {
     public ActionGoal buildAttackGoal() {
         CooldownAction attackAction = new CooldownAction(moveLogic, 80);
         IActionStop onCancel = () -> {
-            entity.level().broadcastEntityEvent(entity, stopAttackAnimation);
+            entity.level.broadcastEntityEvent(entity, stopAttackAnimation);
             attackAction.stop();
         };
 

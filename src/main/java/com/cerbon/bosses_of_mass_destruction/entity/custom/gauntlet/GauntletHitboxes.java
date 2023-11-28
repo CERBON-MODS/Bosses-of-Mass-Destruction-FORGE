@@ -12,7 +12,6 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.ChangeHitboxS2CPacket
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -61,15 +60,15 @@ public class GauntletHitboxes implements IDamageHandler {
     }
 
     public void setOpenHandHitbox(){
-        if (!entity.level().isClientSide() && currentHitbox != hitboxes){
-            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), true), (ServerLevel) entity.level(), entity.position());
+        if (!entity.level.isClientSide() && currentHitbox != hitboxes){
+            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), true), (ServerLevel) entity.level, entity.position());
         }
          currentHitbox = hitboxes;
     }
 
     public void setClosedFistHitbox() {
-        if (!entity.level().isClientSide() && currentHitbox != clampedHitboxes){
-            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), false), (ServerLevel) entity.level(), entity.position());
+        if (!entity.level.isClientSide() && currentHitbox != clampedHitboxes){
+            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), false), (ServerLevel) entity.level, entity.position());
         }
         currentHitbox = clampedHitboxes;
     }
@@ -124,9 +123,9 @@ public class GauntletHitboxes implements IDamageHandler {
         nextDamagedPart = null;
 
         if (disableHitboxesForCompatibility) return true;
-        if (part != null && part.equals(eyeBox) || damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return true;
+        if (part != null && part.equals(eyeBox) || damageSource.isBypassInvul()) return true;
 
-        if (damageSource.is(DamageTypeTags.IS_EXPLOSION)){
+        if (damageSource.isExplosion()){
             Vec3 pos = damageSource.getSourcePosition();
             if (pos != null){
                 Vec3 explosionDirection = MathUtils.unNormedDirection(pos, MobUtils.eyePos(entity));
@@ -135,14 +134,14 @@ public class GauntletHitboxes implements IDamageHandler {
             }
         }
 
-        if (!damageSource.is(DamageTypeTags.IS_PROJECTILE)){
+        if (!damageSource.isProjectile()){
             Entity entity1 = damageSource.getEntity();
             if (entity1 instanceof LivingEntity livingEntity){
                 livingEntity.knockback(0.5, actor.getX() - livingEntity.getX(), actor.getZ() - livingEntity.getZ());
             }
         }
 
-        if (!damageSource.is(DamageTypeTags.IS_FIRE))
+        if (!damageSource.isFire())
             entity.playSound(BMDSounds.GAUNTLET_CLINK.get(), 1.0f, BMDUtils.randomPitch(actor.getRandom()));
 
         return false;

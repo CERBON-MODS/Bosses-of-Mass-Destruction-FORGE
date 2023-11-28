@@ -8,7 +8,6 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -65,10 +64,10 @@ public class VoidBlossomCompoundHitbox implements ICompoundHitbox, IDamageHandle
         nextDamagedPart = null;
 
         if (result)
-            if (spikedBoxes.contains(part) && !damageSource.is(DamageTypeTags.IS_PROJECTILE)){
+            if (spikedBoxes.contains(part) && !damageSource.isProjectile()){
                 float damage = (float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
                 if (damageSource.getEntity() != null)
-                    damageSource.getEntity().hurt(entity.level().damageSources().thorns(entity), damage);
+                    damageSource.getEntity().hurt(DamageSource.thorns(entity), damage);
             }
     }
 

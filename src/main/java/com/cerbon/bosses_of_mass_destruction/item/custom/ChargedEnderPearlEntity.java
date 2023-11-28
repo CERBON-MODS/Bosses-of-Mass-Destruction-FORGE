@@ -1,5 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.item.custom;
 
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
+import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
@@ -9,13 +12,10 @@ import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -63,27 +63,27 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitEntity(@NotNull EntityHitResult result) {
         super.onHitEntity(result);
-        result.getEntity().hurt(result.getEntity().level().damageSources().thrown(this, getOwner()), 0.0f);
+        result.getEntity().hurt(DamageSource.thrown(this, getOwner()), 0.0f);
     }
 
     @Override
     protected void onHit(@NotNull HitResult result) {
         super.onHit(result);
-        if (!level().isClientSide())
+        if (!level.isClientSide())
             if (!this.isRemoved()) serverCollision();
     }
 
     private void serverCollision(){
         teleportEntity(getOwner());
         applyMobEffects(getOwner());
-        BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChargedEnderPearlS2CPacket(position()), (ServerLevel) level(), position());
+        BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChargedEnderPearlS2CPacket(position()), (ServerLevel) level, position());
         playSound(BMDSounds.CHARGED_ENDER_PEARL.get(), 1.0f, BMDUtils.randomPitch(this.random) * 0.8f);
         discard();
     }
 
     private void teleportEntity(Entity entity){
         if (entity instanceof ServerPlayer player){
-            if (player.connection.isAcceptingMessages() && player.level() == this.level() && !player.isSleeping()){
+            if (player.connection.getConnection().isConnected() && player.level == this.level && !player.isSleeping()){
                 if (player.isPassenger())
                     player.dismountTo(this.getX(), this.getY(), this.getZ());
                 else
@@ -103,7 +103,7 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
             livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0));
         }
 
-        List<LivingEntity> livingEntities = level()
+        List<LivingEntity> livingEntities = level
                 .getEntitiesOfClass(LivingEntity.class,
                         new AABB(getX(), getY(), getZ(), getX(), getY(), getZ()).inflate(radius * 2, impactHeight * 2, radius * 2),
                         this::isInXzAndYDistance);
@@ -148,14 +148,14 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
     @Override
     public Entity changeDimension(@NotNull ServerLevel destination) {
         Entity entity = getOwner();
-        if (entity != null && entity.level().dimension() != destination.dimension())
+        if (entity != null && entity.level.dimension() != destination.dimension())
             setOwner(null);
 
         return super.changeDimension(destination);
     }
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return super.getAddEntityPacket();
     }
 

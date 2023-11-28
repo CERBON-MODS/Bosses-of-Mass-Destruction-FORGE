@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,10 +18,10 @@ import javax.annotation.Nullable;
 public class ExplosionMixin {
 
     @ModifyVariable(at = @At(value = "HEAD"), method = "explode", argsOnly = true)
-    private float Explosion(float g, @Nullable Entity source, @Nullable DamageSource damageSource, @Nullable ExplosionDamageCalculator damageCalculator, double x, double y, double z, float radius, boolean fire, Level.ExplosionInteraction explosionInteraction){
+    private float Explosion(float g, @Nullable Entity source, @Nullable DamageSource damageSource, @Nullable ExplosionDamageCalculator damageCalculator, double x, double y, double z, float radius, boolean fire, Explosion.BlockInteraction explosionInteraction){
         Level level = (Level) (Object) this;
         if (!level.isClientSide)
-            return MonolithBlock.getExplosionPower((ServerLevel) level, BlockPos.containing(x, y, z), g);
+            return MonolithBlock.getExplosionPower((ServerLevel) level, new BlockPos(x, y, z), g);
 
         return g;
     }

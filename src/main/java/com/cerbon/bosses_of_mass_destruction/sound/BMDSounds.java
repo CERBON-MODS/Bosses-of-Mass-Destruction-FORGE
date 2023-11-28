@@ -63,7 +63,7 @@ public class BMDSounds {
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name){
         ResourceLocation id = new ResourceLocation(BMDConstants.MOD_ID, name);
-        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
+        return SOUND_EVENTS.register(name, () -> new SoundEvent(id));
     }
 
     public static void register(IEventBus eventBus){

@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.damagesource.UnshieldableDamageSource;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
@@ -26,7 +27,7 @@ public class SpikeAction implements IActionWithCooldown {
 
     public SpikeAction(Mob entity){
         this.entity = entity;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level);
         this.circlePoints = MathUtils.buildBlockCircle(2.0);
     }
 
@@ -42,7 +43,7 @@ public class SpikeAction implements IActionWithCooldown {
         int riftTime = 20;
         RiftBurst riftBurst = new RiftBurst(
                 entity,
-                target.serverLevel(),
+                target.getLevel(),
                 BMDParticles.OBSIDILITH_SPIKE_INDICATOR.get(),
                 BMDParticles.OBSIDILITH_SPIKE.get(),
                 riftTime,
@@ -50,7 +51,7 @@ public class SpikeAction implements IActionWithCooldown {
                 this::damageEntity
         );
 
-        BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 1.2f, 64, null);
+        BMDUtils.playSound(target.getLevel(), entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 1.2f, 64, null);
 
         for(int i = 0; i < 3; i++){
             int timeBetweenRifts = 30;
@@ -60,12 +61,12 @@ public class SpikeAction implements IActionWithCooldown {
                     new TimedEvent(
                             () -> {
                                 Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(BMDCapabilities.getPlayerPositions(target), target.position());
-                                BMDUtils.playSound(target.serverLevel(), placement, BMDSounds.SPIKE_INDICATOR.get(), SoundSource.HOSTILE, 1.0f, 32, null);
+                                BMDUtils.playSound(target.getLevel(), placement, BMDSounds.SPIKE_INDICATOR.get(), SoundSource.HOSTILE, 1.0f, 32, null);
 
                                 eventScheduler.addEvent(
                                         new TimedEvent(
                                                 () -> BMDUtils.playSound(
-                                                        target.serverLevel(),
+                                                        target.getLevel(),
                                                         placement,
                                                         BMDSounds.SPIKE.get(),
                                                         SoundSource.HOSTILE,
@@ -92,7 +93,7 @@ public class SpikeAction implements IActionWithCooldown {
 
     private void damageEntity(LivingEntity entity){
         float damage = (float) this.entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        entity.hurt(BMDUtils.shieldPiercing(entity.level(), this.entity), damage);
+        entity.hurt(new UnshieldableDamageSource(this.entity), damage);
         entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 2));
     }
 }

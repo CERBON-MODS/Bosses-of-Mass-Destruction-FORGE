@@ -49,7 +49,7 @@ public class MultipartEntityInteractionC2SPacket {
             if (serverPlayer == null) return;
 
             serverPlayer.setShiftKeyDown(isSneaking);
-            ServerLevel serverLevel = serverPlayer.serverLevel();
+            ServerLevel serverLevel = serverPlayer.getLevel();
             Entity entity = serverLevel.getEntity(entityId);
             if (entity == null) return;
 

@@ -65,7 +65,7 @@ public class VolleyAction implements IActionWithCooldown {
                                 missileThrower.apply(offset).throwProjectile(targetPos.add(VecUtils.planeProject(offset, VecUtils.yAxis)));
 
                             BMDUtils.playSound(
-                                    target.serverLevel(),
+                                    target.getLevel(),
                                     entity.position(),
                                     BMDSounds.MISSILE_SHOOT.get(),
                                     SoundSource.HOSTILE,
@@ -83,7 +83,7 @@ public class VolleyAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> BMDUtils.playSound(
-                                target.serverLevel(),
+                                target.getLevel(),
                                 entity.position(),
                                 BMDSounds.MISSILE_PREPARE.get(),
                                 SoundSource.HOSTILE,
@@ -108,7 +108,7 @@ public class VolleyAction implements IActionWithCooldown {
                         () -> {
                             MagicMissileProjectile projectile = new MagicMissileProjectile(
                                     entity,
-                                    entity.level(),
+                                    entity.level,
                                     livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new MobEffectInstance(effect, missileEffectDuration, missileEffectAmplifier))),
                                     MinionAction.summonEntityType != null ? List.of(MinionAction.summonEntityType) : List.of());
 

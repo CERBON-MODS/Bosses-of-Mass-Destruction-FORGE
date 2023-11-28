@@ -13,7 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -35,7 +35,7 @@ public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
     public void tick(ServerLevel level) {
         entity.deathTime++;
         if (entity.deathTime == deathAnimationTime){
-            level.explode(null, entity.position().x, entity.position().y, entity.position().z, 4.0f, Level.ExplosionInteraction.MOB);
+            level.explode(null, entity.position().x, entity.position().y, entity.position().z, 4.0f, Explosion.BlockInteraction.DESTROY); //TODO: Check
             if (mobConfig.spawnAncientDebrisOnDeath) createLoot(level);
             dropExp();
             entity.remove(Entity.RemovalReason.KILLED);
@@ -50,7 +50,7 @@ public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
             Vec3 end = entity.position().add(randomDir.scale(length));
             int points = length * 2;
             MathUtils.lineCallback(start, end, points, (vec3, point) -> {
-                BlockPos blockPos = BlockPos.containing(vec3);
+                BlockPos blockPos = new BlockPos(vec3);
                 if (point == points - 1) level.setBlockAndUpdate(blockPos, Blocks.ANCIENT_DEBRIS.defaultBlockState());
                 else level.setBlockAndUpdate(blockPos, Blocks.NETHERRACK.defaultBlockState());
             });
@@ -70,7 +70,7 @@ public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
                         () -> VanillaCopiesServer.awardExperience(
                                 expPerTick,
                                 pos.add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis).scale(2.0)),
-                                entity.level()
+                                entity.level
                         ),
                         0,
                         expTicks,

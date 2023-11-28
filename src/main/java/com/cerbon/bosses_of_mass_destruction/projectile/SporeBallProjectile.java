@@ -5,6 +5,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEv
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.damagesource.UnshieldableDamageSource;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.RiftBurst;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
@@ -15,6 +16,7 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -31,17 +33,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class SporeBallProjectile extends BaseThrownItemProjectile implements GeoEntity {
-    private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
+public class SporeBallProjectile extends BaseThrownItemProjectile implements IAnimatable, IAnimationTickable {
     private final List<Vec3> circlePoints = MathUtils.buildBlockCircle(7.0);
     private final ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.DISAPPEARING_SWIRL.get())
             .color(BMDColors.GREEN)
@@ -92,7 +93,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
         Entity owner = getOwner();
         if (owner instanceof LivingEntity livingEntity)
             doExplosion(livingEntity);
-        else if (!level().isClientSide())
+        else if (!level.isClientSide())
             discard();
     }
 
@@ -107,21 +108,21 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
     }
 
     private void doExplosion(LivingEntity owner){
-        level().broadcastEntityEvent(this, particle);
+        level.broadcastEntityEvent(this, particle);
         playSound(BMDSounds.SPORE_BALL_LAND.get(), 1.0f, BMDUtils.randomPitch(random) - 0.2f);
-        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level());
+        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
         Consumer<LivingEntity> onImpact = entity -> {
             float damage = (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE);
             if (this.getOwner() != null){
-                entity.hurt(BMDUtils.shieldPiercing(level(), this.getOwner()), damage);
+                entity.hurt(new UnshieldableDamageSource(this.getOwner()), damage);
                 entity.addEffect(new MobEffectInstance(MobEffects.POISON, 140), this.getOwner());
             }
         };
 
-        if (!level().isClientSide) {
+        if (!level.isClientSide) {
             RiftBurst riftBurst = new RiftBurst(
                     owner,
-                    (ServerLevel) level(),
+                    (ServerLevel) level,
                     BMDParticles.SPORE_INDICATOR.get(),
                     BMDParticles.SPORE.get(),
                     explosionDelay,
@@ -149,16 +150,16 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
     }
 
     private BlockPos posFinder(Vec3 pos){
-        BlockPos above = BlockPos.containing(pos.add(VecUtils.yAxis.scale(2.0)));
-        BlockPos groundPos = BMDUtils.findGroundBelow(level(), above, pos1 -> true);
+        BlockPos above = new BlockPos(pos.add(VecUtils.yAxis.scale(2.0)));
+        BlockPos groundPos = BMDUtils.findGroundBelow(level, above, pos1 -> true);
         BlockPos up = groundPos.above();
         return (up.getY() + 8 >= above.getY() && isOpenBlock(up)) ? up : null;
     }
 
     private boolean isOpenBlock(BlockPos up) {
-        BlockState blockState = level().getBlockState(up);
+        BlockState blockState = level.getBlockState(up);
         return blockState.canBeReplaced(new DirectionalPlaceContext(
-                level(),
+                level,
                 up,
                 Direction.DOWN,
                 ItemStack.EMPTY,
@@ -177,22 +178,27 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
 
     @Override
     public void entityHit(EntityHitResult entityHitResult) {
-        if (level().isClientSide()) return;
+        if (level.isClientSide()) return;
         Entity owner = getOwner();
         Entity entity = entityHitResult.getEntity();
 
         if (owner instanceof LivingEntity livingEntity)
             if (entity != livingEntity){
                 float damage = (float) livingEntity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-                entity.hurt(level().damageSources().thrown(this, livingEntity), damage);
+                entity.hurt(DamageSource.thrown(this, livingEntity), damage);
             }
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {}
+    public void registerControllers(AnimationData animationData) {}
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return animationFactory;
+    public AnimationFactory getFactory() {
+        return new AnimationFactory(this);
+    }
+
+    @Override
+    public int tickTimer() {
+        return 0;
     }
 }

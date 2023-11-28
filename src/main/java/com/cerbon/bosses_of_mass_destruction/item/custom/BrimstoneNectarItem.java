@@ -10,7 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VecId;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -81,7 +81,7 @@ public class BrimstoneNectarItem extends Item {
     }
 
     private StructureStart getStructureStart(ServerLevel level, BlockPos blockPos, StructureRepair it){
-        return level.structureManager().getStructureAt(blockPos, level.structureManager().registryAccess().registryOrThrow(Registries.STRUCTURE).getOrThrow(it.associatedStructure()));
+        return level.structureManager().getStructureAt(blockPos, level.structureManager().registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY).getOrThrow(it.associatedStructure()));
     }
 
     private void playSound(Level level, Player user){

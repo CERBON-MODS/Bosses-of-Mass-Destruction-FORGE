@@ -48,7 +48,7 @@ public class TeleportAction implements IActionWithCooldown {
     }
 
     public void performTeleport(ServerPlayer target) {
-        MobEntitySpawnPredicate spawnPredicate = new MobEntitySpawnPredicate(target.level());
+        MobEntitySpawnPredicate spawnPredicate = new MobEntitySpawnPredicate(target.level);
         ISpawnPredicate entitySpawnPredicate = (pos, e) -> spawnPredicate.canSpawn(pos, e) && entity.inLineOfSight(target);
         teleport(target, entitySpawnPredicate, spawnPredicate);
     }
@@ -57,7 +57,7 @@ public class TeleportAction implements IActionWithCooldown {
         MobPlacementLogic mobPlacementLogic = buildTeleportLogic(target, target.position(), spawnPredicate);
         boolean success = mobPlacementLogic.tryPlacement(100);
         if (!success) {
-            Vec3 safePos = VecUtils.asVec3(entity.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, BlockPos.containing(target.position())));
+            Vec3 safePos = VecUtils.asVec3(entity.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(target.position())));
             buildTeleportLogic(target, safePos, backupPredicate).tryPlacement(100);
         }
     }
@@ -70,14 +70,14 @@ public class TeleportAction implements IActionWithCooldown {
                 (pos, e) -> eventScheduler.addEvent(
                         new TimedEvent(
                                 () -> {
-                                    BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.TELEPORT_PREPARE.get(), SoundSource.HOSTILE, 3.0f, 64, null);
+                                    BMDUtils.playSound(target.getLevel(), entity.position(), BMDSounds.TELEPORT_PREPARE.get(), SoundSource.HOSTILE, 3.0f, 64, null);
                                     entity.collides = false;
                                     eventScheduler.addEvent(
                                             new TimedEvent(
                                                     () -> {
                                                         e.teleportTo(pos.x, pos.y, pos.z);
-                                                        e.level().broadcastEntityEvent(e, LichActions.endTeleport);
-                                                        BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.LICH_TELEPORT.get(), SoundSource.HOSTILE, 2.0f, 64, null);
+                                                        e.level.broadcastEntityEvent(e, LichActions.endTeleport);
+                                                        BMDUtils.playSound(target.getLevel(), entity.position(), BMDSounds.LICH_TELEPORT.get(), SoundSource.HOSTILE, 2.0f, 64, null);
                                                         entity.collides = true;
                                                         },
                                                     teleportDelay - teleportStartSoundDelay

@@ -33,7 +33,7 @@ public class LichActions {
     public ActionGoal buildAttackGoal() {
         CooldownAction attackAction = new CooldownAction(this.attackAction, 80);
         IActionStop onCancel = () -> {
-            entity.level().broadcastEntityEvent(entity, GauntletAttacks.stopAttackAnimation);
+            entity.level.broadcastEntityEvent(entity, GauntletAttacks.stopAttackAnimation);
             attackAction.stop();
         };
         return new ActionGoal(() -> !cancelAttackAction.get(), null, attackAction, null, onCancel);

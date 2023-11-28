@@ -56,7 +56,7 @@ public class VolleyRageAction implements IActionWithCooldown {
         final Optional<MobEffect> missileMobEffect = Optional.ofNullable(ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.tryParse(mobConfig.missile.mobEffectId)));
         final Function<Vec3, ProjectileThrower> missileThrower = getMissileThrower(missileMobEffect);
 
-        BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.MISSILE_PREPARE.get(), SoundSource.HOSTILE, 4.0f, 64, null);
+        BMDUtils.playSound(target.getLevel(), entity.position(), BMDSounds.MISSILE_PREPARE.get(), SoundSource.HOSTILE, 4.0f, 64, null);
         for (int i = 0; i < rageMissileVolleys; i++){
             int i1 = i;
             eventScheduler.addEvent(
@@ -67,7 +67,7 @@ public class VolleyRageAction implements IActionWithCooldown {
                                     missileThrower.apply(offset).throwProjectile(targetPos.add(offset));
 
                                 BMDUtils.playSound(
-                                        target.serverLevel(),
+                                        target.getLevel(),
                                         entity.position(),
                                         BMDSounds.MISSILE_SHOOT.get(),
                                         SoundSource.HOSTILE,
@@ -96,7 +96,7 @@ public class VolleyRageAction implements IActionWithCooldown {
                         () -> {
                             MagicMissileProjectile projectile = new MagicMissileProjectile(
                                     entity,
-                                    entity.level(),
+                                    entity.level,
                                     livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new MobEffectInstance(effect, missileEffectDuration, missileEffectAmplifier))),
                                     MinionAction.summonEntityType != null ? List.of(MinionAction.summonEntityType) : List.of());
 

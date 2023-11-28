@@ -50,7 +50,7 @@ public class SpikeAction implements IActionWithCooldown {
     private void placeSpikes(ServerPlayer target){
         Spikes riftBurst = new Spikes(
                 entity,
-                target.serverLevel(),
+                target.getLevel(),
                 BMDParticles.VOID_BLOSSOM_SPIKE_INDICATOR.get(),
                 indicatorDelay,
                 eventScheduler,
@@ -58,7 +58,7 @@ public class SpikeAction implements IActionWithCooldown {
         );
 
         BMDUtils.playSound(
-                target.serverLevel(),
+                target.getLevel(),
                 entity.position(),
                 BMDSounds.VOID_BLOSSOM_BURROW.get(),
                 SoundSource.HOSTILE,
@@ -90,7 +90,7 @@ public class SpikeAction implements IActionWithCooldown {
                             () -> {
                                 Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(BMDCapabilities.getPlayerPositions(target), target.position());
                                 BMDUtils.playSound(
-                                        target.serverLevel(),
+                                        target.getLevel(),
                                         placement,
                                         BMDSounds.VOID_SPIKE_INDICATOR.get(),
                                         SoundSource.HOSTILE,
@@ -107,7 +107,7 @@ public class SpikeAction implements IActionWithCooldown {
                                         new TimedEvent(
                                                 () -> {
                                                     BMDUtils.playSound(
-                                                            target.serverLevel(),
+                                                            target.getLevel(),
                                                             placement,
                                                             BMDSounds.VOID_BLOSSOM_SPIKE.get(),
                                                             SoundSource.HOSTILE,
@@ -115,7 +115,7 @@ public class SpikeAction implements IActionWithCooldown {
                                                             32,
                                                             null
                                                     );
-                                                    BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), successfulSpikes), (ServerLevel) entity.level(), entity.position());
+                                                    BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), successfulSpikes), (ServerLevel) entity.level, entity.position());
                                                 },
                                                 indicatorDelay,
                                                 1,

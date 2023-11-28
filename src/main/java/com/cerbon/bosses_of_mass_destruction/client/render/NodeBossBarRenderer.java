@@ -1,7 +1,9 @@
 package com.cerbon.bosses_of_mass_destruction.client.render;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -24,14 +26,14 @@ public class NodeBossBarRenderer {
         this.textureSize = textureSize;
     }
 
-    public void renderBossBar(ResourceLocation texture, GuiGraphics guiGraphics, int x, int y, BossEvent bossEvent, CallbackInfo callbackInfo){
+    public void renderBossBar(PoseStack poseStack, int x, int y, BossEvent bossEvent, CallbackInfo callbackInfo){
         Component name = bossEvent.getName();
         ComponentContents barContent = name.getContents();
 
         if (barContent instanceof TranslatableContents translatableContents && translatableContents.getKey().equals(entityTypeKey)){
             float colorLocation = bossEvent.getColor().ordinal() * 5 * 2f;
-            guiGraphics.blit(
-                    texture, x, y, 0f, colorLocation, 182, 5,
+            GuiComponent.blit(
+                    poseStack, x, y, 0f, colorLocation, 182, 5,
                     textureSize,
                     textureSize
             );
@@ -39,14 +41,14 @@ public class NodeBossBarRenderer {
             int i = (int) (bossEvent.getProgress() * 183.0f);
             if (i > 0){
                 float progressLocation = bossEvent.getColor().ordinal() * 5 * 2 + 5f;
-                guiGraphics.blit(
-                        texture, x, y, 0f, progressLocation, i, 5,
+                GuiComponent.blit(
+                        poseStack, x, y, 0f, progressLocation, i, 5,
                         textureSize,
                         textureSize
                 );
             }
 
-            renderBossNodes(bossEvent, guiGraphics, x, y);
+            renderBossNodes(bossEvent, poseStack, x, y);
 
             callbackInfo.cancel();
         }
@@ -54,20 +56,21 @@ public class NodeBossBarRenderer {
 
     private void renderBossNodes(
             BossEvent bossEvent,
-            GuiGraphics guiGraphics,
+            PoseStack poseStack,
             int x,
             int y
     ) {
+        RenderSystem.setShaderTexture(0, noteTexture);
         int steppedPercentage = (int) (192 * MathUtils.roundedStep(bossEvent.getProgress(), hpPercentages, true)) + 7;
-        guiGraphics.blit(
-                noteTexture, x - 3, y - 1, 0f, 0f, steppedPercentage, 7,
+        GuiComponent.blit(
+                poseStack, x - 3, y - 1, 0f, 0f, steppedPercentage, 7,
                 textureSize,
                 textureSize
         );
 
         int steppedPercentageReverse = 192 - steppedPercentage;
-        guiGraphics.blit(
-                noteTexture,
+        GuiComponent.blit(
+                poseStack,
                 x - 3 + steppedPercentage,
                 y - 1,
                 (float) steppedPercentage,

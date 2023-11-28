@@ -5,13 +5,12 @@ import com.cerbon.bosses_of_mass_destruction.entity.GeoModel;
 import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimations;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 public class LichCodeAnimations implements ICodeAnimations<LichEntity> {
 
     @Override
-    public void animate(LichEntity animatable, AnimationState<?> data, GeoModel<LichEntity> geoModel) {
+    public void animate(LichEntity animatable, AnimationEvent<?> data, GeoModel<LichEntity> geoModel) {
         float bodyYaw = Mth.rotLerp(data.getPartialTick(), animatable.yBodyRotO, animatable.yBodyRot);
         float headYaw = Mth.rotLerp(data.getPartialTick(), animatable.yHeadRotO, animatable.yHeadRot);
 
@@ -26,9 +25,9 @@ public class LichCodeAnimations implements ICodeAnimations<LichEntity> {
         float yaw = headYaw - bodyYaw;
         double adjustedHeadPitch = headPitch - bodyPitch;
 
-        BakedGeoModel model = geoModel.getBakedModel(geoModel.getModelResource(animatable));
-        model.getBone("code_root").ifPresent(bone -> bone.setRotX((float) -Math.toRadians(bodyPitch)));
-        model.getBone("headBase").ifPresent(bone -> bone.setRotX((float) -Math.toRadians(adjustedHeadPitch)));
-        model.getBone("headBase").ifPresent(bone -> bone.setRotY((float) Math.toRadians(yaw)));
+        var model = geoModel.getModel(geoModel.getModelResource(animatable));
+        model.getBone("code_root").ifPresent(bone -> bone.setRotationX((float) -Math.toRadians(bodyPitch)));
+        model.getBone("headBase").ifPresent(bone -> bone.setRotationX((float) -Math.toRadians(adjustedHeadPitch)));
+        model.getBone("headBase").ifPresent(bone -> bone.setRotationX((float) Math.toRadians(yaw)));
     }
 }

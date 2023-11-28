@@ -13,7 +13,7 @@ public class DamageMemory implements IDamageHandler {
 
     public DamageMemory(int hitsToRemember, LivingEntity entity) {
         this.entity = entity;
-        DamageHistory defaultDamageHistory = new DamageHistory(0f, entity.level().damageSources().fellOutOfWorld(), 0);
+        DamageHistory defaultDamageHistory = new DamageHistory(0f, DamageSource.OUT_OF_WORLD, 0);
         this.historicalData = new HistoricalData<>(defaultDamageHistory, hitsToRemember);
     }
 

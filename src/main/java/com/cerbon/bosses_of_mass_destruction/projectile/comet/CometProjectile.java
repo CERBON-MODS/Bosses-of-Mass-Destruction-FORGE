@@ -13,16 +13,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CometProjectile extends BaseThrownItemProjectile implements GeoEntity {
-    private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
+public class CometProjectile extends BaseThrownItemProjectile implements IAnimatable, IAnimationTickable {
     private Consumer<Vec3> impactAction;
     private boolean impacted = false;
 
@@ -75,10 +74,15 @@ public class CometProjectile extends BaseThrownItemProjectile implements GeoEnti
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {}
+    public void registerControllers(AnimationData animationData) {}
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return animationFactory;
+    public AnimationFactory getFactory() {
+        return new AnimationFactory(this);
+    }
+
+    @Override
+    public int tickTimer() {
+        return 0;
     }
 }

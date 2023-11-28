@@ -18,6 +18,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -50,13 +51,13 @@ public class ObsidilithUtils {
     }
 
     public static void onDeath(LivingEntity actor, int experienceDrop){
-        Level level = actor.level();
+        Level level = actor.level;
 
         if (!level.isClientSide()){
             BlockPos blockPos = actor.blockPosition();
             Vec3 vecPos = actor.position();
             EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
-            level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), 2.0f, Level.ExplosionInteraction.MOB);
+            level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), 2.0f, Explosion.BlockInteraction.NONE);
 
             for (int y = 0; y <= deathPillarHeight; y++){
                 int y1 = y;

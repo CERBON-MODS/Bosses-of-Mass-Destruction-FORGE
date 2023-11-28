@@ -11,7 +11,7 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -94,35 +94,35 @@ public class SwirlPunchAction implements IActionWithCooldown {
         if ((entity.horizontalCollision || entity.verticalCollision) && previousSpeed > 0.55f){
             Vec3 pos = entity.position();
             if (entity.getEntityData().get(GauntletEntity.isEnergized)){
-                entity.level().explode(
+                entity.level.explode(
                         entity,
                         pos.x,
                         pos.y,
                         pos.z,
                         (float) mobConfig.energizedPunchExplosionSize,
                         true,
-                        Level.ExplosionInteraction.MOB
+                        Explosion.BlockInteraction.DESTROY //TODO: Check
                 );
                 entity.getEntityData().set(GauntletEntity.isEnergized, false);
             }else {
-                entity.level().explode(
+                entity.level.explode(
                         entity,
                         pos.x,
                         pos.y,
                         pos.z,
                         (float) (previousSpeed * mobConfig.normalPunchExplosionMultiplier),
-                        Level.ExplosionInteraction.MOB
+                        Explosion.BlockInteraction.DESTROY
                 );
             }
         }
     }
 
     private void testEntityImpact(){
-        List<LivingEntity> collidedEntities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox(), livingEntity -> livingEntity != entity);
+        List<LivingEntity> collidedEntities = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox(), livingEntity -> livingEntity != entity);
 
         for (LivingEntity target : collidedEntities){
             entity.doHurtTarget(target);
-            target.addDeltaMovement(entity.getDeltaMovement().scale(0.5));
+            target.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
         }
     }
 }

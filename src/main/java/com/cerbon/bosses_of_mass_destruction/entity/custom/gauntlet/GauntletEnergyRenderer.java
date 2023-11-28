@@ -9,16 +9,15 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoCube;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib3.geo.render.built.GeoCube;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<GauntletEntity> {
-    private final GeoModel<GauntletEntity> geoModel;
+    private final AnimatedGeoModel<GauntletEntity> geoModel;
     private final EntityRendererProvider.Context context;
 
     private final ResourceLocation armorTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
@@ -26,7 +25,7 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
     private GauntletEntity gauntletEntity;
     private RenderType type;
 
-    public GauntletEnergyRenderer(GeoModel<GauntletEntity> geoModel, EntityRendererProvider.Context context) {
+    public GauntletEnergyRenderer(AnimatedGeoModel<GauntletEntity> geoModel, EntityRendererProvider.Context context) {
         this.geoModel = geoModel;
         this.context = context;
     }
@@ -37,14 +36,14 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
         float textureOffset = renderAge * 0.01f;
 
         if (geoModelProvider == null)
-            geoModelProvider = new RenderHelper(entity, geoModel, context);
+            geoModelProvider = new RenderHelper(geoModel, context);
 
         gauntletEntity = entity;
         type = RenderType.energySwirl(armorTexture, textureOffset, textureOffset);
     }
 
     @Override
-    public void render(BakedGeoModel model, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(GeoModel model, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         VertexConsumer energyBuffer = buffer.getBuffer(type);
         if (gauntletEntity == null) return;
         if (type == null) return;
@@ -53,17 +52,16 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
         float lerpedAlpha = Mth.lerp(partialTicks, renderAlpha - 0.1f, renderAlpha);
 
         if (geoModelProvider == null) return;
-        geoModelProvider.actuallyRender(
-                poseStack,
-                gauntletEntity,
+        geoModelProvider.render(
                 model,
+                gauntletEntity,
+                partialTicks,
                 type,
+                poseStack,
                 buffer,
                 energyBuffer,
-                false,
-                partialTicks,
                 packedLightIn,
-                OverlayTexture.NO_OVERLAY,
+                packedOverlayIn,
                 0.8f * lerpedAlpha,
                 0.2f * lerpedAlpha,
                 0.2f * lerpedAlpha,
@@ -72,24 +70,17 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
     }
 
     private static class RenderHelper extends GeoEntityRenderer<GauntletEntity> {
-        private final GauntletEntity gauntletEntity;
 
-        public RenderHelper(GauntletEntity gauntletEntity, GeoModel<GauntletEntity> parentModel, EntityRendererProvider.Context context) {
+        public RenderHelper(AnimatedGeoModel<GauntletEntity> parentModel, EntityRendererProvider.Context context) {
             super(context, parentModel);
-            this.gauntletEntity = gauntletEntity;
         }
 
         @Override
-        public void renderCube(PoseStack poseStack, GeoCube cube, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        public void renderCube(GeoCube cube, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
             poseStack.pushPose();
             poseStack.scale(1.1f, 1.05f, 1.1f);
-            super.renderCube(poseStack, cube, buffer, IBoneLight.fullbright, packedOverlay, red, green, blue, alpha);
+            super.renderCube(cube, poseStack, buffer, IBoneLight.fullbright, packedOverlay, red, green, blue, alpha);
             poseStack.popPose();
-        }
-
-        @Override
-        public GauntletEntity getAnimatable() {
-            return gauntletEntity;
         }
     }
 }

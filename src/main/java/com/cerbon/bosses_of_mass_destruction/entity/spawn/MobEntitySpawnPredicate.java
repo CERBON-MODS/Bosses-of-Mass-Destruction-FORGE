@@ -18,7 +18,7 @@ public class MobEntitySpawnPredicate implements ISpawnPredicate {
 
     @Override
     public boolean canSpawn(Vec3 pos, Entity entity) {
-        BlockPos blockPos = BlockPos.containing(pos);
+        BlockPos blockPos = new BlockPos(pos);
         if (!levelReader.hasChunkAt(blockPos)) return false;
 
         BlockState blockState = levelReader.getBlockState(blockPos);

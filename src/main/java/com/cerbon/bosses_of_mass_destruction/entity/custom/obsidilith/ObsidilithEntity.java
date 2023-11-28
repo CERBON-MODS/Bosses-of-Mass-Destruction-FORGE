@@ -16,6 +16,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.CompositeDamageHandle
 import com.cerbon.bosses_of_mass_destruction.entity.damage.DamageMemory;
 import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EffectsImmunity;
+import com.cerbon.bosses_of_mass_destruction.entity.util.animation.AnimationPredicate;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
@@ -37,11 +38,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +113,7 @@ public class ObsidilithEntity extends BaseEntity {
         super.serverTick(serverLevel);
 
         activePillars.removeIf(
-                pos -> level().getBlockState(pos).getBlock() != BMDBlocks.OBSIDILITH_RUNE.get()
+                pos -> level.getBlockState(pos).getBlock() != BMDBlocks.OBSIDILITH_RUNE.get()
                 || !pos.closerThan(blockPosition(), 64));
 
         getEntityData().set(ObsidilithUtils.isShielded, !activePillars.isEmpty());
@@ -144,7 +144,7 @@ public class ObsidilithEntity extends BaseEntity {
     public void die(@NotNull DamageSource damageSource) {
         if (mobConfig.spawnPillarOnDeath) {
             ObsidilithUtils.onDeath(this, mobConfig.experienceDrop);
-            if (level().isClientSide)
+            if (level.isClientSide)
                 effectHandler.handleStatus(ObsidilithUtils.deathStatus);
         }
         super.die(damageSource);
@@ -178,11 +178,13 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-        data.add(new AnimationController<GeoAnimatable>(this, "summon", 0, animationState -> {
-            animationState.getController().setAnimation(RawAnimation.begin().thenPlay("summon"));
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "summon", 0, new AnimationPredicate<>(animationState -> {
+            animationState.getController().setAnimation(
+                    new AnimationBuilder().addAnimation("summon", false)
+            );
             return PlayState.CONTINUE;
-        }));
+        })));
     }
 
     @Override
@@ -202,7 +204,7 @@ public class ObsidilithEntity extends BaseEntity {
 
     @Override
     public void checkDespawn() {
-        BMDUtils.preventDespawnExceptPeaceful(this, level());
+        BMDUtils.preventDespawnExceptPeaceful(this, level);
     }
 
     @Override

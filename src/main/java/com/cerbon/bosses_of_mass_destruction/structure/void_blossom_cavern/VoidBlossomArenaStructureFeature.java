@@ -21,7 +21,7 @@ public class VoidBlossomArenaStructureFeature extends Structure {
     }
 
     @Override
-    protected @NotNull Optional<GenerationStub> findGenerationPoint(@NotNull GenerationContext context) {
+    public @NotNull Optional<GenerationStub> findGenerationPoint(@NotNull GenerationContext context) {
         return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, collector -> addPieces(collector, context));
     }
 

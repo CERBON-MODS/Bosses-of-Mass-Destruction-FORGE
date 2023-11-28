@@ -6,15 +6,15 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 import java.util.function.Function;
 
@@ -53,8 +53,8 @@ public class VoidBlossomSpikeRenderer implements IRenderer<VoidBlossomEntity> {
         Vec3 bottomPos = spike.offset();
         float n = (float) Math.acos(bottomPos.y);
         float o = (float) Math.atan2(bottomPos.z, bottomPos.x);
-        poseStack.mulPose(Axis.YP.rotationDegrees((1.5707964f - o) * 57.295776f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(n * 57.295776f));
+        poseStack.mulPose(Vector3f.YP.rotationDegrees((1.5707964f - o) * 57.295776f));
+        poseStack.mulPose(Vector3f.XP.rotationDegrees(n * 57.295776f));
         float q = 0.0F;
         int red = (int) (BMDColors.WHITE.x * 255);
         int green = (int) (BMDColors.WHITE.y * 255);

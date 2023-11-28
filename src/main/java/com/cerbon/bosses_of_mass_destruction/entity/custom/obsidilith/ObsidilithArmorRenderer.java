@@ -11,18 +11,17 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoCube;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib3.geo.render.built.GeoCube;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import java.util.Random;
 
 public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<ObsidilithEntity> {
-    private final GeoModel<ObsidilithEntity> geoModel;
+    private final AnimatedGeoModel<ObsidilithEntity> geoModel;
     private final EntityRendererProvider.Context context;
 
     private final ResourceLocation armorTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
@@ -30,7 +29,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
     private ObsidilithEntity obsidilithEntity;
     private RenderType type;
 
-    public ObsidilithArmorRenderer(GeoModel<ObsidilithEntity> geoModel, EntityRendererProvider.Context context){
+    public ObsidilithArmorRenderer(AnimatedGeoModel<ObsidilithEntity> geoModel, EntityRendererProvider.Context context){
         this.geoModel = geoModel;
         this.context = context;
     }
@@ -41,14 +40,14 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
         float textureOffset = renderAge * new Random().nextFloat();
 
         if (geoModelProvider == null)
-            geoModelProvider = new RenderHelper(entity, geoModel, context);
+            geoModelProvider = new RenderHelper(geoModel, context);
 
         this.obsidilithEntity = entity;
         type = RenderType.energySwirl(armorTexture, textureOffset, textureOffset);
     }
 
     @Override
-    public void render(BakedGeoModel model, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(GeoModel model, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         VertexConsumer energyBuffer = buffer.getBuffer(type);
         if(obsidilithEntity == null) return;
         if (type == null) return;
@@ -57,17 +56,16 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
             Vec3 color = getColor().add(VecUtils.unit).normalize().scale(0.6);
 
             if (geoModelProvider == null) return;
-            geoModelProvider.actuallyRender(
-                    poseStack,
-                    obsidilithEntity,
+            geoModelProvider.render(
                     model,
+                    obsidilithEntity,
+                    partialTicks,
                     type,
+                    poseStack,
                     buffer,
                     energyBuffer,
-                    false,
-                    partialTicks,
                     packedLightIn,
-                    OverlayTexture.NO_OVERLAY,
+                    packedOverlayIn,
                     (float) color.x, (float) color.y, (float) color.z, 1.0f
             );
         }
@@ -87,24 +85,17 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
     }
 
     private static class RenderHelper extends GeoEntityRenderer<ObsidilithEntity> {
-        private final ObsidilithEntity entity;
 
-        public RenderHelper(ObsidilithEntity entity, GeoModel<ObsidilithEntity> parentModel, EntityRendererProvider.Context context) {
+        public RenderHelper(AnimatedGeoModel<ObsidilithEntity> parentModel, EntityRendererProvider.Context context) {
             super(context, parentModel);
-            this.entity = entity;
         }
 
         @Override
-        public void renderCube(PoseStack poseStack, GeoCube cube, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        public void renderCube(GeoCube cube, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
             poseStack.pushPose();
             poseStack.scale(1.08f, 1.05f, 1.08f);
-            super.renderCube(poseStack, cube, buffer, IBoneLight.fullbright, packedOverlay, red, green, blue, alpha);
+            super.renderCube(cube, poseStack, buffer, IBoneLight.fullbright, packedOverlay, red, green, blue, alpha);
             poseStack.popPose();
-        }
-
-        @Override
-        public ObsidilithEntity getAnimatable() {
-            return entity;
         }
     }
 }

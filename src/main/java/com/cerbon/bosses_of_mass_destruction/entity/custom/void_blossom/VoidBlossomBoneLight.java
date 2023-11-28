@@ -4,9 +4,9 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Math
 import com.cerbon.bosses_of_mass_destruction.client.render.IBoneLight;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.MultiBufferSource;
-import org.joml.Vector4f;
-import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 
 public class VoidBlossomBoneLight implements IBoneLight, IRenderer<VoidBlossomEntity> {
     private VoidBlossomEntity entity;
@@ -26,7 +26,7 @@ public class VoidBlossomBoneLight implements IBoneLight, IRenderer<VoidBlossomEn
             return rgbaColor;
 
         float partialTicks1 = this.partialTicks != null ? this.partialTicks : 0f;
-        Vector4f newColor = new Vector4f(rgbaColor.x, rgbaColor.y, rgbaColor.z, rgbaColor.w);
+        Vector4f newColor = new Vector4f(rgbaColor.x(), rgbaColor.y(), rgbaColor.z(), rgbaColor.w());
 
         if (entity.isDeadOrDying()){
             float interceptedTime = MathUtils.ratioLerp(entity.deathTime, 0.5f, LightBlockRemover.deathMaxAge, partialTicks1);

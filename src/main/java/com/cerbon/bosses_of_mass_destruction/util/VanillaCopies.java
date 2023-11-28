@@ -3,7 +3,10 @@ package com.cerbon.bosses_of_mass_destruction.util;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,10 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class VanillaCopies {
     public static void renderBillboard(
@@ -25,11 +24,11 @@ public class VanillaCopies {
             int i,
             EntityRenderDispatcher dispatcher,
             RenderType type,
-            Quaternionf rotation
+            Quaternion rotation
     ) {
         poseStack.pushPose();
         poseStack.mulPose(dispatcher.cameraOrientation());
-        poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
+        poseStack.mulPose(Vector3f.YP.rotationDegrees((float) Math.toRadians(180)));
         poseStack.mulPose(rotation);
         PoseStack.Pose pose = poseStack.last();
         Matrix4f matrix4f = pose.pose();
@@ -86,7 +85,7 @@ public class VanillaCopies {
 
         for (int k = 0; k <= 3; k++) {
             Vector3f vector3f2 = vector3fs[k];
-            vector3f2.rotate(Axis.YP.rotationDegrees(rotation));
+            vector3f2.transform(Vector3f.YP.rotationDegrees(rotation));
             vector3f2.mul(scale);
             vector3f2.add(f, g, h);
         }
@@ -109,7 +108,7 @@ public class VanillaCopies {
         float f = (float) (Mth.lerp(tickDelta, prevPosX, x) - vec3.x());
         float g = (float) (Mth.lerp(tickDelta, prevPosY, y) - vec3.y());
         float h = (float) (Mth.lerp(tickDelta, prevPosZ, z) - vec3.z());
-        Quaternionf quaternion2 = camera.rotation();
+        Quaternion quaternion2 = camera.rotation();
 
         Vector3f[] vector3fs = {
                 new Vector3f(-1.0f, -1.0f, 0.0f),
@@ -120,8 +119,8 @@ public class VanillaCopies {
 
         for (int k = 0; k <= 3; k++){
             Vector3f vector3f2 = vector3fs[k];
-            vector3f2.rotate(Axis.ZP.rotationDegrees(rotation));
-            vector3f2.rotate(quaternion2);
+            vector3f2.transform(Vector3f.ZP.rotationDegrees(rotation));
+            vector3f2.transform(quaternion2);
             vector3f2.mul(scale);
             vector3f2.add(f, g, h);
         }
@@ -130,7 +129,7 @@ public class VanillaCopies {
     }
 
     public static void renderBeam(LivingEntity actor, Vec3 target, Vec3 prevTarget, float partialTicks, Vec3 color, PoseStack poseStack, MultiBufferSource buffer, RenderType renderType){
-        float j = actor.level().getGameTime() + partialTicks;
+        float j = actor.level.getGameTime() + partialTicks;
         float k = j % 1.0F;
         float l = actor.getEyeHeight();
         poseStack.pushPose();
@@ -142,8 +141,8 @@ public class VanillaCopies {
         vec33 = vec33.normalize();
         float n = (float) Math.acos(vec33.y);
         float o = (float) Math.atan2(vec33.z, vec33.x);
-        poseStack.mulPose(Axis.YP.rotationDegrees((1.5707964f - o) * 57.295776f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(n * 57.295776f));
+        poseStack.mulPose(Vector3f.YP.rotationDegrees((1.5707964f - o) * 57.295776f));
+        poseStack.mulPose(Vector3f.XP.rotationDegrees(n * 57.295776f));
 
         float q = j * 0.05F * -1.5F;
         int red = (int) (color.x() * 255);

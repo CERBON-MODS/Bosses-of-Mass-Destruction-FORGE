@@ -72,7 +72,7 @@ public class GauntletGoalHandler implements INbtHandler, IMoveHandler, IDamageHa
     }
 
     private void addGoals() {
-        Level level = entity.level();
+        Level level = entity.level;
         if (level instanceof ServerLevel serverLevel){
             GauntletAttacks attackHelper = new GauntletAttacks(entity, eventScheduler, mobConfig, serverLevel);
             CompositeGoal attackGoal = new CompositeGoal(movementHelper.buildAttackMovement(), attackHelper.buildAttackGoal());
