@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.AABB;
@@ -124,8 +125,8 @@ public class BMDUtils {
         return pos.add(xzOffset.scale(radius));
     }
 
-    public static ConfiguredFeature<?, ?> getConfiguredFeature(ServerLevel serverLevel, ResourceKey<ConfiguredFeature<?, ?>> key) {
-        return serverLevel.registryAccess().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY).getOrThrow(key);
+    public static ConfiguredFeature<?, ?> getConfiguredFeature(WorldGenLevel level, ResourceKey<ConfiguredFeature<?, ?>> key) {
+        return level.registryAccess().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY).getOrThrow(key);
     }
 
 }

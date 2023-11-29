@@ -1,10 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 
 import com.cerbon.bosses_of_mass_destruction.structure.util.IStructurePiece;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -50,7 +48,7 @@ public class MossFloorCaveDecorator implements ICaveDecorator{
 
         for (BlockPos mossPos : spacedMossPositions)
             if (boundingBox.isInside(mossPos)){
-                ConfiguredFeature<?, ?> configuredFeature = BMDUtils.getConfiguredFeature(level.getLevel(), level.getLevel().registryAccess().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY).getResourceKey(CaveFeatures.MOSS_PATCH.value()).orElse(null));
+                ConfiguredFeature<?, ?> configuredFeature = CaveFeatures.MOSS_PATCH.get();
                 Feature.VEGETATION_PATCH.place(
                         new FeaturePlaceContext<>(
                                 Optional.of(configuredFeature),

@@ -37,7 +37,7 @@ public class BossesOfMassDestruction {
 
         BMDSounds.register(modEventBus);
         BMDParticles.register(modEventBus);
-        //BMDStructures.register(modEventBus);
+        BMDStructures.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
