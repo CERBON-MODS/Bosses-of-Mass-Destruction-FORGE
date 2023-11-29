@@ -55,7 +55,7 @@ public class SimpleGeoRenderer<T extends Entity & IAnimatable> extends EntityRen
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int packedLight) {
         boolean shouldSit = entity.isPassenger() && entity.getVehicle() != null;
         EntityModelData entityModelData = new EntityModelData();
         entityModelData.isSitting = shouldSit;
@@ -106,7 +106,7 @@ public class SimpleGeoRenderer<T extends Entity & IAnimatable> extends EntityRen
                 buffer,
                 null ,
                 packedLight,
-                overlayOverride != null ? overlayOverride.getOverlay() :getPackedOverlay(0.0f),
+                overlayOverride != null ? overlayOverride.getOverlay() :getPackedOverlay(),
                 (float) renderColor.getRed() / 255.0f,
                 (float) renderColor.getBlue() / 255.0f,
                 (float) renderColor.getGreen() / 255.0f,
@@ -147,8 +147,8 @@ public class SimpleGeoRenderer<T extends Entity & IAnimatable> extends EntityRen
         return modelProvider;
     }
 
-    private int getPackedOverlay(float u){
-        return OverlayTexture.pack(OverlayTexture.u(u), false);
+    private int getPackedOverlay(){
+        return OverlayTexture.pack(OverlayTexture.u((float) 0.0), false);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class SimpleGeoRenderer<T extends Entity & IAnimatable> extends EntityRen
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(T entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull T entity) {
         return modelProvider.getTextureResource(entity);
     }
 }
