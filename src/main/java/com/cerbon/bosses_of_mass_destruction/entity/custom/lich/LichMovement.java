@@ -10,6 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.InDesired
 import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.ValidDirectionAnd;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntity;
+import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -64,7 +65,7 @@ public class LichMovement {
     }
 
     private void moveWhileAttacking(Vec3 velocity) {
-        entity.setDeltaMovement(velocity);
+        BMDUtils.addDeltaMovement(entity, velocity);
 
         LivingEntity target = entity.getTarget();
         if (target != null) {
@@ -109,7 +110,7 @@ public class LichMovement {
     }
 
     private void moveTowards(Vec3 velocity) {
-        entity.setDeltaMovement(velocity);
+        BMDUtils.addDeltaMovement(entity, velocity);
 
         Vec3 lookTarget = entity.position().add(new Vec3(0.0, entity.getEyeHeight(), 0.0)).add(velocity);
         entity.getLookControl().setLookAt(lookTarget);

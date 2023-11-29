@@ -29,6 +29,10 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class BMDUtils {
+    public static void addDeltaMovement(Entity entity, Vec3 velocity){
+        entity.setDeltaMovement(entity.getDeltaMovement().add(velocity));
+    }
+
     public static void spawnParticle(ServerLevel level, ParticleOptions particleType, Vec3 pos, Vec3 velOrOffset, int count, double speed) {
         level.sendParticles(
                 particleType,

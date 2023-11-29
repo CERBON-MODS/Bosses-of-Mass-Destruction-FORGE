@@ -10,6 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.CanMoveTh
 import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.InDesiredRange;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.ValidDirectionAnd;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
+import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
@@ -63,7 +64,7 @@ public class GauntletMovement {
     }
 
     private void moveAndLookAtTarget(Vec3 velocity){
-        entity.setDeltaMovement(velocity);
+        BMDUtils.addDeltaMovement(entity, velocity);
 
         LivingEntity target = entity.getTarget();
         if (target != null){

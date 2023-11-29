@@ -127,13 +127,13 @@ public class PunchAction implements IActionWithCooldown {
 
         for (LivingEntity target : collidedEntities){
             entity.doHurtTarget(target);
-            target.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
+            BMDUtils.addDeltaMovement(target, entity.getDeltaMovement().scale(0.5));
         }
     }
 
     public static void accelerateTowardsTarget(Entity entity, Vec3 target, double velocity){
         Vec3 dir = MathUtils.unNormedDirection(MobUtils.eyePos(entity), target).normalize();
         Vec3 velocityCorrection = VecUtils.planeProject(entity.getDeltaMovement(), dir);
-        entity.setDeltaMovement(dir.subtract(velocityCorrection).scale(velocity));
+        BMDUtils.addDeltaMovement(entity, dir.subtract(velocityCorrection).scale(velocity));
     }
 }
