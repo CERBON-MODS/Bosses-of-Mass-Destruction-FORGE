@@ -13,6 +13,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.Obsidilith
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithBoneLight;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.*;
+import com.cerbon.bosses_of_mass_destruction.entity.util.SimpleGeoRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.util.SimpleLivingGeoRenderer;
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlEntity;
 import com.cerbon.bosses_of_mass_destruction.item.custom.SoulStarEntity;
@@ -34,6 +35,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -189,25 +191,23 @@ public class BMDEntities {
             );
         });
 
-//        EntityRenderers.register(COMET.get(), context ->
-//                new SimpleLivingGeoRenderer<>(
-//                        context,
-//                        new GeoModel<>(
-//                                geoAnimatable -> new ResourceLocation(BMDConstants.MOD_ID, "geo/comet.geo.json"),
-//                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/comet.png"),
-//                                new ResourceLocation(BMDConstants.MOD_ID, "animations/comet.animation.json"),
-//                                new CometCodeAnimations()
-//                        ),
-//                        new FullRenderLight<>(),
-//                        null,
-//                        new ConditionalRenderer<>(
-//                                new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
-//                                new LerpedPosRenderer<>(vec3 -> ParticleFactories.cometTrail().build(vec3.add(RandomUtils.randVec().scale(0.5)), Vec3.ZERO))
-//                        ),
-//                        null,
-//                        null,
-//                        true
-//                ));
+        EntityRenderers.register(COMET.get(), context ->
+                new SimpleGeoRenderer<>(
+                        context,
+                        new GeoModel<>(
+                                geoAnimatable -> new ResourceLocation(BMDConstants.MOD_ID, "geo/comet.geo.json"),
+                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/comet.png"),
+                                new ResourceLocation(BMDConstants.MOD_ID, "animations/comet.animation.json"),
+                                new CometCodeAnimations()
+                        ),
+                        new ConditionalRenderer<>(
+                                new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
+                                new LerpedPosRenderer<>(vec3 -> ParticleFactories.cometTrail().build(vec3.add(RandomUtils.randVec().scale(0.5)), Vec3.ZERO))
+                        ),
+                        null,
+                        new FullRenderLight<>(),
+                        null
+                ));
 
         EntityRenderers.register(SOUL_STAR.get(), context ->
                 new ThrownItemRenderer<>(context, 1.0f, true));
@@ -280,35 +280,34 @@ public class BMDEntities {
             );
         });
 
-//        EntityRenderers.register(SPORE_BALL.get(), context -> {
-//            SporeBallOverlay explosionFlasher = new SporeBallOverlay();
-//            return new SimpleLivingGeoRenderer<>(
-//                    context,
-//                    new GeoModel<>(
-//                            geoAnimatable -> new ResourceLocation(BMDConstants.MOD_ID, "geo/comet.geo.json"),
-//                            entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/spore.png"),
-//                            new ResourceLocation(BMDConstants.MOD_ID, "animations/comet.animation.json"),
-//                            new SporeCodeAnimations()
-//                    ),
-//                    new FullRenderLight<>(),
-//                    null,
-//                    new CompositeRenderer<>(
-//                            new ConditionalRenderer<>(
-//                                    new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
-//                                    new LerpedPosRenderer<>(vec3 -> {
-//                                        ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.OBSIDILITH_BURST.get())
-//                                                .color(BMDColors.GREEN)
-//                                                .colorVariation(0.4)
-//                                                .scale(0.5f)
-//                                                .brightness(BMDParticles.FULL_BRIGHT);
-//                                        projectileParticles.build(vec3.add(RandomUtils.randVec().scale(0.25)), VecUtils.yAxis.scale(0.1));
-//                                    })),
-//                            explosionFlasher,
-//                            new SporeBallSizeRenderer()),
-//                    null,
-//                    explosionFlasher,
-//                    true);
-//        });
+        EntityRenderers.register(SPORE_BALL.get(), context -> {
+            SporeBallOverlay explosionFlasher = new SporeBallOverlay();
+            return new SimpleGeoRenderer<>(
+                    context,
+                    new GeoModel<>(
+                            geoAnimatable -> new ResourceLocation(BMDConstants.MOD_ID, "geo/comet.geo.json"),
+                            entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/spore.png"),
+                            new ResourceLocation(BMDConstants.MOD_ID, "animations/comet.animation.json"),
+                            new SporeCodeAnimations()
+                    ),
+                    new CompositeRenderer<>(
+                            new ConditionalRenderer<>(
+                                    new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
+                                    new LerpedPosRenderer<>(vec3 -> {
+                                        ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.OBSIDILITH_BURST.get())
+                                                .color(BMDColors.GREEN)
+                                                .colorVariation(0.4)
+                                                .scale(0.5f)
+                                                .brightness(BMDParticles.FULL_BRIGHT);
+                                        projectileParticles.build(vec3.add(RandomUtils.randVec().scale(0.25)), VecUtils.yAxis.scale(0.1));
+                                    })),
+                            explosionFlasher
+                    ),
+                    new SporeBallSizeRenderer(),
+                    new FullRenderLight<>(),
+                    explosionFlasher
+            );
+        });
 
         ResourceLocation petalTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/petal_blade.png");
         RenderType petalBladeRenderType = RenderType.entityCutoutNoCull(petalTexture);
