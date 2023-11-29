@@ -20,6 +20,7 @@ import software.bernie.geckolib3.geo.render.built.*;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
 
@@ -90,8 +91,8 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
     @Override
     public void render(GeoModel model, T animatable, float partialTick, RenderType type, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         super.render(model, animatable, partialTick, type, poseStack, bufferSource, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        renderHelper.render(model, animatable, partialTick, type, poseStack, bufferSource, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         int packetOverlay = overlayOverride != null ? overlayOverride.getOverlay() : packedOverlay;
+        renderHelper.render(model, animatable, partialTick, type, poseStack, bufferSource, buffer, packedLight, packetOverlay, red, green, blue, alpha);
         if (renderWithModel != null) renderWithModel.render(model, partialTick, poseStack, bufferSource, packedLight, packetOverlay, red, green, blue, alpha);
     }
 
