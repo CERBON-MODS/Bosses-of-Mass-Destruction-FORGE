@@ -38,6 +38,7 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
     protected IEntityTick<ServerLevel> deathServerTick;
     protected final EventScheduler preTickEvents = new EventScheduler();
     protected final EventScheduler postTickEvents = new EventScheduler();
+    protected AnimationFactory animationFactory;
 
     public BaseEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -193,13 +194,16 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
     }
 
     @Override
-    public int tickTimer() {
-        return tickCount;
+    public AnimationFactory getFactory() {
+        if (animationFactory == null)
+            animationFactory = new AnimationFactory(this);
+
+        return animationFactory;
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return new AnimationFactory(this);
+    public int tickTimer() {
+        return tickCount;
     }
 
     public Vec3 safeGetTargetPos(){
