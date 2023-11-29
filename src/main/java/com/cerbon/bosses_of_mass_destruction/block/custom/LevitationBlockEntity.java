@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 
 public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAnimatable, IAnimationTickable {
     private static final double tableOfElevationRadius = AutoConfig.getConfigHolder(BMDConfig.class).getConfig().generalConfig.tableOfElevationRadius;
+    private AnimationFactory animationFactory;
     public int animationAge = 0;
 
     private static final HashSet<ServerPlayer> flight = new HashSet<>();
@@ -58,7 +59,10 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAni
 
     @Override
     public AnimationFactory getFactory() {
-        return new AnimationFactory(this);
+        if (animationFactory == null)
+            animationFactory = new AnimationFactory(this);
+
+        return animationFactory;
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, LevitationBlockEntity entity){
@@ -135,8 +139,6 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAni
     private static AABB getAffectingBox(Level level, Vec3 pos){
         return new AABB(pos.x, level.getMinBuildHeight(), pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(tableOfElevationRadius, 0.0, tableOfElevationRadius);
     }
-
-
 
     @Override
     public void tick() {}
