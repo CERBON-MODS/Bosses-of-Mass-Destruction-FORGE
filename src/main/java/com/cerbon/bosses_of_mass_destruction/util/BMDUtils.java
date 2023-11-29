@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -33,6 +34,8 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class BMDUtils {
+    public static final ResourceKey<DamageType> SHIELD_PIERCING = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(BMDConstants.MOD_ID, "shield_piercing"));
+
     public static void spawnParticle(ServerLevel level, ParticleOptions particleType, Vec3 pos, Vec3 velOrOffset, int count, double speed) {
         level.sendParticles(
                 particleType,
@@ -48,7 +51,7 @@ public class BMDUtils {
     }
 
     public static DamageSource shieldPiercing(Level level, Entity attacker) {
-        return VanillaCopiesServer.create(level, ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(BMDConstants.MOD_ID, "shield_piercing")), attacker);
+        return VanillaCopiesServer.create(level, SHIELD_PIERCING, attacker);
     }
 
     public static void playSound(
