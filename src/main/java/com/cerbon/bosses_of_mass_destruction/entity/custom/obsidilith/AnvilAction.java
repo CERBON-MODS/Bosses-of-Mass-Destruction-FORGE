@@ -10,6 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldow
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -74,7 +75,7 @@ public class AnvilAction implements IActionWithCooldown {
                                                         new Event(
                                                                 shouldLand,
                                                                 () -> {
-                                                                    actor.level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), explosionPower, Explosion.BlockInteraction.DESTROY);
+                                                                    actor.level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), explosionPower, VanillaCopiesServer.getEntityDestructionType(actor.level));
                                                                     eventScheduler.addEvent(
                                                                             new TimedEvent(
                                                                                     () -> {

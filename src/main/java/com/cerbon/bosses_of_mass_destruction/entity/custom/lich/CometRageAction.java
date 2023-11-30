@@ -10,6 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.ProjectileThrower;
 import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometProjectile;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +42,7 @@ public class CometRageAction implements IActionWithCooldown {
         this.cometThrower = offset -> new ProjectileThrower(
                 () -> {
                     CometProjectile projectile = new CometProjectile(entity, entity.level, vec3 ->
-                            entity.level.explode(entity, vec3.x, vec3.y, vec3.z, lichConfig.comet.explosionStrength, Explosion.BlockInteraction.DESTROY), Collections.singletonList(MinionAction.summonEntityType));
+                            entity.level.explode(entity, vec3.x, vec3.y, vec3.z, lichConfig.comet.explosionStrength, VanillaCopiesServer.getEntityDestructionType(entity.level)), Collections.singletonList(MinionAction.summonEntityType));
 
                     MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
                     return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);

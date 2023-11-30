@@ -13,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -35,7 +34,7 @@ public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
     public void tick(ServerLevel level) {
         entity.deathTime++;
         if (entity.deathTime == deathAnimationTime){
-            level.explode(null, entity.position().x, entity.position().y, entity.position().z, 4.0f, Explosion.BlockInteraction.DESTROY); //TODO: Check
+            level.explode(null, entity.position().x, entity.position().y, entity.position().z, 4.0f, VanillaCopiesServer.getEntityDestructionType(entity.level));
             if (mobConfig.spawnAncientDebrisOnDeath) createLoot(level);
             dropExp();
             entity.remove(Entity.RemovalReason.KILLED);

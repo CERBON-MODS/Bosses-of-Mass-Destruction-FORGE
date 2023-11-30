@@ -117,7 +117,7 @@ public class PunchAction implements IActionWithCooldown {
                     pos.y,
                     pos.z,
                     (float) (previousSpeed * mobConfig.normalPunchExplosionMultiplier),
-                    Explosion.BlockInteraction.DESTROY // TODO: Check if it's correct
+                    VanillaCopiesServer.getEntityDestructionType(entity.level)
             );
         }
     }

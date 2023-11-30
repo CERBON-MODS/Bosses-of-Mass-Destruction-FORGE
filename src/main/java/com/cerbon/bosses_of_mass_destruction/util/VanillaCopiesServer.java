@@ -89,6 +89,10 @@ public class VanillaCopiesServer {
         return entity.isOnFire() ? 15 : entity.level.getBrightness(LightLayer.BLOCK, blockPos);
     }
 
+    public static Explosion.BlockInteraction getEntityDestructionType(Level level){
+        return level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
+    }
+
     public static void destroyBlocks(Entity entity, AABB aabb) {
         int i = Mth.floor(aabb.minX);
         int j = Mth.floor(aabb.minY);

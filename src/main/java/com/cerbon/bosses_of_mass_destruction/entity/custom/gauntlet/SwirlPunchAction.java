@@ -8,6 +8,7 @@ import com.cerbon.bosses_of_mass_destruction.config.mob.GauntletConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -93,6 +94,7 @@ public class SwirlPunchAction implements IActionWithCooldown {
     private void testBlockPhysicalImpact(){
         if ((entity.horizontalCollision || entity.verticalCollision) && previousSpeed > 0.55f){
             Vec3 pos = entity.position();
+            Explosion.BlockInteraction flag = VanillaCopiesServer.getEntityDestructionType(entity.level);
             if (entity.getEntityData().get(GauntletEntity.isEnergized)){
                 entity.level.explode(
                         entity,
@@ -101,7 +103,7 @@ public class SwirlPunchAction implements IActionWithCooldown {
                         pos.z,
                         (float) mobConfig.energizedPunchExplosionSize,
                         true,
-                        Explosion.BlockInteraction.DESTROY //TODO: Check
+                        flag
                 );
                 entity.getEntityData().set(GauntletEntity.isEnergized, false);
             }else {
@@ -111,7 +113,7 @@ public class SwirlPunchAction implements IActionWithCooldown {
                         pos.y,
                         pos.z,
                         (float) (previousSpeed * mobConfig.normalPunchExplosionMultiplier),
-                        Explosion.BlockInteraction.DESTROY
+                        flag
                 );
             }
         }
