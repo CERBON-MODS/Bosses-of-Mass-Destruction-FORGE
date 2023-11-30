@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
@@ -61,7 +62,7 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
                 buffer,
                 energyBuffer,
                 packedLightIn,
-                packedOverlayIn,
+                OverlayTexture.NO_OVERLAY,
                 0.8f * lerpedAlpha,
                 0.2f * lerpedAlpha,
                 0.2f * lerpedAlpha,
