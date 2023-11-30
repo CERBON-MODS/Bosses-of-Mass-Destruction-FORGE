@@ -39,7 +39,6 @@ public class BMDBlockEntities {
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient() {
-        //TODO: Fix animation not working
         BlockEntityRenderers.register(LEVITATION_BLOCK_ENTITY.get(), context ->
                 new BMDBlockEntityRenderer<LevitationBlockEntity>(
                         context,
