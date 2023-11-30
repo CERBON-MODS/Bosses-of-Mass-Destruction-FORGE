@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
@@ -65,7 +66,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
                     buffer,
                     energyBuffer,
                     packedLightIn,
-                    packedOverlayIn,
+                    OverlayTexture.NO_OVERLAY,
                     (float) color.x, (float) color.y, (float) color.z, 1.0f
             );
         }
