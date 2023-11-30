@@ -19,24 +19,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BossHealthOverlay.class)
 public class BossHealthOverlayMixin {
 
-    @Unique private static final NodeBossBarRenderer bmd_lichBossBarRenderer = new NodeBossBarRenderer(
-            BMDEntities.LICH.get().getDescriptionId(),
-            LichUtils.hpPercentRageModes,
-            new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/lich_boss_bar_dividers.png"),
-            LichUtils.textureSize
-    );
-
-    @Unique private static final NodeBossBarRenderer bmd_voidBlossomBarRenderer = new NodeBossBarRenderer(
-            BMDEntities.VOID_BLOSSOM.get().getDescriptionId(),
-            VoidBlossomEntity.hpMilestones,
-            new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/void_blossom_boss_bar_dividers.png"),
-            LichUtils.textureSize
-    );
-
     @Inject(method = "drawBar(Lcom/mojang/blaze3d/vertex/PoseStack;IILnet/minecraft/world/BossEvent;)V", at = @At("HEAD"), cancellable = true)
-    private void drawCustomBossBar(PoseStack poseStack, int x, int y, BossEvent bossEvent, CallbackInfo ci){
-        bmd_lichBossBarRenderer.renderBossBar(poseStack, x, y, bossEvent, ci);
-        bmd_voidBlossomBarRenderer.renderBossBar(poseStack, x, y, bossEvent, ci);
+    private void drawCustomBossBar(PoseStack poseStack, int x, int y, BossEvent bossEvent, CallbackInfo ci) {
+
+        NodeBossBarRenderer lichBossBarRenderer = new NodeBossBarRenderer(
+                BMDEntities.LICH.get().getDescriptionId(),
+                LichUtils.hpPercentRageModes,
+                new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/lich_boss_bar_dividers.png"),
+                LichUtils.textureSize
+        );
+
+        NodeBossBarRenderer voidBlossomBarRenderer = new NodeBossBarRenderer(
+                BMDEntities.VOID_BLOSSOM.get().getDescriptionId(),
+                VoidBlossomEntity.hpMilestones,
+                new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/void_blossom_boss_bar_dividers.png"),
+                LichUtils.textureSize
+        );
+
+        lichBossBarRenderer.renderBossBar(poseStack, x, y, bossEvent, ci);
+        voidBlossomBarRenderer.renderBossBar(poseStack, x, y, bossEvent, ci);
         ObsidilithUtils.obsidilithBossBarRenderer.renderBossBar(poseStack, x, y, bossEvent, ci);
     }
 }
