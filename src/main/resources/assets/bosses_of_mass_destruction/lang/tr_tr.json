@@ -20,7 +20,7 @@
   "block.bosses_of_mass_destruction.void_blossom" : "Mor Felaket",
   "block.bosses_of_mass_destruction.vine_wall" : "Dikenli Duvar",
 
-  "itemGroup.bosses_of_mass_destruction.items" : "Kitle İmha Patronları",
+  "itemGroup.bosses_of_mass_destruction" : "Kitle İmha Patronları",
 
   "item.bosses_of_mass_destruction.soul_star" : "Ruh Yıldızı",
   "item.bosses_of_mass_destruction.soul_star.tooltip" : "Nereye gidiyor?",

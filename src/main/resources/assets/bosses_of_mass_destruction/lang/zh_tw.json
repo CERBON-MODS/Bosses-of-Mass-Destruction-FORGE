@@ -18,7 +18,7 @@
   "block.bosses_of_mass_destruction.void_lily.tooltip": "花粉被什麼東西吸引著",
   "block.bosses_of_mass_destruction.void_blossom": "虛空之花",
   "block.bosses_of_mass_destruction.vine_wall": "荊棘牆",
-  "itemGroup.bosses_of_mass_destruction.items": "世界王",
+  "itemGroup.bosses_of_mass_destruction": "世界王",
   "item.bosses_of_mass_destruction.soul_star": "靈魂之星",
   "item.bosses_of_mass_destruction.soul_star.tooltip": "似乎指引我們到哪裡?",
   "item.bosses_of_mass_destruction.ancient_anima": "遠古心能",

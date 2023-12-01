@@ -9,7 +9,7 @@
   "block.bosses_of_mass_destruction.sealed_blackstone": "Запечатана чорнокам'яна цегла",
   "block.bosses_of_mass_destruction.gauntlet_blackstone": "Стародавній різьблений чорнокамінь",
   "block.bosses_of_mass_destruction.chiseled_stone_altar": "Різьблений кам'яний вівтар",
-  "itemGroup.bosses_of_mass_destruction.items": "Bosses of Mass Destruction",
+  "itemGroup.bosses_of_mass_destruction": "Bosses of Mass Destruction",
   "item.bosses_of_mass_destruction.soul_star": "Зірка душ",
   "item.bosses_of_mass_destruction.soul_star.tooltip": "Куди вона веде?",
   "item.bosses_of_mass_destruction.ancient_anima": "Стародавня душа",

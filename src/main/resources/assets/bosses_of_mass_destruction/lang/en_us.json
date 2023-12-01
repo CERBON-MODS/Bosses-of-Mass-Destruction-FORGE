@@ -20,7 +20,7 @@
   "block.bosses_of_mass_destruction.void_blossom" : "Void Blossom",
   "block.bosses_of_mass_destruction.vine_wall" : "Bramble Wall",
 
-  "itemGroup.bosses_of_mass_destruction.items" : "Bosses of Mass Destruction",
+  "itemGroup.bosses_of_mass_destruction" : "Bosses of Mass Destruction",
 
   "item.bosses_of_mass_destruction.soul_star" : "Soul Star",
   "item.bosses_of_mass_destruction.soul_star.tooltip" : "Where does it lead?",

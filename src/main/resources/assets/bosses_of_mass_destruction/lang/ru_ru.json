@@ -20,7 +20,7 @@
   "block.bosses_of_mass_destruction.void_blossom" : "Цветок пустоты",
   "block.bosses_of_mass_destruction.vine_wall" : "Стена ежевики",
 
-  "itemGroup.bosses_of_mass_destruction.items" : "Боссы массового уничтожения",
+  "itemGroup.bosses_of_mass_destruction" : "Боссы массового уничтожения",
 
   "item.bosses_of_mass_destruction.soul_star" : "Звезда души",
   "item.bosses_of_mass_destruction.soul_star.tooltip" : "Куда она ведёт?",
