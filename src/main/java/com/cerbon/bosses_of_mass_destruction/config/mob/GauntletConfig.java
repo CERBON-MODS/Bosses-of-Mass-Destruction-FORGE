@@ -3,14 +3,14 @@ package com.cerbon.bosses_of_mass_destruction.config.mob;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 public class GauntletConfig {
-    public final double health = 250.0;
-    public final double armor = 8.0;
-    public final double attack = 16.0;
-    public final float idleHealingPerTick = 0.5f;
+    public double health = 250.0;
+    public double armor = 8.0;
+    public double attack = 16.0;
+    public float idleHealingPerTick = 0.5f;
 
     @ConfigEntry.BoundedDiscrete(min = 0, max = 10000)
-    public final int experienceDrop = 1000;
-    public final boolean spawnAncientDebrisOnDeath = true;
-    public final double energizedPunchExplosionSize = 4.5;
-    public final double normalPunchExplosionMultiplier = 1.5;
+    public int experienceDrop = 1000;
+    public boolean spawnAncientDebrisOnDeath = true;
+    public double energizedPunchExplosionSize = 4.5;
+    public double normalPunchExplosionMultiplier = 1.5;
 }
