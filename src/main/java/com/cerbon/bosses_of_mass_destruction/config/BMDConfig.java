@@ -18,23 +18,23 @@ import java.util.List;
 public class BMDConfig implements ConfigData {
     @ConfigEntry.Category("Lich")
     @ConfigEntry.Gui.TransitiveObject
-    public final LichConfig lichConfig = new LichConfig();
+    public LichConfig lichConfig = new LichConfig();
 
     @ConfigEntry.Category("Obsidilith")
     @ConfigEntry.Gui.TransitiveObject
-    public final ObsidilithConfig obsidilithConfig = new ObsidilithConfig();
+    public ObsidilithConfig obsidilithConfig = new ObsidilithConfig();
 
     @ConfigEntry.Category("Gauntlet")
     @ConfigEntry.Gui.TransitiveObject
-    public final GauntletConfig gauntletConfig = new GauntletConfig();
+    public GauntletConfig gauntletConfig = new GauntletConfig();
 
     @ConfigEntry.Category("VoidBlossom")
     @ConfigEntry.Gui.TransitiveObject
-    public final VoidBlossomConfig voidBlossomConfig = new VoidBlossomConfig();
+    public VoidBlossomConfig voidBlossomConfig = new VoidBlossomConfig();
 
     @ConfigEntry.Category("General")
     @ConfigEntry.Gui.TransitiveObject
-    public final GeneralConfig generalConfig = new GeneralConfig();
+    public GeneralConfig generalConfig = new GeneralConfig();
 
     public void postInit() {
         List<String> entitiesThatCountToSummonCounter = lichConfig.summonMechanic.entitiesThatCountToSummonCounter;
