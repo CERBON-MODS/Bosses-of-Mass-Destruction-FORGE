@@ -7,8 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +39,8 @@ public class SpikeS2CPacket {
         }
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
+        CustomPayloadEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
 

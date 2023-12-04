@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import java.util.function.Supplier;
 
@@ -42,8 +42,8 @@ public class MultipartEntityInteractionC2SPacket {
         buf.writeEnum(interactionType);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
+        CustomPayloadEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
             ServerPlayer serverPlayer = ctx.getSender();
             if (serverPlayer == null) return;
