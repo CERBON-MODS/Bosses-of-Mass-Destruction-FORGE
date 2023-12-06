@@ -5,7 +5,6 @@
 		"1": "bosses_of_mass_destruction:block/mob_ward",
 		"particle" : "bosses_of_mass_destruction:block/mob_ward"
 	},
-	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "shaft",

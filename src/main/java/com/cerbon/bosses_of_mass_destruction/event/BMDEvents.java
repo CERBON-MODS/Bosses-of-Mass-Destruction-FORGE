@@ -1,6 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.event;
 
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.LevelEventSchedulerProvider;
 import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
@@ -9,7 +10,6 @@ import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,6 +33,7 @@ public class BMDEvents {
         protected static void onClientSetup(FMLClientSetupEvent event){
             BMDEntities.initClient();
             BMDItems.initClient();
+            BMDBlocks.initClient();
             BMDBlockEntities.initClient();
             ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((client, parent) -> AutoConfig.getConfigScreen(BMDConfig.class, parent).get()));
         }

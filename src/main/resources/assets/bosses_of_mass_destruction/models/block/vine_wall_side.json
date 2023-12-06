@@ -5,7 +5,6 @@
         "bars": "bosses_of_mass_destruction:block/vine_wall",
         "edge": "bosses_of_mass_destruction:block/vine_wall"
     },
-    "render_type": "cutout",
     "elements": [
         {   "from": [ 8, 0, 0 ],
             "to": [ 8, 16, 8 ],

@@ -2,6 +2,8 @@ package com.cerbon.bosses_of_mass_destruction.block;
 
 import com.cerbon.bosses_of_mass_destruction.block.custom.*;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -9,6 +11,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,6 +57,14 @@ public class BMDBlocks {
 
     public static final RegistryObject<Block> VOID_LILY_BLOCK = BLOCKS.register("void_lily",
             () -> new VoidLilyBlock(BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).lightLevel(value -> 8)));
+
+    @OnlyIn(Dist.CLIENT)
+    public static void initClient(){
+        ItemBlockRenderTypes.setRenderLayer(MOB_WARD.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(VOID_BLOSSOM.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(VINE_WALL.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(VOID_LILY_BLOCK.get(), RenderType.cutout());
+    }
 
     public static void register(IEventBus eventBus){
         BLOCKS.register(eventBus);
