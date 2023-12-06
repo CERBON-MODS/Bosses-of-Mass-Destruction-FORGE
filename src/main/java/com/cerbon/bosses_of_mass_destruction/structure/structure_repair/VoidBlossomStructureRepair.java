@@ -26,12 +26,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class VoidBlossomStructureRepair implements StructureRepair{
-    private static final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
-            .color(BMDColors.VOID_PURPLE)
-            .colorVariation(0.25)
-            .brightness(BMDParticles.FULL_BRIGHT)
-            .scale(f -> 0.5f * (1 - f * 0.25f))
-            .age(20);
 
     @Override
     public ResourceKey<ConfiguredStructureFeature<?, ?>> associatedStructure() {
@@ -69,7 +63,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
                         () -> BMDUtils.spawnRotatingParticles(
                                 new BMDUtils.RotatingParticles(
                                         pos.add(VecUtils.yAxis.scale(RandomUtils.range(1.0, 10.0))),
-                                        spikeParticleFactory,
+                                        Particles.spikeParticleFactory,
                                         1.0,
                                         2.0,
                                         3.0,
@@ -86,5 +80,14 @@ public class VoidBlossomStructureRepair implements StructureRepair{
                 new ClientParticleBuilder(BMDParticles.VOID_BLOSSOM_SPIKE_INDICATOR.get())
                         .age(60)
                         .build(pos.add(0.0, 0.1, 0.0).add(vec3), Vec3.ZERO));
+    }
+
+    private static class Particles {
+        private static final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
+                .color(BMDColors.VOID_PURPLE)
+                .colorVariation(0.25)
+                .brightness(BMDParticles.FULL_BRIGHT)
+                .scale(f -> 0.5f * (1 - f * 0.25f))
+                .age(20);
     }
 }
