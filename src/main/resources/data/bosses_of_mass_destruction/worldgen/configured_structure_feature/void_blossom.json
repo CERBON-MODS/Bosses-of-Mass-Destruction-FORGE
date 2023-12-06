@@ -1,0 +1,8 @@
+{
+  "type": "bosses_of_mass_destruction:void_blossom",
+
+  "config": {},
+
+  "biomes": "#bosses_of_mass_destruction:has_structure/void_blossom",
+  "spawn_overrides": {}
+}

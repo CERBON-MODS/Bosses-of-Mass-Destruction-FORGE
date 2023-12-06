@@ -9,7 +9,6 @@ import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -19,6 +18,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class ChiseledStoneAltarBlock extends Block {
     public static final BooleanProperty lit = BlockStateProperties.LIT;
@@ -50,7 +51,7 @@ public class ChiseledStoneAltarBlock extends Block {
     }
 
     @Override
-    public void animateTick(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    public void animateTick(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Random random) {
         if (state.getValue(lit)){
             if (random.nextInt(3) == 0){
                 Particles.blueFireParticleFactory.build(

@@ -20,7 +20,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class BMDBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCKS_ENTITIES =
-            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, BMDConstants.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, BMDConstants.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<MobWardBlockEntity>> MOB_WARD = BLOCKS_ENTITIES.register("mob_ward",
             () -> BlockEntityType.Builder.of(MobWardBlockEntity::new, BMDBlocks.MOB_WARD.get()).build(null));

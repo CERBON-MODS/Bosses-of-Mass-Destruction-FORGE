@@ -6,10 +6,9 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,17 +19,14 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class VoidBlossomCavernPieceGenerator implements IPieceGenerator {
 
     @Override
-    public void generate(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos, IStructurePiece structurePiece) {
+    public void generate(WorldGenLevel level, StructureFeatureManager structureManager, ChunkGenerator chunkGenerator, Random random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos, IStructurePiece structurePiece) {
         int minY = chunkGenerator.getMinY();
         List<ICaveDecorator> caveDecorators = Arrays.asList(
                 new SpikeCaveDecorator(minY, random),
@@ -47,7 +43,7 @@ public class VoidBlossomCavernPieceGenerator implements IPieceGenerator {
 
     }
 
-    private void generateCave(WorldGenLevel level, BlockPos pos, IStructurePiece structurePiece, RandomSource random, BoundingBox boundingBox, List<ICaveDecorator> caveDecorators, int bottomOfWorld){
+    private void generateCave(WorldGenLevel level, BlockPos pos, IStructurePiece structurePiece, Random random, BoundingBox boundingBox, List<ICaveDecorator> caveDecorators, int bottomOfWorld){
         double noiseMultiplier = 0.005;
         UniformInt outerWallDistance = UniformInt.of(3, 4);
         UniformInt pointOffset = UniformInt.of(1, 2);

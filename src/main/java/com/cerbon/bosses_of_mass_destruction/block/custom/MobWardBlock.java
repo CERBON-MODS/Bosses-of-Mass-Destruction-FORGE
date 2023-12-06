@@ -12,8 +12,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Random;
 
 public class MobWardBlock extends BaseEntityBlock {
     public static final VoxelShape blockShape = box(5.0, 0.0, 5.0, 11.0, 16.0, 11.0);
@@ -65,7 +66,7 @@ public class MobWardBlock extends BaseEntityBlock {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.bosses_of_mass_destruction.mob_ward.tooltip").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(new TranslatableComponent("item.bosses_of_mass_destruction.mob_ward.tooltip").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Override
@@ -172,7 +173,7 @@ public class MobWardBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void animateTick(BlockState state, @NotNull Level lvel, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    public void animateTick(BlockState state, @NotNull Level lvel, @NotNull BlockPos pos, @NotNull Random random) {
         if (state.getValue(tripleBlockPart) == TripleBlockPart.TOP){
             if (random.nextInt(3) == 0){
                 Vec3 vecPos = VecUtils.asVec3(pos).add(VecUtils.unit.scale(0.5));

@@ -1,0 +1,11 @@
+{
+  "type": "bosses_of_mass_destruction:lich_tower",
+
+  "config": {
+    "start_pool": "bosses_of_mass_destruction:lich_tower/start_pool",
+    "size": 2
+  },
+
+  "biomes": "#bosses_of_mass_destruction:has_structure/lich_tower",
+  "spawn_overrides": {}
+}

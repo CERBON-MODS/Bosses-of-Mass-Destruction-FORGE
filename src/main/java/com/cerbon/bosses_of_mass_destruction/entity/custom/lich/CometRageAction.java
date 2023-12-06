@@ -14,7 +14,6 @@ import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;

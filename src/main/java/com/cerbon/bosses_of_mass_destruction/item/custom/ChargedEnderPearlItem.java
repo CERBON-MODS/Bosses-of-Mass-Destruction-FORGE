@@ -2,6 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.item.custom;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -53,8 +54,8 @@ public class ChargedEnderPearlItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip").withStyle(ChatFormatting.DARK_GRAY));
-        tooltipComponents.add(Component.translatable("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip2").withStyle(ChatFormatting.DARK_GRAY));
+        tooltipComponents.add(new TranslatableComponent("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip").withStyle(ChatFormatting.DARK_GRAY));
+        tooltipComponents.add(new TranslatableComponent("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip2").withStyle(ChatFormatting.DARK_GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }

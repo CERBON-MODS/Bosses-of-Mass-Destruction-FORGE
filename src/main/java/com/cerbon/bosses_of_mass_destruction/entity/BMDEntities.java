@@ -1,6 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity;
 
-import com.cerbon.bosses_of_mass_destruction.BossesOfMassDestruction;
 import com.cerbon.bosses_of_mass_destruction.animation.PauseAnimationTimer;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.WeakHashPredicate;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
@@ -35,7 +34,6 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -52,7 +50,7 @@ public class BMDEntities {
     public static final BMDConfig mobConfig = AutoConfig.getConfigHolder(BMDConfig.class).getConfig();
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BMDConstants.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.ENTITIES, BMDConstants.MOD_ID);
 
     public static final RegistryObject<EntityType<LichEntity>> LICH = ENTITY_TYPES.register("lich",
             () -> EntityType.Builder.<LichEntity>of((entityType, level) -> new LichEntity(entityType, level, mobConfig.lichConfig), MobCategory.MONSTER)

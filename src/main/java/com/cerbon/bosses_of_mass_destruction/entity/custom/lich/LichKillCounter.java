@@ -24,7 +24,7 @@ public class LichKillCounter {
         this.config = config;
         this.countedEntities = config.entitiesThatCountToSummonCounter != null
                 ? config.entitiesThatCountToSummonCounter.stream()
-                .map(string -> ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(string)))
+                .map(string -> ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(string)))
                 .collect(Collectors.toList())
                 : List.of();
     }

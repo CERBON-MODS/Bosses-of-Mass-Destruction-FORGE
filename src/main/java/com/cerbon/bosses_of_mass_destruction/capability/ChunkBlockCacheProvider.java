@@ -6,7 +6,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@AutoRegisterCapability
 public class ChunkBlockCacheProvider implements ICapabilityProvider {
     public static final Capability<ChunkBlockCache> CHUNK_BLOCK_CACHE = CapabilityManager.get(new CapabilityToken<>() {});
 

@@ -3,6 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.block.custom;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -42,6 +43,6 @@ public class VoidLilyBlock extends FlowerBlock implements EntityBlock {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.translatable("block.bosses_of_mass_destruction.void_lily.tooltip").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(new TranslatableComponent("block.bosses_of_mass_destruction.void_lily.tooltip").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

@@ -8,7 +8,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@AutoRegisterCapability
 public class PlayerMoveHistoryProvider implements ICapabilityProvider {
     public static final Capability<HistoricalData<Vec3>> HISTORICAL_DATA = CapabilityManager.get(new CapabilityToken<>() {});
 

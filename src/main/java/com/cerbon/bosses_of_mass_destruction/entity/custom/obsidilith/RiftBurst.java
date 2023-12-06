@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
@@ -17,6 +16,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -75,7 +75,7 @@ public class RiftBurst {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            RandomSource rand = serverLevel.random;
+                            Random rand = serverLevel.random;
                             Vec3 columVel = VecUtils.yAxis.scale(rand.nextDouble() + 1).scale(0.25);
                             AtomicInteger ticks = new AtomicInteger();
                             eventScheduler.addEvent(

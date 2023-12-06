@@ -14,7 +14,7 @@ public class SporeCodeAnimations implements ICodeAnimations<SporeBallProjectile>
     public void animate(SporeBallProjectile animatable, AnimationEvent<?> data, GeoModel<SporeBallProjectile> geoModel) {
         float pitch = animatable.impacted ? animatable.getXRot() : Mth.rotLerp(data.getPartialTick(), animatable.getXRot() - 5, animatable.getXRot());
 
-        var model = geoModel.getModel(geoModel.getModelResource(animatable));
+        var model = geoModel.getModel(geoModel.getModelLocation(animatable));
         model.getBone("root1").ifPresent(it -> it.setRotationX((float) Math.toRadians(pitch)));
     }
 }

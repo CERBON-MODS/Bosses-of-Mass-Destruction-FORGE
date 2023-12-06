@@ -9,6 +9,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -61,7 +62,7 @@ public class EarthdiveSpear extends Item {
             List<Component> tooltipComponents,
             @NotNull TooltipFlag isAdvanced
     ) {
-        tooltipComponents.add(Component.translatable("item.bosses_of_mass_destruction.earthdive_spear.tooltip").withStyle(ChatFormatting.DARK_GRAY));
+        tooltipComponents.add(new TranslatableComponent("item.bosses_of_mass_destruction.earthdive_spear.tooltip").withStyle(ChatFormatting.DARK_GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 
@@ -157,8 +158,9 @@ public class EarthdiveSpear extends Item {
         return UseAnim.SPEAR;
     }
 
+
     @Override
-    public int getEnchantmentValue(ItemStack stack) {
+    public int getEnchantmentValue() {
         return 1;
     }
 }

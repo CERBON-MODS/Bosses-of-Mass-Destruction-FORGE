@@ -61,9 +61,9 @@ public class ForgeEvents {
     }
 
     @SubscribeEvent
-    public static void onLevelTick(TickEvent.LevelTickEvent event){
-        if ((event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT) && event.level.getGameTime() % 2 == 0)
-            event.level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
+    public static void onLevelTick(TickEvent.WorldTickEvent event){
+        if ((event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT) && event.world.getGameTime() % 2 == 0)
+            event.world.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
     }
 
     @SubscribeEvent
@@ -72,7 +72,7 @@ public class ForgeEvents {
             Entity attacker = event.getSource().getEntity();
 
             if (attacker != null)
-                BMDEntities.killCounter.afterKilledOtherEntity(attacker, event.getEntity());
+                BMDEntities.killCounter.afterKilledOtherEntity(attacker, event.getEntityLiving());
         }
     }
 }

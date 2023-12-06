@@ -5,22 +5,17 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecU
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.SupportType;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +60,7 @@ public class BMDUtils {
                 pos.z,
                 range,
                 level.dimension(),
-                new ClientboundSoundPacket(soundEvent, soundSource, pos.x, pos.y, pos.z, volume, pitch, level.random.nextLong())
+                new ClientboundSoundPacket(soundEvent, soundSource, pos.x, pos.y, pos.z, volume, pitch)
         );
     }
 
@@ -81,7 +76,7 @@ public class BMDUtils {
         playSound(level, pos, soundEvent, soundSource, volume, randomPitch(level.random), range, player);
     }
 
-    public static float randomPitch(@NotNull RandomSource random) {
+    public static float randomPitch(@NotNull Random random) {
         return (random.nextFloat() - random.nextFloat()) * 0.2f + 1.0f;
     }
 
@@ -124,9 +119,4 @@ public class BMDUtils {
         Vec3 xzOffset = VecUtils.xAxis.yRot((float)Math.toRadians(age * rotationSpeed + startingRotation));
         return pos.add(xzOffset.scale(radius));
     }
-
-    public static ConfiguredFeature<?, ?> getConfiguredFeature(WorldGenLevel level, ResourceKey<ConfiguredFeature<?, ?>> key) {
-        return level.registryAccess().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY).getOrThrow(key);
-    }
-
 }

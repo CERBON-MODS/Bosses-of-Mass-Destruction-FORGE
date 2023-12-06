@@ -3,11 +3,12 @@ package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.structure.util.IStructurePiece;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+
+import java.util.Random;
 
 public class BossBlockDecorator implements ICaveDecorator {
     private final int bottomOfWorld;
@@ -20,7 +21,7 @@ public class BossBlockDecorator implements ICaveDecorator {
     public void onBlockPlaced(BlockPos pos, Block block) {}
 
     @Override
-    public void generate(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox boundingBox, BlockPos pos, IStructurePiece structurePiece) {
+    public void generate(WorldGenLevel level, ChunkGenerator chunkGenerator, Random random, BoundingBox boundingBox, BlockPos pos, IStructurePiece structurePiece) {
         structurePiece.placeBlock(level, BMDBlocks.VOID_BLOSSOM_SUMMON_BLOCK.get().defaultBlockState(), bossBlockOffset(pos, bottomOfWorld), boundingBox);
     }
 

@@ -7,7 +7,7 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
-        "location": "bosses_of_mass_destruction:gauntlet_arena/base",
+        "location": "bosses_of_mass_destruction:gauntlet_arena",
         "processors": "minecraft:empty"
       }
     }

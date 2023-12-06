@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import java.util.Comparator;
@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 public class LichStructureRepair implements StructureRepair{
 
     @Override
-    public ResourceKey<Structure> associatedStructure() {
+    public ResourceKey<ConfiguredStructureFeature<?, ?>> associatedStructure() {
         return BMDStructures.LICH_STRUCTURE_REGISTRY.getConfiguredStructureKey();
     }
 

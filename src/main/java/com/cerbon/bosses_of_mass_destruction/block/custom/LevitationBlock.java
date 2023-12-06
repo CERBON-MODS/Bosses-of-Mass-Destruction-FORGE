@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -32,7 +33,7 @@ public class LevitationBlock extends BaseEntityBlock {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.bosses_of_mass_destruction.levitation_block.tooltip").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(new TranslatableComponent("item.bosses_of_mass_destruction.levitation_block.tooltip").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Override

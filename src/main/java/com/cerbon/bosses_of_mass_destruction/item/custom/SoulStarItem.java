@@ -20,6 +20,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -56,7 +57,7 @@ public class SoulStarItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("item.bosses_of_mass_destruction.soul_star.tooltip").withStyle(ChatFormatting.DARK_GRAY));
+        tooltipComponents.add(new TranslatableComponent("item.bosses_of_mass_destruction.soul_star.tooltip").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Override
@@ -139,7 +140,7 @@ public class SoulStarItem extends Item {
         }else {
             player.startUsingItem(usedHand);
             if (level instanceof ServerLevel serverLevel){
-                BlockPos blockPos = serverLevel.findNearestMapStructure(BMDStructures.SOUL_STAR_STRUCTURE_KEY, player.blockPosition(), 100, false);
+                BlockPos blockPos = serverLevel.findNearestMapFeature(BMDStructures.SOUL_STAR_STRUCTURE_KEY, player.blockPosition(), 100, false);
                 if (blockPos != null){
                     SoulStarEntity entity = new SoulStarEntity(level, player.getX(), player.getEyeY(), player.getZ());
                     entity.setItem(itemStack);
@@ -185,7 +186,7 @@ public class SoulStarItem extends Item {
             LichEntity entity = BMDEntities.LICH.get().create(level);
             if (entity != null){
                 Vec3 defaultSpawnPos = spawnPos.add(VecUtils.xAxis.scale(5.0));
-                entity.syncPacketPositionCodec(defaultSpawnPos.x, defaultSpawnPos.y, defaultSpawnPos.z);
+                entity.setPacketCoordinates(defaultSpawnPos.x, defaultSpawnPos.y, defaultSpawnPos.z);
                 entity.absMoveTo(defaultSpawnPos.x, defaultSpawnPos.y, defaultSpawnPos.z);
                 level.addFreshEntity(entity);
             }

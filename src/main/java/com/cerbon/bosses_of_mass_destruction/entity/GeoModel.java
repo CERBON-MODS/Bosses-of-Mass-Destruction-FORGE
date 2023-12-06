@@ -24,17 +24,17 @@ public class GeoModel<T extends IAnimatable & IAnimationTickable> extends Animat
     }
 
     @Override
-    public ResourceLocation getModelResource(T t) {
+    public ResourceLocation getModelLocation(T t) {
         return modelLocation.apply(t);
     }
 
     @Override
-    public ResourceLocation getTextureResource(T t) {
+    public ResourceLocation getTextureLocation(T t) {
         return textureProvider.getTexture(t);
     }
 
     @Override
-    public ResourceLocation getAnimationResource(T t) {
+    public ResourceLocation getAnimationFileLocation(T t) {
         return animationLocation;
     }
 
@@ -43,5 +43,7 @@ public class GeoModel<T extends IAnimatable & IAnimationTickable> extends Animat
         super.setLivingAnimations(animatable, instanceId, customPredicate);
         if (animatable != null && customPredicate != null) codeAnimations.animate(animatable, customPredicate, this);
     }
+
+
 }
 

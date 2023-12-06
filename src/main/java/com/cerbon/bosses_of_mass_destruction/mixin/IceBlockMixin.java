@@ -24,7 +24,7 @@ public class IceBlockMixin {
 
     @Inject(method = "playerDestroy", at = @At("TAIL"))
     private void onAfterBreak(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack stack, CallbackInfo ci) {
-        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0 && level instanceof ServerLevel serverLevel && serverLevel.structureManager().getStructureAt(pos, serverLevel.structureManager().registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY).getOrThrow(BMDStructures.LICH_STRUCTURE_REGISTRY.getConfiguredStructureKey())).isValid())
+        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0 && level instanceof ServerLevel serverLevel && serverLevel.structureFeatureManager().getStructureAt(pos, serverLevel.structureFeatureManager().registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY).getOrThrow(BMDStructures.LICH_STRUCTURE_REGISTRY.getConfiguredStructureKey())).isValid())
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
     }
 }

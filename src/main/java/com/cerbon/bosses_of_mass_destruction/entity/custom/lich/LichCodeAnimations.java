@@ -25,7 +25,7 @@ public class LichCodeAnimations implements ICodeAnimations<LichEntity> {
         float yaw = headYaw - bodyYaw;
         double adjustedHeadPitch = headPitch - bodyPitch;
 
-        var model = geoModel.getModel(geoModel.getModelResource(animatable));
+        var model = geoModel.getModel(geoModel.getModelLocation(animatable));
         model.getBone("code_root").ifPresent(bone -> bone.setRotationX((float) -Math.toRadians(bodyPitch)));
         model.getBone("headBase").ifPresent(bone -> bone.setRotationX((float) -Math.toRadians(adjustedHeadPitch)));
         model.getBone("headBase").ifPresent(bone -> bone.setRotationX((float) Math.toRadians(yaw)));

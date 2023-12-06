@@ -13,7 +13,7 @@ public class CometCodeAnimations implements ICodeAnimations<CometProjectile> {
             GeoModel<CometProjectile> geoModel
     ) {
         float pitch = Mth.rotLerp(data.getPartialTick(), animatable.getXRot() - 5, animatable.getXRot());
-        software.bernie.geckolib3.geo.render.built.GeoModel model = geoModel.getModel(geoModel.getModelResource(animatable));
+        software.bernie.geckolib3.geo.render.built.GeoModel model = geoModel.getModel(geoModel.getModelLocation(animatable));
         model.getBone("root1").ifPresent(geoBone -> geoBone.setRotationX((float) Math.toRadians(pitch)));
     }
 }

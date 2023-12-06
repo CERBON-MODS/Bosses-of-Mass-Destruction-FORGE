@@ -9,6 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -45,8 +46,8 @@ public class MonolithBlock extends BaseEntityBlock {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.bosses_of_mass_destruction.monolith_block.tooltip_0").withStyle(ChatFormatting.DARK_GRAY));
-        tooltip.add(Component.translatable("item.bosses_of_mass_destruction.monolith_block.tooltip_1").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(new TranslatableComponent("item.bosses_of_mass_destruction.monolith_block.tooltip_0").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(new TranslatableComponent("item.bosses_of_mass_destruction.monolith_block.tooltip_1").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Nullable

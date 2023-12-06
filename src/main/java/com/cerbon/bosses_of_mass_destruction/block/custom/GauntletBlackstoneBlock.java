@@ -12,7 +12,6 @@ import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -21,6 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Random;
 
 public class GauntletBlackstoneBlock extends Block {
 
@@ -70,7 +70,7 @@ public class GauntletBlackstoneBlock extends Block {
     }
 
     @Override
-    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Random random) {
         Vec3 particlePos = VecUtils.asVec3(pos).add(VecUtils.unit.scale(0.5)).add(RandomUtils.randVec().normalize());
         Particles.laserChargeParticles.build(particlePos,Vec3.ZERO);
     }

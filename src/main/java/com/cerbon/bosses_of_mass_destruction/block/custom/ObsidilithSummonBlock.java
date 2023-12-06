@@ -124,7 +124,7 @@ public class ObsidilithSummonBlock extends Block {
                             level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
                             ObsidilithEntity obsidilithEntity = BMDEntities.OBSIDILITH.get().create(level);
                             if (obsidilithEntity != null){
-                                obsidilithEntity.syncPacketPositionCodec(pos.x, pos.y, pos.z);
+                                obsidilithEntity.setPacketCoordinates(pos.x, pos.y, pos.z);
                                 obsidilithEntity.absMoveTo(pos.x, pos.y, pos.z);
                                 level.addFreshEntity(obsidilithEntity);
                             }

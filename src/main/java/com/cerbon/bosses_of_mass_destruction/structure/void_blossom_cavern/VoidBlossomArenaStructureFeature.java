@@ -1,36 +1,36 @@
 package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 
-import com.cerbon.bosses_of_mass_destruction.structure.util.CodeStructurePiece;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
+import com.cerbon.bosses_of_mass_destruction.structure.util.CodeStructurePiece;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
-public class VoidBlossomArenaStructureFeature extends Structure {
-    public static final Codec<VoidBlossomArenaStructureFeature> CODEC = simpleCodec(VoidBlossomArenaStructureFeature::new);
-
-    protected VoidBlossomArenaStructureFeature(StructureSettings settings) {
-        super(settings);
+public class VoidBlossomArenaStructureFeature extends StructureFeature<NoneFeatureConfiguration> implements FeatureConfiguration {
+    public VoidBlossomArenaStructureFeature(Codec<NoneFeatureConfiguration> codec) {
+        super(
+                codec,
+                PieceGeneratorSupplier.simple(
+                        PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG),
+                        VoidBlossomArenaStructureFeature::addPieces)
+        );
     }
 
     @Override
-    public @NotNull Optional<GenerationStub> findGenerationPoint(@NotNull GenerationContext context) {
-        return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, collector -> addPieces(collector, context));
+    public GenerationStep.@NotNull Decoration step() {
+        return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
-    @Override
-    public @NotNull StructureType<?> type() {
-        return BMDStructures.VOID_BLOSSOM_STRUCTURE_TYPE.get();
-    }
-
-    public static void addPieces(StructurePiecesBuilder collector, GenerationContext context){
+    public static void addPieces(StructurePiecesBuilder collector, PieceGenerator.Context<?> context){
         int x = context.chunkPos().getMinBlockX();
         int z = context.chunkPos().getMinBlockZ();
         int y = 35 + context.chunkGenerator().getMinY();

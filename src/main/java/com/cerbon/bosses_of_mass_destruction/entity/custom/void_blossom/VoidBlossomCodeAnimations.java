@@ -10,7 +10,7 @@ public class VoidBlossomCodeAnimations implements ICodeAnimations<VoidBlossomEnt
     public void animate(VoidBlossomEntity animatable, AnimationEvent<?> data, GeoModel<VoidBlossomEntity> geoModel) {
         float bodyYaw = Mth.rotLerp(data.getPartialTick(), animatable.yBodyRotO, animatable.yBodyRot);
 
-        var model = geoModel.getModel(geoModel.getModelResource(animatable));
+        var model = geoModel.getModel(geoModel.getModelLocation(animatable));
         model.getBone("Leaves").ifPresent(geoBone -> geoBone.setRotationY((float) Math.toRadians(bodyYaw)));
         model.getBone("Thorns").ifPresent(geoBone -> geoBone.setRotationY((float) Math.toRadians(bodyYaw)));
         model.getBone("Roots").ifPresent(geoBone -> geoBone.setRotationY((float) Math.toRadians(bodyYaw)));

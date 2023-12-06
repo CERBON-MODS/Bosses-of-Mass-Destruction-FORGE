@@ -12,6 +12,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -38,7 +39,7 @@ public class BrimstoneNectarItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("item.bosses_of_mass_destruction.brimstone_nectar.tooltip").withStyle(ChatFormatting.DARK_GRAY));
+        tooltipComponents.add(new TranslatableComponent("item.bosses_of_mass_destruction.brimstone_nectar.tooltip").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Override
@@ -81,7 +82,7 @@ public class BrimstoneNectarItem extends Item {
     }
 
     private StructureStart getStructureStart(ServerLevel level, BlockPos blockPos, StructureRepair it){
-        return level.structureManager().getStructureAt(blockPos, level.structureManager().registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY).getOrThrow(it.associatedStructure()));
+        return level.structureFeatureManager().getStructureAt(blockPos, level.structureFeatureManager().registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY).getOrThrow(it.associatedStructure()));
     }
 
     private void playSound(Level level, Player user){

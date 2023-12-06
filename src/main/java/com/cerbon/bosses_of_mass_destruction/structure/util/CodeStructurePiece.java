@@ -3,9 +3,8 @@ package com.cerbon.bosses_of_mass_destruction.structure.util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -17,6 +16,8 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class CodeStructurePiece extends StructurePiece implements IStructurePiece {
     private final IPieceGenerator pieceGenerator;
@@ -36,8 +37,9 @@ public class CodeStructurePiece extends StructurePiece implements IStructurePiec
     @Override
     protected void addAdditionalSaveData(@NotNull StructurePieceSerializationContext context, @NotNull CompoundTag tag) {}
 
+
     @Override
-    public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structureManager, @NotNull ChunkGenerator generator, @NotNull RandomSource random, @NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
+    public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureFeatureManager structureManager, @NotNull ChunkGenerator generator, @NotNull Random random, @NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
         pieceGenerator.generate(
                 level,
                 structureManager,

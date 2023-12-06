@@ -95,7 +95,7 @@ public class SimpleGeoRenderer<T extends Entity & IAnimatable> extends EntityRen
         if (preRenderers != null) preRenderers.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);
         poseStack.translate(0.0, 0.009999999776482582, 0.0);
         Minecraft.getInstance().textureManager.bindForSetup(getTextureLocation(entity));
-        var model = modelProvider.getModel(modelProvider.getModelResource(entity));
+        var model = modelProvider.getModel(modelProvider.getModelLocation(entity));
         Color renderColor = Color.ofRGBA(255, 255, 255, 255);
         RenderType renderType = getRenderType(entity, partialTick, poseStack, buffer, null , packedLight, getTextureLocation(entity));
         this.render(model,
@@ -163,6 +163,6 @@ public class SimpleGeoRenderer<T extends Entity & IAnimatable> extends EntityRen
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull T entity) {
-        return modelProvider.getTextureResource(entity);
+        return modelProvider.getTextureLocation(entity);
     }
 }

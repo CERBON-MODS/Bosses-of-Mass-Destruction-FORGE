@@ -5,8 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
-import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.BossEvent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,9 +27,8 @@ public class NodeBossBarRenderer {
 
     public void renderBossBar(PoseStack poseStack, int x, int y, BossEvent bossEvent, CallbackInfo callbackInfo){
         Component name = bossEvent.getName();
-        ComponentContents barContent = name.getContents();
 
-        if (barContent instanceof TranslatableContents translatableContents && translatableContents.getKey().equals(entityTypeKey)){
+        if (name instanceof TranslatableComponent translatableContents && translatableContents.getKey().equals(entityTypeKey)){
             float colorLocation = bossEvent.getColor().ordinal() * 5 * 2f;
             GuiComponent.blit(
                     poseStack, x, y, 0f, colorLocation, 182, 5,

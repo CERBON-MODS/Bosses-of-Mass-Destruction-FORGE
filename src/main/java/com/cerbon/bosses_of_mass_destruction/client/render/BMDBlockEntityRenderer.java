@@ -27,7 +27,7 @@ public class BMDBlockEntityRenderer<T extends BlockEntity & IAnimatable> extends
 
     @Override
     public RenderType getRenderType(T animatable, float partialTick, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, ResourceLocation texture) {
-        return RenderType.entityCutoutNoCull(model.getTextureResource(animatable));
+        return RenderType.entityCutoutNoCull(model.getTextureLocation(animatable));
     }
 
     @Override

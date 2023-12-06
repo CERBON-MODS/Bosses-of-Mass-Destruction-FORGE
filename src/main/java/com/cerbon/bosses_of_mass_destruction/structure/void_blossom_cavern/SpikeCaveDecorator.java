@@ -5,7 +5,6 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecU
 import com.cerbon.bosses_of_mass_destruction.structure.util.IStructurePiece;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,12 +18,12 @@ import java.util.stream.Collectors;
 
 public class SpikeCaveDecorator implements ICaveDecorator{
     private final int bottomOfWorld;
-    private final RandomSource random;
+    private final Random random;
 
     private final List<BlockPos> spikePositions = new ArrayList<>();
     private final List<Vec3> baseBlocks = MathUtils.buildBlockCircle(4.2);
 
-    public SpikeCaveDecorator(int bottomOfWorld, RandomSource random) {
+    public SpikeCaveDecorator(int bottomOfWorld, Random random) {
         this.bottomOfWorld = bottomOfWorld;
         this.random = random;
     }
@@ -37,7 +36,7 @@ public class SpikeCaveDecorator implements ICaveDecorator{
     }
 
     @Override
-    public void generate(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox boundingBox, BlockPos pos, IStructurePiece structurePiece) {
+    public void generate(WorldGenLevel level, ChunkGenerator chunkGenerator, Random random, BoundingBox boundingBox, BlockPos pos, IStructurePiece structurePiece) {
         Map<Pair<Integer, Integer>, List<BlockPos>> groupedSpikePositions = spikePositions.stream()
                 .collect(Collectors.groupingBy(p -> new Pair<>(p.getX() >> 2, p.getZ() >> 2)));
 

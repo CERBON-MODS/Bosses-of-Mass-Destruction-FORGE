@@ -1,16 +1,21 @@
 package com.cerbon.bosses_of_mass_destruction.event;
 
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
+import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
+import com.cerbon.bosses_of_mass_destruction.capability.LevelEventSchedulerProvider;
+import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -29,12 +34,12 @@ public class BMDEvents {
             BMDEntities.initClient();
             BMDItems.initClient();
             BMDBlockEntities.initClient();
-            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> AutoConfig.getConfigScreen(BMDConfig.class, parent).get()));
+            ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((client, parent) -> AutoConfig.getConfigScreen(BMDConfig.class, parent).get()));
         }
 
         @SubscribeEvent
-        protected static void registerParticleProviders(final @NotNull RegisterParticleProvidersEvent event) {
-            BMDParticles.initClient(event);
+        protected static void registerParticleProviders(final @NotNull ParticleFactoryRegisterEvent event) {
+            BMDParticles.initClient();
         }
     }
 
@@ -49,6 +54,13 @@ public class BMDEvents {
         @SubscribeEvent
         public static void entityAttributeEvent(EntityAttributeCreationEvent event){
             BMDEntities.createAttributes(event);
+        }
+
+        @SubscribeEvent
+        public static void registerCapabilities(RegisterCapabilitiesEvent event){
+            event.register(PlayerMoveHistoryProvider.class);
+            event.register(LevelEventSchedulerProvider.class);
+            event.register(ChunkBlockCacheProvider.class);
         }
     }
 }

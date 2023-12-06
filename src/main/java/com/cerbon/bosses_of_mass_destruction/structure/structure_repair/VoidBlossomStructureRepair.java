@@ -19,7 +19,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,7 +34,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
             .age(20);
 
     @Override
-    public ResourceKey<Structure> associatedStructure() {
+    public ResourceKey<ConfiguredStructureFeature<?, ?>> associatedStructure() {
         return BMDStructures.VOID_BLOSSOM_STRUCTURE_REGISTRY.getConfiguredStructureKey();
     }
 

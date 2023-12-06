@@ -12,4 +12,12 @@ public class ObsidilithConfig {
     public int experienceDrop = 1000;
     public boolean spawnPillarOnDeath = true;
     public float anvilAttackExplosionStrength = 4.0f;
+
+    @ConfigEntry.Gui.CollapsibleObject
+    public ArenaGeneration arenaGeneration = new ArenaGeneration();
+
+    public static class ArenaGeneration {
+        @ConfigEntry.BoundedDiscrete(min = 1, max = 150)
+        public int generationHeight = 90;
+    }
 }

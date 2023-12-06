@@ -41,7 +41,7 @@ public class MinionAction implements IActionWithCooldown {
         }
     }
 
-    public static final EntityType<?> summonEntityType = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(summonId));
+    public static final EntityType<?> summonEntityType = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(summonId));
 
     public MinionAction(LichEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
         this.entity = entity;

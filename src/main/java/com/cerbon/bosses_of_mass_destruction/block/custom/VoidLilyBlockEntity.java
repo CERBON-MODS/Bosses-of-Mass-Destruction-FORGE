@@ -60,7 +60,7 @@ public class VoidLilyBlockEntity extends BlockEntity {
     }
 
     private static void setNearestStructureDirection(ServerLevel level, BlockPos pos, VoidLilyBlockEntity entity){
-        BlockPos blockPos = level.findNearestMapStructure(BMDStructures.VOID_LILY_STRUCTURE_KEY, pos, 50, false);
+        BlockPos blockPos = level.findNearestMapFeature(BMDStructures.VOID_LILY_STRUCTURE_KEY, pos, 50, false);
         if (blockPos != null)
             entity.structureDirection = VecUtils.asVec3(new BlockPos(blockPos.getX(), level.getMinBuildHeight(), blockPos.getZ()).subtract(pos)).normalize();
         else

@@ -49,10 +49,10 @@ public class BMDItems {
     public static final RegistryObject<Item> CHARGED_ENDER_PEARL = ITEMS.register("charged_ender_pearl",
             () -> new ChargedEnderPearlItem(new Item.Properties().fireResistant().stacksTo(1).tab(BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION)));
 
-    public static final RegistryObject<Item> BRIMSTONE_NECTAR = ITEMS.register("brimstone_nectar",
-            () -> new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant().tab(BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION), List.of(
-                    new GauntletStructureRepair(), new LichStructureRepair(), new ObsidilithStructureRepair(), new VoidBlossomStructureRepair()
-            )));
+//    public static final RegistryObject<Item> BRIMSTONE_NECTAR = ITEMS.register("brimstone_nectar",
+//            () -> new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant().tab(BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION), List.of(
+//                    new GauntletStructureRepair(), new LichStructureRepair(), new ObsidilithStructureRepair(), new VoidBlossomStructureRepair()
+//            )));
 
     public static final RegistryObject<Item> OBSIDILITH_RUNE = ITEMS.register("obsidilith_rune",
             () -> new BlockItem(BMDBlocks.OBSIDILITH_RUNE.get(), new Item.Properties()));

@@ -10,7 +10,7 @@ public class GauntletCodeAnimations implements ICodeAnimations<GauntletEntity> {
     @Override
     public void animate(GauntletEntity animatable, AnimationEvent<?> data, GeoModel<GauntletEntity> geoModel) {
         float headPitch = Mth.lerp(data.getPartialTick(), animatable.xRotO, animatable.getXRot());
-        var model = geoModel.getModel(geoModel.getModelResource(animatable));
+        var model = geoModel.getModel(geoModel.getModelLocation(animatable));
 
         model.getBone("codeRoot").ifPresent(bone -> bone.setRotationX((float) -Math.toRadians(headPitch)));
     }
