@@ -7,6 +7,8 @@ import com.cerbon.bosses_of_mass_destruction.capability.LevelEventSchedulerProvi
 import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -61,8 +63,17 @@ public class ForgeEvents {
     }
 
     @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event){
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) return;
+
+        if (level.getGameTime() % 2 == 0)
+            level.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
+    }
+
+    @SubscribeEvent
     public static void onLevelTick(TickEvent.WorldTickEvent event){
-        if ((event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT) && event.world.getGameTime() % 2 == 0)
+        if ((event.side == LogicalSide.SERVER) && event.world.getGameTime() % 2 == 0)
             event.world.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
     }
 
