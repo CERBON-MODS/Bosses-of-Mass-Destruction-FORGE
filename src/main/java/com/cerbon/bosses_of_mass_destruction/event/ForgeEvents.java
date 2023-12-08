@@ -72,7 +72,7 @@ public class ForgeEvents {
     }
 
     @SubscribeEvent
-    public static void onLevelTick(TickEvent.WorldTickEvent event){
+    public static void onServerTick(TickEvent.WorldTickEvent event){
         if ((event.side == LogicalSide.SERVER) && event.world.getGameTime() % 2 == 0)
             event.world.getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).ifPresent(EventScheduler::updateEvents);
     }
