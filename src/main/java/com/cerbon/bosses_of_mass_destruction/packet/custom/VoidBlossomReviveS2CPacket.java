@@ -10,8 +10,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
 
-import java.util.function.Supplier;
-
 public class VoidBlossomReviveS2CPacket {
     private final Vec3 pos;
 
@@ -27,8 +25,7 @@ public class VoidBlossomReviveS2CPacket {
         PacketUtils.writeVec3(buf, this.pos);
     }
 
-    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
-        CustomPayloadEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;

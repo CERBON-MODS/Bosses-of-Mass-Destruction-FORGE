@@ -9,8 +9,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
 
-import java.util.function.Supplier;
-
 public class ChangeHitboxS2CPacket {
     private final int entityId;
     private final boolean open;
@@ -30,8 +28,7 @@ public class ChangeHitboxS2CPacket {
         buf.writeBoolean(open);
     }
 
-    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
-        CustomPayloadEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;

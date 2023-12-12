@@ -12,8 +12,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
 
-import java.util.function.Supplier;
-
 public class SendParticleS2CPacket {
     private final BlockPos pos;
     private final Vec3 dir;
@@ -33,8 +31,7 @@ public class SendParticleS2CPacket {
         PacketUtils.writeVec3(buf, dir);
     }
 
-    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
-        CustomPayloadEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;

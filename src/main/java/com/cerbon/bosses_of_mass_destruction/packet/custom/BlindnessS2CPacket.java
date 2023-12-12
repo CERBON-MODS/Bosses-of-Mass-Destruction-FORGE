@@ -12,7 +12,6 @@ import net.minecraftforge.fml.DistExecutor;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class BlindnessS2CPacket {
     private final int entityId;
@@ -33,8 +32,7 @@ public class BlindnessS2CPacket {
         buf.writeVarIntArray(playerIds);
     }
 
-    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
-        CustomPayloadEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;

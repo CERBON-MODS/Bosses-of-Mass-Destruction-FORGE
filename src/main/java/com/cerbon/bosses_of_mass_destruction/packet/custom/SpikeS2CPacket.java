@@ -12,7 +12,6 @@ import net.minecraftforge.fml.DistExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class SpikeS2CPacket {
     private final int id;
@@ -39,8 +38,7 @@ public class SpikeS2CPacket {
         }
     }
 
-    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
-        CustomPayloadEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
 

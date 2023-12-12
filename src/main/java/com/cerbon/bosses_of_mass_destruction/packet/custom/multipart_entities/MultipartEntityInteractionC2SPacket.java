@@ -9,8 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
-import java.util.function.Supplier;
-
 public class MultipartEntityInteractionC2SPacket {
     private final int entityId;
     private final String part;
@@ -42,8 +40,7 @@ public class MultipartEntityInteractionC2SPacket {
         buf.writeEnum(interactionType);
     }
 
-    public void handle(Supplier<CustomPayloadEvent.Context> supplier){
-        CustomPayloadEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             ServerPlayer serverPlayer = ctx.getSender();
             if (serverPlayer == null) return;
