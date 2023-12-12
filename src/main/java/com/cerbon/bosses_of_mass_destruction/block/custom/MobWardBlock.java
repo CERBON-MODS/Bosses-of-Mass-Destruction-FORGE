@@ -128,7 +128,7 @@ public class MobWardBlock extends BaseEntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         BlockPos blockPos = ctx.getClickedPos();
 
-        if (blockPos.getY() < 254 && ctx.getLevel().getBlockState(blockPos.above()).canBeReplaced(ctx) && ctx.getLevel().getBlockState(blockPos.above(2)).canBeReplaced(ctx))
+        if (blockPos.getY() < ctx.getLevel().getMaxBuildHeight() - 2 && ctx.getLevel().getBlockState(blockPos.above()).canBeReplaced(ctx) && ctx.getLevel().getBlockState(blockPos.above(2)).canBeReplaced(ctx))
             return getStateDefinition().any().setValue(DoorBlock.FACING, ctx.getHorizontalDirection()).setValue(tripleBlockPart, TripleBlockPart.BOTTOM);
         else
             return null;
