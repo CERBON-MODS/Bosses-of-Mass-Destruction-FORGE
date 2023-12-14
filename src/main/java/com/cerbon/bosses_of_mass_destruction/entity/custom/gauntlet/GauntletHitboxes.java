@@ -49,7 +49,7 @@ public class GauntletHitboxes implements IDamageHandler {
             .create();
     private EntityBounds currentHitbox = hitboxes;
 
-    private final boolean disableHitboxesForCompatibility = ModList.get().isLoaded("bettercombat");
+    private final boolean disableHitboxesForCompatibility = ModList.get().isLoaded("bettercombat") || ModList.get().isLoaded("epicfight");
 
     public GauntletHitboxes(GauntletEntity entity) {
         this.entity = entity;
