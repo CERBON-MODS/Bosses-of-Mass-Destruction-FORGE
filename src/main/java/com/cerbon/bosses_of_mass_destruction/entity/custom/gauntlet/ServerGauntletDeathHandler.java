@@ -12,10 +12,10 @@ import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.phys.Vec3;
 
 public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
@@ -57,7 +57,7 @@ public class ServerGauntletDeathHandler implements IEntityTick<ServerLevel> {
         }
         BlockPos chestPos = entity.blockPosition().above();
         level.setBlock(chestPos, Blocks.CHEST.defaultBlockState(), 2);
-        RandomizableContainerBlockEntity.setLootTable(level, entity.getRandom(), chestPos, new ResourceLocation(BMDConstants.MOD_ID, "chests/gauntlet"));
+        RandomizableContainer.setBlockEntityLootTable(level, entity.getRandom(), chestPos, new ResourceLocation(BMDConstants.MOD_ID, "chests/gauntlet"));
     }
 
     private void dropExp(){

@@ -1,6 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -23,11 +24,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class LevitationBlock extends BaseEntityBlock {
+    public static final MapCodec<LevitationBlock> CODEC = simpleCodec(LevitationBlock::new);
     private static final VoxelShape bottomShape = box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0);
     private static final VoxelShape tableShape = box(2.0, 2.0, 2.0, 14.0, 14.0, 14.0);
 
     public LevitationBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override
