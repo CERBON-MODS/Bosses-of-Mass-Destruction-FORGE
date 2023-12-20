@@ -6,15 +6,15 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.ModRan
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.block.custom.ChiseledStoneAltarBlock;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.*;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
+import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -99,7 +99,7 @@ public class SoulStarItem extends Item {
                 }).count();
 
         if (numberOfAltarsFilled == 3){
-            EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = LevelEventScheduler.get(level);
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {

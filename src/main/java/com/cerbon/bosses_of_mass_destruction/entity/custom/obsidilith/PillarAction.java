@@ -6,8 +6,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Math
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
@@ -35,7 +35,7 @@ public class PillarAction implements IActionWithCooldown {
 
     public PillarAction(LivingEntity entity){
         this.entity = entity;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = LevelEventScheduler.get(entity.level());
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.EntityBounds;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.MultipartAwareEntity;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util.CompoundOrientedBox;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.config.mob.GauntletConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.CompositeDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.DamageMemory;
@@ -78,7 +78,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
         moveHandler = gauntletGoalHandler;
         nbtHandler = gauntletGoalHandler;
         deathClientTick = new ClientGauntletDeathHandler(this);
-        deathServerTick = new ServerGauntletDeathHandler(this, BMDCapabilities.getLevelEventScheduler(level), mobConfig);
+        deathServerTick = new ServerGauntletDeathHandler(this, LevelEventScheduler.get(level), mobConfig);
     }
 
     @Override

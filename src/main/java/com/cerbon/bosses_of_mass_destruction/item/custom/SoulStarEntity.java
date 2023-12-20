@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.item.custom;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.Event;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
@@ -115,7 +115,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     public void tick() {
         if (level().isClientSide() && tickCount == 1){
             double rotationOffset = random.nextDouble() * 360;
-            BMDCapabilities.getLevelEventScheduler(level()).addEvent(
+            LevelEventScheduler.get(level()).addEvent(
                     new Event(
                             () -> true,
                             () -> spawnTrailParticles(rotationOffset),

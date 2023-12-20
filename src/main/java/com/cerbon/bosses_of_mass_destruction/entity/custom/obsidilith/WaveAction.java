@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
@@ -35,7 +35,7 @@ public class WaveAction implements IActionWithCooldown {
         this.entity = entity;
         this.circlePoints = MathUtils.buildBlockCircle(riftRadius);
         this.level = entity.level();
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+        this.eventScheduler = LevelEventScheduler.get(level);
     }
 
     @Override

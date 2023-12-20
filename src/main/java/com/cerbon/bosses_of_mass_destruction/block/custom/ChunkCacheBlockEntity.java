@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelChunkBlockCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -21,10 +21,7 @@ public class ChunkCacheBlockEntity extends BlockEntity {
     @Override
     public void setRemoved() {
         if (level != null){
-            BMDCapabilities.getChunkBlockCache(level).ifPresent(chunkBlockCache ->
-                    chunkBlockCache.removeFromChunk(new ChunkPos(worldPosition), block, worldPosition)
-            );
-
+            LevelChunkBlockCache.get(level).removeFromChunk(new ChunkPos(worldPosition), block, worldPosition);
             added = false;
         }
         super.setRemoved();
@@ -32,10 +29,7 @@ public class ChunkCacheBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, ChunkCacheBlockEntity entity){
         if (!entity.added){
-            BMDCapabilities.getChunkBlockCache(level).ifPresent(chunkBlockCache ->
-                    chunkBlockCache.addToChunk(new ChunkPos(pos), entity.block, pos)
-            );
-
+            LevelChunkBlockCache.get(level).addToChunk(new ChunkPos(pos), entity.block, pos);
             entity.added = true;
         }
     }

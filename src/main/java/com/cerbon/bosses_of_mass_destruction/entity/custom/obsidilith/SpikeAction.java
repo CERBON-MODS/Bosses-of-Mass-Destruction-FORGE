@@ -4,7 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.attachment.BMDAttachments;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
@@ -27,7 +27,7 @@ public class SpikeAction implements IActionWithCooldown {
 
     public SpikeAction(Mob entity){
         this.entity = entity;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = LevelEventScheduler.get(entity.level());
         this.circlePoints = MathUtils.buildBlockCircle(2.0);
     }
 

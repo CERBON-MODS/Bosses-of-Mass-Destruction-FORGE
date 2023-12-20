@@ -4,8 +4,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEntity;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
@@ -81,7 +81,7 @@ public class ObsidilithSummonBlock extends Block {
         BlockState blockState = level.getBlockState(blockPos);
 
         if (blockState.is(BMDBlocks.OBSIDILITH_SUMMON_BLOCK.get()) && !blockState.getValue(EndPortalFrameBlock.HAS_EYE)){
-            EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = LevelEventScheduler.get(level);
 
             if (level.isClientSide){
                 cir.setReturnValue(InteractionResult.SUCCESS);

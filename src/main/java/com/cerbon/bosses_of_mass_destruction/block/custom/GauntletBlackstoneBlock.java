@@ -4,7 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.GauntletEntity;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
@@ -53,7 +53,7 @@ public class GauntletBlackstoneBlock extends Block {
             level.addFreshEntity(entity);
         }
 
-        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+        EventScheduler eventScheduler = LevelEventScheduler.get(level);
         for (int y = -1; y <= 4; y++){
             int y1 = y;
             eventScheduler.addEvent(

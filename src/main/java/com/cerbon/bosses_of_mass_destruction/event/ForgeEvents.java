@@ -2,8 +2,9 @@ package com.cerbon.bosses_of_mass_destruction.event;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
 import com.cerbon.bosses_of_mass_destruction.attachment.BMDAttachments;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelChunkBlockCache;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.custom.LevitationBlockEntity;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,11 +14,18 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 @Mod.EventBusSubscriber(modid = BMDConstants.MOD_ID)
 public class ForgeEvents {
+
+    @SubscribeEvent
+    public static void onPlayerLogging(ClientPlayerNetworkEvent.LoggingIn event) {
+        LevelEventScheduler.INSTANCE = new LevelEventScheduler();
+        LevelChunkBlockCache.INSTANCE = new LevelChunkBlockCache();
+    }
 
     @SubscribeEvent
     protected static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -40,7 +48,7 @@ public class ForgeEvents {
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event){
         if ((event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT) && event.level.getGameTime() % 2 == 0)
-            BMDCapabilities.getLevelEventScheduler(event.level).updateEvents();
+            LevelEventScheduler.get(event.level).updateEvents();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

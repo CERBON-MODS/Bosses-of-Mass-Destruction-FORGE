@@ -1,9 +1,9 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 public class MonolithBlock extends BaseEntityBlock {
     public static final MapCodec<MonolithBlock> CODEC = simpleCodec(MonolithBlock::new);
@@ -147,19 +146,18 @@ public class MonolithBlock extends BaseEntityBlock {
 
     public static float getExplosionPower(ServerLevel level, BlockPos pos, float power){
         ChunkPos chunkPos = new ChunkPos(pos);
-        Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(level);
+        ChunkBlockCache blockCache = LevelChunkBlockCache.get(level);
 
-        if (blockCache.isPresent()) {
-            for (int x = chunkPos.x - 4; x <= chunkPos.x + 4; x++)
-                for (int z = chunkPos.z - 4; z <= chunkPos.z + 4; z++) {
-                    List<BlockPos> blocks = blockCache.get().getBlocksFromChunk(new ChunkPos(x, z), BMDBlocks.MONOLITH_BLOCK.get());
-                    for (BlockPos blockPos : blocks) {
-                        if (Math.abs(blockPos.getX() - pos.getX()) < 64 && Math.abs(blockPos.getY() - pos.getY()) < 64 && Math.abs(blockPos.getZ() - pos.getZ()) < 64) {
-                            return power * 1.3f;
-                        }
+        for (int x = chunkPos.x - 4; x <= chunkPos.x + 4; x++)
+            for (int z = chunkPos.z - 4; z <= chunkPos.z + 4; z++) {
+                List<BlockPos> blocks = blockCache.getBlocksFromChunk(new ChunkPos(x, z), BMDBlocks.MONOLITH_BLOCK.get());
+                for (BlockPos blockPos : blocks) {
+                    if (Math.abs(blockPos.getX() - pos.getX()) < 64 && Math.abs(blockPos.getY() - pos.getY()) < 64 && Math.abs(blockPos.getZ() - pos.getZ()) < 64) {
+                        return power * 1.3f;
                     }
                 }
-        }
+            }
+
         return power;
     }
 }

@@ -4,7 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.RiftBurst;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
@@ -109,7 +109,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
     private void doExplosion(LivingEntity owner){
         level().broadcastEntityEvent(this, particle);
         playSound(BMDSounds.SPORE_BALL_LAND.get(), 1.0f, BMDUtils.randomPitch(random) - 0.2f);
-        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level());
+        EventScheduler eventScheduler = LevelEventScheduler.get(level());
         Consumer<LivingEntity> onImpact = entity -> {
             float damage = (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE);
             if (this.getOwner() != null){

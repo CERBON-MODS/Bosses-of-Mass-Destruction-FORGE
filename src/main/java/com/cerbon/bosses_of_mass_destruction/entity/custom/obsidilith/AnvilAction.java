@@ -5,7 +5,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
@@ -30,7 +30,7 @@ public class AnvilAction implements IActionWithCooldown {
     public AnvilAction(Mob actor, float explosionPower){
         this.actor = actor;
         this.explosionPower = explosionPower;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(actor.level());
+        this.eventScheduler = LevelEventScheduler.get(actor.level());
         this.circlePoints = MathUtils.buildBlockCircle(2.0);
     }
 

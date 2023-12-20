@@ -2,9 +2,10 @@ package com.cerbon.bosses_of_mass_destruction.block.custom;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
@@ -218,19 +219,18 @@ public class MobWardBlock extends BaseEntityBlock {
         if (!cir.getReturnValue()) return;
 
         ChunkPos chunkPos = new ChunkPos(pos);
-        BMDCapabilities.getChunkBlockCache(serverLevel).ifPresent(capability -> {
-            for (int x = chunkPos.x - 4; x <= chunkPos.x + 4; x++)
-                for (int z = chunkPos.z - 4; z <= chunkPos.z + 4; z++){
-                    List<BlockPos> blocks = capability.getBlocksFromChunk(new ChunkPos(x, z), BMDBlocks.MOB_WARD.get());
-                    if (blocks == null) return;
-                    for (BlockPos blockPos : blocks) {
-                        if (Math.abs(blockPos.getX() - pos.getX()) < 64 && Math.abs(blockPos.getY() - pos.getY()) < 64 && Math.abs(blockPos.getZ() - pos.getZ()) < 64) {
-                            cir.setReturnValue(false);
-                            break;
-                        }
+        ChunkBlockCache chunkBlockCache = LevelChunkBlockCache.get(serverLevel);
+        for (int x = chunkPos.x - 4; x <= chunkPos.x + 4; x++)
+            for (int z = chunkPos.z - 4; z <= chunkPos.z + 4; z++){
+                List<BlockPos> blocks = chunkBlockCache.getBlocksFromChunk(new ChunkPos(x, z), BMDBlocks.MOB_WARD.get());
+                if (blocks == null) return;
+                for (BlockPos blockPos : blocks) {
+                    if (Math.abs(blockPos.getX() - pos.getX()) < 64 && Math.abs(blockPos.getY() - pos.getY()) < 64 && Math.abs(blockPos.getZ() - pos.getZ()) < 64) {
+                        cir.setReturnValue(false);
+                        break;
                     }
                 }
-        });
+            }
     }
 
     private static class Particles {

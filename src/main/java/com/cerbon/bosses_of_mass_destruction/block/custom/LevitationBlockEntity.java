@@ -2,10 +2,10 @@ package com.cerbon.bosses_of_mass_destruction.block.custom;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
@@ -27,7 +27,10 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoBlockEntity {
@@ -88,13 +91,10 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
         }
         Set<ChunkPos> chunksToCheck = blockToCheck.stream().map(pos -> new ChunkPos(pos.offset(player.blockPosition()))).collect(Collectors.toSet());
         boolean hasLevitationBlock = chunksToCheck.stream().anyMatch(chunkPos -> {
-            Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(player.level());
+            ChunkBlockCache blockCache = LevelChunkBlockCache.get(player.level());
 
-            if (blockCache.isPresent()){
-                List<BlockPos> blocks = blockCache.get().getBlocksFromChunk(chunkPos, BMDBlocks.LEVITATION_BLOCK.get());
-                return blocks.stream().anyMatch(pos -> getAffectingBox(player.level(), VecUtils.asVec3(pos)).contains(player.position()));
-            } else
-                return false;
+            List<BlockPos> blocks = blockCache.getBlocksFromChunk(chunkPos, BMDBlocks.LEVITATION_BLOCK.get());
+            return blocks.stream().anyMatch(pos -> getAffectingBox(player.level(), VecUtils.asVec3(pos)).contains(player.position()));
         });
 
         /*

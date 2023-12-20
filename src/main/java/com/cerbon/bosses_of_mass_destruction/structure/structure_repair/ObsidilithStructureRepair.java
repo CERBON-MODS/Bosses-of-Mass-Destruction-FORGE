@@ -3,8 +3,8 @@ package com.cerbon.bosses_of_mass_destruction.structure.structure_repair;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEffectHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithUtils;
@@ -34,7 +34,7 @@ public class ObsidilithStructureRepair implements StructureRepair{
     @Override
     public void repairStructure(ServerLevel level, StructureStart structureStart) {
         BlockPos topCenter = getTopCenter(structureStart);
-        EventScheduler levelEventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+        EventScheduler levelEventScheduler = LevelEventScheduler.get(level);
         BMDPacketHandler.sendToAllPlayersTrackingChunk(new ObsidilithReviveS2CPacket(VecUtils.asVec3(topCenter).add(0.5, 0.5, 0.5)), level, VecUtils.asVec3(topCenter).add(0.5, 0.5, 0.5));
 
         for (int y = 0; y <= ObsidilithUtils.deathPillarHeight; y++){
@@ -71,6 +71,6 @@ public class ObsidilithStructureRepair implements StructureRepair{
 
     @OnlyIn(Dist.CLIENT)
     public static void handleObsidilithRevivePacket(Vec3 pos, ClientLevel level){
-        ObsidilithEffectHandler.spawnPillarParticles(pos, BMDCapabilities.getLevelEventScheduler(level));
+        ObsidilithEffectHandler.spawnPillarParticles(pos, LevelEventScheduler.get(level));
     }
 }

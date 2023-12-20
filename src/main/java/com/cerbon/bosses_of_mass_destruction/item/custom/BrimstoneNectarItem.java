@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.item.custom;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendVec3S2CPacket;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
@@ -73,7 +73,7 @@ public class BrimstoneNectarItem extends Item {
     }
 
     private void scheduleStructureRepair(ServerLevel level, List<StructureRepair> structureToRepair, BlockPos usePos){
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        LevelEventScheduler.get(level).addEvent(
                 new TimedEvent(
                         () -> structureToRepair.forEach(structure -> structure.repairStructure(level, getStructureStart(level, usePos, structure))),
                         30

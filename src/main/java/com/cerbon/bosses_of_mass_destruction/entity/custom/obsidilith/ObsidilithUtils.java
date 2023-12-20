@@ -5,7 +5,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEv
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.client.render.NodeBossBarRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
@@ -55,7 +55,7 @@ public class ObsidilithUtils {
         if (!level.isClientSide()){
             BlockPos blockPos = actor.blockPosition();
             Vec3 vecPos = actor.position();
-            EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = LevelEventScheduler.get(level);
             level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), 2.0f, Level.ExplosionInteraction.MOB);
 
             for (int y = 0; y <= deathPillarHeight; y++){

@@ -1,4 +1,4 @@
-package com.cerbon.bosses_of_mass_destruction.attachment;
+package com.cerbon.bosses_of_mass_destruction.attachment.saved_data;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class LevelEventScheduler extends SavedData {
     private static final Factory<LevelEventScheduler> FACTORY = new Factory<>(LevelEventScheduler::new, LevelEventScheduler::new);
+    public static LevelEventScheduler INSTANCE;
     private static final String DATA_KEY = "bomd_level_event_scheduler";
     private EventScheduler eventScheduler;
 
@@ -24,7 +25,7 @@ public class LevelEventScheduler extends SavedData {
     }
 
     public static EventScheduler get(Level level) {
-        LevelEventScheduler levelEventScheduler = getData((ServerLevel) level);
+        LevelEventScheduler levelEventScheduler = getSavedData(level);
 
         if (levelEventScheduler.eventScheduler == null)
             levelEventScheduler.eventScheduler = new EventScheduler();
@@ -32,7 +33,7 @@ public class LevelEventScheduler extends SavedData {
         return levelEventScheduler.eventScheduler;
     }
 
-    private static LevelEventScheduler getData(ServerLevel level) {
-        return level.getServer().overworld().getDataStorage().computeIfAbsent(FACTORY, DATA_KEY);
+    private static LevelEventScheduler getSavedData(Level level) {
+        return level.isClientSide ? INSTANCE : ((ServerLevel) level).getDataStorage().computeIfAbsent(FACTORY, DATA_KEY);
     }
 }

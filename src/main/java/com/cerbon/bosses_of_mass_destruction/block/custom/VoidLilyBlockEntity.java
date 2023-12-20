@@ -3,8 +3,8 @@ package com.cerbon.bosses_of_mass_destruction.block.custom;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendParticleS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
@@ -75,7 +75,7 @@ public class VoidLilyBlockEntity extends BlockEntity {
         double curveLength = RandomUtils.range(1.2, 1.6);
         int particleAmount = RandomUtils.range(7, 10);
 
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        LevelEventScheduler.get(level).addEvent(
                 new TimedEvent(
                         () -> {
                             Vec3 particlePos = streakPos.add(RandomUtils.randVec().scale(0.05));

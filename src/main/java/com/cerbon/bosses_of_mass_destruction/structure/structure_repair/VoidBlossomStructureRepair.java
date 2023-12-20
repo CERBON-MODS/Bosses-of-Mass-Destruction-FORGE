@@ -4,8 +4,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEv
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.VoidBlossomReviveS2CPacket;
@@ -43,7 +43,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
         BlockPos offset = getCenterSpawn(structureStart, level);
         BMDPacketHandler.sendToAllPlayersTrackingChunk(new VoidBlossomReviveS2CPacket(VecUtils.asVec3(offset)), level, VecUtils.asVec3(offset));
 
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        LevelEventScheduler.get(level).addEvent(
                 new TimedEvent(
                         () -> level.setBlockAndUpdate(offset, BMDBlocks.VOID_BLOSSOM_SUMMON_BLOCK.get().defaultBlockState()),
                         60
@@ -64,7 +64,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
 
     @OnlyIn(Dist.CLIENT)
     public static void handleVoidBlossomRevivePacket(Vec3 pos, ClientLevel level){
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        LevelEventScheduler.get(level).addEvent(
                 new TimedEvent(
                         () -> BMDUtils.spawnRotatingParticles(
                                 new BMDUtils.RotatingParticles(

@@ -4,8 +4,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEv
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.saved_data.LevelEventScheduler;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.config.mob.ObsidilithConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.CooldownAction;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
@@ -75,7 +75,7 @@ public class ObsidilithEntity extends BaseEntity {
 
         DamageMemory damageMemory = new DamageMemory(10, this);
         this.moveLogic = new ObsidilithMoveLogic(statusRegistry, this, damageMemory);
-        this.effectHandler = new ObsidilithEffectHandler(this, BMDCapabilities.getLevelEventScheduler(level));
+        this.effectHandler = new ObsidilithEffectHandler(this, LevelEventScheduler.get(level));
 
         bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_12);
         damageHandler = new CompositeDamageHandler(moveLogic, new ShieldDamageHandler(this::isShielded), damageMemory);
