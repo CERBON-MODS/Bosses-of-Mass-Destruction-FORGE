@@ -50,7 +50,7 @@ public class PunchAction implements IActionWithCooldown {
         int unclenchTime = 56;
 
         BlockPos breakBoundCenter = BlockPos.containing(entity.position().add(entity.getLookAngle()));
-        AABB breakBounds = new AABB(breakBoundCenter.subtract(new BlockPos(1, 1, 1)), breakBoundCenter.offset(1, 2, 1));
+        AABB breakBounds = new AABB(VecUtils.asVec3(breakBoundCenter.subtract(new BlockPos(1, 1, 1))), VecUtils.asVec3(breakBoundCenter.offset(1, 2, 1)));
         VanillaCopiesServer.destroyBlocks(entity, breakBounds);
         entity.push(0.0, 0.7, 0.0);
 

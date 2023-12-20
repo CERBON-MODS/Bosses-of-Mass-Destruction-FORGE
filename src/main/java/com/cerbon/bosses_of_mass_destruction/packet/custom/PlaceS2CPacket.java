@@ -5,11 +5,8 @@ import com.cerbon.bosses_of_mass_destruction.block.custom.VoidBlossomBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class PlaceS2CPacket {
     private final Vec3 pos;
@@ -26,12 +23,12 @@ public class PlaceS2CPacket {
         PacketUtils.writeVec3(buf, this.pos);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(NetworkEvent.Context ctx) {
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
+            if (!FMLEnvironment.dist.isClient()) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> VoidBlossomBlock.handleVoidBlossomPlace(pos)));
+            client.execute(() -> VoidBlossomBlock.handleVoidBlossomPlace(pos));
         });
         ctx.setPacketHandled(true);
     }

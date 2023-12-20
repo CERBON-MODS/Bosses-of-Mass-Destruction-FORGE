@@ -5,14 +5,13 @@ import com.cerbon.bosses_of_mass_destruction.config.mob.LichConfig;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.ForgeRegistries;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,7 @@ public class LichKillCounter {
         this.config = config;
         this.countedEntities = config.entitiesThatCountToSummonCounter != null
                 ? config.entitiesThatCountToSummonCounter.stream()
-                .map(string -> ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(string)))
+                .map(string -> BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.tryParse(string)))
                 .collect(Collectors.toList())
                 : List.of();
     }

@@ -5,11 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class ChangeHitboxS2CPacket {
     private final int entityId;
@@ -30,18 +27,18 @@ public class ChangeHitboxS2CPacket {
         buf.writeBoolean(open);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(NetworkEvent.Context ctx) {
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;
             if (level == null) return;
+            if (!FMLEnvironment.dist.isClient()) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> {
+            client.execute(() -> {
                 Entity entity = level.getEntity(entityId);
                 if (entity instanceof GauntletEntity)
                     if (open) ((GauntletEntity) entity).hitboxHelper.setOpenHandHitbox(); else ((GauntletEntity) entity).hitboxHelper.setClosedFistHitbox();
-            }));
+            });
         });
         ctx.setPacketHandled(true);
     }

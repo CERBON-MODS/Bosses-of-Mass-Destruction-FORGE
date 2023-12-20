@@ -6,13 +6,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class SpikeS2CPacket {
     private final int id;
@@ -39,12 +37,12 @@ public class SpikeS2CPacket {
         }
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(NetworkEvent.Context ctx) {
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
+            if (!FMLEnvironment.dist.isClient()) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> {
+            client.execute(() -> {
                 ClientLevel clientLevel = client.level;
                 if (clientLevel == null) return;
                 Entity entity = clientLevel.getEntity(id);
@@ -52,7 +50,7 @@ public class SpikeS2CPacket {
                 if (entity instanceof VoidBlossomEntity){
                     spikePositions.forEach(spikePos -> ((VoidBlossomEntity) entity).clientSpikeHandler.addSpike(spikePos));
                 }
-            }));
+            });
         });
         ctx.setPacketHandled(true);
     }

@@ -5,6 +5,7 @@ import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MonolithBlock extends BaseEntityBlock {
+    public static final MapCodec<MonolithBlock> CODEC = simpleCodec(MonolithBlock::new);
     private static final VoxelShape xAxisShape = box(3.5, 0.0, 1.5, 12.5, 16.0, 14.5);
     private static final VoxelShape zAxisShape = box(1.5, 0.0, 3.5, 14.5, 16.0, 12.5);
 
@@ -41,6 +43,11 @@ public class MonolithBlock extends BaseEntityBlock {
         registerDefaultState(getStateDefinition().any()
                 .setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH)
                 .setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -86,11 +93,11 @@ public class MonolithBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (!level.isClientSide && player.isCreative()){
             VanillaCopiesServer.onBreakInCreative(level, pos, state, player);
         }
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Nullable

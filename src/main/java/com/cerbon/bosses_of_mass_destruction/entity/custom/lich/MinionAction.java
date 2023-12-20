@@ -9,6 +9,7 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
@@ -17,8 +18,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
-
 import java.util.function.Supplier;
 
 public class MinionAction implements IActionWithCooldown {
@@ -41,7 +40,7 @@ public class MinionAction implements IActionWithCooldown {
         }
     }
 
-    public static final EntityType<?> summonEntityType = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(summonId));
+    public static final EntityType<?> summonEntityType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.tryParse(summonId));
 
     public MinionAction(LichEntity entity, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
         this.entity = entity;

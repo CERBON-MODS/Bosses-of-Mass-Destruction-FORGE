@@ -8,17 +8,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 public class BMDPacketHandler {
     private static final String PROTOCOL_VERSION = "1";
     public static SimpleChannel INSTANCE;
 
     private static int packetId = 0;
-    private static int id(){
+    private static int id() {
         return packetId++;
     }
 
@@ -31,73 +31,73 @@ public class BMDPacketHandler {
 
         INSTANCE = net;
 
-        net.messageBuilder(ChargedEnderPearlS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(ChargedEnderPearlS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ChargedEnderPearlS2CPacket::new)
                 .encoder(ChargedEnderPearlS2CPacket::write)
                 .consumerMainThread(ChargedEnderPearlS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(SendDeltaMovementS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(SendDeltaMovementS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(SendDeltaMovementS2CPacket::new)
                 .encoder(SendDeltaMovementS2CPacket::write)
                 .consumerMainThread(SendDeltaMovementS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(PlaceS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(PlaceS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(PlaceS2CPacket::new)
                 .encoder(PlaceS2CPacket::write)
                 .consumerMainThread(PlaceS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(SpikeS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(SpikeS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(SpikeS2CPacket::new)
                 .encoder(SpikeS2CPacket::write)
                 .consumerMainThread(SpikeS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(HealS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(HealS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(HealS2CPacket::new)
                 .encoder(HealS2CPacket::write)
                 .consumerMainThread(HealS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(BlindnessS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(BlindnessS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(BlindnessS2CPacket::new)
                 .encoder(BlindnessS2CPacket::write)
                 .consumerMainThread(BlindnessS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(ChangeHitboxS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(ChangeHitboxS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ChangeHitboxS2CPacket::new)
                 .encoder(ChangeHitboxS2CPacket::write)
                 .consumerMainThread(ChangeHitboxS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(SendParticleS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(SendParticleS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(SendParticleS2CPacket::new)
                 .encoder(SendParticleS2CPacket::write)
                 .consumerMainThread(SendParticleS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(SendVec3S2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(SendVec3S2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(SendVec3S2CPacket::new)
                 .encoder(SendVec3S2CPacket::write)
                 .consumerMainThread(SendVec3S2CPacket::handle)
                 .add();
 
-        net.messageBuilder(ObsidilithReviveS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(ObsidilithReviveS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ObsidilithReviveS2CPacket::new)
                 .encoder(ObsidilithReviveS2CPacket::write)
                 .consumerMainThread(ObsidilithReviveS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(VoidBlossomReviveS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(VoidBlossomReviveS2CPacket.class, id(), PlayNetworkDirection.PLAY_TO_CLIENT)
                 .decoder(VoidBlossomReviveS2CPacket::new)
                 .encoder(VoidBlossomReviveS2CPacket::write)
                 .consumerMainThread(VoidBlossomReviveS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+        net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), PlayNetworkDirection.PLAY_TO_SERVER)
                 .decoder(MultipartEntityInteractionC2SPacket::new)
                 .encoder(MultipartEntityInteractionC2SPacket::write)
                 .consumerMainThread(MultipartEntityInteractionC2SPacket::handle)

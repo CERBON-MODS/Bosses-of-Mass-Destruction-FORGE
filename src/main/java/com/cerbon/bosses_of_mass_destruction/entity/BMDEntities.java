@@ -31,77 +31,78 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 public class BMDEntities {
     public static final BMDConfig mobConfig = AutoConfig.getConfigHolder(BMDConfig.class).getConfig();
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BMDConstants.MOD_ID);
+            DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, BMDConstants.MOD_ID);
 
-    public static final RegistryObject<EntityType<LichEntity>> LICH = ENTITY_TYPES.register("lich",
+    public static final Supplier<EntityType<LichEntity>> LICH = ENTITY_TYPES.register("lich",
             () -> EntityType.Builder.<LichEntity>of((entityType, level) -> new LichEntity(entityType, level, mobConfig.lichConfig), MobCategory.MONSTER)
                     .sized(1.8f, 3.0f)
                     .updateInterval(1)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "lich").toString()));
 
-    public static final RegistryObject<EntityType<MagicMissileProjectile>> MAGIC_MISSILE = ENTITY_TYPES.register("blue_fireball",
+    public static final Supplier<EntityType<MagicMissileProjectile>> MAGIC_MISSILE = ENTITY_TYPES.register("blue_fireball",
             () -> EntityType.Builder.<MagicMissileProjectile>of(MagicMissileProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "blue_fireball").toString()));
 
-    public static final RegistryObject<EntityType<CometProjectile>> COMET = ENTITY_TYPES.register("comet",
+    public static final Supplier<EntityType<CometProjectile>> COMET = ENTITY_TYPES.register("comet",
             () -> EntityType.Builder.<CometProjectile>of(CometProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "comet").toString()));
 
-    public static final RegistryObject<EntityType<SoulStarEntity>> SOUL_STAR = ENTITY_TYPES.register("soul_star",
+    public static final Supplier<EntityType<SoulStarEntity>> SOUL_STAR = ENTITY_TYPES.register("soul_star",
             () -> EntityType.Builder.<SoulStarEntity>of(SoulStarEntity::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "soul_star").toString()));
 
-    public static final RegistryObject<EntityType<ChargedEnderPearlEntity>> CHARGED_ENDER_PEARL = ENTITY_TYPES.register("charged_ender_pearl",
+    public static final Supplier<EntityType<ChargedEnderPearlEntity>> CHARGED_ENDER_PEARL = ENTITY_TYPES.register("charged_ender_pearl",
             () -> EntityType.Builder.of(ChargedEnderPearlEntity::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "charged_ender_pearl").toString()));
 
-    public static final RegistryObject<EntityType<ObsidilithEntity>> OBSIDILITH = ENTITY_TYPES.register("obsidilith",
+    public static final Supplier<EntityType<ObsidilithEntity>> OBSIDILITH = ENTITY_TYPES.register("obsidilith",
             () -> EntityType.Builder.<ObsidilithEntity>of((entityType, level) -> new ObsidilithEntity(entityType, level, mobConfig.obsidilithConfig), MobCategory.MONSTER)
                     .sized(2.0f, 4.4f)
                     .fireImmune()
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "obsidilith").toString()));
 
-    public static final RegistryObject<EntityType<GauntletEntity>> GAUNTLET = ENTITY_TYPES.register("gauntlet",
+    public static final Supplier<EntityType<GauntletEntity>> GAUNTLET = ENTITY_TYPES.register("gauntlet",
             () -> EntityType.Builder.<GauntletEntity>of((entityType, level) -> new GauntletEntity(entityType, level, mobConfig.gauntletConfig) , MobCategory.MONSTER)
                     .sized(5.0f, 4.0f)
                     .fireImmune()
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "gauntlet").toString()));
 
-    public static final RegistryObject<EntityType<VoidBlossomEntity>> VOID_BLOSSOM = ENTITY_TYPES.register("void_blossom",
+    public static final Supplier<EntityType<VoidBlossomEntity>> VOID_BLOSSOM = ENTITY_TYPES.register("void_blossom",
             () -> EntityType.Builder.<VoidBlossomEntity>of((entityType, level) -> new VoidBlossomEntity(entityType, level, mobConfig.voidBlossomConfig), MobCategory.MONSTER)
                     .sized(8.0f, 10.0f)
                     .fireImmune()
                     .setTrackingRange(3)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "void_blossom").toString()));
 
-    public static final RegistryObject<EntityType<SporeBallProjectile>> SPORE_BALL = ENTITY_TYPES.register("spore_ball",
+    public static final Supplier<EntityType<SporeBallProjectile>> SPORE_BALL = ENTITY_TYPES.register("spore_ball",
             () -> EntityType.Builder.<SporeBallProjectile>of(SporeBallProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "spore_ball").toString()));
 
-    public static final RegistryObject<EntityType<PetalBladeProjectile>> PETAL_BLADE = ENTITY_TYPES.register("petal_blade",
+    public static final Supplier<EntityType<PetalBladeProjectile>> PETAL_BLADE = ENTITY_TYPES.register("petal_blade",
             () -> EntityType.Builder.<PetalBladeProjectile>of(PetalBladeProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)
                     .build(new ResourceLocation(BMDConstants.MOD_ID, "petal_blade").toString()));

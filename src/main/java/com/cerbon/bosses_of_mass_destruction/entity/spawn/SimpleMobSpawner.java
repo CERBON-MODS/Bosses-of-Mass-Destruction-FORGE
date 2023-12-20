@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class SimpleMobSpawner implements IMobSpawner {
     private final ServerLevel serverLevel;
@@ -18,7 +18,7 @@ public class SimpleMobSpawner implements IMobSpawner {
     public void spawn(Vec3 pos, Entity entity) {
         entity.setPos(pos);
         if (entity instanceof Mob) {
-            ForgeEventFactory.onFinalizeSpawn(
+            EventHooks.onFinalizeSpawn(
                     (Mob) entity,
                     serverLevel,
                     serverLevel.getCurrentDifficultyAt(entity.blockPosition()),

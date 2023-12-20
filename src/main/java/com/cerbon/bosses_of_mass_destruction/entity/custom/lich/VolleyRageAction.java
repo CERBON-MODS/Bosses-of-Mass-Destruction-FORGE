@@ -11,6 +11,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.ProjectileThrower;
 import com.cerbon.bosses_of_mass_destruction.projectile.MagicMissileProjectile;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -18,7 +19,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class VolleyRageAction implements IActionWithCooldown {
 
     public int performVolley(ServerPlayer target) {
         int rageMissileVolleys = getRageMissileVolleys(entity).size();
-        final Optional<MobEffect> missileMobEffect = Optional.ofNullable(ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.tryParse(mobConfig.missile.mobEffectId)));
+        final Optional<MobEffect> missileMobEffect = Optional.ofNullable(BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.tryParse(mobConfig.missile.mobEffectId)));
         final Function<Vec3, ProjectileThrower> missileThrower = getMissileThrower(missileMobEffect);
 
         BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.MISSILE_PREPARE.get(), SoundSource.HOSTILE, 4.0f, 64, null);

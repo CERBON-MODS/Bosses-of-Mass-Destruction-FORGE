@@ -6,11 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class VoidBlossomReviveS2CPacket {
     private final Vec3 pos;
@@ -27,14 +24,14 @@ public class VoidBlossomReviveS2CPacket {
         PacketUtils.writeVec3(buf, this.pos);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(NetworkEvent.Context ctx) {
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;
             if (level == null) return;
+            if (!FMLEnvironment.dist.isClient()) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> VoidBlossomStructureRepair.handleVoidBlossomRevivePacket(pos, level)));
+            client.execute(() -> VoidBlossomStructureRepair.handleVoidBlossomRevivePacket(pos, level));
         });
         ctx.setPacketHandled(true);
     }

@@ -6,13 +6,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class BlindnessS2CPacket {
     private final int entityId;
@@ -33,24 +31,24 @@ public class BlindnessS2CPacket {
         buf.writeVarIntArray(playerIds);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(NetworkEvent.Context ctx) {
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;
             if (level == null) return;
+            if (!FMLEnvironment.dist.isClient()) return;
 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> {
+            client.execute(() -> {
                 Entity entity = level.getEntity(entityId);
                 List<Player> players = Arrays.stream(playerIds)
-                        .mapToObj(level::getEntity)
-                        .filter(id -> id instanceof Player)
-                        .map(id -> (Player) id)
-                        .toList();
+                                             .mapToObj(level::getEntity)
+                                             .filter(id -> id instanceof Player)
+                                             .map(id -> (Player) id)
+                                             .toList();
 
-                if (entity instanceof GauntletEntity)
-                    ((GauntletEntity) entity).clientBlindnessHandler.handlePlayerEffects(players);
-            }));
+                if (entity instanceof GauntletEntity gauntletEntity)
+                    gauntletEntity.clientBlindnessHandler.handlePlayerEffects(players);
+            });
         });
         ctx.setPacketHandled(true);
     }

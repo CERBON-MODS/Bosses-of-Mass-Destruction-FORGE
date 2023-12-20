@@ -3,6 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
+import com.cerbon.bosses_of_mass_destruction.attachment.BMDAttachments;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
@@ -59,7 +60,7 @@ public class SpikeAction implements IActionWithCooldown {
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(BMDCapabilities.getPlayerPositions(target), target.position());
+                                Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(BMDAttachments.getPlayerPositions(target), target.position());
                                 BMDUtils.playSound(target.serverLevel(), placement, BMDSounds.SPIKE_INDICATOR.get(), SoundSource.HOSTILE, 1.0f, 32, null);
 
                                 eventScheduler.addEvent(
