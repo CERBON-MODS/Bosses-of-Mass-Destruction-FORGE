@@ -1,6 +1,0 @@
-/effect give Dev minecraft:resistance infinite 5
-/locate structure bosses_of_mass_destruction:lich_tower
-/tp @s -1008 ~ -1088
-/enchant Dev minecraft:infinity
-/enchant Dev minecraft:power 5
-/gamerule mobGriefing false
