@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox;
 
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.EntityBounds;
 import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
+import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

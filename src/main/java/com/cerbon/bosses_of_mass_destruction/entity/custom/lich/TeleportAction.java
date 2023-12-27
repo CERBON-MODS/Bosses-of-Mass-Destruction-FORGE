@@ -1,16 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.ModRandom;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.ISpawnPredicate;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.MobEntitySpawnPredicate;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.MobPlacementLogic;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.RangedSpawnPosition;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -64,20 +63,20 @@ public class TeleportAction implements IActionWithCooldown {
 
     private MobPlacementLogic buildTeleportLogic(ServerPlayer target, Vec3 spawnPos, ISpawnPredicate spawnPredicate) {
         return new MobPlacementLogic(
-                new RangedSpawnPosition(spawnPos, tooCloseToTargetDistance, tooFarFromTargetDistance, new ModRandom()),
+                new RangedSpawnPosition(spawnPos, tooCloseToTargetDistance, tooFarFromTargetDistance),
                 () -> entity,
                 spawnPredicate,
                 (pos, e) -> eventScheduler.addEvent(
                         new TimedEvent(
                                 () -> {
-                                    BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.TELEPORT_PREPARE.get(), SoundSource.HOSTILE, 3.0f, 64, null);
+                                    SoundUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.TELEPORT_PREPARE.get(), SoundSource.HOSTILE, 3.0f, 64, null);
                                     entity.collides = false;
                                     eventScheduler.addEvent(
                                             new TimedEvent(
                                                     () -> {
                                                         e.teleportTo(pos.x, pos.y, pos.z);
                                                         e.level().broadcastEntityEvent(e, LichActions.endTeleport);
-                                                        BMDUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.LICH_TELEPORT.get(), SoundSource.HOSTILE, 2.0f, 64, null);
+                                                        SoundUtils.playSound(target.serverLevel(), entity.position(), BMDSounds.LICH_TELEPORT.get(), SoundSource.HOSTILE, 2.0f, 64, null);
                                                         entity.collides = true;
                                                         },
                                                     teleportDelay - teleportStartSoundDelay

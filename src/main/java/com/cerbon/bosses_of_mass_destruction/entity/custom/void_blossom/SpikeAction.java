@@ -1,10 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSeries;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
@@ -13,7 +8,12 @@ import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.EventSeries;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,7 +57,7 @@ public class SpikeAction implements IActionWithCooldown {
                 shouldCancel
         );
 
-        BMDUtils.playSound(
+        SoundUtils.playSound(
                 target.serverLevel(),
                 entity.position(),
                 BMDSounds.VOID_BLOSSOM_BURROW.get(),
@@ -88,8 +88,8 @@ public class SpikeAction implements IActionWithCooldown {
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(BMDCapabilities.getPlayerPositions(target), target.position());
-                                BMDUtils.playSound(
+                                Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(CapabilityUtils.getLastPositions(target), target.position());
+                                SoundUtils.playSound(
                                         target.serverLevel(),
                                         placement,
                                         BMDSounds.VOID_SPIKE_INDICATOR.get(),
@@ -106,7 +106,7 @@ public class SpikeAction implements IActionWithCooldown {
                                 eventScheduler.addEvent(
                                         new TimedEvent(
                                                 () -> {
-                                                    BMDUtils.playSound(
+                                                    SoundUtils.playSound(
                                                             target.serverLevel(),
                                                             placement,
                                                             BMDSounds.VOID_BLOSSOM_SPIKE.get(),

@@ -1,8 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSeries;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
@@ -11,7 +8,10 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.ProjectileThrower;
 import com.cerbon.bosses_of_mass_destruction.projectile.SporeBallProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.util.ExemptEntities;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.EventSeries;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,7 +54,7 @@ public class SporeAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDUtils.playSound(((ServerPlayer) target).serverLevel(), entity.position(), BMDSounds.SPORE_PREPARE.get(), SoundSource.HOSTILE, 1.5f, 32, null),
+                        () -> SoundUtils.playSound(((ServerPlayer) target).serverLevel(), entity.position(), BMDSounds.SPORE_PREPARE.get(), SoundSource.HOSTILE, 1.5f, 32, null),
                         26
                 )
         );

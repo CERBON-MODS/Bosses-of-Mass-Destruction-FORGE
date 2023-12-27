@@ -1,7 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.packet;
 
 import com.cerbon.bosses_of_mass_destruction.packet.custom.*;
-import com.cerbon.bosses_of_mass_destruction.packet.custom.multipart_entities.MultipartEntityInteractionC2SPacket;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -95,12 +94,6 @@ public class BMDPacketHandler {
                 .decoder(VoidBlossomReviveS2CPacket::new)
                 .encoder(VoidBlossomReviveS2CPacket::write)
                 .consumerMainThread(VoidBlossomReviveS2CPacket::handle)
-                .add();
-
-        net.messageBuilder(MultipartEntityInteractionC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(MultipartEntityInteractionC2SPacket::new)
-                .encoder(MultipartEntityInteractionC2SPacket::write)
-                .consumerMainThread(MultipartEntityInteractionC2SPacket::handle)
                 .add();
     }
 

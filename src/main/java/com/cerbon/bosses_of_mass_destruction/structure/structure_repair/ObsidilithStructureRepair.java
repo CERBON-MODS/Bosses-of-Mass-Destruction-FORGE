@@ -1,17 +1,17 @@
 package com.cerbon.bosses_of_mass_destruction.structure.structure_repair;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEffectHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithUtils;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.ObsidilithReviveS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -34,7 +34,7 @@ public class ObsidilithStructureRepair implements StructureRepair{
     @Override
     public void repairStructure(ServerLevel level, StructureStart structureStart) {
         BlockPos topCenter = getTopCenter(structureStart);
-        EventScheduler levelEventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+        EventScheduler levelEventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
         BMDPacketHandler.sendToAllPlayersTrackingChunk(new ObsidilithReviveS2CPacket(VecUtils.asVec3(topCenter).add(0.5, 0.5, 0.5)), level, VecUtils.asVec3(topCenter).add(0.5, 0.5, 0.5));
 
         for (int y = 0; y <= ObsidilithUtils.deathPillarHeight; y++){
@@ -42,7 +42,7 @@ public class ObsidilithStructureRepair implements StructureRepair{
             levelEventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                level.playSound(null, topCenter, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0f, BMDUtils.randomPitch(level.random));
+                                level.playSound(null, topCenter, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0f, SoundUtils.randomPitch(level.random));
 
                                 for (Vec3 pos : ObsidilithUtils.circlePos)
                                     level.removeBlock(new BlockPos((int) pos.x, y1, (int) pos.z).offset(topCenter), false);
@@ -71,6 +71,6 @@ public class ObsidilithStructureRepair implements StructureRepair{
 
     @OnlyIn(Dist.CLIENT)
     public static void handleObsidilithRevivePacket(Vec3 pos, ClientLevel level){
-        ObsidilithEffectHandler.spawnPillarParticles(pos, BMDCapabilities.getLevelEventScheduler(level));
+        ObsidilithEffectHandler.spawnPillarParticles(pos, CerbonsApiCapabilities.getLevelEventScheduler(level));
     }
 }

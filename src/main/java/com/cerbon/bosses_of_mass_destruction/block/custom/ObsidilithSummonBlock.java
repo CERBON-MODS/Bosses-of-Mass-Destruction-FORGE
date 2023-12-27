@@ -1,15 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEntity;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -81,7 +81,7 @@ public class ObsidilithSummonBlock extends Block {
         BlockState blockState = level.getBlockState(blockPos);
 
         if (blockState.is(BMDBlocks.OBSIDILITH_SUMMON_BLOCK.get()) && !blockState.getValue(EndPortalFrameBlock.HAS_EYE)){
-            EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
 
             if (level.isClientSide){
                 cir.setReturnValue(InteractionResult.SUCCESS);

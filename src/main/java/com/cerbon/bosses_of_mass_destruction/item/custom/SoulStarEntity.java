@@ -1,15 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.item.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.Event;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
+import com.cerbon.cerbons_api.api.general.event.Event;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -115,7 +115,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     public void tick() {
         if (level().isClientSide() && tickCount == 1){
             double rotationOffset = random.nextDouble() * 360;
-            BMDCapabilities.getLevelEventScheduler(level()).addEvent(
+            CerbonsApiCapabilities.getLevelEventScheduler(level()).addEvent(
                     new Event(
                             () -> true,
                             () -> spawnTrailParticles(rotationOffset),

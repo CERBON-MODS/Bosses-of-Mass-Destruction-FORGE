@@ -1,15 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -35,7 +36,7 @@ public class WaveAction implements IActionWithCooldown {
         this.entity = entity;
         this.circlePoints = MathUtils.buildBlockCircle(riftRadius);
         this.level = entity.level();
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+        this.eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class WaveAction implements IActionWithCooldown {
                 this::damageEntity
         );
 
-        BMDUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 0.8f, 64, null);
+        SoundUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 0.8f, 64, null);
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
@@ -67,10 +68,10 @@ public class WaveAction implements IActionWithCooldown {
                             MathUtils.lineCallback(startRiftPos, endRiftPos, numRifts, (linePos, i) -> eventScheduler.addEvent(
                                     new TimedEvent(
                                             () -> {
-                                                BMDUtils.playSound((ServerLevel) level, linePos, BMDSounds.WAVE_INDICATOR.get(), SoundSource.HOSTILE, 0.7f, 32, null);
+                                                SoundUtils.playSound((ServerLevel) level, linePos, BMDSounds.WAVE_INDICATOR.get(), SoundSource.HOSTILE, 0.7f, 32, null);
                                                 eventScheduler.addEvent(
                                                         new TimedEvent(
-                                                                () -> BMDUtils.playSound((ServerLevel) level, linePos, BMDSounds.OBSIDILITH_WAVE.get(), SoundSource.HOSTILE, 1.2f, 32, null),
+                                                                () -> SoundUtils.playSound((ServerLevel) level, linePos, BMDSounds.OBSIDILITH_WAVE.get(), SoundSource.HOSTILE, 1.2f, 32, null),
                                                                 waveDelay,
                                                                 1,
                                                                 () -> !entity.isAlive()

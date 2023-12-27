@@ -1,7 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.ModRandom;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.ValidatedTargetSelector;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.VelocitySteering;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.VelocityGoal;
@@ -11,6 +9,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.ValidDire
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntity;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
@@ -40,8 +39,7 @@ public class LichMovement {
         ValidDirectionAnd canMoveTowardsPositionValidator = getValidDirectionAnd(tooCloseToTarget);
         ValidatedTargetSelector targetSelector = new ValidatedTargetSelector(
                 iEntity,
-                canMoveTowardsPositionValidator,
-                new ModRandom()
+                canMoveTowardsPositionValidator
         );
         return new VelocityGoal(
                 this::moveWhileAttacking,
@@ -86,8 +84,7 @@ public class LichMovement {
 
         ValidatedTargetSelector targetSelector = new ValidatedTargetSelector(
                 iEntity,
-                canMoveTowardsPositionValidator,
-                new ModRandom()
+                canMoveTowardsPositionValidator
         );
 
         return new VelocityGoal(

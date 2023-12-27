@@ -1,17 +1,18 @@
 package com.cerbon.bosses_of_mass_destruction.projectile;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.RiftBurst;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -44,7 +45,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
     private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
     private final List<Vec3> circlePoints = MathUtils.buildBlockCircle(7.0);
     private final ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.DISAPPEARING_SWIRL.get())
-            .color(BMDColors.GREEN)
+            .color(Vec3Colors.GREEN)
             .colorVariation(0.4)
             .scale(0.2f)
             .brightness(BMDParticles.FULL_BRIGHT);
@@ -108,8 +109,8 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
 
     private void doExplosion(LivingEntity owner){
         level().broadcastEntityEvent(this, particle);
-        playSound(BMDSounds.SPORE_BALL_LAND.get(), 1.0f, BMDUtils.randomPitch(random) - 0.2f);
-        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level());
+        playSound(BMDSounds.SPORE_BALL_LAND.get(), 1.0f, SoundUtils.randomPitch(random) - 0.2f);
+        EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level());
         Consumer<LivingEntity> onImpact = entity -> {
             float damage = (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE);
             if (this.getOwner() != null){
@@ -135,7 +136,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                playSound(BMDSounds.SPORE_IMPACT.get(), 1.5f, BMDUtils.randomPitch(random));
+                                playSound(BMDSounds.SPORE_IMPACT.get(), 1.5f, SoundUtils.randomPitch(random));
                                 discard();
                             },
                             explosionDelay

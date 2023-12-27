@@ -1,17 +1,13 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -41,7 +37,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
                 .colorVariation(0.5);
 
         this.teleportParticleBuilder = new ClientParticleBuilder(BMDParticles.DISAPPEARING_SWIRL.get())
-                .color(BMDColors.TELEPORT_PURPLE)
+                .color(Vec3Colors.TELEPORT_PURPLE)
                 .age(10, 15)
                 .brightness(BMDParticles.FULL_BRIGHT);
 
@@ -49,11 +45,11 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
                 .colorVariation(0.5);
 
         this.flameRingFactory = ParticleFactories.soulFlame()
-                .color(t -> MathUtils.lerpVec(t, BMDColors.WHITE, BMDColors.WHITE.multiply(0.5, 0.5, 0.5)))
+                .color(t -> MathUtils.lerpVec(t, Vec3Colors.WHITE, Vec3Colors.WHITE.multiply(0.5, 0.5, 0.5)))
                 .age(0, 7);
 
         this.minionSummonParticleBuilder = ParticleFactories.soulFlame()
-                .color(BMDColors.WHITE);
+                .color(Vec3Colors.WHITE);
         this.thresholdParticleBuilder = ParticleFactories.soulFlame()
                 .age(20)
                 .scale(0.5f);
@@ -64,7 +60,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
                 .age(10);
 
         this.summonRingCompleteFactory = ParticleFactories.soulFlame()
-                .color(BMDColors.WHITE)
+                .color(Vec3Colors.WHITE)
                 .age(20, 30);
 
         this.deathParticleFactory = ParticleFactories.soulFlame()
@@ -157,7 +153,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
                                         .add(VecUtils.planeProject(RandomUtils.randVec(), VecUtils.yAxis)
                                                 .normalize()
                                                 .scale(entity.getRandom().nextGaussian())),
-                                VecUtils.yAxis.scale(RandomUtils.randomDouble(0.2))),
+                                VecUtils.yAxis.scale(RandomUtils.randDouble(0.2))),
                         MinionAction.minionSummonDelay,
                         MinionAction.minionSummonDelay - MinionAction.minionSummonParticleDelay,
                         this::shouldCancelParticles

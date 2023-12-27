@@ -1,8 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.MultiBufferSource;

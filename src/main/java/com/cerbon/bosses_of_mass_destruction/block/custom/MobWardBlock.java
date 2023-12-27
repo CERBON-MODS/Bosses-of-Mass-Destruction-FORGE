@@ -1,13 +1,13 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -176,9 +176,9 @@ public class MobWardBlock extends BaseEntityBlock {
         if (state.getValue(tripleBlockPart) == TripleBlockPart.TOP){
             if (random.nextInt(3) == 0){
                 Vec3 vecPos = VecUtils.asVec3(pos).add(VecUtils.unit.scale(0.5));
-                double randomHeight = RandomUtils.randomDouble(0.25) + 0.25;
-                double randomRadius = RandomUtils.randomDouble(0.1) + 0.3;
-                double randomOffset = RandomUtils.randomDouble(Math.PI);
+                double randomHeight = RandomUtils.randDouble(0.25) + 0.25;
+                double randomRadius = RandomUtils.randDouble(0.1) + 0.3;
+                double randomOffset = RandomUtils.randDouble(Math.PI);
                 Particles.blueFireParticleFactory.continuousPosition(simpleParticle ->
                         calcParticlePos(
                                 vecPos,

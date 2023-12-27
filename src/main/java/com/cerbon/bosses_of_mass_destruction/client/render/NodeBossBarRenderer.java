@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.client.render;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;

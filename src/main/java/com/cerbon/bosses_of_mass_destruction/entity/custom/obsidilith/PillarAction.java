@@ -1,17 +1,14 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.*;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -35,7 +32,7 @@ public class PillarAction implements IActionWithCooldown {
 
     public PillarAction(LivingEntity entity){
         this.entity = entity;
-        this.eventScheduler = BMDCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(entity.level());
     }
 
     @Override
@@ -43,11 +40,11 @@ public class PillarAction implements IActionWithCooldown {
         Level level = entity.level();
         if (!(level instanceof ServerLevel)) return 80;
         List<BlockPos> pillarPositions = getPillarPositions();
-        BMDUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 1.4f, 64, null);
+        SoundUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(), SoundSource.HOSTILE, 3.0f, 1.4f, 64, null);
 
         pillarPositions.forEach(blockPos -> {
-            MathUtils.lineCallback(MobUtils.eyePos(entity), VecUtils.asVec3(blockPos).add(0.5, 0.5, 0.5), (int) pillarXzDistance, (vec3, integer) -> BMDUtils.spawnParticle((ServerLevel) level, BMDParticles.PILLAR_SPAWN_INDICATOR_2.get(), vec3, Vec3.ZERO, 0, 0.0));
-            BMDUtils.spawnParticle((ServerLevel) level, BMDParticles.PILLAR_SPAWN_INDICATOR.get(), VecUtils.asVec3(blockPos.above(5)), new Vec3(0.3, 3.0, 0.3), 20, 0.0);
+            MathUtils.lineCallback(MobUtils.eyePos(entity), VecUtils.asVec3(blockPos).add(0.5, 0.5, 0.5), (int) pillarXzDistance, (vec3, integer) -> ParticleUtils.spawnParticle((ServerLevel) level, BMDParticles.PILLAR_SPAWN_INDICATOR_2.get(), vec3, Vec3.ZERO, 0, 0.0));
+            ParticleUtils.spawnParticle((ServerLevel) level, BMDParticles.PILLAR_SPAWN_INDICATOR.get(), VecUtils.asVec3(blockPos.above(5)), new Vec3(0.3, 3.0, 0.3), 20, 0.0);
         });
 
         eventScheduler.addEvent(
@@ -85,6 +82,6 @@ public class PillarAction implements IActionWithCooldown {
         IntStream.range(0, pillarHeight).forEach(i -> entity.level().setBlockAndUpdate(pos.above(i), Blocks.OBSIDIAN.defaultBlockState()));
         BlockPos pillarTop = pos.above(pillarHeight);
         entity.level().setBlockAndUpdate(pillarTop, BMDBlocks.OBSIDILITH_RUNE.get().defaultBlockState());
-        BMDUtils.playSound(serverLevel, VecUtils.asVec3(pos), SoundEvents.BASALT_PLACE, SoundSource.HOSTILE, 1.0f, 16.0, null);
+        SoundUtils.playSound(serverLevel, VecUtils.asVec3(pos), SoundEvents.BASALT_PLACE, SoundSource.HOSTILE, 1.0f, 16.0, null);
     }
 }

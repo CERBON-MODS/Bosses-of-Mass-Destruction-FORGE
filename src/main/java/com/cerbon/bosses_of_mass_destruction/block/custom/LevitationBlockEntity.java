@@ -1,16 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
@@ -63,12 +63,12 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
             for (Player player : playersInBox) {
 
                 for (double x : List.of(box.minX, box.maxX)) {
-                    double zRand = box.getCenter().z + box.getZsize() * RandomUtils.randomDouble(0.5);
+                    double zRand = box.getCenter().z + box.getZsize() * RandomUtils.randDouble(0.5);
                     Particles.particlesFactory.build(randYPos(x, player, zRand), Vec3.ZERO);
                 }
 
                 for (double z : List.of(box.minZ, box.maxZ)) {
-                    double xRand = box.getCenter().x + box.getXsize() * RandomUtils.randomDouble(0.5);
+                    double xRand = box.getCenter().x + box.getXsize() * RandomUtils.randDouble(0.5);
                     Particles.particlesFactory.build(randYPos(xRand, player, z), Vec3.ZERO);
                 }
             }
@@ -76,7 +76,7 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
     }
 
     private static Vec3 randYPos(double x, Player player, double z){
-        return new Vec3(x, player.getY() + RandomUtils.randomDouble(0.5) + 1, z);
+        return new Vec3(x, player.getY() + RandomUtils.randDouble(0.5) + 1, z);
     }
 
     public static void tickFlight(ServerPlayer player){
@@ -134,7 +134,7 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
 
     private static class Particles {
         private static final ClientParticleBuilder particlesFactory = new ClientParticleBuilder(BMDParticles.LINE.get())
-                .color(BMDColors.COMET_BLUE)
+                .color(Vec3Colors.COMET_BLUE)
                 .brightness(BMDParticles.FULL_BRIGHT)
                 .colorVariation(0.5)
                 .scale(0.075f);

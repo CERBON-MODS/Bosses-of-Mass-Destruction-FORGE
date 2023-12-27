@@ -1,8 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.packet.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.PacketUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.custom.VoidLilyBlockEntity;
+import com.cerbon.cerbons_api.api.static_utilities.PacketUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;

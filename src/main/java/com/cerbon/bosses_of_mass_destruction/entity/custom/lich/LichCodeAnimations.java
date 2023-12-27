@@ -1,8 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.GeoModel;
 import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimations;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.cache.object.BakedGeoModel;

@@ -1,6 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.config.mob.GauntletConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.CompositeGoal;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.FindTargetGoal;
@@ -8,6 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IMoveHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.INbtHandler;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;

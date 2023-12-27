@@ -1,16 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.EntityBounds;
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.EntityPart;
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.MutableBox;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.ChangeHitboxS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
+import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityPart;
+import com.cerbon.cerbons_api.api.multipart_entities.entity.MutableBox;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -143,7 +143,7 @@ public class GauntletHitboxes implements IDamageHandler {
         }
 
         if (!damageSource.is(DamageTypeTags.IS_FIRE))
-            entity.playSound(BMDSounds.GAUNTLET_CLINK.get(), 1.0f, BMDUtils.randomPitch(actor.getRandom()));
+            entity.playSound(BMDSounds.GAUNTLET_CLINK.get(), 1.0f, SoundUtils.randomPitch(actor.getRandom()));
 
         return false;
     }

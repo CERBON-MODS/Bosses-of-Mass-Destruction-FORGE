@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.packet.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.PacketUtils;
+import com.cerbon.cerbons_api.api.static_utilities.PacketUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
