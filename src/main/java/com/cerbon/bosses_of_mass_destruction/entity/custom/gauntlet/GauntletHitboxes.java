@@ -9,6 +9,7 @@ import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
 import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityPart;
 import com.cerbon.cerbons_api.api.multipart_entities.entity.MutableBox;
 import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MiscUtils;
 import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
 import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.ModList;
 
 public class GauntletHitboxes implements IDamageHandler {
     private final GauntletEntity entity;
@@ -50,7 +50,7 @@ public class GauntletHitboxes implements IDamageHandler {
             .create();
     private EntityBounds currentHitbox = hitboxes;
 
-    private final boolean disableHitboxesForCompatibility = ModList.get().isLoaded("bettercombat") || ModList.get().isLoaded("epicfight");
+    private final boolean disableHitboxesForCompatibility = MiscUtils.isModLoaded("bettercombat") || MiscUtils.isModLoaded("epicfight");
 
     public GauntletHitboxes(GauntletEntity entity) {
         this.entity = entity;
