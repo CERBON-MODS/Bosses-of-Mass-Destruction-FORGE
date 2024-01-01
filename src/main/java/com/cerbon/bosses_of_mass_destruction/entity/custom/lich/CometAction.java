@@ -1,16 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.config.mob.LichConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.ThrowProjectileAction;
 import com.cerbon.bosses_of_mass_destruction.entity.util.ProjectileThrower;
 import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometProjectile;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -59,7 +59,7 @@ public class CometAction implements IActionWithCooldown {
     private void performCometThrow(ServerLevel serverLevel) {
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDUtils.playSound(
+                        () -> SoundUtils.playSound(
                                 serverLevel,
                                 entity.position(),
                                 BMDSounds.COMET_PREPARE.get(),
@@ -81,7 +81,7 @@ public class CometAction implements IActionWithCooldown {
                                     entity,
                                     cometThrower.apply(getCometLaunchOffset())).perform();
 
-                            BMDUtils.playSound(
+                            SoundUtils.playSound(
                                     serverLevel,
                                     entity.position(),
                                     BMDSounds.COMET_SHOOT.get(),

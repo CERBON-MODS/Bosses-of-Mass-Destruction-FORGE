@@ -1,11 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.VoidBlossomEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
@@ -13,8 +8,13 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.EntityStats;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.HealS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -63,7 +63,7 @@ public class VoidBlossomBlock extends Block {
     private void healNearbyEntities(ServerLevel level, BlockPos pos){
         level.getEntitiesOfClass(VoidBlossomEntity.class, new AABB(pos).inflate(40.0, 20.0, 40.0))
                 .forEach(voidBlossom -> {
-                    BMDCapabilities.getLevelEventScheduler(level).addEvent(
+                    CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
                             new TimedEvent(
                                     () -> LichUtils.cappedHeal(new EntityAdapter(voidBlossom), new EntityStats(voidBlossom), VoidBlossomEntity.hpMilestones, 10f, voidBlossom::heal),
                                     healAnimationDelay
@@ -129,7 +129,7 @@ public class VoidBlossomBlock extends Block {
     @OnlyIn(Dist.CLIENT)
     private static void spawnChargeParticle(Vec3 source, ClientLevel level){
         Vec3 particlePos = source.add(VecUtils.yAxis.scale(0.25));
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> Particles.healParticleFactory.build(particlePos.add(RandomUtils.randVec().scale(0.2)), Vec3.ZERO),
                         32,
@@ -148,7 +148,7 @@ public class VoidBlossomBlock extends Block {
                 particlePositions.add(pos.add(circlePoints.get(i % numCirclePoints))));
 
         AtomicInteger i = new AtomicInteger();
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> {
                             Particles.healParticleFactory.build(particlePositions.get(i.get()), Vec3.ZERO);
@@ -178,21 +178,21 @@ public class VoidBlossomBlock extends Block {
 
     public static class Particles {
         private static final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.LINE.get())
-                .color(f -> MathUtils.lerpVec(f, BMDColors.VOID_PURPLE, BMDColors.ULTRA_DARK_PURPLE))
+                .color(f -> MathUtils.lerpVec(f, Vec3Colors.VOID_PURPLE, Vec3Colors.ULTRA_DARK_PURPLE))
                 .colorVariation(0.15)
                 .brightness(BMDParticles.FULL_BRIGHT)
                 .scale(0.25f)
                 .age(10, 15);
 
         private static final ClientParticleBuilder healParticleFactory = new ClientParticleBuilder(BMDParticles.OBSIDILITH_BURST.get())
-                .color(f -> MathUtils.lerpVec(f, BMDColors.PINK, BMDColors.ULTRA_DARK_PURPLE))
+                .color(f -> MathUtils.lerpVec(f, Vec3Colors.PINK, Vec3Colors.ULTRA_DARK_PURPLE))
                 .colorVariation(0.15)
                 .brightness(BMDParticles.FULL_BRIGHT)
                 .scale(f -> 0.4f * (1 - f * 0.75f))
                 .age(10);
 
         private static final ClientParticleBuilder petalParticleFactory = new ClientParticleBuilder(BMDParticles.PETAL.get())
-                .color(f -> MathUtils.lerpVec(f, BMDColors.PINK, BMDColors.ULTRA_DARK_PURPLE))
+                .color(f -> MathUtils.lerpVec(f, Vec3Colors.PINK, Vec3Colors.ULTRA_DARK_PURPLE))
                 .brightness(BMDParticles.FULL_BRIGHT)
                 .colorVariation(0.15)
                 .scale(f -> 0.15f * (1 - f * 0.25f))

@@ -1,11 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.client.render.IBoneLight;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRendererWithModel;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -76,12 +76,12 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
     private Vec3 getColor() {
         Vec3 color;
         switch (obsidilithEntity.currentAttack){
-            case ObsidilithUtils.burstAttackStatus -> color = BMDColors.ORANGE;
-            case ObsidilithUtils.waveAttackStatus -> color = BMDColors.RED;
-            case ObsidilithUtils.spikeAttackStatus -> color = BMDColors.COMET_BLUE;
-            case ObsidilithUtils.anvilAttackStatus -> color = BMDColors.ENDER_PURPLE;
-            case ObsidilithUtils.pillarDefenseStatus -> color = BMDColors.WHITE;
-            default -> color = BMDColors.WHITE;
+            case ObsidilithUtils.burstAttackStatus -> color = Vec3Colors.ORANGE;
+            case ObsidilithUtils.waveAttackStatus -> color = Vec3Colors.RED;
+            case ObsidilithUtils.spikeAttackStatus -> color = Vec3Colors.COMET_BLUE;
+            case ObsidilithUtils.anvilAttackStatus -> color = Vec3Colors.ENDER_PURPLE;
+            case ObsidilithUtils.pillarDefenseStatus -> color = Vec3Colors.WHITE;
+            default -> color = Vec3Colors.WHITE;
         }
         return color;
     }

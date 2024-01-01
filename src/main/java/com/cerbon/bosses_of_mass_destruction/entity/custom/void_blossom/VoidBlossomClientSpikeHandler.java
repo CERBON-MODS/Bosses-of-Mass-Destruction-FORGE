@@ -1,11 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -19,7 +19,7 @@ public class VoidBlossomClientSpikeHandler implements IEntityTick<Level> {
     private final LinkedHashMap<BlockPos, VoidBlossomClientSpikeHandler.Spike> spikes = new LinkedHashMap<>();
     private final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
             .age(RandomUtils.range(10, 15))
-            .color(BMDColors.VOID_PURPLE)
+            .color(Vec3Colors.VOID_PURPLE)
             .colorVariation(0.25)
             .brightness(BMDParticles.FULL_BRIGHT);
     private final int maxAge = 10;
@@ -30,7 +30,7 @@ public class VoidBlossomClientSpikeHandler implements IEntityTick<Level> {
 
     public void addSpike(BlockPos pos){
         Vec3 center = VecUtils.asVec3(pos).add(VecUtils.unit.scale(0.5));
-        double spikeHeight = 4.0 + RandomUtils.randomDouble(0.5);
+        double spikeHeight = 4.0 + RandomUtils.randDouble(0.5);
         spikes.put(pos, new Spike(
                 center,
                 RandomUtils.randVec().add(VecUtils.yAxis.scale(spikeHeight)).normalize(),
@@ -52,7 +52,7 @@ public class VoidBlossomClientSpikeHandler implements IEntityTick<Level> {
 
             if (newAge == maxAge - 5) {
                 spikeParticleFactory.build(
-                        VecUtils.asVec3(kv.getKey()).add(RandomUtils.randVec().add(VecUtils.yAxis.scale(2.5 + RandomUtils.randomDouble(2.0)))),
+                        VecUtils.asVec3(kv.getKey()).add(RandomUtils.randVec().add(VecUtils.yAxis.scale(2.5 + RandomUtils.randDouble(2.0)))),
                         Vec3.ZERO
                 );
             }

@@ -1,13 +1,13 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.world.phys.Vec3;
 
 public class ClientSporeEffectHandler implements IEntityEventHandler {
@@ -15,7 +15,7 @@ public class ClientSporeEffectHandler implements IEntityEventHandler {
     private final EventScheduler eventScheduler;
 
     private final ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.OBSIDILITH_BURST.get())
-            .color(BMDColors.GREEN)
+            .color(Vec3Colors.GREEN)
             .colorVariation(0.4)
             .scale(0.5f)
             .brightness(BMDParticles.FULL_BRIGHT);

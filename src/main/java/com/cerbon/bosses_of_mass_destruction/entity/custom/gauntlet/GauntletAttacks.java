@@ -1,11 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.config.mob.GauntletConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.CooldownAction;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionStop;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.Map;

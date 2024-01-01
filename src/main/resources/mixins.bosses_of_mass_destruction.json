@@ -9,20 +9,12 @@
     "ExplosionMixin",
     "IceBlockMixin",
     "LivingEntityMixin",
-    "NaturalSpawnerMixin",
-    "multipart_entities.InvokerArrayVoxelShape",
-    "multipart_entities.MixinBox",
-    "multipart_entities.MixinEntity",
-    "multipart_entities.MixinProjectile",
-    "multipart_entities.MixinVoxelShape",
-    "multipart_entities.MixinVoxelShapes"
+    "NaturalSpawnerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "BossHealthOverlayMixin",
-    "multipart_entities.client.MixinEntityRenderDispatcher",
-    "multipart_entities.client.MixinMultiplayerGameMode"
+    "BossHealthOverlayMixin"
   ]
 }

@@ -1,9 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity;
 
 import com.cerbon.bosses_of_mass_destruction.animation.PauseAnimationTimer;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.WeakHashPredicate;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
 import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.*;
@@ -16,15 +13,18 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.SimpleLivingGeoRenderer
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlEntity;
 import com.cerbon.bosses_of_mass_destruction.item.custom.SoulStarEntity;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.projectile.MagicMissileProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.PetalBladeProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.SporeBallProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometCodeAnimations;
 import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometProjectile;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import com.cerbon.cerbons_api.api.general.data.WeakHashPredicate;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import com.mojang.blaze3d.Blaze3D;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.Minecraft;
@@ -297,7 +297,7 @@ public class BMDEntities {
                                     new WeakHashPredicate<>(() -> new FrameLimiter(60f, pauseSecondTimer)::canDoFrame),
                                     new LerpedPosRenderer<>(vec3 -> {
                                         ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.OBSIDILITH_BURST.get())
-                                                .color(BMDColors.GREEN)
+                                                .color(Vec3Colors.GREEN)
                                                 .colorVariation(0.4)
                                                 .scale(0.5f)
                                                 .brightness(BMDParticles.FULL_BRIGHT);

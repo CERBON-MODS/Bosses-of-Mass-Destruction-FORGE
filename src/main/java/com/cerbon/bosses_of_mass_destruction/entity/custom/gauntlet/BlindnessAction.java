@@ -1,12 +1,12 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.BlindnessS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,7 +34,7 @@ public class BlindnessAction implements IActionWithCooldown {
 
     @Override
     public int perform() {
-        BMDUtils.playSound(
+        SoundUtils.playSound(
                 serverLevel,
                 entity.position(),
                 BMDSounds.GAUNTLET_CAST.get(),

@@ -1,10 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.ParticleUtils;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -63,7 +64,7 @@ public class RiftBurst {
     }
 
     private void placeRift(BlockPos pos){
-        BMDUtils.spawnParticle(
+        ParticleUtils.spawnParticle(
                 serverLevel,
                 indicatorParticle,
                 VecUtils.asVec3(pos).add(new Vec3(0.5, 0.1, 0.5)),
@@ -82,7 +83,7 @@ public class RiftBurst {
                                     new TimedEvent(
                                             () -> {
                                                 BlockPos impactPos = pos.above(ticks.get());
-                                                BMDUtils.spawnParticle(
+                                                ParticleUtils.spawnParticle(
                                                         serverLevel,
                                                         columnParticle,
                                                         VecUtils.asVec3(impactPos).add(VecUtils.unit.scale(0.5)).add(RandomUtils.randVec().scale(0.25)),

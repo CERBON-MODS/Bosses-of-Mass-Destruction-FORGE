@@ -2,8 +2,9 @@ package com.cerbon.bosses_of_mass_destruction.item.custom;
 
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.ParticleUtils;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -81,7 +82,7 @@ public class EarthdiveSpear extends Item {
                                 BMDSounds.EARTHDIVE_SPEAR_THROW.get(),
                                 SoundSource.PLAYERS,
                                 1.0F,
-                                BMDUtils.randomPitch(player.getRandom())
+                                SoundUtils.randomPitch(player.getRandom())
                         );
                     }
     }
@@ -135,7 +136,7 @@ public class EarthdiveSpear extends Item {
     private void spawnTeleportParticles(ServerLevel level, LivingEntity user){
         Vec3 pos = user.getEyePosition().add(user.getLookAngle().multiply(0.15, 0.15, 0.15)).add(RandomUtils.randVec());
         Vec3 vel = user.getEyePosition().add(user.getLookAngle().multiply(4.0, 4.0, 4.0)).subtract(pos);
-        BMDUtils.spawnParticle(level, BMDParticles.EARTHDIVE_INDICATOR.get(), pos, vel, 0, 0.07);
+        ParticleUtils.spawnParticle(level, BMDParticles.EARTHDIVE_INDICATOR.get(), pos, vel, 0, 0.07);
     }
 
     private boolean isCharged(ItemStack stack, int remainingUseTicks){

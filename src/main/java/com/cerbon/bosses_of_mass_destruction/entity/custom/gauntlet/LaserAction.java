@@ -1,15 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSeries;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
+import com.cerbon.cerbons_api.api.general.data.HistoricalData;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.EventSeries;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -47,7 +48,7 @@ public class LaserAction implements IActionWithCooldown {
 
         HistoricalData<Vec3> laserRenderPositions = new HistoricalData<>(Vec3.ZERO, laserLagTicks);
 
-        BMDUtils.playSound(serverLevel, entity.position(), BMDSounds.GAUNTLET_LASER_CHARGE.get(), SoundSource.HOSTILE, 3.0f, 1.0f, 64, null);
+        SoundUtils.playSound(serverLevel, entity.position(), BMDSounds.GAUNTLET_LASER_CHARGE.get(), SoundSource.HOSTILE, 3.0f, 1.0f, 64, null);
 
         TimedEvent sendStartToClient = new TimedEvent(
                 () -> entity.getEntityData().set(GauntletEntity.laserTarget, target.getId()),
@@ -58,8 +59,8 @@ public class LaserAction implements IActionWithCooldown {
 
         TimedEvent applyLaser = new TimedEvent(
                 () -> {
-                    laserRenderPositions.set(target.getBoundingBox().getCenter());
-                    if (laserRenderPositions.getSize() == laserLagTicks)
+                    laserRenderPositions.add(target.getBoundingBox().getCenter());
+                    if (laserRenderPositions.size() == laserLagTicks)
                         applyLaser(laserRenderPositions);
                 },
                 0,

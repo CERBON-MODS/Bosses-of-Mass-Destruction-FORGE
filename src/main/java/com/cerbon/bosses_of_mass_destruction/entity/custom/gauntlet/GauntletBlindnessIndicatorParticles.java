@@ -1,15 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -23,10 +19,10 @@ public class GauntletBlindnessIndicatorParticles implements IEntityEventHandler 
 
     private final ClientParticleBuilder particleBuilder = new ClientParticleBuilder(BMDParticles.EYE_OPEN.get())
             .brightness(BMDParticles.FULL_BRIGHT)
-            .color(f -> MathUtils.lerpVec(f, BMDColors.WHITE, BMDColors.LASER_RED));
+            .color(f -> MathUtils.lerpVec(f, Vec3Colors.WHITE, Vec3Colors.LASER_RED));
 
     private final ClientParticleBuilder gauntletParticleBuilder = new ClientParticleBuilder(BMDParticles.SOUL_FLAME.get())
-            .color(BMDColors.DARK_RED)
+            .color(Vec3Colors.DARK_RED)
             .brightness(BMDParticles.FULL_BRIGHT)
             .scale(0.25f)
             .age(20);

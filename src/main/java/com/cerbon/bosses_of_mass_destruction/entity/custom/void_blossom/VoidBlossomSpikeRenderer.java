@@ -1,9 +1,9 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -56,9 +56,9 @@ public class VoidBlossomSpikeRenderer implements IRenderer<VoidBlossomEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees((1.5707964f - o) * 57.295776f));
         poseStack.mulPose(Axis.XP.rotationDegrees(n * 57.295776f));
         float q = 0.0F;
-        int red = (int) (BMDColors.WHITE.x * 255);
-        int green = (int) (BMDColors.WHITE.y * 255);
-        int blue = (int) (BMDColors.WHITE.z * 255);
+        int red = (int) (Vec3Colors.WHITE.x * 255);
+        int green = (int) (Vec3Colors.WHITE.y * 255);
+        int blue = (int) (Vec3Colors.WHITE.z * 255);
         float af = Mth.cos(q + 3.1415927f) * spikeWidth;
         float ag = Mth.sin(q + 3.1415927f) * spikeWidth;
         float ah = Mth.cos(q + 0.0f) * spikeWidth;

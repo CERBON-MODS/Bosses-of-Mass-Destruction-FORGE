@@ -1,21 +1,20 @@
 package com.cerbon.bosses_of_mass_destruction.item.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.ModRandom;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.block.custom.ChiseledStoneAltarBlock;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.*;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -79,7 +78,7 @@ public class SoulStarItem extends Item {
                         BMDSounds.SOUL_STAR.get(),
                         SoundSource.NEUTRAL,
                         0.5f,
-                        BMDUtils.randomPitch(level.random)
+                        SoundUtils.randomPitch(level.random)
                 );
                 return InteractionResult.PASS;
             }
@@ -99,7 +98,7 @@ public class SoulStarItem extends Item {
                 }).count();
 
         if (numberOfAltarsFilled == 3){
-            EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
@@ -122,7 +121,7 @@ public class SoulStarItem extends Item {
     private void clientSoulStartPlace(BlockPos blockPos){
         Vec3 centralPos = VecUtils.asVec3(blockPos).add(new Vec3(0.5, 1.2, 0.5));
         MathUtils.circleCallback(0.5, 15, VecUtils.yAxis, vec3 -> {
-            Vec3 particleVel = VecUtils.yAxis.scale(0.03 + RandomUtils.randomDouble(0.01));
+            Vec3 particleVel = VecUtils.yAxis.scale(0.03 + RandomUtils.randDouble(0.01));
             Vec3 particlePos = centralPos.add(vec3);
             ChiseledStoneAltarBlock.Particles.blueFireParticleFactory.build(particlePos, particleVel);
         });
@@ -175,7 +174,7 @@ public class SoulStarItem extends Item {
 
         Vec3 spawnPos = VecUtils.asVec3(blockPos);
         boolean spawned = new MobPlacementLogic(
-                new HorizontalRangedSpawnPosition(spawnPos, 15.0, 30.0, new ModRandom()),
+                new HorizontalRangedSpawnPosition(spawnPos, 15.0, 30.0),
                 new CompoundTagEntityProvider(compoundTag, level),
                 new MobEntitySpawnPredicate(level),
                 new SimpleMobSpawner((ServerLevel) level)

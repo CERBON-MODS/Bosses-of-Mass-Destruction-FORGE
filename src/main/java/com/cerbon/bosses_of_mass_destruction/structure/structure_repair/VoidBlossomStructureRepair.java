@@ -1,20 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.structure.structure_repair;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.VoidBlossomReviveS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern.BossBlockDecorator;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.*;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -27,7 +23,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class VoidBlossomStructureRepair implements StructureRepair{
     private static final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
-            .color(BMDColors.VOID_PURPLE)
+            .color(Vec3Colors.VOID_PURPLE)
             .colorVariation(0.25)
             .brightness(BMDParticles.FULL_BRIGHT)
             .scale(f -> 0.5f * (1 - f * 0.25f))
@@ -43,7 +39,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
         BlockPos offset = getCenterSpawn(structureStart, level);
         BMDPacketHandler.sendToAllPlayersTrackingChunk(new VoidBlossomReviveS2CPacket(VecUtils.asVec3(offset)), level, VecUtils.asVec3(offset));
 
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> level.setBlockAndUpdate(offset, BMDBlocks.VOID_BLOSSOM_SUMMON_BLOCK.get().defaultBlockState()),
                         60
@@ -64,10 +60,10 @@ public class VoidBlossomStructureRepair implements StructureRepair{
 
     @OnlyIn(Dist.CLIENT)
     public static void handleVoidBlossomRevivePacket(Vec3 pos, ClientLevel level){
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
-                        () -> BMDUtils.spawnRotatingParticles(
-                                new BMDUtils.RotatingParticles(
+                        () -> ParticleUtils.spawnRotatingParticles(
+                                new ParticleUtils.RotatingParticles(
                                         pos.add(VecUtils.yAxis.scale(RandomUtils.range(1.0, 10.0))),
                                         spikeParticleFactory,
                                         1.0,

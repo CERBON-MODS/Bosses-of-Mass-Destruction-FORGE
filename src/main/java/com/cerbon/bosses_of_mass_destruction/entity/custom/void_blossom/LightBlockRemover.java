@@ -1,9 +1,9 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +27,7 @@ public class LightBlockRemover implements IEntityTick<ServerLevel> {
         level.setBlockAndUpdate(entity.blockPosition(), Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, Math.round((1 - interceptedTime) * 15)));
 
         if (entity.deathTime == 49)
-            BMDUtils.playSound(level, entity.position(), BMDSounds.VOID_BLOSSOM_FALL.get(), SoundSource.HOSTILE, 1.5f, 32, null);
+            SoundUtils.playSound(level, entity.position(), BMDSounds.VOID_BLOSSOM_FALL.get(), SoundSource.HOSTILE, 1.5f, 32, null);
 
         if (entity.deathTime == deathMaxAge) {
             if (level.getBlockState(entity.blockPosition()).getBlock() == Blocks.LIGHT)

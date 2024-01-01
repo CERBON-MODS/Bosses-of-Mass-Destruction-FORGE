@@ -1,13 +1,13 @@
 package com.cerbon.bosses_of_mass_destruction.item.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendVec3S2CPacket;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.StructureRepair;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VecId;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -73,7 +73,7 @@ public class BrimstoneNectarItem extends Item {
     }
 
     private void scheduleStructureRepair(ServerLevel level, List<StructureRepair> structureToRepair, BlockPos usePos){
-        BMDCapabilities.getLevelEventScheduler(level).addEvent(
+        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> structureToRepair.forEach(structure -> structure.repairStructure(level, getStructureStart(level, usePos, structure))),
                         30
@@ -93,7 +93,7 @@ public class BrimstoneNectarItem extends Item {
                 BMDSounds.BRIMSTONE.get(),
                 SoundSource.NEUTRAL,
                 1.0f,
-                BMDUtils.randomPitch(level.getRandom())
+                SoundUtils.randomPitch(level.getRandom())
         );
     }
 }

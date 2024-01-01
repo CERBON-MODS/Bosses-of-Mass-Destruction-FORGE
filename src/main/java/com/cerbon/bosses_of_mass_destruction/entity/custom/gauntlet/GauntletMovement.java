@@ -1,8 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.ModRandom;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.ValidatedTargetSelector;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.VelocitySteering;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.VelocityGoal;
@@ -10,6 +7,8 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.CanMoveTh
 import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.InDesiredRange;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.ValidDirectionAnd;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
@@ -37,8 +36,7 @@ public class GauntletMovement {
 
         ValidatedTargetSelector targetSelector = new ValidatedTargetSelector(
                 iEntity,
-                canMoveTowardsPositionValidator,
-                new ModRandom()
+                canMoveTowardsPositionValidator
         );
 
         return new VelocityGoal(

@@ -1,9 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSeries;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.NetworkedHitboxManager;
@@ -11,7 +7,11 @@ import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.EventSeries;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -106,9 +106,9 @@ public class SpikeWaveAction implements IActionWithCooldown {
         createSpikeWave(
                 () -> {
                     createBurst(spikeGenerator, firstCirclePoints);
-                    BMDUtils.playSound(level, entity.position(), BMDSounds.SPIKE_WAVE_INDICATOR.get(), SoundSource.HOSTILE, 2.0f, 0.7f, 64, null);
+                    SoundUtils.playSound(level, entity.position(), BMDSounds.SPIKE_WAVE_INDICATOR.get(), SoundSource.HOSTILE, 2.0f, 0.7f, 64, null);
                 },
-                () -> BMDUtils.playSound(level, entity.position(), BMDSounds.VOID_BLOSSOM_SPIKE.get(), SoundSource.HOSTILE, 1.2f, 64, null),
+                () -> SoundUtils.playSound(level, entity.position(), BMDSounds.VOID_BLOSSOM_SPIKE.get(), SoundSource.HOSTILE, 1.2f, 64, null),
                 firstBurstDelay
         );
 
@@ -117,7 +117,7 @@ public class SpikeWaveAction implements IActionWithCooldown {
                     createBurst(spikeGenerator, secondCirclePoints);
                     playSoundsInRadius(level, secondRadius, BMDSounds.SPIKE_WAVE_INDICATOR.get(), 2.0f, 0.7f);
                 },
-                () -> playSoundsInRadius(level, secondRadius, BMDSounds.VOID_BLOSSOM_SPIKE.get(),1.2f, BMDUtils.randomPitch(entity.getRandom())),
+                () -> playSoundsInRadius(level, secondRadius, BMDSounds.VOID_BLOSSOM_SPIKE.get(),1.2f, SoundUtils.randomPitch(entity.getRandom())),
                 secondBurstDelay
         );
 
@@ -126,7 +126,7 @@ public class SpikeWaveAction implements IActionWithCooldown {
                     createBurst(spikeGenerator, thirdCirclePoints);
                     playSoundsInRadius(level, thirdRadius, BMDSounds.SPIKE_WAVE_INDICATOR.get(), 2.0f, 0.7f);
                 },
-                () -> playSoundsInRadius(level, thirdRadius, BMDSounds.VOID_BLOSSOM_SPIKE.get(),1.2f, BMDUtils.randomPitch(entity.getRandom())),
+                () -> playSoundsInRadius(level, thirdRadius, BMDSounds.VOID_BLOSSOM_SPIKE.get(),1.2f, SoundUtils.randomPitch(entity.getRandom())),
                 thirdBurstDelay
         );
     }
@@ -148,7 +148,7 @@ public class SpikeWaveAction implements IActionWithCooldown {
     private void playSoundsInRadius(ServerLevel level, double radius, SoundEvent soundEvent, float volume, float pitch){
         for (Direction dir : Direction.Plane.HORIZONTAL){
             Vec3 pos = entity.position().add(new Vec3(dir.step()).scale(radius));
-            BMDUtils.playSound(level, pos, soundEvent, SoundSource.HOSTILE, volume, pitch, 64, null);
+            SoundUtils.playSound(level, pos, soundEvent, SoundSource.HOSTILE, volume, pitch, 64, null);
         }
     }
 

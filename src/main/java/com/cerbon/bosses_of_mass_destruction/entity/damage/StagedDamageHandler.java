@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.entity.damage;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 
