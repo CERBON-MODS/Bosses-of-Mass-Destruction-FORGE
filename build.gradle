@@ -97,9 +97,9 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
+    implementation fg.deobf("curse.maven:cerbons-api-forge-955605:${cerbons_api_version}")
     implementation fg.deobf("curse.maven:geckolib-388172:${geckolib_version}")
     implementation fg.deobf("curse.maven:cloth-config-348521:${cloth_config_version}")
-    implementation fg.deobf("com.cerbon:cerbons_api-1.20.1:1.0.0")
 
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -121,6 +121,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     mainFile.changelogType = 'markdown'
     mainFile.releaseType = release_type
     mainFile.addGameVersion("${minecraft_version}")
+    mainFile.addRequirement(cerbons_api)
     mainFile.addRequirement(geckolib)
     mainFile.addRequirement(cloth_config)
 }
@@ -131,8 +132,8 @@ tasks.named('processResources', ProcessResources).configure {
             forge_version: forge_version, forge_version_range: forge_version_range,
             loader_version_range: loader_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors: mod_authors, mod_description: mod_description, geckolib_version_range: geckolib_version_range,
-            cloth_config_version_range: cloth_config_version_range,
+            mod_authors: mod_authors, mod_description: mod_description, cerbons_api_version_range: cerbons_api_version_range,
+            geckolib_version_range: geckolib_version_range, cloth_config_version_range: cloth_config_version_range,
     ]
     inputs.properties replaceProperties
 
