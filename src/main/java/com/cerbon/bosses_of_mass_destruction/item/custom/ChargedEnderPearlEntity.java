@@ -5,13 +5,9 @@ import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.ChargedEnderPearlS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
@@ -40,11 +36,11 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
     private static final double impactHeight = 3.0;
     private static final ClientParticleBuilder verticalRodParticle = new ClientParticleBuilder(BMDParticles.ROD.get())
             .brightness(BMDParticles.FULL_BRIGHT)
-            .color(age -> MathUtils.lerpVec(age, BMDColors.LIGHT_ENDER_PEARL, BMDColors.DARK_ENDER_PEARL))
+            .color(age -> MathUtils.lerpVec(age, Vec3Colors.LIGHT_ENDER_PEARL, Vec3Colors.DARK_ENDER_PEARL))
             .colorVariation(0.25);
     private static final ClientParticleBuilder enderParticle = new ClientParticleBuilder(BMDParticles.FLUFF.get())
             .brightness(BMDParticles.FULL_BRIGHT)
-            .color(BMDColors.ENDER_PURPLE)
+            .color(Vec3Colors.ENDER_PURPLE)
             .colorVariation(0.25);
 
     public ChargedEnderPearlEntity(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
@@ -77,7 +73,7 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
         teleportEntity(getOwner());
         applyMobEffects(getOwner());
         BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChargedEnderPearlS2CPacket(position()), (ServerLevel) level(), position());
-        playSound(BMDSounds.CHARGED_ENDER_PEARL.get(), 1.0f, BMDUtils.randomPitch(this.random) * 0.8f);
+        playSound(BMDSounds.CHARGED_ENDER_PEARL.get(), 1.0f, SoundUtils.randomPitch(this.random) * 0.8f);
         discard();
     }
 

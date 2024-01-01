@@ -1,9 +1,9 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,7 +24,7 @@ public class GauntletLaserRenderer implements IRenderer<GauntletEntity> {
                     beamPos.getFirst(),
                     beamPos.getSecond(),
                     partialTicks,
-                    BMDColors.LASER_RED,
+                    Vec3Colors.LASER_RED,
                     poseStack,
                     buffer,
                     type

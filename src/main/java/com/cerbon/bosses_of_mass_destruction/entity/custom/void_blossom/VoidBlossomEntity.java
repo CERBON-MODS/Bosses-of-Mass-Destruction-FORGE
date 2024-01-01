@@ -1,11 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.BooleanFlag;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.EntityBounds;
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.MultipartAwareEntity;
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util.CompoundOrientedBox;
 import com.cerbon.bosses_of_mass_destruction.config.mob.VoidBlossomConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.TargetSwitcher;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
@@ -21,7 +15,12 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityEventHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityTick;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.data.BooleanFlag;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
+import com.cerbon.cerbons_api.api.multipart_entities.entity.MultipartAwareEntity;
+import com.cerbon.cerbons_api.api.multipart_entities.util.CompoundOrientedBox;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -169,7 +168,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
 
     @Override
     public void checkDespawn() {
-        BMDUtils.preventDespawnExceptPeaceful(this, level());
+        MobUtils.preventDespawnExceptPeaceful(this, level());
     }
 
     @Override

@@ -1,14 +1,10 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -17,29 +13,29 @@ public class ObsidilithEffectHandler {
     private final EventScheduler eventScheduler;
 
     private final ClientParticleBuilder burstParticleFactory = new ClientParticleBuilder(BMDParticles.ENCHANT.get())
-            .color(BMDColors.ORANGE)
+            .color(Vec3Colors.ORANGE)
             .colorVariation(0.2);
 
     private final ClientParticleBuilder waveParticleFactory = new ClientParticleBuilder(BMDParticles.ENCHANT.get())
-            .color(BMDColors.RED)
+            .color(Vec3Colors.RED)
             .colorVariation(0.2);
 
     private final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.ENCHANT.get())
-            .color(BMDColors.COMET_BLUE)
+            .color(Vec3Colors.COMET_BLUE)
             .colorVariation(0.2);
 
     private final ClientParticleBuilder anvilParticleFactory = new ClientParticleBuilder(BMDParticles.ENCHANT.get())
-            .color(BMDColors.ENDER_PURPLE)
+            .color(Vec3Colors.ENDER_PURPLE)
             .colorVariation(0.2);
 
     private final ClientParticleBuilder teleportFactory = new ClientParticleBuilder(BMDParticles.DOWNSPARKLE.get())
-            .color(BMDColors.ENDER_PURPLE)
+            .color(Vec3Colors.ENDER_PURPLE)
             .brightness(BMDParticles.FULL_BRIGHT)
             .age(() -> RandomUtils.range(25, 30))
             .colorVariation(0.2);
 
     private static final ClientParticleBuilder deathParticleFactory = new ClientParticleBuilder(BMDParticles.DOWNSPARKLE.get())
-            .color(age -> MathUtils.lerpVec(age, BMDColors.ENDER_PURPLE, BMDColors.WHITE))
+            .color(age -> MathUtils.lerpVec(age, Vec3Colors.ENDER_PURPLE, Vec3Colors.WHITE))
             .colorVariation(0.2)
             .brightness(BMDParticles.FULL_BRIGHT)
             .age(RandomUtils.range(35, 40))

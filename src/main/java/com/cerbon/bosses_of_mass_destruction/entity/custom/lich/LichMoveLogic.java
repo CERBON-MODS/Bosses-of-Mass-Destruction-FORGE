@@ -1,7 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.WeightedRandom;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.TargetSwitcher;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.DamageMemory;
@@ -9,6 +7,8 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.StagedDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
+import com.cerbon.cerbons_api.api.general.data.HistoricalData;
+import com.cerbon.cerbons_api.api.general.random.WeightedRandom;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -79,7 +79,7 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
         ));
 
         Byte nextMove = random.next();
-        moveHistory.set(nextMove);
+        moveHistory.add(nextMove);
 
         return nextMove;
     }
@@ -98,6 +98,6 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
 
     @Override
     public void tick(ServerLevel level) {
-        positionalHistory.set(actor.position());
+        positionalHistory.add(actor.position());
     }
 }

@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.packet.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.PacketUtils;
 import com.cerbon.bosses_of_mass_destruction.item.custom.ChargedEnderPearlEntity;
+import com.cerbon.cerbons_api.api.static_utilities.PacketUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,7 +24,7 @@ public class ChargedEnderPearlS2CPacket {
     public void write(FriendlyByteBuf buf){
         PacketUtils.writeVec3(buf, this.pos);
     }
-    
+
     public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();

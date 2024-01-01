@@ -1,16 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.client.render.NodeBossBarRenderer;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -55,7 +55,7 @@ public class ObsidilithUtils {
         if (!level.isClientSide()){
             BlockPos blockPos = actor.blockPosition();
             Vec3 vecPos = actor.position();
-            EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
             level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), 2.0f, Level.ExplosionInteraction.MOB);
 
             for (int y = 0; y <= deathPillarHeight; y++){
@@ -63,7 +63,7 @@ public class ObsidilithUtils {
                 eventScheduler.addEvent(
                         new TimedEvent(
                                 () ->{
-                                    actor.playSound(SoundEvents.STONE_PLACE, 1.0f, BMDUtils.randomPitch(actor.getRandom()));
+                                    actor.playSound(SoundEvents.STONE_PLACE, 1.0f, SoundUtils.randomPitch(actor.getRandom()));
 
                                     for (Vec3 pos : circlePos){
                                         level.setBlockAndUpdate(

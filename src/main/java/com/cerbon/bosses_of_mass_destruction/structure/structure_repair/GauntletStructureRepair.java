@@ -1,11 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.structure.structure_repair;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.static_utilities.ParticleUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +24,7 @@ public class GauntletStructureRepair implements StructureRepair{
     public void repairStructure(ServerLevel level, StructureStart structureStart) {
         BlockPos pos = runeCenter(structureStart);
 
-        BMDUtils.spawnParticle(level, BMDParticles.GAUNTLET_REVIVE_SPARKLES.get(), VecUtils.asVec3(pos.above(5)), VecUtils.unit.scale(3.0), 100, 0);
+        ParticleUtils.spawnParticle(level, BMDParticles.GAUNTLET_REVIVE_SPARKLES.get(), VecUtils.asVec3(pos.above(5)), VecUtils.unit.scale(3.0), 100, 0);
 
         spawnBlocks(level, pos);
     }

@@ -1,11 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.structure.structure_repair;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.static_utilities.ParticleUtils;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -37,7 +37,7 @@ public class LichStructureRepair implements StructureRepair{
 
         for (BlockPos altarPos : positions){
             level.setBlockAndUpdate(altarPos, altar);
-            BMDUtils.spawnParticle(level, BMDParticles.SOUL_FLAME.get(), VecUtils.asVec3(altarPos).add(0.5, 1.0, 0.5), VecUtils.unit,10, 0);
+            ParticleUtils.spawnParticle(level, BMDParticles.SOUL_FLAME.get(), VecUtils.asVec3(altarPos).add(0.5, 1.0, 0.5), VecUtils.unit,10, 0);
         }
     }
 

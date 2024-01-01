@@ -1,9 +1,5 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.lich;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
 import com.cerbon.bosses_of_mass_destruction.config.mob.LichConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.CompositeGoal;
@@ -19,8 +15,11 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityEventHan
 import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityTick;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
+import com.cerbon.cerbons_api.api.general.data.HistoricalData;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -131,7 +130,7 @@ public class LichEntity extends BaseEntity {
 
     @Override
     public void clientTick() {
-        velocityHistory.set(getDeltaMovement());
+        velocityHistory.add(getDeltaMovement());
     }
 
     @Override
@@ -157,7 +156,7 @@ public class LichEntity extends BaseEntity {
 
     @Override
     public void checkDespawn() {
-        BMDUtils.preventDespawnExceptPeaceful(this, level());
+        MobUtils.preventDespawnExceptPeaceful(this, level());
     }
 
     @Nullable

@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -33,7 +33,7 @@ public class ShieldDamageHandler implements IDamageHandler {
                 if (entity instanceof LivingEntity livingEntity)
                     livingEntity.knockback(0.5, actor.getX() - livingEntity.getX(), actor.getZ() - livingEntity.getZ());
             }
-            actor.playSound(BMDSounds.ENERGY_SHIELD.get(), 1.0f, BMDUtils.randomPitch(actor.getRandom()));
+            actor.playSound(BMDSounds.ENERGY_SHIELD.get(), 1.0f, SoundUtils.randomPitch(actor.getRandom()));
             return false;
         }
         return true;

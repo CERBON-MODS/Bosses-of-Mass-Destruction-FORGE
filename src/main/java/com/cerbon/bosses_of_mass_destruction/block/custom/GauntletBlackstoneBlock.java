@@ -1,15 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.GauntletEntity;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -53,7 +53,7 @@ public class GauntletBlackstoneBlock extends Block {
             level.addFreshEntity(entity);
         }
 
-        EventScheduler eventScheduler = BMDCapabilities.getLevelEventScheduler(level);
+        EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
         for (int y = -1; y <= 4; y++){
             int y1 = y;
             eventScheduler.addEvent(
@@ -78,7 +78,7 @@ public class GauntletBlackstoneBlock extends Block {
     public static class Particles {
         public static final ClientParticleBuilder laserChargeParticles = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
                 .brightness(BMDParticles.FULL_BRIGHT)
-                .color(BMDColors.LASER_RED)
+                .color(Vec3Colors.LASER_RED)
                 .colorVariation(0.2);
     }
 }

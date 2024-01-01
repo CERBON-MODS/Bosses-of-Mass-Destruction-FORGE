@@ -1,11 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox;
 
-import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.EntityBounds;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.VoidBlossomEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.CompositeDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityTick;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
+import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;

@@ -1,11 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
-import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.config.mob.ObsidilithConfig;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.CooldownAction;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
@@ -18,7 +13,9 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EffectsImmunity;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.*;
+import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerBossEvent;
@@ -75,7 +72,7 @@ public class ObsidilithEntity extends BaseEntity {
 
         DamageMemory damageMemory = new DamageMemory(10, this);
         this.moveLogic = new ObsidilithMoveLogic(statusRegistry, this, damageMemory);
-        this.effectHandler = new ObsidilithEffectHandler(this, BMDCapabilities.getLevelEventScheduler(level));
+        this.effectHandler = new ObsidilithEffectHandler(this, CerbonsApiCapabilities.getLevelEventScheduler(level));
 
         bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_12);
         damageHandler = new CompositeDamageHandler(moveLogic, new ShieldDamageHandler(this::isShielded), damageMemory);
@@ -89,7 +86,7 @@ public class ObsidilithEntity extends BaseEntity {
 
             preTickEvents.addEvent(
                     new TimedEvent(
-                            () -> BMDUtils.playSound((ServerLevel) level, position(), BMDSounds.WAVE_INDICATOR.get(), SoundSource.HOSTILE, 1.5f, 0.7f, 24, null),
+                            () -> SoundUtils.playSound((ServerLevel) level, position(), BMDSounds.WAVE_INDICATOR.get(), SoundSource.HOSTILE, 1.5f, 0.7f, 24, null),
                             1
                     )
             );
@@ -124,7 +121,7 @@ public class ObsidilithEntity extends BaseEntity {
                 MathUtils.lineCallback(VecUtils.asVec3(pos).add(0.5, 0.5, 0.5), MobUtils.eyePos(this), 15, (vec3, i) ->
                         preTickEvents.addEvent(
                                 new TimedEvent(
-                                        () -> BMDUtils.spawnParticle(serverLevel, BMDParticles.PILLAR_RUNE.get(), vec3, Vec3.ZERO, 0, 0.0),
+                                        () -> ParticleUtils.spawnParticle(serverLevel, BMDParticles.PILLAR_RUNE.get(), vec3, Vec3.ZERO, 0, 0.0),
                                         i
                                 )
                         ));
@@ -202,7 +199,7 @@ public class ObsidilithEntity extends BaseEntity {
 
     @Override
     public void checkDespawn() {
-        BMDUtils.preventDespawnExceptPeaceful(this, level());
+        MobUtils.preventDespawnExceptPeaceful(this, level());
     }
 
     @Override

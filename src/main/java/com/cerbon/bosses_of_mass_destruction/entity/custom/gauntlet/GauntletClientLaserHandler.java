@@ -1,17 +1,17 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MobUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IDataAccessorHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
-import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.cerbon.cerbons_api.api.general.data.HistoricalData;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
@@ -31,7 +31,7 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
 
     public final ClientParticleBuilder laserChargeParticles = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
             .brightness(BMDParticles.FULL_BRIGHT)
-            .color(BMDColors.LASER_RED)
+            .color(Vec3Colors.LASER_RED)
             .colorVariation(0.2);
 
     public GauntletClientLaserHandler(GauntletEntity entity, EventScheduler eventScheduler) {
@@ -44,7 +44,7 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
         LivingEntity beamTarget = getBeamTarget();
         if (beamTarget != null){
             Vec3 centerBoxOffset = beamTarget.getBoundingBox().getCenter().subtract(beamTarget.position());
-            laserRenderPositions.set(
+            laserRenderPositions.add(
                     Pair.of(
                             beamTarget.position().add(centerBoxOffset),
                             MobUtils.lastRenderPos(beamTarget).add(centerBoxOffset)
@@ -55,7 +55,7 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
     }
 
     public boolean shouldRenderLaser(){
-        return laserRenderPositions.getSize() > 1;
+        return laserRenderPositions.size() > 1;
     }
 
     public Pair<Vec3, Vec3> getLaserRenderPos(){
