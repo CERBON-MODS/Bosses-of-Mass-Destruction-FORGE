@@ -9,10 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class SendParticleS2CPacket {
     private final BlockPos pos;
@@ -33,8 +31,7 @@ public class SendParticleS2CPacket {
         PacketUtils.writeVec3(buf, dir);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
             ClientLevel level = client.level;

@@ -6,10 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class PlaceS2CPacket {
     private final Vec3 pos;
@@ -26,8 +24,7 @@ public class PlaceS2CPacket {
         PacketUtils.writeVec3(buf, this.pos);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier){
-        NetworkEvent.Context ctx = supplier.get();
+    public void handle(CustomPayloadEvent.Context ctx){
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
 

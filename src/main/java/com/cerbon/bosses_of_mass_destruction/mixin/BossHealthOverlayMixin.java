@@ -19,7 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BossHealthOverlay.class)
 public class BossHealthOverlayMixin {
-    @Shadow @Final private static ResourceLocation GUI_BARS_LOCATION;
+    @Shadow @Final private static ResourceLocation[] BAR_BACKGROUND_SPRITES;
+    @Shadow @Final private static ResourceLocation[] BAR_PROGRESS_SPRITES;
 
     @Inject(method = "drawBar(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/world/BossEvent;)V", at = @At("HEAD"), cancellable = true)
     private void drawCustomBossBar(GuiGraphics guiGraphics, int x, int y, BossEvent bossEvent, CallbackInfo ci) {
@@ -38,8 +39,8 @@ public class BossHealthOverlayMixin {
                 LichUtils.textureSize
         );
 
-        lichBossBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
-        voidBlossomBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
-        ObsidilithUtils.obsidilithBossBarRenderer.renderBossBar(GUI_BARS_LOCATION, guiGraphics, x, y, bossEvent, ci);
+        lichBossBarRenderer.renderBossBar(BAR_BACKGROUND_SPRITES, BAR_PROGRESS_SPRITES, guiGraphics, x, y, bossEvent, ci);
+        voidBlossomBarRenderer.renderBossBar(BAR_BACKGROUND_SPRITES, BAR_PROGRESS_SPRITES, guiGraphics, x, y, bossEvent, ci);
+        ObsidilithUtils.obsidilithBossBarRenderer.renderBossBar(BAR_BACKGROUND_SPRITES, BAR_PROGRESS_SPRITES, guiGraphics, x, y, bossEvent, ci);
     }
 }
