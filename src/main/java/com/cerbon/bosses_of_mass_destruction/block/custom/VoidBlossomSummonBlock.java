@@ -1,6 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -12,9 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class VoidBlossomSummonBlock extends BaseEntityBlock {
+    public static final MapCodec<VoidBlossomSummonBlock> CODEC = simpleCodec(VoidBlossomSummonBlock::new);
 
     public VoidBlossomSummonBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Nullable

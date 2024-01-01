@@ -8,6 +8,7 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
 import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
 import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 public class MobWardBlock extends BaseEntityBlock {
+    public static final MapCodec<MobWardBlock> CODEC = simpleCodec(MobWardBlock::new);
     public static final VoxelShape blockShape = box(5.0, 0.0, 5.0, 11.0, 16.0, 11.0);
     public static final VoxelShape thinBlockShape = box(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
     public static final EnumProperty<TripleBlockPart> tripleBlockPart = EnumProperty.create("triple_part", TripleBlockPart.class);
@@ -44,6 +46,11 @@ public class MobWardBlock extends BaseEntityBlock {
     public MobWardBlock(Properties properties) {
         super(properties);
         registerDefaultState(getStateDefinition().any().setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Nullable
@@ -97,7 +104,7 @@ public class MobWardBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (!level.isClientSide && player.isCreative()){
             TripleBlockPart part = state.getValue(tripleBlockPart);
 
@@ -111,7 +118,7 @@ public class MobWardBlock extends BaseEntityBlock {
             }
         }
 
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     private void checkBreakPart(BlockPos pos, Level level, BlockState state, Player player, TripleBlockPart part){
@@ -187,13 +194,13 @@ public class MobWardBlock extends BaseEntityBlock {
                                 randomHeight,
                                 simpleParticle.getAge() * 0.1
                         )).build(
-                                calcParticlePos(
-                                        vecPos,
-                                        randomOffset,
-                                        randomRadius,
-                                        randomHeight,
-                                        .0
-                                ), Vec3.ZERO
+                        calcParticlePos(
+                                vecPos,
+                                randomOffset,
+                                randomRadius,
+                                randomHeight,
+                                .0
+                        ), Vec3.ZERO
                 );
             }
         }

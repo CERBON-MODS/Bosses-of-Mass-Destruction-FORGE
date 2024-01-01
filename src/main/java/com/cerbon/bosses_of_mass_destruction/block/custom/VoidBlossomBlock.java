@@ -109,7 +109,7 @@ public class VoidBlossomBlock extends Block {
     }
 
     @Override
-    public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (level.isClientSide) {
             for (int i = 0; i < 12; i++){
                 Vec3 vel = VecUtils.yAxis.scale(RandomUtils.range(0.1, 0.2));
@@ -117,7 +117,7 @@ public class VoidBlossomBlock extends Block {
                 Particles.spikeParticleFactory.build(spawnPos, vel);
             }
         }
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @OnlyIn(Dist.CLIENT)

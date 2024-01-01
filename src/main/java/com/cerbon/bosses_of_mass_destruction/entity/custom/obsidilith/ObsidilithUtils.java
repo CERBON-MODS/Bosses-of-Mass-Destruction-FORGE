@@ -17,10 +17,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -82,7 +82,7 @@ public class ObsidilithUtils {
                             () -> {
                                 BlockPos chestPos = blockPos.above(deathPillarHeight + 1);
                                 level.setBlock(chestPos, Blocks.SHULKER_BOX.defaultBlockState(), 2);
-                                RandomizableContainerBlockEntity.setLootTable(level, actor.getRandom(), chestPos, new ResourceLocation(BMDConstants.MOD_ID, "chests/obsidilith"));
+                                RandomizableContainer.setBlockEntityLootTable(level, actor.getRandom(), chestPos, new ResourceLocation(BMDConstants.MOD_ID, "chests/obsidilith"));
                             },
                             deathPillarHeight * ticksBetweenPillarLayer
                     )
