@@ -2,9 +2,9 @@ package com.cerbon.bosses_of_mass_destruction.event;
 
 import com.cerbon.bosses_of_mass_destruction.block.custom.LevitationBlockEntity;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCacheProvider;
+import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvider;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.cerbon.cerbons_api.capability.providers.Vec3HistoryProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -30,15 +30,15 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if(!(event.getObject() instanceof Player) || event.getObject().getCapability(Vec3HistoryProvider.HISTORICAL_DATA).isPresent()) return;
-        event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "player_move_history"), new Vec3HistoryProvider(10, false));
+        if(!(event.getObject() instanceof Player) || event.getObject().getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).isPresent()) return;
+        event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "player_move_history"), new PlayerMoveHistoryProvider());
     }
 
     @SubscribeEvent
     protected static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.side == LogicalSide.CLIENT) return;
 
-        event.player.getCapability(Vec3HistoryProvider.HISTORICAL_DATA).ifPresent(data -> {
+        event.player.getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).ifPresent(data -> {
             Vec3 previousPosition = data.get(0);
             Vec3 newPosition = event.player.position();
 

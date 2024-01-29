@@ -7,11 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.cerbons_api.api.general.event.Event;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
-import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
-import com.cerbon.cerbons_api.api.static_utilities.ParticleUtils;
-import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
-import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -32,7 +28,7 @@ public class AnvilAction implements IActionWithCooldown {
     public AnvilAction(Mob actor, float explosionPower){
         this.actor = actor;
         this.explosionPower = explosionPower;
-        this.eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(actor.level());
+        this.eventScheduler = CapabilityUtils.getLevelEventScheduler(actor.level());
         this.circlePoints = MathUtils.buildBlockCircle(2.0);
     }
 

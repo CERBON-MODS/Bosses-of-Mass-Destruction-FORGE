@@ -10,11 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
-import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
-import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
-import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
-import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -98,7 +94,7 @@ public class SoulStarItem extends Item {
                 }).count();
 
         if (numberOfAltarsFilled == 3){
-            EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = CapabilityUtils.getLevelEventScheduler(level);
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {

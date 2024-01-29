@@ -8,11 +8,7 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
-import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
-import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
-import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
-import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -110,7 +106,7 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements Geo
     private void doExplosion(LivingEntity owner){
         level().broadcastEntityEvent(this, particle);
         playSound(BMDSounds.SPORE_BALL_LAND.get(), 1.0f, SoundUtils.randomPitch(random) - 0.2f);
-        EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level());
+        EventScheduler eventScheduler = CapabilityUtils.getLevelEventScheduler(level());
         Consumer<LivingEntity> onImpact = entity -> {
             float damage = (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE);
             if (this.getOwner() != null){

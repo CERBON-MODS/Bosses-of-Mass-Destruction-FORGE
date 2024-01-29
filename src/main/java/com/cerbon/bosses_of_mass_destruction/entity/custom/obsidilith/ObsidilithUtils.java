@@ -6,11 +6,7 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
-import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
-import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
-import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
-import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -55,7 +51,7 @@ public class ObsidilithUtils {
         if (!level.isClientSide()){
             BlockPos blockPos = actor.blockPosition();
             Vec3 vecPos = actor.position();
-            EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
+            EventScheduler eventScheduler = CapabilityUtils.getLevelEventScheduler(level);
             level.explode(actor, actor.getX(), actor.getY(), actor.getZ(), 2.0f, Level.ExplosionInteraction.MOB);
 
             for (int y = 0; y <= deathPillarHeight; y++){

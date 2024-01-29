@@ -8,7 +8,6 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.static_utilities.*;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -32,7 +31,7 @@ public class PillarAction implements IActionWithCooldown {
 
     public PillarAction(LivingEntity entity){
         this.entity = entity;
-        this.eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = CapabilityUtils.getLevelEventScheduler(entity.level());
     }
 
     @Override

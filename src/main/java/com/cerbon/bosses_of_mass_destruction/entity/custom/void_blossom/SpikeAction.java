@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
+import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
@@ -11,7 +12,6 @@ import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.EventSeries;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
-import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import net.minecraft.core.BlockPos;
@@ -88,7 +88,7 @@ public class SpikeAction implements IActionWithCooldown {
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(CapabilityUtils.getLastPositions(target), target.position());
+                                Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(BMDCapabilities.getPlayerPositions(target), target.position());
                                 SoundUtils.playSound(
                                         target.serverLevel(),
                                         placement,

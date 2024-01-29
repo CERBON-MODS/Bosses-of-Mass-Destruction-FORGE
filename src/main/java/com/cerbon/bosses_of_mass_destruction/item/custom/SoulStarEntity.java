@@ -7,9 +7,9 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.cerbons_api.api.general.event.Event;
 import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
 import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -115,7 +115,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     public void tick() {
         if (level().isClientSide() && tickCount == 1){
             double rotationOffset = random.nextDouble() * 360;
-            CerbonsApiCapabilities.getLevelEventScheduler(level()).addEvent(
+            CapabilityUtils.getLevelEventScheduler(level()).addEvent(
                     new Event(
                             () -> true,
                             () -> spawnTrailParticles(rotationOffset),

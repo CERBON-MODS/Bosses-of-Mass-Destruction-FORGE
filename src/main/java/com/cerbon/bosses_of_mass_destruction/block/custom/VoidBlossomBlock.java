@@ -10,11 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.HealS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
-import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
-import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
-import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
-import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
+import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -63,7 +59,7 @@ public class VoidBlossomBlock extends Block {
     private void healNearbyEntities(ServerLevel level, BlockPos pos){
         level.getEntitiesOfClass(VoidBlossomEntity.class, new AABB(pos).inflate(40.0, 20.0, 40.0))
                 .forEach(voidBlossom -> {
-                    CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
+                    CapabilityUtils.getLevelEventScheduler(level).addEvent(
                             new TimedEvent(
                                     () -> LichUtils.cappedHeal(new EntityAdapter(voidBlossom), new EntityStats(voidBlossom), VoidBlossomEntity.hpMilestones, 10f, voidBlossom::heal),
                                     healAnimationDelay
@@ -129,7 +125,7 @@ public class VoidBlossomBlock extends Block {
     @OnlyIn(Dist.CLIENT)
     private static void spawnChargeParticle(Vec3 source, ClientLevel level){
         Vec3 particlePos = source.add(VecUtils.yAxis.scale(0.25));
-        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
+        CapabilityUtils.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> Particles.healParticleFactory.build(particlePos.add(RandomUtils.randVec().scale(0.2)), Vec3.ZERO),
                         32,
@@ -148,7 +144,7 @@ public class VoidBlossomBlock extends Block {
                 particlePositions.add(pos.add(circlePoints.get(i % numCirclePoints))));
 
         AtomicInteger i = new AtomicInteger();
-        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
+        CapabilityUtils.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> {
                             Particles.healParticleFactory.build(particlePositions.get(i.get()), Vec3.ZERO);

@@ -12,8 +12,8 @@ import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
 import com.cerbon.cerbons_api.api.multipart_entities.entity.MultipartAwareEntity;
 import com.cerbon.cerbons_api.api.multipart_entities.util.CompoundOrientedBox;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -78,7 +78,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
         moveHandler = gauntletGoalHandler;
         nbtHandler = gauntletGoalHandler;
         deathClientTick = new ClientGauntletDeathHandler(this);
-        deathServerTick = new ServerGauntletDeathHandler(this, CerbonsApiCapabilities.getLevelEventScheduler(level), mobConfig);
+        deathServerTick = new ServerGauntletDeathHandler(this, CapabilityUtils.getLevelEventScheduler(level), mobConfig);
     }
 
     @Override

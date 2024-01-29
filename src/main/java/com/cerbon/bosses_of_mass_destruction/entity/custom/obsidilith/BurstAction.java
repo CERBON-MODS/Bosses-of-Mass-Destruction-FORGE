@@ -8,9 +8,9 @@ import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -30,7 +30,7 @@ public class BurstAction implements IActionWithCooldown {
 
     public BurstAction(LivingEntity entity){
         this.entity = entity;
-        this.eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(entity.level());
+        this.eventScheduler = CapabilityUtils.getLevelEventScheduler(entity.level());
         this.circlePoints = MathUtils.buildBlockCircle(7.0);
     }
 

@@ -7,9 +7,9 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
 import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -75,7 +75,7 @@ public class VoidLilyBlockEntity extends BlockEntity {
         double curveLength = RandomUtils.range(1.2, 1.6);
         int particleAmount = RandomUtils.range(7, 10);
 
-        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
+        CapabilityUtils.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> {
                             Vec3 particlePos = streakPos.add(RandomUtils.randVec().scale(0.05));

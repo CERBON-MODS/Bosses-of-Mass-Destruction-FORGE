@@ -9,9 +9,9 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.ObsidilithReviveS2CPa
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -34,7 +34,7 @@ public class ObsidilithStructureRepair implements StructureRepair{
     @Override
     public void repairStructure(ServerLevel level, StructureStart structureStart) {
         BlockPos topCenter = getTopCenter(structureStart);
-        EventScheduler levelEventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
+        EventScheduler levelEventScheduler = CapabilityUtils.getLevelEventScheduler(level);
         BMDPacketHandler.sendToAllPlayersTrackingChunk(new ObsidilithReviveS2CPacket(VecUtils.asVec3(topCenter).add(0.5, 0.5, 0.5)), level, VecUtils.asVec3(topCenter).add(0.5, 0.5, 0.5));
 
         for (int y = 0; y <= ObsidilithUtils.deathPillarHeight; y++){
@@ -71,6 +71,6 @@ public class ObsidilithStructureRepair implements StructureRepair{
 
     @OnlyIn(Dist.CLIENT)
     public static void handleObsidilithRevivePacket(Vec3 pos, ClientLevel level){
-        ObsidilithEffectHandler.spawnPillarParticles(pos, CerbonsApiCapabilities.getLevelEventScheduler(level));
+        ObsidilithEffectHandler.spawnPillarParticles(pos, CapabilityUtils.getLevelEventScheduler(level));
     }
 }

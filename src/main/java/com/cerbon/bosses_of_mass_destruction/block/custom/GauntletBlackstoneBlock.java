@@ -6,10 +6,10 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
 import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
 import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -53,7 +53,7 @@ public class GauntletBlackstoneBlock extends Block {
             level.addFreshEntity(entity);
         }
 
-        EventScheduler eventScheduler = CerbonsApiCapabilities.getLevelEventScheduler(level);
+        EventScheduler eventScheduler = CapabilityUtils.getLevelEventScheduler(level);
         for (int y = -1; y <= 4; y++){
             int y1 = y;
             eventScheduler.addEvent(

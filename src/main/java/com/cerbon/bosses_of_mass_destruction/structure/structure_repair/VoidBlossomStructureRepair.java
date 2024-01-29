@@ -10,7 +10,6 @@ import com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern.BossB
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
 import com.cerbon.cerbons_api.api.static_utilities.*;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -39,7 +38,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
         BlockPos offset = getCenterSpawn(structureStart, level);
         BMDPacketHandler.sendToAllPlayersTrackingChunk(new VoidBlossomReviveS2CPacket(VecUtils.asVec3(offset)), level, VecUtils.asVec3(offset));
 
-        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
+        CapabilityUtils.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> level.setBlockAndUpdate(offset, BMDBlocks.VOID_BLOSSOM_SUMMON_BLOCK.get().defaultBlockState()),
                         60
@@ -60,7 +59,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
 
     @OnlyIn(Dist.CLIENT)
     public static void handleVoidBlossomRevivePacket(Vec3 pos, ClientLevel level){
-        CerbonsApiCapabilities.getLevelEventScheduler(level).addEvent(
+        CapabilityUtils.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> ParticleUtils.spawnRotatingParticles(
                                 new ParticleUtils.RotatingParticles(

@@ -15,7 +15,6 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.static_utilities.*;
-import com.cerbon.cerbons_api.capability.CerbonsApiCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerBossEvent;
@@ -72,7 +71,7 @@ public class ObsidilithEntity extends BaseEntity {
 
         DamageMemory damageMemory = new DamageMemory(10, this);
         this.moveLogic = new ObsidilithMoveLogic(statusRegistry, this, damageMemory);
-        this.effectHandler = new ObsidilithEffectHandler(this, CerbonsApiCapabilities.getLevelEventScheduler(level));
+        this.effectHandler = new ObsidilithEffectHandler(this, CapabilityUtils.getLevelEventScheduler(level));
 
         bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_12);
         damageHandler = new CompositeDamageHandler(moveLogic, new ShieldDamageHandler(this::isShielded), damageMemory);
