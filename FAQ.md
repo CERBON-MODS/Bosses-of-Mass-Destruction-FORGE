@@ -1,10 +1,14 @@
-**Q: Can I use this mod in my modpack?**
+**Q: Can I use this mod in my mod pack?**
 
 A: Yes, you can.
 
-**Q: Will this mod be backported to versions below 1.18.2?**
+**Q: Are you going to backport this mod to older versions?**
 
-A: No, I will not backport to versions below 1.18.2.
+A: All my mods that are currently using this multi loader template won't be backport to versions below 1.20.1.
+
+**Q: What loaders do you support?**
+
+A: Forge and NeoForge.
 
 **Q: Can you add X or change Y?**
 

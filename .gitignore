@@ -1,25 +1,18 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
+# Project exclude paths
+/.gradle/
+/.idea/
+/build/
 
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
+/Common/.gradle/
+/Common/build/
+/Common/run
 
-# gradle
-build
-.gradle
+/Fabric
 
-# other
-eclipse
-run
+/Forge/.gradle/
+/Forge/build/
+/Forge/run
 
-# Files from Forge MDK
-forge*changelog.txt
+/NeoForge/.gradle/
+/NeoForge/build/
+/NeoForge/run
