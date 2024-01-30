@@ -50,8 +50,7 @@ public class BMDItems {
 
     public static final RegistryEntry<Item> BRIMSTONE_NECTAR = ITEMS.register("brimstone_nectar", () ->
             new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant(), List.of(
-                    new GauntletStructureRepair(), new LichStructureRepair(), new ObsidilithStructureRepair(), new VoidBlossomStructureRepair()
-            )));
+                    new GauntletStructureRepair(), new LichStructureRepair(), new ObsidilithStructureRepair(), new VoidBlossomStructureRepair())));
 
     public static final RegistryEntry<Item> OBSIDILITH_RUNE = ITEMS.register("obsidilith_rune", () ->
             new BlockItem(BMDBlocks.OBSIDILITH_RUNE.get(), new Item.Properties()));
