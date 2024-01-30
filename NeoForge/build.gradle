@@ -25,6 +25,12 @@ dependencies {
     // Mod Dependencies
     modImplementation "com.cerbon:cerbons_api-neoforge-${minecraft_version}:${cerbons_api_version}"
 
+    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+
+    modApi("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+
     // Useful Mods
     modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
@@ -53,7 +59,9 @@ processResources {
             issues_url                      : issues_url,
             curseforge_url                  : curseforge_url,
             logo_file                       : logo_file,
-            cerbons_api_version_range_forge : cerbons_api_version_range_forge
+            cerbons_api_version_range_forge : cerbons_api_version_range_forge,
+            cloth_config_version_range      : cloth_config_version_range,
+            geckolib_version_range          : geckolib_version_range
     ]
     inputs.properties replaceProperties
 

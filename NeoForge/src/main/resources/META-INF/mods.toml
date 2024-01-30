@@ -39,3 +39,17 @@ issueTrackerURL="${issues_url}"
    versionRange="${cerbons_api_version_range_forge}"
    ordering="NONE"
    side="BOTH"
+
+[[dependencies.${mod_id}]]
+   modId="cloth_config"
+   type="required"
+   versionRange="${cloth_config_version_range}"
+   ordering="NONE"
+   side="BOTH"
+
+[[dependencies.${mod_id}]]
+   modId="geckolib"
+   type="required"
+   versionRange="${geckolib_version_range}"
+   ordering="NONE"
+   side="BOTH"
