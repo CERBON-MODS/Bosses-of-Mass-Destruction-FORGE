@@ -46,7 +46,7 @@ public class NeoEvents {
 
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event){
-        if ((event.side == LogicalSide.SERVER || event.side == LogicalSide.CLIENT) && event.level.getGameTime() % 2 == 0)
+        if (event.level.getGameTime() % 2 == 0)
             LevelEventScheduler.get(event.level).updateEvents();
     }
 
