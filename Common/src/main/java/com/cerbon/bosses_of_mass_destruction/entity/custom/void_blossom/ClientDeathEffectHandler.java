@@ -1,0 +1,50 @@
+package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
+
+import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
+import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
+import com.cerbon.cerbons_api.api.general.event.EventScheduler;
+import com.cerbon.cerbons_api.api.general.event.TimedEvent;
+import com.cerbon.cerbons_api.api.general.particle.ClientParticleBuilder;
+import com.cerbon.cerbons_api.api.static_utilities.RandomUtils;
+import com.cerbon.cerbons_api.api.static_utilities.Vec3Colors;
+import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
+import net.minecraft.world.phys.Vec3;
+
+public class ClientDeathEffectHandler implements IEntityEventHandler {
+    private final VoidBlossomEntity entity;
+    private final EventScheduler eventScheduler;
+
+    private final ClientParticleBuilder deathParticle = new ClientParticleBuilder(BMDParticles.FLUFF.get())
+            .color(Vec3Colors.DARK_GREY)
+            .colorVariation(0.1)
+            .age(20, 30)
+            .scale(0.3f);
+
+    public ClientDeathEffectHandler(VoidBlossomEntity entity, EventScheduler eventScheduler) {
+        this.entity = entity;
+        this.eventScheduler = eventScheduler;
+    }
+
+    @Override
+    public void handleEntityEvent(byte status) {
+        if ((int) status == 3){
+            int delay = 3;
+            Vec3 fallDirection = VecUtils.planeProject(entity.getForward(), VecUtils.yAxis).yRot(180f);
+            Vec3 originPos = entity.position().add(VecUtils.yAxis.scale(2.0));
+            eventScheduler.addEvent(
+                    new TimedEvent(
+                            () -> {
+                                Vec3 pos = originPos
+                                        .add(RandomUtils.randVec().scale(5.0))
+                                        .add(fallDirection.scale(RandomUtils.randDouble(6.0) + 6.0));
+                                Vec3 vel = RandomUtils.randVec().add(VecUtils.yAxis).scale(0.05);
+                                deathParticle.build(pos, vel);
+                            },
+                            delay,
+                            (int) LightBlockRemover.deathMaxAge - delay,
+                            () -> false
+                    )
+            );
+        }
+    }
+}

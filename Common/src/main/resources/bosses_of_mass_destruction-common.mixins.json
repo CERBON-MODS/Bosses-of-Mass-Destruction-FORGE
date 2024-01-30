@@ -4,6 +4,12 @@
   "package": "com.cerbon.bosses_of_mass_destruction.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BossHealthOverlayMixin",
+    "EnderEyeUseMixin",
+    "ExplosionMixin",
+    "IceBlockMixin",
+    "LivingEntityMixin",
+    "NaturalSpawnerMixin"
   ],
   "client": [
     "test.TestMixin"

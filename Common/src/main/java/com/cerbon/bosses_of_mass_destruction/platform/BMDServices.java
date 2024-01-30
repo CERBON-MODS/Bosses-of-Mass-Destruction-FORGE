@@ -1,10 +1,12 @@
 package com.cerbon.bosses_of_mass_destruction.platform;
 
+import com.cerbon.bosses_of_mass_destruction.platform.services.ICapabilityHelper;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 
 import java.util.ServiceLoader;
 
 public class BMDServices {
+    public static ICapabilityHelper PLATFORM_CAPABILITY_HELPER = load(ICapabilityHelper.class);
 
     public static <T> T load(Class<T> clazz) {
         final T loadedService = ServiceLoader.load(clazz)
