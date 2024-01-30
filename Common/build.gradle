@@ -18,6 +18,10 @@ architectury {
     common("forge", "fabric", "neoforge")
 }
 
+base {
+    archivesBaseName = archives_base_name + "-Common-${minecraft_version}"
+}
+
 loom {
     accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
 }
