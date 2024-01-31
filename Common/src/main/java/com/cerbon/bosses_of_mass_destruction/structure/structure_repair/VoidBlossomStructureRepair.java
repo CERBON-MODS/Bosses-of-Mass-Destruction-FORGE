@@ -21,12 +21,6 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.Vec3;
 
 public class VoidBlossomStructureRepair implements StructureRepair{
-    private static final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
-            .color(Vec3Colors.VOID_PURPLE)
-            .colorVariation(0.25)
-            .brightness(BMDParticles.FULL_BRIGHT)
-            .scale(f -> 0.5f * (1 - f * 0.25f))
-            .age(20);
 
     @Override
     public ResourceKey<Structure> associatedStructure() {
@@ -64,7 +58,7 @@ public class VoidBlossomStructureRepair implements StructureRepair{
                         () -> ParticleUtils.spawnRotatingParticles(
                                 new ParticleUtils.RotatingParticles(
                                         pos.add(VecUtils.yAxis.scale(RandomUtils.range(1.0, 10.0))),
-                                        spikeParticleFactory,
+                                        Particles.spikeParticleFactory,
                                         1.0,
                                         2.0,
                                         3.0,
@@ -81,5 +75,14 @@ public class VoidBlossomStructureRepair implements StructureRepair{
                 new ClientParticleBuilder(BMDParticles.VOID_BLOSSOM_SPIKE_INDICATOR.get())
                         .age(60)
                         .build(pos.add(0.0, 0.1, 0.0).add(vec3), Vec3.ZERO));
+    }
+
+    private static class Particles {
+        private static final ClientParticleBuilder spikeParticleFactory = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
+                .color(Vec3Colors.VOID_PURPLE)
+                .colorVariation(0.25)
+                .brightness(BMDParticles.FULL_BRIGHT)
+                .scale(f -> 0.5f * (1 - f * 0.25f))
+                .age(20);
     }
 }
