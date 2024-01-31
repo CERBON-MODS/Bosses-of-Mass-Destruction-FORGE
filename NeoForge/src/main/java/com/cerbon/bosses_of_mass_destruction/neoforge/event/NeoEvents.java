@@ -6,7 +6,6 @@ import com.cerbon.bosses_of_mass_destruction.neoforge.attachment.BMDAttachments;
 import com.cerbon.bosses_of_mass_destruction.neoforge.attachment.saved_data.LevelChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.cerbons_api.api.general.data.HistoricalData;
-import com.cerbon.cerbons_api.neoforge.attachment.saved_data.LevelEventScheduler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -42,12 +41,6 @@ public class NeoEvents {
         data.add(newPosition);
 
         LevitationBlockEntity.tickFlight((ServerPlayer) event.player);
-    }
-
-    @SubscribeEvent
-    public static void onLevelTick(TickEvent.LevelTickEvent event){
-        if (event.level.getGameTime() % 2 == 0)
-            LevelEventScheduler.get(event.level).updateEvents();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
