@@ -74,7 +74,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
         dataAccessorHandler = new CompositeDataAccessorHandler(laserHandler, energyShieldHandler);
         clientTick = laserHandler;
         serverTick = serverLevel -> {if (getTarget() == null) heal(mobConfig.idleHealingPerTick);};
-        bossBar = new ServerBossInfo(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_6);
+        bossBar = new ServerBossInfo(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
         mobEffectHandler = new EffectsImmunity(Effects.WITHER, Effects.POISON);
         moveHandler = gauntletGoalHandler;
         nbtHandler = gauntletGoalHandler;

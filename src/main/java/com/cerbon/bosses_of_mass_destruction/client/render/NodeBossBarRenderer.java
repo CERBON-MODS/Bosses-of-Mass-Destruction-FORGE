@@ -2,6 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.client.render;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -45,11 +46,10 @@ public class NodeBossBarRenderer {
                             textureSize
                     );
                 }
+                renderBossNodes(bossEvent, poseStack, x, y);
+
+                callbackInfo.cancel();
             }
-
-            renderBossNodes(bossEvent, poseStack, x, y);
-
-            callbackInfo.cancel();
         }
     }
 
@@ -59,7 +59,7 @@ public class NodeBossBarRenderer {
             int x,
             int y
     ) {
-        //RenderSystem.setShaderTexture(0, noteTexture);
+        Minecraft.getInstance().textureManager.bind(noteTexture);
         int steppedPercentage = (int) (192 * MathUtils.roundedStep(bossEvent.getPercent(), hpPercentages, true)) + 7;
         AbstractGui.blit(
                 poseStack, x - 3, y - 1, 0f, 0f, steppedPercentage, 7,
