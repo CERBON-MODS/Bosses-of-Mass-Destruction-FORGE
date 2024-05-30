@@ -22,6 +22,7 @@
   },
   "client": [
     "BossHealthOverlayMixin",
+    "ClientPlayNetHandlerMixin",
     "multipart_entities.client.MixinEntityRenderDispatcher",
     "multipart_entities.client.MixinMultiplayerGameMode"
   ]
