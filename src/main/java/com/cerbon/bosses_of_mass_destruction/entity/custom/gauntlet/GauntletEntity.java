@@ -14,27 +14,28 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.EffectsImmunity;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerBossInfo;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
@@ -46,24 +47,24 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
 
     private final AnimationHolder animationHandler;
 
-    public static final EntityDataAccessor<Integer> laserTarget = SynchedEntityData.defineId(GauntletEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> isEnergized = SynchedEntityData.defineId(GauntletEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final DataParameter<Integer> laserTarget = EntityDataManager.defineId(GauntletEntity.class, DataSerializers.INT);
+    public static final DataParameter<Boolean> isEnergized = EntityDataManager.defineId(GauntletEntity.class, DataSerializers.BOOLEAN);
 
-    public GauntletEntity(EntityType<? extends PathfinderMob> entityType, Level level, GauntletConfig mobConfig) {
+    public GauntletEntity(EntityType<? extends CreatureEntity> entityType, World level, GauntletConfig mobConfig) {
         super(entityType, level);
 
+        Map<Byte, AnimationHolder.Animation> animationStatusFlags = new HashMap<>();
+        animationStatusFlags.put(GauntletAttacks.punchAttack, new AnimationHolder.Animation("punch_start", "punch_loop"));
+        animationStatusFlags.put(GauntletAttacks.stopPunchAnimation, new AnimationHolder.Animation("punch_stop", "idle"));
+        animationStatusFlags.put(GauntletAttacks.stopPoundAnimation, new AnimationHolder.Animation("pound_stop", "idle"));
+        animationStatusFlags.put(GauntletAttacks.laserAttack, new AnimationHolder.Animation("laser_eye_start", "laser_eye_loop"));
+        animationStatusFlags.put(GauntletAttacks.laserAttackStop, new AnimationHolder.Animation("laser_eye_stop", "idle"));
+        animationStatusFlags.put(GauntletAttacks.swirlPunchAttack, new AnimationHolder.Animation("swirl_punch", "idle"));
+        animationStatusFlags.put(GauntletAttacks.blindnessAttack, new AnimationHolder.Animation("cast", "idle"));
+        animationStatusFlags.put((byte) 3, new AnimationHolder.Animation("death", "idle"));
+
         GauntletGoalHandler gauntletGoalHandler = new GauntletGoalHandler(this, goalSelector, targetSelector, postTickEvents, mobConfig);
-        animationHandler = new AnimationHolder(
-                this, Map.of(
-                GauntletAttacks.punchAttack, new AnimationHolder.Animation("punch_start", "punch_loop"),
-                GauntletAttacks.stopPunchAnimation, new AnimationHolder.Animation("punch_stop", "idle"),
-                GauntletAttacks.stopPoundAnimation, new AnimationHolder.Animation("pound_stop", "idle"),
-                GauntletAttacks.laserAttack, new AnimationHolder.Animation("laser_eye_start", "laser_eye_loop"),
-                GauntletAttacks.laserAttackStop, new AnimationHolder.Animation("laser_eye_stop", "idle"),
-                GauntletAttacks.swirlPunchAttack, new AnimationHolder.Animation("swirl_punch", "idle"),
-                GauntletAttacks.blindnessAttack, new AnimationHolder.Animation("cast", "idle"),
-                (byte) 3, new AnimationHolder.Animation("death", "idle")
-        ), GauntletAttacks.stopAttackAnimation, 5);
+        animationHandler = new AnimationHolder(this, animationStatusFlags, GauntletAttacks.stopAttackAnimation, 5);
 
         noCulling = true;
         laserHandler.initDataTracker();
@@ -73,8 +74,8 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
         dataAccessorHandler = new CompositeDataAccessorHandler(laserHandler, energyShieldHandler);
         clientTick = laserHandler;
         serverTick = serverLevel -> {if (getTarget() == null) heal(mobConfig.idleHealingPerTick);};
-        bossBar = new ServerBossEvent(getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_6);
-        mobEffectHandler = new EffectsImmunity(MobEffects.WITHER, MobEffects.POISON);
+        bossBar = new ServerBossInfo(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_6);
+        mobEffectHandler = new EffectsImmunity(Effects.WITHER, Effects.POISON);
         moveHandler = gauntletGoalHandler;
         nbtHandler = gauntletGoalHandler;
         deathClientTick = new ClientGauntletDeathHandler(this);
@@ -87,10 +88,10 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     }
 
     @Override
-    protected void checkFallDamage(double y, boolean onGround, @NotNull BlockState state, @NotNull BlockPos pos) {}
+    protected void checkFallDamage(double y, boolean onGround, @Nonnull BlockState state, @Nonnull BlockPos pos) {}
 
     @Override
-    public void travel(@NotNull Vec3 travelVector) {
+    public void travel(@Nonnull Vector3d travelVector) {
         VanillaCopiesServer.travel(travelVector, this, 0.85f);
     }
 
@@ -110,7 +111,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(float pFallDistance, float pDamageMultiplier) {
         return false;
     }
 
@@ -120,7 +121,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     }
 
     @Override
-    public CompoundOrientedBox getCompoundBoundingBox(AABB bounds) {
+    public CompoundOrientedBox getCompoundBoundingBox(AxisAlignedBB bounds) {
         return hitboxHelper.getHitbox().getBox(bounds);
     }
 
@@ -130,7 +131,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     }
 
     @Override
-    protected float getStandingEyeHeight(@NotNull Pose pose, EntityDimensions dimensions) {
+    protected float getStandingEyeHeight(@Nonnull Pose pose, EntitySize dimensions) {
         return dimensions.height * 0.4f;
     }
 
@@ -152,7 +153,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return BMDSounds.GAUNTLET_HURT.get();
     }
 

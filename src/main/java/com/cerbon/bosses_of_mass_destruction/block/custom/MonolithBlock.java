@@ -1,85 +1,87 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
 import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.capability.ChunkBlockCache;
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.*;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.DoubleBlockHalf;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class MonolithBlock extends BaseEntityBlock {
+public class MonolithBlock extends ContainerBlock {
     private static final VoxelShape xAxisShape = box(3.5, 0.0, 1.5, 12.5, 16.0, 14.5);
     private static final VoxelShape zAxisShape = box(1.5, 0.0, 3.5, 14.5, 16.0, 12.5);
 
     public MonolithBlock(Properties properties) {
         super(properties);
         registerDefaultState(getStateDefinition().any()
-                .setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH)
+                .setValue(HorizontalBlock.FACING, Direction.NORTH)
                 .setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(new TranslatableComponent("item.bosses_of_mass_destruction.monolith_block.tooltip_0").withStyle(ChatFormatting.DARK_GRAY));
-        tooltip.add(new TranslatableComponent("item.bosses_of_mass_destruction.monolith_block.tooltip_1").withStyle(ChatFormatting.DARK_GRAY));
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
+        tooltip.add(new TranslationTextComponent("item.bosses_of_mass_destruction.monolith_block.tooltip_0").withStyle(TextFormatting.DARK_GRAY));
+        tooltip.add(new TranslationTextComponent("item.bosses_of_mass_destruction.monolith_block.tooltip_1").withStyle(TextFormatting.DARK_GRAY));
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new MonolithBlockEntity(pos, state);
+    public TileEntity newBlockEntity(IBlockReader blockReader) {
+        return new MonolithBlockEntity();
     }
 
     @Override
-    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
-        return RenderShape.MODEL;
+    public @Nonnull BlockRenderType getRenderShape(@Nonnull BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
-    @Nullable
+//    @Nullable
+//    @Override
+//    public <T extends TileEntity> BlockEntityTicker<T> getTicker(@Nonnull World level, @Nonnull BlockState state, @Nonnull TileEntityType<T> blockEntityType) {
+//        return createTickerHelper(blockEntityType, BMDBlockEntities.MONOLITH_BLOCK_ENTITY.get(), ChunkCacheBlockEntity::tick);
+//    }
+
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, BMDBlockEntities.MONOLITH_BLOCK_ENTITY.get(), ChunkCacheBlockEntity::tick);
+    public @Nonnull VoxelShape getShape(BlockState state, @Nonnull IBlockReader level, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+        return state.getValue(HorizontalBlock.FACING).getAxis() == Direction.Axis.X ? xAxisShape : zAxisShape;
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return state.getValue(HorizontalDirectionalBlock.FACING).getAxis() == Direction.Axis.X ? xAxisShape : zAxisShape;
-    }
-
-    @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, @NotNull BlockState newState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos posFrom) {
+    public @Nonnull BlockState updateShape(BlockState state, Direction direction, @Nonnull BlockState newState, @Nonnull IWorld level, @Nonnull BlockPos pos, @Nonnull BlockPos posFrom) {
         DoubleBlockHalf doubleBlockHalf = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF);
         BlockState airState = Blocks.AIR.defaultBlockState();
 
         if (direction.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP)){
             if (newState.is(this) && newState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) != doubleBlockHalf)
-                return state.setValue(HorizontalDirectionalBlock.FACING, newState.getValue(HorizontalDirectionalBlock.FACING));
+                return state.setValue(HorizontalBlock.FACING, newState.getValue(HorizontalBlock.FACING));
             else
                 return airState;
         } else
@@ -87,7 +89,7 @@ public class MonolithBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+    public void playerWillDestroy(World level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull PlayerEntity player) {
         if (!level.isClientSide && player.isCreative()){
             VanillaCopiesServer.onBreakInCreative(level, pos, state, player);
         }
@@ -96,23 +98,23 @@ public class MonolithBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
+    public BlockState getStateForPlacement(@Nonnull BlockItemUseContext ctx) {
         BlockPos blockPos = ctx.getClickedPos();
 
         if (blockPos.getY() < 255 && ctx.getLevel().getBlockState(blockPos.above()).canBeReplaced(ctx))
-            return getStateDefinition().any().setValue(HorizontalDirectionalBlock.FACING, ctx.getHorizontalDirection())
+            return getStateDefinition().any().setValue(HorizontalBlock.FACING, ctx.getHorizontalDirection())
                     .setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER);
         else
             return null;
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
+    public void setPlacedBy(World level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         level.setBlock(pos.above(), state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), 3);
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, IWorldReader level, BlockPos pos) {
         BlockPos blockPos = pos.below();
         BlockState blockState = level.getBlockState(blockPos);
 
@@ -123,23 +125,23 @@ public class MonolithBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
+    public @Nonnull BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(
-                HorizontalDirectionalBlock.FACING,
-                rotation.rotate(state.getValue(HorizontalDirectionalBlock.FACING)));
+                HorizontalBlock.FACING,
+                rotation.rotate(state.getValue(HorizontalBlock.FACING)));
     }
 
     @Override
-    public @NotNull BlockState mirror(@NotNull BlockState state, @NotNull Mirror mirror) {
-        return mirror == Mirror.NONE ? state : state.rotate(mirror.getRotation(state.getValue(HorizontalDirectionalBlock.FACING))).cycle(DoorBlock.HINGE);
+    public @Nonnull BlockState mirror(@Nonnull BlockState state, @Nonnull Mirror mirror) {
+        return mirror == Mirror.NONE ? state : state.rotate(mirror.getRotation(state.getValue(HorizontalBlock.FACING))).cycle(DoorBlock.HINGE);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.DOUBLE_BLOCK_HALF, HorizontalDirectionalBlock.FACING);
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.DOUBLE_BLOCK_HALF, HorizontalBlock.FACING);
     }
 
-    public static float getExplosionPower(ServerLevel level, BlockPos pos, float power){
+    public static float getExplosionPower(ServerWorld level, BlockPos pos, float power){
         ChunkPos chunkPos = new ChunkPos(pos);
         Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(level);
 

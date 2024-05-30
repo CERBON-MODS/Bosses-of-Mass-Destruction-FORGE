@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities;
 
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -34,11 +34,11 @@ public class RandomUtils {
         return min + rand.nextDouble() * range;
     }
 
-    public static Vec3 randVec(Supplier<Double> rand) {
-        return new Vec3(rand.get() - 0.5, rand.get() - 0.5, rand.get() - 0.5);
+    public static Vector3d randVec(Supplier<Double> rand) {
+        return new Vector3d(rand.get() - 0.5, rand.get() - 0.5, rand.get() - 0.5);
     }
 
-    public static Vec3 randVec() {
+    public static Vector3d randVec() {
         return randVec(rand::nextDouble);
     }
 

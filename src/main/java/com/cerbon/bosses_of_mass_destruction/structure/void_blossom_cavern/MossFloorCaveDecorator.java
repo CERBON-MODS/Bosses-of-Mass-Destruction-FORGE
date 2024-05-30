@@ -1,20 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 
 import com.cerbon.bosses_of_mass_destruction.structure.util.IStructurePiece;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.BlockPos;
-import net.minecraft.data.worldgen.features.CaveFeatures;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.gen.ChunkGenerator;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MossFloorCaveDecorator implements ICaveDecorator{
     private final int bottomOfWorld;
@@ -34,27 +29,27 @@ public class MossFloorCaveDecorator implements ICaveDecorator{
     }
 
     @Override
-    public void generate(WorldGenLevel level, ChunkGenerator chunkGenerator, Random random, BoundingBox boundingBox, BlockPos pos, IStructurePiece structurePiece) {
-        Map<Pair<Integer, Integer>, List<BlockPos>> groupedMossPositions = mossFloorPositions.stream()
-                .collect(Collectors.groupingBy(p -> new Pair<>(p.getX() >> 3, p.getZ() >> 3)));
-
-        List<BlockPos> spacedMossPositions = groupedMossPositions.values().stream()
-                .map(list -> list.get(0))
-                .toList();
-
-        for (BlockPos mossPos : spacedMossPositions)
-            if (boundingBox.isInside(mossPos)){
-                ConfiguredFeature<?, ?> configuredFeature = CaveFeatures.MOSS_PATCH.value();
-                Feature.VEGETATION_PATCH.place(
-                        new FeaturePlaceContext<>(
-                                Optional.of(configuredFeature),
-                                level,
-                                chunkGenerator,
-                                random,
-                                mossPos,
-                                (VegetationPatchConfiguration) configuredFeature.config()
-                        )
-                );
-            }
+    public void generate(ISeedReader level, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox boundingBox, BlockPos pos, IStructurePiece structurePiece) {
+//        Map<Pair<Integer, Integer>, List<BlockPos>> groupedMossPositions = mossFloorPositions.stream()
+//                .collect(Collectors.groupingBy(p -> new Pair<>(p.getX() >> 3, p.getZ() >> 3)));
+//
+//        List<BlockPos> spacedMossPositions = groupedMossPositions.values().stream()
+//                .map(list -> list.get(0))
+//                .toList();
+//
+//        for (BlockPos mossPos : spacedMossPositions)
+//            if (boundingBox.isInside(mossPos)){
+//                ConfiguredFeature<?, ?> configuredFeature = Feature.FLOWER.();
+//                Feature.FLOWER.place(
+//                        new FlowersFeature<>(
+//                                Optional.of(configuredFeature),
+//                                level,
+//                                chunkGenerator,
+//                                random,
+//                                mossPos,
+//                                (VegetationPatchConfiguration) configuredFeature.config()
+//                        )
+//                );
+//            }
     }
 }

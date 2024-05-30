@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.damagesource;
 
-import net.minecraft.world.damagesource.EntityDamageSource;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.entity.Entity;
 
 public class UnshieldableDamageSource extends EntityDamageSource {
 

@@ -8,17 +8,17 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class ChiseledStoneAltarBlock extends Block {
@@ -31,27 +31,27 @@ public class ChiseledStoneAltarBlock extends Block {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@Nonnull BlockItemUseContext context) {
         return this.stateDefinition.any().setValue(lit, false);
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(@NotNull BlockState state) {
+    public boolean hasAnalogOutputSignal(@Nonnull BlockState state) {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, @Nonnull World level, @Nonnull BlockPos pos) {
         return state.getValue(lit) ? 15 : 0;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(lit);
     }
 
     @Override
-    public void animateTick(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Random random) {
+    public void animateTick(BlockState state, @Nonnull World level, @Nonnull BlockPos pos, @Nonnull Random random) {
         if (state.getValue(lit)){
             if (random.nextInt(3) == 0){
                 Particles.blueFireParticleFactory.build(

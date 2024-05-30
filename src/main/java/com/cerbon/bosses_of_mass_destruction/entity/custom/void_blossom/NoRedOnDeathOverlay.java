@@ -2,8 +2,8 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
 import com.cerbon.bosses_of_mass_destruction.client.render.IOverlayOverride;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 
 public class NoRedOnDeathOverlay implements IRenderer<VoidBlossomEntity>, IOverlayOverride {
@@ -18,7 +18,7 @@ public class NoRedOnDeathOverlay implements IRenderer<VoidBlossomEntity>, IOverl
     }
 
     @Override
-    public void render(VoidBlossomEntity entity, float yaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light) {
+    public void render(VoidBlossomEntity entity, float yaw, float partialTicks, MatrixStack poseStack, IRenderTypeBuffer buffer, int light) {
         this.entity = entity;
     }
 }

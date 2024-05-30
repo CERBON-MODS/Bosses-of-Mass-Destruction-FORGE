@@ -13,37 +13,37 @@ import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.DirectionalPlaceContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.item.DirectionalPlaceContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class SporeBallProjectile extends BaseThrownItemProjectile implements IAnimatable, IAnimationTickable {
-    private final List<Vec3> circlePoints = MathUtils.buildBlockCircle(7.0);
+    private final List<Vector3d> circlePoints = MathUtils.buildBlockCircle(7.0);
     private final ClientParticleBuilder projectileParticles = new ClientParticleBuilder(BMDParticles.DISAPPEARING_SWIRL.get())
             .color(BMDColors.GREEN)
             .colorVariation(0.4)
@@ -58,18 +58,18 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements IAn
 
     public static final int explosionDelay = 30;
 
-    public SporeBallProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
+    public SporeBallProjectile(EntityType<? extends ProjectileItemEntity> entityType, World level) {
         super(entityType, level);
         collisionPredicate = hitResult -> true;
     }
 
-    public SporeBallProjectile(LivingEntity livingEntity, Level level, Predicate<EntityHitResult> entityPredicate){
+    public SporeBallProjectile(LivingEntity livingEntity, World level, Predicate<EntityRayTraceResult> entityPredicate){
         super(BMDEntities.SPORE_BALL.get(), livingEntity, level, entityPredicate);
         collisionPredicate = hitResult -> true;
     }
 
     @Override
-    protected void onHitBlock(@NotNull BlockHitResult result) {
+    protected void onHitBlock(@Nonnull BlockRayTraceResult result) {
         onImpact();
     }
 
@@ -81,8 +81,8 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements IAn
     }
 
     @Override
-    public @NotNull Vec3 getDeltaMovement() {
-        return !impacted ? super.getDeltaMovement() : Vec3.ZERO;
+    public @Nonnull Vector3d getDeltaMovement() {
+        return !impacted ? super.getDeltaMovement() : Vector3d.ZERO;
     }
 
     private void onImpact(){
@@ -91,18 +91,16 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements IAn
         impactedPitch = getXRot();
         impacted = true;
         Entity owner = getOwner();
-        if (owner instanceof LivingEntity livingEntity)
-            doExplosion(livingEntity);
+        if (owner instanceof LivingEntity)
+            doExplosion(((LivingEntity) owner));
         else if (!level.isClientSide())
-            discard();
+            remove();
     }
 
-    @Override
     public float getXRot() {
         return impacted ? impactedPitch : tickCount * 5f;
     }
 
-    @Override
     public float getYRot() {
         return 0f;
     }
@@ -115,14 +113,14 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements IAn
             float damage = (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE);
             if (this.getOwner() != null){
                 entity.hurt(new UnshieldableDamageSource(this.getOwner()), damage);
-                entity.addEffect(new MobEffectInstance(MobEffects.POISON, 140), this.getOwner());
+                owner.addEffect(new EffectInstance(Effects.POISON, 140));
             }
         };
 
         if (!level.isClientSide) {
             RiftBurst riftBurst = new RiftBurst(
                     owner,
-                    (ServerLevel) level,
+                    (ServerWorld) level,
                     BMDParticles.SPORE_INDICATOR.get(),
                     BMDParticles.SPORE.get(),
                     explosionDelay,
@@ -137,19 +135,19 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements IAn
                     new TimedEvent(
                             () -> {
                                 playSound(BMDSounds.SPORE_IMPACT.get(), 1.5f, BMDUtils.randomPitch(random));
-                                discard();
+                                remove();
                             },
                             explosionDelay
                     )
             );
 
-            Vec3 center = VecUtils.asVec3(blockPosition()).add(VecUtils.unit.scale(0.5));
-            for (Vec3 point : circlePoints)
+            Vector3d center = VecUtils.asVec3(blockPosition()).add(VecUtils.unit.scale(0.5));
+            for (Vector3d point : circlePoints)
                 riftBurst.tryPlaceRift(center.add(point));
         }
     }
 
-    private BlockPos posFinder(Vec3 pos){
+    private BlockPos posFinder(Vector3d pos){
         BlockPos above = new BlockPos(pos.add(VecUtils.yAxis.scale(2.0)));
         BlockPos groundPos = BMDUtils.findGroundBelow(level, above, pos1 -> true);
         BlockPos up = groundPos.above();
@@ -164,29 +162,32 @@ public class SporeBallProjectile extends BaseThrownItemProjectile implements IAn
                 Direction.DOWN,
                 ItemStack.EMPTY,
                 Direction.UP
-        )) || blockState.getBlock() == Blocks.MOSS_CARPET;
+        )) || blockState.getBlock() == Blocks.GRASS_BLOCK;
     }
 
     @Override
     public void handleEntityEvent(byte id) {
         if (id == particle)
-            for (Vec3 point : MathUtils.circlePoints(0.8, 16, VecUtils.yAxis))
+            for (Vector3d point : MathUtils.circlePoints(0.8, 16, VecUtils.yAxis))
                 projectileParticles.build(point.add(position()), point.scale(0.1));
 
         super.handleEntityEvent(id);
     }
 
     @Override
-    public void entityHit(EntityHitResult entityHitResult) {
+    public void entityHit(EntityRayTraceResult entityHitResult) {
         if (level.isClientSide()) return;
         Entity owner = getOwner();
         Entity entity = entityHitResult.getEntity();
 
-        if (owner instanceof LivingEntity livingEntity)
-            if (entity != livingEntity){
+        if (owner instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) owner;
+
+            if (entity != livingEntity) {
                 float damage = (float) livingEntity.getAttributeValue(Attributes.ATTACK_DAMAGE);
                 entity.hurt(DamageSource.thrown(this, livingEntity), damage);
             }
+        }
     }
 
     @Override

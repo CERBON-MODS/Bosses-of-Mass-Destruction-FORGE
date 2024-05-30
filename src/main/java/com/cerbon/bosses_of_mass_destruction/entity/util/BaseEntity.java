@@ -2,45 +2,45 @@ package com.cerbon.bosses_of_mass_destruction.entity.util;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventScheduler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
-import com.google.errorprone.annotations.ForOverride;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public abstract class BaseEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
-    public Vec3 idlePosition = Vec3.ZERO;
-    protected ServerBossEvent bossBar;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public abstract class BaseEntity extends CreatureEntity implements IAnimatable, IAnimationTickable {
+    public Vector3d idlePosition = Vector3d.ZERO;
+    protected ServerBossInfo bossBar;
     protected IDamageHandler damageHandler;
     protected IEntityEventHandler entityEventHandler;
-    protected IEntityTick<Level> clientTick;
-    protected IEntityTick<ServerLevel> serverTick;
+    protected IEntityTick<World> clientTick;
+    protected IEntityTick<ServerWorld> serverTick;
     protected IDataAccessorHandler dataAccessorHandler;
     protected IMobEffectFilter mobEffectHandler;
     protected IMoveHandler moveHandler;
     protected INbtHandler nbtHandler;
-    protected IEntityTick<Level> deathClientTick;
-    protected IEntityTick<ServerLevel> deathServerTick;
+    protected IEntityTick<World> deathClientTick;
+    protected IEntityTick<ServerWorld> deathServerTick;
     protected final EventScheduler preTickEvents = new EventScheduler();
     protected final EventScheduler postTickEvents = new EventScheduler();
     protected AnimationFactory animationFactory;
 
-    public BaseEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
+    public BaseEntity(EntityType<? extends CreatureEntity> entityType, World level) {
         super(entityType, level);
     }
 
@@ -48,7 +48,7 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
     public void tick() {
         preTickEvents.updateEvents();
 
-        if (idlePosition == Vec3.ZERO)
+        if (idlePosition == Vector3d.ZERO)
             idlePosition = position();
 
         if (level.isClientSide()){
@@ -57,11 +57,11 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
             if (clientTick != null)
                 clientTick.tick(level);
 
-        }else if (level instanceof ServerLevel serverLevel){
-            serverTick(serverLevel);
+        }else if (level instanceof ServerWorld){
+            serverTick((ServerWorld) level);
 
             if (serverTick != null)
-                serverTick.tick(serverLevel);
+                serverTick.tick((ServerWorld) level);
         }
 
         super.tick();
@@ -74,18 +74,16 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
         if (level.isClientSide() && deathClientTick != null)
             deathClientTick.tick(level);
 
-        else if (level instanceof ServerLevel serverLevel && deathServerTick != null)
-            deathServerTick.tick(serverLevel);
+        else if (level instanceof ServerWorld && deathServerTick != null)
+            deathServerTick.tick((ServerWorld) level);
 
         else
             super.tickDeath();
     }
 
-    @ForOverride
     public void clientTick(){}
 
-    @ForOverride
-    public void serverTick(ServerLevel serverLevel){}
+    public void serverTick(ServerWorld serverLevel){}
 
     @Override
     public void aiStep() {
@@ -97,11 +95,11 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
     protected void customServerAiStep() {
         super.customServerAiStep();
         if (bossBar != null)
-            bossBar.setProgress(this.getHealth() / this.getMaxHealth());
+            bossBar.setPercent(this.getHealth() / this.getMaxHealth());
     }
 
     @Override
-    public void load(@NotNull CompoundTag compound) {
+    public void load(@Nonnull CompoundNBT compound) {
         super.load(compound);
         if (hasCustomName() && bossBar != null)
             bossBar.setName(this.getDisplayName());
@@ -111,28 +109,28 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
     }
 
     @Override
-    public void setCustomName(@Nullable Component name) {
+    public void setCustomName(@Nullable ITextComponent name) {
         super.setCustomName(name);
         if (bossBar != null)
             bossBar.setName(this.getDisplayName());
     }
 
     @Override
-    public void startSeenByPlayer(@NotNull ServerPlayer serverPlayer) {
+    public void startSeenByPlayer(@Nonnull ServerPlayerEntity serverPlayer) {
         super.startSeenByPlayer(serverPlayer);
         if (bossBar != null)
             bossBar.addPlayer(serverPlayer);
     }
 
     @Override
-    public void stopSeenByPlayer(@NotNull ServerPlayer serverPlayer) {
+    public void stopSeenByPlayer(@Nonnull ServerPlayerEntity serverPlayer) {
         super.stopSeenByPlayer(serverPlayer);
         if (bossBar != null)
             bossBar.removePlayer(serverPlayer);
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
+    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
     }
 
@@ -145,19 +143,19 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
     }
 
     @Override
-    public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> data) {
+    public void onSyncedDataUpdated(@Nonnull DataParameter<?> data) {
         super.onSyncedDataUpdated(data);
         if (dataAccessorHandler != null)
             dataAccessorHandler.onSyncedDataUpdated(data);
     }
 
     @Override
-    public boolean canBeAffected(@NotNull MobEffectInstance effectInstance) {
+    public boolean canBeAffected(@Nonnull EffectInstance effectInstance) {
         return mobEffectHandler != null ? mobEffectHandler.canBeAffected(effectInstance) : super.canBeAffected(effectInstance);
     }
 
     @Override
-    public boolean hurt(@NotNull DamageSource source, float amount) {
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
         EntityStats stats = new EntityStats(this);
         IDamageHandler handler = damageHandler;
 
@@ -181,15 +179,15 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
     }
 
     @Override
-    public void move(@NotNull MoverType type, @NotNull Vec3 movement) {
+    public void move(@Nonnull MoverType type, @Nonnull Vector3d movement) {
         boolean shouldDoDefault = moveHandler != null && moveHandler.canMove(type, movement);
         if (moveHandler == null || shouldDoDefault)
             super.move(type, movement);
     }
 
     @Override
-    public @NotNull CompoundTag saveWithoutId(@NotNull CompoundTag compound) {
-        CompoundTag superCompound = super.saveWithoutId(compound);
+    public @Nonnull CompoundNBT saveWithoutId(@Nonnull CompoundNBT compound) {
+        CompoundNBT superCompound = super.saveWithoutId(compound);
         return nbtHandler != null ? nbtHandler.toTag(superCompound) : superCompound;
     }
 
@@ -206,9 +204,9 @@ public abstract class BaseEntity extends PathfinderMob implements IAnimatable, I
         return tickCount;
     }
 
-    public Vec3 safeGetTargetPos(){
+    public Vector3d safeGetTargetPos(){
         LivingEntity target = getTarget();
-        return target == null ? Vec3.ZERO : target.position();
+        return target == null ? Vector3d.ZERO : target.position();
     }
 }
 

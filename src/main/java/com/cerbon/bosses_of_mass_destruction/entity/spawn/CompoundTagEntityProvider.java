@@ -1,17 +1,17 @@
 package com.cerbon.bosses_of_mass_destruction.entity.spawn;
 
 import com.cerbon.bosses_of_mass_destruction.BossesOfMassDestruction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.world.World;
 
 
 public class CompoundTagEntityProvider implements IEntityProvider {
-    private final CompoundTag tag;
-    private final Level world;
+    private final CompoundNBT tag;
+    private final World world;
 
-    public CompoundTagEntityProvider(CompoundTag tag, Level world) {
+    public CompoundTagEntityProvider(CompoundNBT tag, World world) {
         this.tag = tag;
         this.world = world;
     }

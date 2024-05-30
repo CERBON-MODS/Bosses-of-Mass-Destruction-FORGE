@@ -12,9 +12,11 @@ import com.cerbon.bosses_of_mass_destruction.projectile.SporeBallProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.util.ExemptEntities;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
+import com.google.common.collect.Lists;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -33,7 +35,7 @@ public class SporeAction implements IActionWithCooldown {
     @Override
     public int perform() {
         LivingEntity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return 80;
+        if (!(target instanceof ServerPlayerEntity)) return 80;
 
         eventScheduler.addEvent(
                 new EventSeries(
@@ -54,7 +56,7 @@ public class SporeAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDUtils.playSound(((ServerPlayer) target).getLevel(), entity.position(), BMDSounds.SPORE_PREPARE.get(), SoundSource.HOSTILE, 1.5f, 32, null),
+                        () -> BMDUtils.playSound(((ServerPlayerEntity) target).getLevel(), entity.position(), BMDSounds.SPORE_PREPARE.get(), SoundCategory.HOSTILE, 1.5f, 32, null),
                         26
                 )
         );
@@ -63,11 +65,12 @@ public class SporeAction implements IActionWithCooldown {
                 new TimedEvent(
                         () -> new ProjectileThrower(
                                 () -> {
-                                    SporeBallProjectile projectile = new SporeBallProjectile(entity, entity.level, new ExemptEntities(List.of(BMDEntities.VOID_BLOSSOM.get())));
-                                    projectile.setPos(entity.getEyePosition());
+                                    SporeBallProjectile projectile = new SporeBallProjectile(entity, entity.level, new ExemptEntities(Lists.newArrayList(BMDEntities.VOID_BLOSSOM.get())));
+                                    Vector3d pos = entity.getEyePosition(1.0f);
+                                    projectile.setPos(pos.x, pos.y, pos.z);
                                     return new ProjectileThrower.ProjectileData(projectile, 0.75f, 0f, 0.2);
                                 }
-                        ).throwProjectile(target.getEyePosition()),
+                        ).throwProjectile(target.getEyePosition(1.0f)),
                         45,
                         1,
                         shouldCancel

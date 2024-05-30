@@ -1,29 +1,28 @@
 package com.cerbon.bosses_of_mass_destruction.projectile;
 
-import com.google.errorprone.annotations.ForOverride;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.network.IPacket;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
-public abstract class BaseThrownItemProjectile extends ThrowableItemProjectile {
-    protected final Predicate<EntityHitResult> entityCollisionPredicate;
-    protected Predicate<HitResult> collisionPredicate = hitResult -> !level.isClientSide();
+public abstract class BaseThrownItemProjectile extends ProjectileItemEntity {
+    protected final Predicate<EntityRayTraceResult> entityCollisionPredicate;
+    protected Predicate<RayTraceResult> collisionPredicate = hitResult -> !level.isClientSide();
 
-    public BaseThrownItemProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
+    public BaseThrownItemProjectile(EntityType<? extends ProjectileItemEntity> entityType, World level) {
         super(entityType, level);
         entityCollisionPredicate = entityHitResult -> true;
     }
 
-    public BaseThrownItemProjectile(EntityType<? extends ThrowableItemProjectile> entityType, LivingEntity livingEntity, Level level, Predicate<EntityHitResult> collisionPredicate) {
+    public BaseThrownItemProjectile(EntityType<? extends ProjectileItemEntity> entityType, LivingEntity livingEntity, World level, Predicate<EntityRayTraceResult> collisionPredicate) {
         super(entityType, livingEntity, level);
         this.entityCollisionPredicate = collisionPredicate;
     }
@@ -36,29 +35,28 @@ public abstract class BaseThrownItemProjectile extends ThrowableItemProjectile {
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
+    public @Nonnull IPacket<?> getAddEntityPacket() {
         return super.getAddEntityPacket();
     }
 
     @Override
-    protected void onHit(@NotNull HitResult hitResult) {
+    protected void onHit(@Nonnull RayTraceResult hitResult) {
         if(collisionPredicate.test(hitResult))
             super.onHit(hitResult);
     }
 
     @Override
-    protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
+    protected void onHitEntity(@Nonnull EntityRayTraceResult entityHitResult) {
         if (entityCollisionPredicate.test(entityHitResult))
             entityHit(entityHitResult);
     }
 
-    protected abstract void entityHit(EntityHitResult entityHitResult);
+    protected abstract void entityHit(EntityRayTraceResult entityHitResult);
 
-    @ForOverride
     public void clientTick() {}
 
     @Override
-    protected @NotNull Item getDefaultItem() {
+    protected @Nonnull Item getDefaultItem() {
         return Items.SNOWBALL;
     }
 }

@@ -10,16 +10,16 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.GauntletEnti
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import com.google.common.collect.Lists;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 
-import java.util.List;
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 public class GauntletBlackstoneBlock extends Block {
@@ -29,10 +29,10 @@ public class GauntletBlackstoneBlock extends Block {
     }
 
     @Override
-    public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+    public void playerWillDestroy(World level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull PlayerEntity player) {
         if (level.isClientSide) return;
 
-        for (Direction dir : List.of(Direction.EAST, Direction.WEST, Direction.NORTH, Direction.SOUTH)){
+        for (Direction dir : Lists.newArrayList(Direction.EAST, Direction.WEST, Direction.NORTH, Direction.SOUTH)){
             BlockPos centerPos = pos.offset(dir.getNormal());
             Block centerBlock = level.getBlockState(centerPos).getBlock();
 
@@ -44,8 +44,8 @@ public class GauntletBlackstoneBlock extends Block {
         super.playerWillDestroy(level, pos, state, player);
     }
 
-    private void spawnGauntlet(BlockPos centerPos, Level level){
-        Vec3 spawnPos = VecUtils.asVec3(centerPos).add(new Vec3(0.5, -0.5, 0.5));
+    private void spawnGauntlet(BlockPos centerPos, World level){
+        Vector3d spawnPos = VecUtils.asVec3(centerPos).add(new Vector3d(0.5, -0.5, 0.5));
         GauntletEntity entity = BMDEntities.GAUNTLET.get().create(level);
 
         if (entity != null){
@@ -70,9 +70,9 @@ public class GauntletBlackstoneBlock extends Block {
     }
 
     @Override
-    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Random random) {
-        Vec3 particlePos = VecUtils.asVec3(pos).add(VecUtils.unit.scale(0.5)).add(RandomUtils.randVec().normalize());
-        Particles.laserChargeParticles.build(particlePos,Vec3.ZERO);
+    public void animateTick(@Nonnull BlockState state, @Nonnull World level, @Nonnull BlockPos pos, @Nonnull Random random) {
+        Vector3d particlePos = VecUtils.asVec3(pos).add(VecUtils.unit.scale(0.5)).add(RandomUtils.randVec().normalize());
+        Particles.laserChargeParticles.build(particlePos,Vector3d.ZERO);
     }
 
     public static class Particles {

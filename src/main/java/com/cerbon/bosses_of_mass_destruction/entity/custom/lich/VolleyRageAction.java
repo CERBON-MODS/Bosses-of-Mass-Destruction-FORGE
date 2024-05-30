@@ -11,21 +11,23 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.ProjectileThrower;
 import com.cerbon.bosses_of_mass_destruction.projectile.MagicMissileProjectile;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
+import com.google.common.collect.Lists;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.registry.Registry;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class VolleyRageAction implements IActionWithCooldown {
     private final LichEntity entity;
@@ -47,30 +49,30 @@ public class VolleyRageAction implements IActionWithCooldown {
     @Override
     public int perform() {
         LivingEntity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return 80;
-        return performVolley((ServerPlayer) target);
+        if (!(target instanceof ServerPlayerEntity)) return 80;
+        return performVolley((ServerPlayerEntity) target);
     }
 
-    public int performVolley(ServerPlayer target) {
+    public int performVolley(ServerPlayerEntity target) {
         int rageMissileVolleys = getRageMissileVolleys(entity).size();
-        final Optional<MobEffect> missileMobEffect = Optional.ofNullable(ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.tryParse(mobConfig.missile.mobEffectId)));
-        final Function<Vec3, ProjectileThrower> missileThrower = getMissileThrower(missileMobEffect);
+        final Optional<Effect> missileMobEffect = Optional.ofNullable(Registry.MOB_EFFECT.get(ResourceLocation.tryParse(mobConfig.missile.mobEffectId)));
+        final Function<Vector3d, ProjectileThrower> missileThrower = getMissileThrower(missileMobEffect);
 
-        BMDUtils.playSound(target.getLevel(), entity.position(), BMDSounds.MISSILE_PREPARE.get(), SoundSource.HOSTILE, 4.0f, 64, null);
+        BMDUtils.playSound(target.getLevel(), entity.position(), BMDSounds.MISSILE_PREPARE.get(), SoundCategory.HOSTILE, 4.0f, 64, null);
         for (int i = 0; i < rageMissileVolleys; i++){
             int i1 = i;
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 targetPos = target.getBoundingBox().getCenter();
-                                for (Vec3 offset : getRageMissileVolleys(entity).get(i1))
+                                Vector3d targetPos = target.getBoundingBox().getCenter();
+                                for (Vector3d offset : getRageMissileVolleys(entity).get(i1))
                                     missileThrower.apply(offset).throwProjectile(targetPos.add(offset));
 
                                 BMDUtils.playSound(
                                         target.getLevel(),
                                         entity.position(),
                                         BMDSounds.MISSILE_SHOOT.get(),
-                                        SoundSource.HOSTILE,
+                                        SoundCategory.HOSTILE,
                                         3.0f,
                                         64,
                                         null
@@ -86,8 +88,8 @@ public class VolleyRageAction implements IActionWithCooldown {
         return ragedMissileVolleyInitialDelay + (rageMissileVolleys * ragedMissileVolleyBetweenVolleyDelay);
     }
 
-    @NotNull
-    private Function<Vec3, ProjectileThrower> getMissileThrower(Optional<MobEffect> missileMobEffect) {
+    @Nonnull
+    private Function<Vector3d, ProjectileThrower> getMissileThrower(Optional<Effect> missileMobEffect) {
         final int missileEffectDuration = mobConfig.missile.mobEffectDuration;
         final int missileEffectAmplifier = mobConfig.missile.mobEffectAmplifier;
 
@@ -97,31 +99,31 @@ public class VolleyRageAction implements IActionWithCooldown {
                             MagicMissileProjectile projectile = new MagicMissileProjectile(
                                     entity,
                                     entity.level,
-                                    livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new MobEffectInstance(effect, missileEffectDuration, missileEffectAmplifier))),
-                                    MinionAction.summonEntityType != null ? List.of(MinionAction.summonEntityType) : List.of());
+                                    livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new EffectInstance(effect, missileEffectDuration, missileEffectAmplifier))),
+                                    MinionAction.summonEntityType != null ? Lists.newArrayList(MinionAction.summonEntityType) : Lists.newArrayList());
 
                             MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
                             return new ProjectileThrower.ProjectileData(projectile, 1.6f, 0f, 0.2);
                         });
     }
 
-    public static List<List<Vec3>> getRageMissileVolleys(LichEntity entity) {
+    public static List<List<Vector3d>> getRageMissileVolleys(LichEntity entity) {
         double xOffset = 3.0;
         double zOffset = 4.0;
         int numPoints = 9;
 
-        Vec3 lineStart = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.scale(xOffset).add(VecUtils.zAxis.scale(zOffset)));
-        Vec3 lineEnd = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.scale(xOffset).add(VecUtils.zAxis.scale(-zOffset)));
+        Vector3d lineStart = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.scale(xOffset).add(VecUtils.zAxis.scale(zOffset)));
+        Vector3d lineEnd = MathUtils.axisOffset(entity.getLookAngle(), VecUtils.xAxis.scale(xOffset).add(VecUtils.zAxis.scale(-zOffset)));
 
-        ArrayList<Vec3> lineAcross = new ArrayList<>();
+        ArrayList<Vector3d> lineAcross = new ArrayList<>();
         MathUtils.lineCallback(lineStart, lineEnd, numPoints, (vec3, integer) -> lineAcross.add(vec3));
 
-        List<Vec3> lineUpDown = lineAcross.stream().map(vec3 -> VecUtils.rotateVector(vec3, entity.getLookAngle(), 90.0)).toList();
-        List<Vec3> cross = new ArrayList<>(lineAcross);
+        List<Vector3d> lineUpDown = lineAcross.stream().map(vec3 -> VecUtils.rotateVector(vec3, entity.getLookAngle(), 90.0)).collect(Collectors.toList());
+        List<Vector3d> cross = new ArrayList<>(lineAcross);
         cross.addAll(lineUpDown);
-        List<Vec3> xVolley = cross.stream().map(vec3 -> VecUtils.rotateVector(vec3, entity.getLookAngle(), 45.0)).toList();
+        List<Vector3d> xVolley = cross.stream().map(vec3 -> VecUtils.rotateVector(vec3, entity.getLookAngle(), 45.0)).collect(Collectors.toList());
 
-        return List.of(lineAcross, lineUpDown, cross, xVolley);
+        return Lists.newArrayList(lineAcross, lineUpDown, cross, xVolley);
     }
 }
 

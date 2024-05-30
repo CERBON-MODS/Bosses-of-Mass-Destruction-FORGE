@@ -7,24 +7,24 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.VoidBlos
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
-public class VoidBlossomCompoundHitbox implements ICompoundHitbox, IDamageHandler, IEntityTick<ServerLevel> {
+public class VoidBlossomCompoundHitbox implements ICompoundHitbox, IDamageHandler, IEntityTick<ServerWorld> {
     private final VoidBlossomEntity entity;
     private final EntityBounds hitboxes;
     private final String root;
-    private final AABB collisionHitbox;
+    private final AxisAlignedBB collisionHitbox;
     private final List<String> spikedBoxes;
 
     private String nextDamagedPart;
 
-    public VoidBlossomCompoundHitbox(VoidBlossomEntity entity, EntityBounds hitboxes, String root, AABB collisionHitbox, List<String> spikedBoxes) {
+    public VoidBlossomCompoundHitbox(VoidBlossomEntity entity, EntityBounds hitboxes, String root, AxisAlignedBB collisionHitbox, List<String> spikedBoxes) {
         this.entity = entity;
         this.hitboxes = hitboxes;
         this.root = root;
@@ -35,7 +35,7 @@ public class VoidBlossomCompoundHitbox implements ICompoundHitbox, IDamageHandle
     @Override
     public void updatePosition() {
         EntityPart rootYaw = hitboxes.getPart(root);
-        rootYaw.setRotation(0.0, -entity.getYRot(), 0.0, true);
+        rootYaw.setRotation(0.0, -entity.yRot, 0.0, true);
 
         rootYaw.setX(entity.getX());
         rootYaw.setY(entity.getY());
@@ -77,8 +77,8 @@ public class VoidBlossomCompoundHitbox implements ICompoundHitbox, IDamageHandle
     }
 
     @Override
-    public void tick(ServerLevel level) {
+    public void tick(ServerWorld level) {
         EntityPart rootYaw = hitboxes.getPart(root);
-        rootYaw.setRotation(0.0, -entity.getYRot(), 0.0, true);
+        rootYaw.setRotation(0.0, -entity.yRot, 0.0, true);
     }
 }

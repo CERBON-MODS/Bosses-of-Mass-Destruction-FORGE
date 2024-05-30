@@ -3,33 +3,34 @@ package com.cerbon.bosses_of_mass_destruction.util;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SupportType;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.play.server.SPlaySoundEffectPacket;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.util.BlockVoxelShape;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
 public class BMDUtils {
-    public static void addDeltaMovement(Entity entity, Vec3 velocity){
+    public static void addDeltaMovement(Entity entity, Vector3d velocity){
         entity.setDeltaMovement(entity.getDeltaMovement().add(velocity));
     }
 
-    public static void spawnParticle(ServerLevel level, ParticleOptions particleType, Vec3 pos, Vec3 velOrOffset, int count, double speed) {
+    public static void spawnParticle(ServerWorld level, IParticleData particleType, Vector3d pos, Vector3d velOrOffset, int count, double speed) {
         level.sendParticles(
                 particleType,
                 pos.x,
@@ -44,14 +45,14 @@ public class BMDUtils {
     }
 
     public static void playSound(
-            ServerLevel level,
-            Vec3 pos,
+            ServerWorld level,
+            Vector3d pos,
             SoundEvent soundEvent,
-            SoundSource soundSource,
+            SoundCategory soundSource,
             float volume,
             float pitch,
             double range,
-            Player player
+            PlayerEntity player
     ) {
         level.getServer().getPlayerList().broadcast(
                 player,
@@ -60,63 +61,79 @@ public class BMDUtils {
                 pos.z,
                 range,
                 level.dimension(),
-                new ClientboundSoundPacket(soundEvent, soundSource, pos.x, pos.y, pos.z, volume, pitch)
+                new SPlaySoundEffectPacket(soundEvent, soundSource, pos.x, pos.y, pos.z, volume, pitch)
         );
     }
 
     public static void playSound(
-            ServerLevel level,
-            Vec3 pos,
+            ServerWorld level,
+            Vector3d pos,
             SoundEvent soundEvent,
-            SoundSource soundSource,
+            SoundCategory soundSource,
             float volume,
             double range,
-            Player player
+            PlayerEntity player
     ) {
         playSound(level, pos, soundEvent, soundSource, volume, randomPitch(level.random), range, player);
     }
 
-    public static float randomPitch(@NotNull Random random) {
+    public static float randomPitch(@Nonnull Random random) {
         return (random.nextFloat() - random.nextFloat()) * 0.2f + 1.0f;
     }
 
-    public static BlockPos findGroundBelow(Level level, BlockPos pos, Function<BlockPos, Boolean> isOpenBlock) {
-        int bottomY = level.getMinBuildHeight();
+    public static BlockPos findGroundBelow(World level, BlockPos pos, Function<BlockPos, Boolean> isOpenBlock) {
+        int bottomY = 0;
         for (int i = pos.getY(); i >= bottomY + 1; i--) {
             BlockPos tempPos = new BlockPos(pos.getX(), i, pos.getZ());
 
-            if (level.getBlockState(tempPos).isFaceSturdy(level, tempPos, Direction.UP, SupportType.FULL) && isOpenBlock.apply(tempPos.above()))
+            if (level.getBlockState(tempPos).isFaceSturdy(level, tempPos, Direction.UP, BlockVoxelShape.FULL) && isOpenBlock.apply(tempPos.above()))
                 return tempPos;
         }
         return new BlockPos(pos.getX(), bottomY, pos.getZ());
     }
 
-    public static void preventDespawnExceptPeaceful(LivingEntity mobEntity, Level level){
+    public static void preventDespawnExceptPeaceful(MobEntity mobEntity, World level){
         if (level.getDifficulty() == Difficulty.PEACEFUL)
-            mobEntity.discard();
+            mobEntity.remove();
         else
             mobEntity.setNoActionTime(0);
     }
 
-    public static List<Entity> findEntitiesInLine(Level level, Vec3 start, Vec3 end, Entity toExclude) {
-        AABB aabb = new AABB(start, end);
+    public static List<Entity> findEntitiesInLine(World level, Vector3d start, Vector3d end, Entity toExclude) {
+        AxisAlignedBB aabb = new AxisAlignedBB(start, end);
         return level.getEntities(toExclude, aabb, entity -> entity.getBoundingBox().clip(start, end).isPresent());
     }
 
-    public record RotatingParticles(Vec3 pos, ClientParticleBuilder particleBuilder, double minRadius, double maxRadius, double minSpeed, double maxSpeed){}
+    public static class RotatingParticles {
+        public final Vector3d pos;
+        public final ClientParticleBuilder particleBuilder;
+        public final double minRadius;
+        public final double maxRadius;
+        public final double minSpeed;
+        public final double maxSpeed;
+
+        public RotatingParticles(Vector3d pos, ClientParticleBuilder particleBuilder, double minRadius, double maxRadius, double minSpeed, double maxSpeed) {
+            this.pos = pos;
+            this.particleBuilder = particleBuilder;
+            this.minRadius = minRadius;
+            this.maxRadius = maxRadius;
+            this.minSpeed = minSpeed;
+            this.maxSpeed = maxSpeed;
+        }
+    }
 
     public static void spawnRotatingParticles(RotatingParticles particleParams) {
         int startingRotation = new Random().nextInt(360);
-        double randomRadius = RandomUtils.range(particleParams.minRadius(), particleParams.maxRadius());
-        double rotationSpeed = RandomUtils.range(particleParams.minSpeed(), particleParams.maxSpeed());
-        ClientParticleBuilder builder = particleParams.particleBuilder();
+        double randomRadius = RandomUtils.range(particleParams.minRadius, particleParams.maxRadius);
+        double rotationSpeed = RandomUtils.range(particleParams.minSpeed, particleParams.maxSpeed);
+        ClientParticleBuilder builder = particleParams.particleBuilder;
         builder.continuousPosition(
-                age -> rotateAroundPos(particleParams.pos(), age.getAge(), startingRotation, randomRadius, rotationSpeed))
-                .build(rotateAroundPos(particleParams.pos(), 0, startingRotation, randomRadius, rotationSpeed), Vec3.ZERO);
+                age -> rotateAroundPos(particleParams.pos, age.getAge(), startingRotation, randomRadius, rotationSpeed))
+                .build(rotateAroundPos(particleParams.pos, 0, startingRotation, randomRadius, rotationSpeed), Vector3d.ZERO);
     }
 
-    private static Vec3 rotateAroundPos(Vec3 pos, int age, int startingRotation, double radius, double rotationSpeed) {
-        Vec3 xzOffset = VecUtils.xAxis.yRot((float)Math.toRadians(age * rotationSpeed + startingRotation));
+    private static Vector3d rotateAroundPos(Vector3d pos, int age, int startingRotation, double radius, double rotationSpeed) {
+        Vector3d xzOffset = VecUtils.xAxis.yRot((float)Math.toRadians(age * rotationSpeed + startingRotation));
         return pos.add(xzOffset.scale(radius));
     }
 }

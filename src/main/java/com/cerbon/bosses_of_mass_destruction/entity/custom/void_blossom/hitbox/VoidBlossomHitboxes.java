@@ -6,9 +6,9 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.CompositeDamageHandle
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityTick;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -19,7 +19,7 @@ public class VoidBlossomHitboxes {
 
     public VoidBlossomHitboxes(VoidBlossomEntity entity) {
 
-        AABB collisionHitbox = new AABB(Vec3.ZERO, new Vec3(2.0, 8.0, 2.0));
+        AxisAlignedBB collisionHitbox = new AxisAlignedBB(Vector3d.ZERO, new Vector3d(2.0, 8.0, 2.0));
         String flowerBottom = "flowerBottom";
         String flower = "flower";
         String neck = "neck";
@@ -106,15 +106,14 @@ public class VoidBlossomHitboxes {
                 Arrays.asList(rootBoxYaw)
         );
 
-        this.hitboxMap = new LinkedHashMap<>() {{
-            put(HitboxId.Idle.getId(), idleHitbox);
-            put(HitboxId.Spike.getId(), spikeHitbox);
-            put(HitboxId.Petal.getId(), petalHitbox);
-            put(HitboxId.SpikeWave3.getId(), spikeHitbox3);
-            put(HitboxId.SpikeWave1.getId(), spikeHitbox1);
-            put(HitboxId.SpikeWave2.getId(), spikeHitbox2);
-            put(HitboxId.Spore.getId(), sporeHitbox);
-        }};
+        this.hitboxMap = new LinkedHashMap<>();
+        hitboxMap.put(HitboxId.Idle.getId(), idleHitbox);
+        hitboxMap.put(HitboxId.Spike.getId(), spikeHitbox);
+        hitboxMap.put(HitboxId.Petal.getId(), petalHitbox);
+        hitboxMap.put(HitboxId.SpikeWave3.getId(), spikeHitbox3);
+        hitboxMap.put(HitboxId.SpikeWave1.getId(), spikeHitbox1);
+        hitboxMap.put(HitboxId.SpikeWave2.getId(), spikeHitbox2);
+        hitboxMap.put(HitboxId.Spore.getId(), sporeHitbox);
     }
 
     public Map<Byte, ICompoundHitbox> getMap(){
@@ -122,7 +121,7 @@ public class VoidBlossomHitboxes {
     }
 
     @SuppressWarnings("unchecked")
-    public CompositeEntityTick<ServerLevel> getTickers() {
+    public CompositeEntityTick<ServerWorld> getTickers() {
         return new CompositeEntityTick<>(hitboxMap.values().stream()
                 .filter(IEntityTick.class::isInstance)
                 .toArray(IEntityTick[]::new));

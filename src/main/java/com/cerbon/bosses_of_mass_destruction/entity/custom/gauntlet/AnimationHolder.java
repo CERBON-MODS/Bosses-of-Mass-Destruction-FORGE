@@ -59,6 +59,14 @@ public class AnimationHolder implements IEntityEventHandler {
         return PlayState.CONTINUE;
     });
 
-    public record Animation(String animationName, String idleAnimationName) {}
+    public static class Animation {
+        private final String animationName;
+        private final String idleAnimationName;
+
+        public Animation(String animationName, String idleAnimationName) {
+            this.animationName = animationName;
+            this.idleAnimationName = idleAnimationName;
+        }
+    }
 }
 

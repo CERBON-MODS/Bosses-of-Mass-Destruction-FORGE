@@ -20,33 +20,30 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.animation.AnimationPred
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class ObsidilithEntity extends BaseEntity {
@@ -59,37 +56,35 @@ public class ObsidilithEntity extends BaseEntity {
 
     public byte currentAttack = 0;
 
-    public ObsidilithEntity(EntityType<? extends PathfinderMob> entityType, Level level, ObsidilithConfig mobConfig) {
+    public ObsidilithEntity(EntityType<? extends CreatureEntity> entityType, World level, ObsidilithConfig mobConfig) {
         super(entityType, level);
         this.mobConfig = mobConfig;
 
         noCulling = true;
-
-        this.statusRegistry = Map.of(
-                ObsidilithUtils.burstAttackStatus, new BurstAction(this),
-                ObsidilithUtils.waveAttackStatus, new WaveAction(this),
-                ObsidilithUtils.spikeAttackStatus, new SpikeAction(this),
-                ObsidilithUtils.anvilAttackStatus, new AnvilAction(this, mobConfig.anvilAttackExplosionStrength),
-                ObsidilithUtils.pillarDefenseStatus, new PillarAction(this)
-        );
+        this.statusRegistry = new HashMap<>();
+        statusRegistry.put(ObsidilithUtils.burstAttackStatus, new BurstAction(this));
+        statusRegistry.put(ObsidilithUtils.waveAttackStatus, new WaveAction(this));
+        statusRegistry.put(ObsidilithUtils.spikeAttackStatus, new SpikeAction(this));
+        statusRegistry.put(ObsidilithUtils.anvilAttackStatus, new AnvilAction(this, mobConfig.anvilAttackExplosionStrength));
+        statusRegistry.put(ObsidilithUtils.pillarDefenseStatus, new PillarAction(this));
 
         DamageMemory damageMemory = new DamageMemory(10, this);
         this.moveLogic = new ObsidilithMoveLogic(statusRegistry, this, damageMemory);
         this.effectHandler = new ObsidilithEffectHandler(this, BMDCapabilities.getLevelEventScheduler(level));
 
-        bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_12);
+        bossBar = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.NOTCHED_12);
         damageHandler = new CompositeDamageHandler(moveLogic, new ShieldDamageHandler(this::isShielded), damageMemory);
-        mobEffectHandler = new EffectsImmunity(MobEffects.WITHER, MobEffects.POISON);
+        mobEffectHandler = new EffectsImmunity(Effects.WITHER, Effects.POISON);
         serverTick = new CappedHeal(this, ObsidilithUtils.hpPillarShieldMilestones, mobConfig.idleHealingPerTick);
 
         if (!level.isClientSide()) {
             goalSelector.addGoal(1, buildAttackGoal());
 
-            targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> getBoundingBox().inflate(d), 10, true, false, null));
+            targetSelector.addGoal(2, new FindTargetGoal<>(this, PlayerEntity.class, d -> getBoundingBox().inflate(d), 10, true, false, null));
 
             preTickEvents.addEvent(
                     new TimedEvent(
-                            () -> BMDUtils.playSound((ServerLevel) level, position(), BMDSounds.WAVE_INDICATOR.get(), SoundSource.HOSTILE, 1.5f, 0.7f, 24, null),
+                            () -> BMDUtils.playSound((ServerWorld) level, position(), BMDSounds.WAVE_INDICATOR.get(), SoundCategory.HOSTILE, 1.5f, 0.7f, 24, null),
                             1
                     )
             );
@@ -109,7 +104,7 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     @Override
-    public void serverTick(ServerLevel serverLevel) {
+    public void serverTick(ServerWorld serverLevel) {
         super.serverTick(serverLevel);
 
         activePillars.removeIf(
@@ -124,7 +119,7 @@ public class ObsidilithEntity extends BaseEntity {
                 MathUtils.lineCallback(VecUtils.asVec3(pos).add(0.5, 0.5, 0.5), MobUtils.eyePos(this), 15, (vec3, i) ->
                         preTickEvents.addEvent(
                                 new TimedEvent(
-                                        () -> BMDUtils.spawnParticle(serverLevel, BMDParticles.PILLAR_RUNE.get(), vec3, Vec3.ZERO, 0, 0.0),
+                                        () -> BMDUtils.spawnParticle(serverLevel, BMDParticles.PILLAR_RUNE.get(), vec3, Vector3d.ZERO, 0, 0.0),
                                         i
                                 )
                         ));
@@ -138,10 +133,10 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     @Override
-    public void push(@NotNull Entity entity) {}
+    public void push(@Nonnull Entity entity) {}
 
     @Override
-    public void die(@NotNull DamageSource damageSource) {
+    public void die(@Nonnull DamageSource damageSource) {
         if (mobConfig.spawnPillarOnDeath) {
             ObsidilithUtils.onDeath(this, mobConfig.experienceDrop);
             if (level.isClientSide)
@@ -167,7 +162,7 @@ public class ObsidilithEntity extends BaseEntity {
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return BMDSounds.OBSIDILITH_HURT.get();
     }
 
@@ -188,8 +183,8 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     @Override
-    public void move(@NotNull MoverType type, @NotNull Vec3 movement) {
-        super.move(type, new Vec3(0.0, movement.y, 0.0));
+    public void move(@Nonnull MoverType type, @Nonnull Vector3d movement) {
+        super.move(type, new Vector3d(0.0, movement.y, 0.0));
     }
 
     @Override
@@ -208,7 +203,7 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(float fallDistance, float multiplier) {
         return false;
     }
 
@@ -221,7 +216,7 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     @Override
-    public @NotNull CompoundTag saveWithoutId(@NotNull CompoundTag compound) {
+    public @Nonnull CompoundNBT saveWithoutId(@Nonnull CompoundNBT compound) {
         int[] activePillarsArray = activePillars.stream()
                 .flatMapToInt(p -> IntStream.of(p.getX(), p.getY(), p.getZ()))
                 .toArray();
@@ -230,7 +225,7 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     @Override
-    public void load(@NotNull CompoundTag compound) {
+    public void load(@Nonnull CompoundNBT compound) {
         super.load(compound);
         if (compound.contains("activePillars")) {
             int[] activePillarsArray = compound.getIntArray("activePillars");

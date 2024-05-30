@@ -2,9 +2,9 @@ package com.cerbon.bosses_of_mass_destruction.entity.damage;
 
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 
 import java.util.function.Consumer;
 

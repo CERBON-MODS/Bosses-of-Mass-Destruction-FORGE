@@ -14,22 +14,23 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class SpikeAction implements IActionWithCooldown {
     private final VoidBlossomEntity entity;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
 
-    private final List<Vec3> circlePoints = MathUtils.buildBlockCircle(2.0);
+    private final List<Vector3d> circlePoints = MathUtils.buildBlockCircle(2.0);
 
     public static final int indicatorDelay = 20;
 
@@ -42,12 +43,12 @@ public class SpikeAction implements IActionWithCooldown {
     @Override
     public int perform() {
         LivingEntity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return 80;
-        placeSpikes((ServerPlayer) target);
+        if (!(target instanceof ServerPlayerEntity)) return 80;
+        placeSpikes((ServerPlayerEntity) target);
         return 150;
     }
 
-    private void placeSpikes(ServerPlayer target){
+    private void placeSpikes(ServerPlayerEntity target){
         Spikes riftBurst = new Spikes(
                 entity,
                 target.getLevel(),
@@ -61,7 +62,7 @@ public class SpikeAction implements IActionWithCooldown {
                 target.getLevel(),
                 entity.position(),
                 BMDSounds.VOID_BLOSSOM_BURROW.get(),
-                SoundSource.HOSTILE,
+                SoundCategory.HOSTILE,
                 1.5f,
                 32,
                 null
@@ -88,12 +89,12 @@ public class SpikeAction implements IActionWithCooldown {
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 placement = ObsidilithUtils.approximatePlayerNextPosition(BMDCapabilities.getPlayerPositions(target), target.position());
+                                Vector3d placement = ObsidilithUtils.approximatePlayerNextPosition(BMDCapabilities.getPlayerPositions(target), target.position());
                                 BMDUtils.playSound(
                                         target.getLevel(),
                                         placement,
                                         BMDSounds.VOID_SPIKE_INDICATOR.get(),
-                                        SoundSource.HOSTILE,
+                                        SoundCategory.HOSTILE,
                                         1.0f,
                                         32,
                                         null
@@ -101,7 +102,7 @@ public class SpikeAction implements IActionWithCooldown {
 
                                 List<BlockPos> successfulSpikes = circlePoints.stream()
                                         .flatMap(point -> riftBurst.tryPlaceRift(placement.add(point)).stream())
-                                        .toList();
+                                        .collect(Collectors.toList());
 
                                 eventScheduler.addEvent(
                                         new TimedEvent(
@@ -110,12 +111,12 @@ public class SpikeAction implements IActionWithCooldown {
                                                             target.getLevel(),
                                                             placement,
                                                             BMDSounds.VOID_BLOSSOM_SPIKE.get(),
-                                                            SoundSource.HOSTILE,
+                                                            SoundCategory.HOSTILE,
                                                             1.2f,
                                                             32,
                                                             null
                                                     );
-                                                    BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), successfulSpikes), (ServerLevel) entity.level, entity.position());
+                                                    BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), successfulSpikes), (ServerWorld) entity.level, entity.position());
                                                 },
                                                 indicatorDelay,
                                                 1,

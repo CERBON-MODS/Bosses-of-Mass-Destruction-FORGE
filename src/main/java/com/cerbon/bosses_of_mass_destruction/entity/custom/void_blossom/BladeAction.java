@@ -13,12 +13,12 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.ProjectileThrower;
 import com.cerbon.bosses_of_mass_destruction.projectile.PetalBladeProjectile;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
+import com.google.common.collect.Lists;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.vector.Vector3d;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class BladeAction implements IActionWithCooldown {
@@ -35,7 +35,7 @@ public class BladeAction implements IActionWithCooldown {
     @Override
     public int perform() {
         LivingEntity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return 80;
+        if (!(target instanceof ServerPlayerEntity)) return 80;
 
         eventScheduler.addEvent(
                 new EventSeries(
@@ -53,23 +53,24 @@ public class BladeAction implements IActionWithCooldown {
         );
 
         Runnable thrower = () -> {
-            Vec3 eyePos = target.getBoundingBox().getCenter();
-            Vec3 dir = entity.getEyePosition().subtract(eyePos);
-            Vec3 left = dir.cross(VecUtils.yAxis).normalize();
+            Vector3d eyePos = target.getBoundingBox().getCenter();
+            Vector3d dir = entity.getEyePosition(1.0F).subtract(eyePos);
+            Vector3d left = dir.cross(VecUtils.yAxis).normalize();
             double rotation = RandomUtils.randSign() * 20.0;
-            Vec3 angled = VecUtils.rotateVector(left, dir, rotation);
-            Vec3 lineStart = eyePos.add(angled.scale(7.0));
-            Vec3 lineEnd = eyePos.add(angled.scale(-7.0));
+            Vector3d angled = VecUtils.rotateVector(left, dir, rotation);
+            Vector3d lineStart = eyePos.add(angled.scale(7.0));
+            Vector3d lineEnd = eyePos.add(angled.scale(-7.0));
             ProjectileThrower projectileThrower = new ProjectileThrower(
                     () -> {
-                        PetalBladeProjectile projectile = new PetalBladeProjectile(entity, entity.level, livingEntity -> {}, List.of(entity.getType()), (float) rotation);
-                        projectile.setPos(entity.getEyePosition().add(VecUtils.yAxis));
+                        PetalBladeProjectile projectile = new PetalBladeProjectile(entity, entity.level, livingEntity -> {}, Lists.newArrayList(entity.getType()), (float) rotation);
+                        Vector3d pos = entity.getEyePosition(1.0f).add(VecUtils.yAxis);
+                        projectile.setPos(pos.x, pos.y, pos.z);
                         projectile.setNoGravity(true);
                         return new ProjectileThrower.ProjectileData(projectile, 0.9f, 0f, 0.0);
                     }
             );
 
-            BMDUtils.playSound(((ServerPlayer) target).getLevel(), entity.position(), BMDSounds.PETAL_BLADE.get(), SoundSource.HOSTILE, 3.0f, BMDUtils.randomPitch(target.getRandom()), 64.0, null);
+            BMDUtils.playSound(((ServerPlayerEntity) target).getLevel(), entity.position(), BMDSounds.PETAL_BLADE.get(), SoundCategory.HOSTILE, 3.0f, BMDUtils.randomPitch(target.getRandom()), 64.0, null);
             MathUtils.lineCallback(lineStart, lineEnd, 11, (vec3, integer) -> projectileThrower.throwProjectile(vec3));
         };
 

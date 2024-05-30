@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util;
 
-import com.mojang.math.Quaternion;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
 
 public final class QuaternionD {
     public static final QuaternionD IDENTITY = new QuaternionD(0, 0, 0, 1);
@@ -17,7 +17,7 @@ public final class QuaternionD {
         this.w = w;
     }
 
-    public QuaternionD(final Vec3 axis, double rotationAngle, final boolean degrees) {
+    public QuaternionD(final Vector3d axis, double rotationAngle, final boolean degrees) {
         if (degrees)
             rotationAngle *= 0.017453292F;
 

@@ -8,13 +8,13 @@ import com.cerbon.bosses_of_mass_destruction.capability.PlayerMoveHistoryProvide
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeEvents {
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event){
+    public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<World> event){
         if (event.getObject() != null) {
             if (!event.getObject().getCapability(LevelEventSchedulerProvider.EVENT_SCHEDULER).isPresent())
                 event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "event_scheduler"), new LevelEventSchedulerProvider());
@@ -40,8 +40,8 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof Player player)
-            if(!player.getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).isPresent())
+        if(event.getObject() instanceof PlayerEntity)
+            if(!event.getObject().getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).isPresent())
                 event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "player_move_history"), new PlayerMoveHistoryProvider());
     }
 
@@ -49,8 +49,8 @@ public class ForgeEvents {
     protected static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.side == LogicalSide.SERVER) {
             event.player.getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).ifPresent(data -> {
-                Vec3 previousPosition = data.get(0);
-                Vec3 newPosition = event.player.position();
+                Vector3d previousPosition = data.get(0);
+                Vector3d newPosition = event.player.position();
 
                 // Extremely fast movement in one tick is a sign of teleportation or dimension hopping, and thus we should clear history to avoid undefined behavior
                 if (previousPosition.distanceToSqr(newPosition) > 5)
@@ -59,13 +59,13 @@ public class ForgeEvents {
                 data.set(newPosition);
             });
 
-            LevitationBlockEntity.tickFlight((ServerPlayer) event.player);
+            LevitationBlockEntity.tickFlight((ServerPlayerEntity) event.player);
         }
     }
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event){
-        ClientLevel level = Minecraft.getInstance().level;
+        ClientWorld level = Minecraft.getInstance().level;
         if (level == null) return;
 
         if (level.getGameTime() % 2 == 0)

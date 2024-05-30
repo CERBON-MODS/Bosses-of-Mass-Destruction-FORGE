@@ -2,15 +2,15 @@ package com.cerbon.bosses_of_mass_destruction.entity.spawn;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.IRandom;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class HorizontalRangedSpawnPosition implements ISpawnPosition {
-    private final Vec3 position;
+    private final Vector3d position;
     private final double minDistance;
     private final double maxDistance;
     private final IRandom random;
 
-    public HorizontalRangedSpawnPosition(Vec3 position, double minDistance, double maxDistance, IRandom random) {
+    public HorizontalRangedSpawnPosition(Vector3d position, double minDistance, double maxDistance, IRandom random) {
         this.position = position;
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
@@ -18,10 +18,10 @@ public class HorizontalRangedSpawnPosition implements ISpawnPosition {
     }
 
     @Override
-    public Vec3 getPos() {
-        Vec3 randomOffset = random.getVector().normalize();
-        Vec3 horizontalAddition = VecUtils.planeProject(randomOffset, VecUtils.yAxis).normalize();
-        Vec3 coercedRandomOffset = randomOffset.add(horizontalAddition).normalize().scale(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
+    public Vector3d getPos() {
+        Vector3d randomOffset = random.getVector().normalize();
+        Vector3d horizontalAddition = VecUtils.planeProject(randomOffset, VecUtils.yAxis).normalize();
+        Vector3d coercedRandomOffset = randomOffset.add(horizontalAddition).normalize().scale(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
         return position.add(coercedRandomOffset);
     }
 }

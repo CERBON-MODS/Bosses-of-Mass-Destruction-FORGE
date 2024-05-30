@@ -6,11 +6,11 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Rand
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.vector.Vector3d;
 
-public class VoidBlossomDropExpDeathTick implements IEntityTick<ServerLevel> {
+public class VoidBlossomDropExpDeathTick implements IEntityTick<ServerWorld> {
     private final LivingEntity entity;
     private final EventScheduler eventScheduler;
     private final int exp;
@@ -22,7 +22,7 @@ public class VoidBlossomDropExpDeathTick implements IEntityTick<ServerLevel> {
     }
 
     @Override
-    public void tick(ServerLevel level) {
+    public void tick(ServerWorld level) {
         if (entity.deathTime == 1)
             scheduleExp();
     }
@@ -30,13 +30,13 @@ public class VoidBlossomDropExpDeathTick implements IEntityTick<ServerLevel> {
     private void scheduleExp(){
         int expTicks = 20;
         int expPerTick = (int) (exp / (float) expTicks);
-        Vec3 fallDirection = VecUtils.planeProject(entity.getForward(), VecUtils.yAxis).yRot(180f);
-        Vec3 originPos = entity.position().add(VecUtils.yAxis.scale(2.0));
+        Vector3d fallDirection = VecUtils.planeProject(entity.getForward(), VecUtils.yAxis).yRot(180f);
+        Vector3d originPos = entity.position().add(VecUtils.yAxis.scale(2.0));
 
         eventScheduler.addEvent(
                 new TimedEvent(
                         () ->{
-                            Vec3 pos = originPos
+                            Vector3d pos = originPos
                                     .add(RandomUtils.randVec().scale(2.0))
                                     .add(fallDirection.scale(RandomUtils.randomDouble(6.0) + 6.0));
 

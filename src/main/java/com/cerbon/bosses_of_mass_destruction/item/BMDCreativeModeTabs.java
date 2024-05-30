@@ -1,15 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.item;
 
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nonnull;
 
 public class BMDCreativeModeTabs {
-    public static final CreativeModeTab BOSSES_OF_MASS_DESTRUCTION = new CreativeModeTab(BMDConstants.MOD_ID) {
+    public static final ItemGroup BOSSES_OF_MASS_DESTRUCTION = new ItemGroup(BMDConstants.MOD_ID) {
 
         @Override
-        public @NotNull ItemStack makeIcon() {
+        public @Nonnull ItemStack makeIcon() {
             return new ItemStack(BMDItems.BLAZING_EYE.get());
         }
     };

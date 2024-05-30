@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.util;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.datasync.DataParameter;
 
 import java.util.List;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ public class CompositeDataAccessorHandler implements IDataAccessorHandler {
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
+    public void onSyncedDataUpdated(DataParameter<?> data) {
         for (IDataAccessorHandler handler : handlerList)
             handler.onSyncedDataUpdated(data);
     }

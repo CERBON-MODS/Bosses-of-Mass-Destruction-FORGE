@@ -1,8 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.entity.spawn;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.vector.Vector3d;
 
 public interface IMobSpawner {
-    void spawn(Vec3 pos, Entity entity);
+    void spawn(Vector3d pos, Entity entity);
 }

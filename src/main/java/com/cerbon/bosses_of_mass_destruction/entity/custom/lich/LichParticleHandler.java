@@ -12,13 +12,14 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.particle.ParticleFactories;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Level> {
+public class LichParticleHandler implements IEntityEventHandler, IEntityTick<World> {
     private final LichEntity entity;
     private final EventScheduler eventScheduler;
     private final ClientParticleBuilder summonMissileParticleBuilder;
@@ -81,7 +82,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
     }
 
     @Override
-    public void tick(Level level) {
+    public void tick(World level) {
         if (entity.getRandom().nextDouble() > 0.9)
             idleParticles.build(entity.position().subtract(VecUtils.yAxis).add(RandomUtils.randVec().scale(0.2)), entity.getDeltaMovement());
     }
@@ -125,7 +126,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
     private void cometEffect(){
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> summonCometParticleBuilder.build(MobUtils.eyePos(entity).add(CometAction.getCometLaunchOffset()), Vec3.ZERO),
+                        () -> summonCometParticleBuilder.build(MobUtils.eyePos(entity).add(CometAction.getCometLaunchOffset()), Vector3d.ZERO),
                         CometAction.cometParticleSummonDelay,
                         CometAction.cometThrowDelay - CometAction.cometParticleSummonDelay,
                         this::shouldCancelParticles
@@ -137,8 +138,8 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            for (Vec3 offset : VolleyAction.getMissileLaunchOffsets(entity)) {
-                                summonMissileParticleBuilder.build(MobUtils.eyePos(entity).add(offset), Vec3.ZERO);
+                            for (Vector3d offset : VolleyAction.getMissileLaunchOffsets(entity)) {
+                                summonMissileParticleBuilder.build(MobUtils.eyePos(entity).add(offset), Vector3d.ZERO);
                             }
                         },
                         VolleyAction.missileParticleSummonDelay,
@@ -209,8 +210,8 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 cometOffset = CometRageAction.getRageCometOffsets(entity).get(i1);
-                                summonCometParticleBuilder.build(cometOffset.add(MobUtils.eyePos(entity)), Vec3.ZERO);
+                                Vector3d cometOffset = CometRageAction.getRageCometOffsets(entity).get(i1);
+                                summonCometParticleBuilder.build(cometOffset.add(MobUtils.eyePos(entity)), Vector3d.ZERO);
                             },
                             i * CometRageAction.delayBetweenRageComets,
                             CometRageAction.initialRageCometDelay,
@@ -220,7 +221,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
         }
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> MathUtils.circleCallback(3.0, 72, entity.getLookAngle(), vec3 -> flameRingFactory.build(vec3.add(MobUtils.eyePos(entity)), Vec3.ZERO)),
+                        () -> MathUtils.circleCallback(3.0, 72, entity.getLookAngle(), vec3 -> flameRingFactory.build(vec3.add(MobUtils.eyePos(entity)), Vector3d.ZERO)),
                         0,
                         CometRageAction.rageCometsMoveDuration,
                         this::shouldCancelParticles
@@ -235,8 +236,8 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                for (Vec3 offset : VolleyRageAction.getRageMissileVolleys(entity).get(i1))
-                                    summonMissileParticleBuilder.build(MobUtils.eyePos(entity).add(offset), Vec3.ZERO);
+                                for (Vector3d offset : VolleyRageAction.getRageMissileVolleys(entity).get(i1))
+                                    summonMissileParticleBuilder.build(MobUtils.eyePos(entity).add(offset), Vector3d.ZERO);
                             },
                             VolleyRageAction.ragedMissileParticleDelay + (i1 * VolleyRageAction.ragedMissileVolleyBetweenVolleyDelay),
                             VolleyRageAction.ragedMissileVolleyBetweenVolleyDelay,
@@ -268,22 +269,22 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
     private void spawnTeleportParticles(){
         teleportParticleBuilder.build(
                 MobUtils.eyePos(entity).add(RandomUtils.randVec().scale(3.0)),
-                Vec3.ZERO
+                Vector3d.ZERO
         );
     }
 
     private void animatedParticleMagicCircle(double radius, int points, int time, float rotationDegrees){
-        Vec3 spellPos = entity.position();
-        List<Vec3> circlePoints = MathUtils.circlePoints(radius, points, entity.getLookAngle()).stream().toList();
+        Vector3d spellPos = entity.position();
+        List<Vector3d> circlePoints = new ArrayList<>(MathUtils.circlePoints(radius, points, entity.getLookAngle()));
         float timeScale = time / (float) points;
 
         IntStream.range(0, circlePoints.size()).forEach(index -> {
-            Vec3 off = circlePoints.get(index);
+            Vector3d off = circlePoints.get(index);
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
                                 off.yRot(rotationDegrees);
-                                summonRingFactory.build(off.add(spellPos), Vec3.ZERO);
+                                summonRingFactory.build(off.add(spellPos), Vector3d.ZERO);
                                 },
                             (int) (index * timeScale)
                     )
@@ -292,7 +293,7 @@ public class LichParticleHandler implements IEntityEventHandler, IEntityTick<Lev
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> circlePoints.stream().peek(vec3 -> summonRingCompleteFactory.build(vec3.add(spellPos), Vec3.ZERO)),
+                        () -> circlePoints.stream().peek(vec3 -> summonRingCompleteFactory.build(vec3.add(spellPos), Vector3d.ZERO)),
                         (int) (points * timeScale)
                 )
         );

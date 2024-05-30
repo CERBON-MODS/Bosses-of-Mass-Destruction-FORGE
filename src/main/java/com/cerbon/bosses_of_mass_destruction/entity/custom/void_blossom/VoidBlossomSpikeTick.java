@@ -1,15 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
-public class VoidBlossomSpikeTick implements IEntityTick<ServerLevel> {
+public class VoidBlossomSpikeTick implements IEntityTick<ServerWorld> {
     private final VoidBlossomEntity entity;
 
     public VoidBlossomSpikeTick(VoidBlossomEntity entity) {
@@ -17,8 +17,8 @@ public class VoidBlossomSpikeTick implements IEntityTick<ServerLevel> {
     }
 
     @Override
-    public void tick(ServerLevel level) {
-        AABB spikeHitbox = new AABB(entity.position(), entity.position()).inflate(3.0, 3.0, 3.0).move(0.0, 1.5, 0.0);
+    public void tick(ServerWorld level) {
+        AxisAlignedBB spikeHitbox = new AxisAlignedBB(entity.position(), entity.position()).inflate(3.0, 3.0, 3.0).move(0.0, 1.5, 0.0);
         List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, spikeHitbox, livingEntity -> livingEntity != entity);
 
         for (LivingEntity target : targets){

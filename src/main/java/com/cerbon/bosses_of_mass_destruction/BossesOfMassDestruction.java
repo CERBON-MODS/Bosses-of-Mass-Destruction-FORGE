@@ -7,9 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.mojang.logging.LogUtils;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,10 +15,11 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mod(BMDConstants.MOD_ID)
 public class BossesOfMassDestruction {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LoggerFactory.getLogger(BMDConstants.MOD_ID);
 
     public BossesOfMassDestruction() {
         AutoConfig.register(BMDConfig.class, JanksonConfigSerializer::new);
@@ -37,7 +36,7 @@ public class BossesOfMassDestruction {
 
         BMDSounds.register(modEventBus);
         BMDParticles.register(modEventBus);
-        BMDStructures.register(modEventBus);
+        //BMDStructures.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }

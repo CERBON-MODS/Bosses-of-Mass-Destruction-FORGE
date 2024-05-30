@@ -7,13 +7,13 @@ import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.BlindnessS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.entity.EntityPredicate;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -23,9 +23,9 @@ public class BlindnessAction implements IActionWithCooldown {
     private final GauntletEntity entity;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> cancelAction;
-    private final ServerLevel serverLevel;
+    private final ServerWorld serverLevel;
 
-    public BlindnessAction(GauntletEntity entity, EventScheduler eventScheduler, Supplier<Boolean> cancelAction, ServerLevel serverLevel) {
+    public BlindnessAction(GauntletEntity entity, EventScheduler eventScheduler, Supplier<Boolean> cancelAction, ServerWorld serverLevel) {
         this.entity = entity;
         this.eventScheduler = eventScheduler;
         this.cancelAction = cancelAction;
@@ -38,7 +38,7 @@ public class BlindnessAction implements IActionWithCooldown {
                 serverLevel,
                 entity.position(),
                 BMDSounds.GAUNTLET_CAST.get(),
-                SoundSource.HOSTILE,
+                SoundCategory.HOSTILE,
                 3.0f,
                 1.0f,
                 64,
@@ -51,10 +51,10 @@ public class BlindnessAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            List<Player> players = entity.level.getNearbyPlayers(
-                                    TargetingConditions.forCombat().range(64),
+                            List<PlayerEntity> players = entity.level.getNearbyPlayers(
+                                    EntityPredicate.DEFAULT.range(64),
                                     entity,
-                                    new AABB(entity.position(), entity.position()).inflate(64.0, 32.0, 64.0)
+                                    new AxisAlignedBB(entity.position(), entity.position()).inflate(64.0, 32.0, 64.0)
                             );
 
                             if (!players.isEmpty()){
@@ -62,7 +62,7 @@ public class BlindnessAction implements IActionWithCooldown {
                                 eventScheduler.addEvent(
                                         new TimedEvent(
                                                 () -> players.forEach(player -> player.addEffect(
-                                                        new MobEffectInstance(MobEffects.BLINDNESS, 140))),
+                                                        new EffectInstance(Effects.BLINDNESS, 140))),
                                                 50,
                                                 1,
                                                 cancelAction

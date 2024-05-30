@@ -2,27 +2,27 @@ package com.cerbon.bosses_of_mass_destruction.particle;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
-import net.minecraft.client.Camera;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 
+import javax.annotation.Nonnull;
 import java.util.function.Function;
 
-public class SimpleParticle extends TextureSheetParticle {
+public class SimpleParticle extends SpriteTexturedParticle {
     private final ParticleContext particleContext;
     private final IParticleGeometry particleGeometry;
     private Function<Float, Integer> brightnessOverride;
     private Function<Float, Float> scaleOverride;
-    private Function<Float, Vec3> colorOverride;
-    private Function<SimpleParticle, Vec3> velocityOverride;
-    private Function<SimpleParticle, Vec3> positionOverride;
+    private Function<Float, Vector3d> colorOverride;
+    private Function<SimpleParticle, Vector3d> velocityOverride;
+    private Function<SimpleParticle, Vector3d> positionOverride;
     private Function<SimpleParticle, Float> rotationOverride;
-    private Vec3 colorVariation = Vec3.ZERO;
+    private Vector3d colorVariation = Vector3d.ZERO;
 
     private float rotation = 0f;
     private float prevRotation = 0f;
@@ -30,31 +30,31 @@ public class SimpleParticle extends TextureSheetParticle {
     private final boolean cycleSprites;
 
     public SimpleParticle(ParticleContext particleContext, int particleAge, IParticleGeometry particleGeometry, boolean cycleSprites, boolean doCollision) {
-        super(particleContext.level(), particleContext.pos().x(), particleContext.pos().y(), particleContext.pos().z());
+        super(particleContext.level, particleContext.pos.x(), particleContext.pos.y(), particleContext.pos.z());
         this.particleContext = particleContext;
         this.particleGeometry = particleGeometry;
         this.cycleSprites = cycleSprites;
         this.lifetime = particleAge;
 
         if (cycleSprites)
-            setSpriteFromAge(particleContext.spriteSet());
+            setSpriteFromAge(particleContext.spriteSet);
         else
-            setSprite(particleContext.spriteSet().get(this.random));
+            setSprite(particleContext.spriteSet.get(this.random));
 
-        xd = particleContext.vel().x();
-        yd = particleContext.vel().y();
-        zd = particleContext.vel().z();
+        xd = particleContext.vel.x();
+        yd = particleContext.vel.y();
+        zd = particleContext.vel.z();
         hasPhysics = doCollision;
     }
 
 
     @Override
-    public @NotNull ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public @Nonnull IParticleRenderType getRenderType() {
+        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    public @NotNull Vec3 getPos() {
-        return new Vec3(x, y, z);
+    public @Nonnull Vector3d getPos() {
+        return new Vector3d(x, y, z);
     }
 
     public int getAge(){
@@ -65,7 +65,7 @@ public class SimpleParticle extends TextureSheetParticle {
     public void tick() {
         super.tick();
         if (isAlive()){
-            if (cycleSprites) setSpriteFromAge(particleContext.spriteSet());
+            if (cycleSprites) setSpriteFromAge(particleContext.spriteSet);
             ageRatio = (float) age / lifetime;
             setColorFromOverride(colorOverride, ageRatio);
             setScaleFromOverride(scaleOverride, ageRatio);
@@ -83,18 +83,18 @@ public class SimpleParticle extends TextureSheetParticle {
         }
     }
 
-    private void setVelocityFromOverride(Function<SimpleParticle, Vec3> velocityOverride) {
+    private void setVelocityFromOverride(Function<SimpleParticle, Vector3d> velocityOverride) {
         if (velocityOverride != null){
-            Vec3 velocity = velocityOverride.apply(this);
+            Vector3d velocity = velocityOverride.apply(this);
             xd = velocity.x();
             yd = velocity.y();
             zd = velocity.z();
         }
     }
 
-    private void setPositionFromOverride(Function<SimpleParticle, Vec3> positionOverride) {
+    private void setPositionFromOverride(Function<SimpleParticle, Vector3d> positionOverride) {
         if (positionOverride != null) {
-            Vec3 pos = positionOverride.apply(this);
+            Vector3d pos = positionOverride.apply(this);
             setPos(pos.x(), pos.y(), pos.z());
         }
     }
@@ -106,10 +106,10 @@ public class SimpleParticle extends TextureSheetParticle {
         }
     }
 
-    private void setColorFromOverride(Function<Float, Vec3> colorOverride, float ageRatio) {
+    private void setColorFromOverride(Function<Float, Vector3d> colorOverride, float ageRatio) {
         if (colorOverride != null){
-            Vec3 color = colorOverride.apply(ageRatio);
-            Vec3 variedColor = VecUtils.coerceAtMost(VecUtils.coerceAtLeast(color.add(colorVariation), Vec3.ZERO), VecUtils.unit);
+            Vector3d color = colorOverride.apply(ageRatio);
+            Vector3d variedColor = VecUtils.coerceAtMost(VecUtils.coerceAtLeast(color.add(colorVariation), Vector3d.ZERO), VecUtils.unit);
             setColor((float) variedColor.x(), (float) variedColor.y(), (float) variedColor.z());
         }
     }
@@ -118,7 +118,7 @@ public class SimpleParticle extends TextureSheetParticle {
         brightnessOverride = override;
     }
 
-    public void setColorOverride(Function<Float, Vec3> override){
+    public void setColorOverride(Function<Float, Vector3d> override){
         colorOverride = override;
         setColorFromOverride(override, 0f);
     }
@@ -133,11 +133,11 @@ public class SimpleParticle extends TextureSheetParticle {
         setColorFromOverride(colorOverride, 0f);
     }
 
-    public void setVelocityOverride(Function<SimpleParticle, Vec3> override){
+    public void setVelocityOverride(Function<SimpleParticle, Vector3d> override){
         velocityOverride = override;
     }
 
-    public void setPositionOverride(Function<SimpleParticle, Vec3> override){
+    public void setPositionOverride(Function<SimpleParticle, Vector3d> override){
         positionOverride = override;
     }
 
@@ -160,14 +160,14 @@ public class SimpleParticle extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer vertexConsumer, @NotNull Camera camera, float partialTicks) {
+    public void render(IVertexBuilder vertexConsumer, @Nonnull ActiveRenderInfo camera, float partialTicks) {
         Vector3f[] vector3fs = particleGeometry.getGeometry(
                 camera,
                 partialTicks,
                 xo, yo, zo,
                 x, y, z,
                 getQuadSize(partialTicks),
-                Mth.lerp(partialTicks, prevRotation, rotation)
+                MathHelper.lerp(partialTicks, prevRotation, rotation)
         );
 
         float l = this.getU0();

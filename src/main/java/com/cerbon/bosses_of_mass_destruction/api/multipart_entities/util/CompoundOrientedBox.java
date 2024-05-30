@@ -6,27 +6,27 @@ import com.google.common.collect.Iterators;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.BitSetVoxelShapePart;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public final class CompoundOrientedBox extends AABB implements Iterable<OrientedBox> {
+public final class CompoundOrientedBox extends AxisAlignedBB implements Iterable<OrientedBox> {
     private final Collection<OrientedBox> boxes;
     private VoxelShape cached;
     private final @Nullable MutableBox overrideBox;
 
-    public CompoundOrientedBox(final AABB bounds, final Collection<OrientedBox> boxes, MutableBox overrideBox) {
+    public CompoundOrientedBox(final AxisAlignedBB bounds, final Collection<OrientedBox> boxes, MutableBox overrideBox) {
         this(bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ, boxes, overrideBox);
     }
 
@@ -44,7 +44,7 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     }
 
     @Override
-    public @NotNull AABB inflate(final double x, final double y, final double z) {
+    public @Nonnull AxisAlignedBB inflate(final double x, final double y, final double z) {
         final List<OrientedBox> orientedBoxes = new ObjectArrayList<>(boxes.size());
         for (final OrientedBox box : boxes)
             orientedBoxes.add(box.expand(x,y,z));
@@ -60,7 +60,7 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     }
 
     @Override
-    public @NotNull AABB move(final double x, final double y, final double z) {
+    public @Nonnull AxisAlignedBB move(final double x, final double y, final double z) {
         final List<OrientedBox> orientedBoxes = new ObjectArrayList<>(boxes.size());
         for (final OrientedBox box : boxes)
             orientedBoxes.add(box.offset(x, y, z));
@@ -76,12 +76,12 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
     }
 
     @Override
-    public @NotNull AABB move(final BlockPos blockPos) {
+    public @Nonnull AxisAlignedBB move(final BlockPos blockPos) {
         return move(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     @Override
-    public @NotNull Optional<Vec3> clip(final @NotNull Vec3 min, final @NotNull Vec3 max) {
+    public @Nonnull Optional<Vector3d> clip(final @Nonnull Vector3d min, final @Nonnull Vector3d max) {
         double t = Double.MAX_VALUE;
         for (final OrientedBox box : boxes) {
             final double tmp = box.raycast(min, max);
@@ -97,7 +97,7 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
         return Optional.empty();
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public Iterator<OrientedBox> iterator() {
         return Iterators.unmodifiableIterator(boxes.iterator());
@@ -105,12 +105,12 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
 
     @Override
     public boolean intersects(final double minX, final double minY, final double minZ, final double maxX, final double maxY, final double maxZ) {
-        return intersects(new AABB(minX, minY, minZ, maxX, maxY, maxZ));
+        return intersects(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
     }
 
     @Override
-    public boolean intersects(final @NotNull AABB box) {
-        final Vec3[] vertices = OrientedBox.getVertices(box);
+    public boolean intersects(final @Nonnull AxisAlignedBB box) {
+        final Vector3d[] vertices = OrientedBox.getVertices(box);
         for (final OrientedBox orientedBox : boxes) {
             if (orientedBox.intersects(vertices))
                 return true;
@@ -123,7 +123,7 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
             return cached;
         }
         if(overrideBox != null) {
-            cached = Shapes.create(overrideBox.getBox());
+            cached = VoxelShapes.create(overrideBox.getBox());
             return cached;
         }
         final double minX = min(Direction.Axis.X) + 0.0001;
@@ -138,16 +138,16 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
         final int yResolution = (int) Math.ceil(deltaY * resolution + 0.0001);
         final int zResolution = (int) Math.ceil(deltaZ * resolution + 0.0001);
 
-        final BitSetDiscreteVoxelShape bitSet = new BitSetDiscreteVoxelShape(xResolution, yResolution, zResolution);
+        final BitSetVoxelShapePart bitSet = new BitSetVoxelShapePart(xResolution, yResolution, zResolution);
         for (int i = 0; i < xResolution; i++) {
             final double x = minX + i / resolution;
             for (int j = 0; j < zResolution; j++) {
                 final double z = minZ + j / resolution;
                 for (int k = 0; k < yResolution; k++) {
                     final double y = minY + k / resolution;
-                    final AABB box = new AABB(x, y, z, x + 0.9999 / xResolution, y + 0.9999 / yResolution, z + 0.9999 / zResolution);
+                    final AxisAlignedBB box = new AxisAlignedBB(x, y, z, x + 0.9999 / xResolution, y + 0.9999 / yResolution, z + 0.9999 / zResolution);
                     if (intersects(box))
-                        bitSet.fill(i, k, j);
+                        bitSet.setFull(i, k, j, true, true);
                 }
             }
         }
@@ -175,12 +175,12 @@ public final class CompoundOrientedBox extends AABB implements Iterable<Oriented
         return false;
     }
 
-    public CompoundOrientedBox withBounds(final AABB bounds) {
+    public CompoundOrientedBox withBounds(final AxisAlignedBB bounds) {
         return new CompoundOrientedBox(bounds, new ObjectArrayList<>(boxes), overrideBox);
     }
 
     public double calculateMaxDistance(final Direction.Axis axis, final VoxelShape voxelShape, double maxDist) {
-        for (final AABB boundingBox : toVoxelShape().toAabbs()) {
+        for (final AxisAlignedBB boundingBox : toVoxelShape().toAabbs()) {
             maxDist = voxelShape.collide(axis, boundingBox, maxDist);
             if (Math.abs(maxDist) < 0.0001)
                 return 0;

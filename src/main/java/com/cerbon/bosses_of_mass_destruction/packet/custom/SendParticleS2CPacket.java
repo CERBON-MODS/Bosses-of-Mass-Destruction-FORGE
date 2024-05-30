@@ -4,31 +4,31 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.Pack
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.block.custom.VoidLilyBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class SendParticleS2CPacket {
     private final BlockPos pos;
-    private final Vec3 dir;
+    private final Vector3d dir;
 
-    public SendParticleS2CPacket(BlockPos pos, Vec3 dir) {
+    public SendParticleS2CPacket(BlockPos pos, Vector3d dir) {
         this.pos = pos;
         this.dir = dir;
     }
 
-    public SendParticleS2CPacket(FriendlyByteBuf buf) {
+    public SendParticleS2CPacket(PacketBuffer buf) {
         this.pos = buf.readBlockPos();
         this.dir = PacketUtils.readVec3(buf);
     }
 
-    public void write(FriendlyByteBuf buf){
+    public void write(PacketBuffer buf){
         buf.writeBlockPos(this.pos);
         PacketUtils.writeVec3(buf, dir);
     }
@@ -37,7 +37,7 @@ public class SendParticleS2CPacket {
         NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
-            ClientLevel level = client.level;
+            ClientWorld level = client.level;
             if (level == null) return;
 
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> VoidLilyBlockEntity.spawnVoidLilyParticles(level, VecUtils.asVec3(this.pos), dir)));

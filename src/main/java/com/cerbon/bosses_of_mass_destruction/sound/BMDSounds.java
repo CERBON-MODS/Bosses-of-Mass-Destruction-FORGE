@@ -1,12 +1,12 @@
 package com.cerbon.bosses_of_mass_destruction.sound;
 
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class BMDSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =

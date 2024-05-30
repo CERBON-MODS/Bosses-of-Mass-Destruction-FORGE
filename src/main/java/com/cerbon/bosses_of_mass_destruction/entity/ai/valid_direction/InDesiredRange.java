@@ -1,22 +1,22 @@
 package com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction;
 
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.function.Function;
 
 public class InDesiredRange implements IValidDirection {
-    private final Function<Vec3, Boolean> tooClose;
-    private final Function<Vec3, Boolean> tooFar;
-    private final Function<Vec3, Boolean> movingCloser;
+    private final Function<Vector3d, Boolean> tooClose;
+    private final Function<Vector3d, Boolean> tooFar;
+    private final Function<Vector3d, Boolean> movingCloser;
 
-    public InDesiredRange(Function<Vec3, Boolean> tooClose, Function<Vec3, Boolean> tooFar, Function<Vec3, Boolean> movingCloser) {
+    public InDesiredRange(Function<Vector3d, Boolean> tooClose, Function<Vector3d, Boolean> tooFar, Function<Vector3d, Boolean> movingCloser) {
         this.tooClose = tooClose;
         this.tooFar = tooFar;
         this.movingCloser = movingCloser;
     }
 
     @Override
-    public boolean isValidDirection(Vec3 normedDirection) {
+    public boolean isValidDirection(Vector3d normedDirection) {
         boolean isTooClose = tooClose.apply(normedDirection);
         boolean isMovingCloser = movingCloser.apply(normedDirection);
         boolean isTooFar = tooFar.apply(normedDirection);

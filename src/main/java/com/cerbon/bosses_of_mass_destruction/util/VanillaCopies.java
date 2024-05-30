@@ -1,28 +1,25 @@
 package com.cerbon.bosses_of_mass_destruction.util;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.*;
+
+import javax.annotation.Nonnull;
 
 public class VanillaCopies {
     public static void renderBillboard(
-            PoseStack poseStack,
-            MultiBufferSource buffer,
+            MatrixStack poseStack,
+            IRenderTypeBuffer buffer,
             int i,
-            EntityRenderDispatcher dispatcher,
+            EntityRendererManager dispatcher,
             RenderType type,
             Quaternion rotation
     ) {
@@ -30,10 +27,10 @@ public class VanillaCopies {
         poseStack.mulPose(dispatcher.cameraOrientation());
         poseStack.mulPose(Vector3f.YP.rotationDegrees((float) Math.toRadians(180)));
         poseStack.mulPose(rotation);
-        PoseStack.Pose pose = poseStack.last();
+        MatrixStack.Entry pose = poseStack.last();
         Matrix4f matrix4f = pose.pose();
         Matrix3f matrix3f = pose.normal();
-        VertexConsumer vertexConsumer = buffer.getBuffer(type);
+        IVertexBuilder vertexConsumer = buffer.getBuffer(type);
         produceVertex(vertexConsumer, matrix4f, matrix3f, i, 0.0f, 0, 0, 1);
         produceVertex(vertexConsumer, matrix4f, matrix3f, i, 1.0f, 0, 1, 1);
         produceVertex(vertexConsumer, matrix4f, matrix3f, i, 1.0f, 1, 1, 0);
@@ -42,7 +39,7 @@ public class VanillaCopies {
     }
 
     public static void produceVertex(
-            VertexConsumer vertexConsumer,
+            IVertexBuilder vertexConsumer,
             Matrix4f modelMatrix,
             Matrix3f normalMatrix,
             int light,
@@ -60,8 +57,8 @@ public class VanillaCopies {
                 .endVertex();
     }
 
-    public static Vector3f @NotNull [] buildFlatGeometry(
-            @NotNull Camera camera, float tickDelta,
+    public static Vector3f[] buildFlatGeometry(
+            @Nonnull ActiveRenderInfo camera, float tickDelta,
             double prevPosX,
             double prevPosY,
             double prevPosZ,
@@ -71,10 +68,10 @@ public class VanillaCopies {
             float scale,
             float rotation
     ) {
-        Vec3 vec3 = camera.getPosition();
-        float f = (float) (Mth.lerp(tickDelta, prevPosX, x) - vec3.x());
-        float g = (float) (Mth.lerp(tickDelta, prevPosY, y) - vec3.y());
-        float h = (float) (Mth.lerp(tickDelta, prevPosZ, z) - vec3.z());
+        Vector3d vec3 = camera.getPosition();
+        float f = (float) (MathHelper.lerp(tickDelta, prevPosX, x) - vec3.x());
+        float g = (float) (MathHelper.lerp(tickDelta, prevPosY, y) - vec3.y());
+        float h = (float) (MathHelper.lerp(tickDelta, prevPosZ, z) - vec3.z());
 
         Vector3f[] vector3fs = new Vector3f[]{
                 new Vector3f(-1.0f, 0.0f, -1.0f),
@@ -94,7 +91,7 @@ public class VanillaCopies {
     }
 
     public static Vector3f[] buildBillBoardGeometry(
-            @NotNull Camera camera, float tickDelta,
+            @Nonnull ActiveRenderInfo camera, float tickDelta,
             double prevPosX,
             double prevPosY,
             double prevPosZ,
@@ -104,10 +101,10 @@ public class VanillaCopies {
             float scale,
             float rotation
     ) {
-        Vec3 vec3 = camera.getPosition();
-        float f = (float) (Mth.lerp(tickDelta, prevPosX, x) - vec3.x());
-        float g = (float) (Mth.lerp(tickDelta, prevPosY, y) - vec3.y());
-        float h = (float) (Mth.lerp(tickDelta, prevPosZ, z) - vec3.z());
+        Vector3d vec3 = camera.getPosition();
+        float f = (float) (MathHelper.lerp(tickDelta, prevPosX, x) - vec3.x());
+        float g = (float) (MathHelper.lerp(tickDelta, prevPosY, y) - vec3.y());
+        float h = (float) (MathHelper.lerp(tickDelta, prevPosZ, z) - vec3.z());
         Quaternion quaternion2 = camera.rotation();
 
         Vector3f[] vector3fs = {
@@ -128,15 +125,15 @@ public class VanillaCopies {
         return vector3fs;
     }
 
-    public static void renderBeam(LivingEntity actor, Vec3 target, Vec3 prevTarget, float partialTicks, Vec3 color, PoseStack poseStack, MultiBufferSource buffer, RenderType renderType){
+    public static void renderBeam(LivingEntity actor, Vector3d target, Vector3d prevTarget, float partialTicks, Vector3d color, MatrixStack poseStack, IRenderTypeBuffer buffer, RenderType renderType){
         float j = actor.level.getGameTime() + partialTicks;
         float k = j % 1.0F;
         float l = actor.getEyeHeight();
         poseStack.pushPose();
         poseStack.translate(0.0, l, 0.0);
-        Vec3 vec3 = MathUtils.lerpVec(partialTicks, prevTarget, target);
-        Vec3 vec32 = fromLerpedPosition(actor, l, partialTicks);
-        Vec3 vec33 = vec3.subtract(vec32);
+        Vector3d vec3 = MathUtils.lerpVec(partialTicks, prevTarget, target);
+        Vector3d vec32 = fromLerpedPosition(actor, l, partialTicks);
+        Vector3d vec33 = vec3.subtract(vec32);
         float m = (float) vec33.length();
         vec33 = vec33.normalize();
         float n = (float) Math.acos(vec33.y);
@@ -148,26 +145,26 @@ public class VanillaCopies {
         int red = (int) (color.x() * 255);
         int green = (int) (color.y() * 255);
         int blue = (int) (color.z() * 255);
-        float x = Mth.cos(q + 2.3561945F) * 0.282F;
-        float y = Mth.sin(q + 2.3561945F) * 0.282F;
-        float z = Mth.cos(q + 0.7853982F) * 0.282F;
-        float aa = Mth.sin(q + 0.7853982F) * 0.282F;
-        float ab = Mth.cos(q + 3.926991F) * 0.282F;
-        float ac = Mth.sin(q + 3.926991F) * 0.282F;
-        float ad = Mth.cos(q + 5.4977875F) * 0.282F;
-        float ae = Mth.sin(q + 5.4977875F) * 0.282F;
-        float af = Mth.cos(q + 3.1415927F) * 0.2F;
-        float ag = Mth.sin(q + 3.1415927F) * 0.2F;
-        float ah = Mth.cos(q + 0.0F) * 0.2F;
-        float ai = Mth.sin(q + 0.0F) * 0.2F;
-        float aj = Mth.cos(q + 1.5707964F) * 0.2F;
-        float ak = Mth.sin(q + 1.5707964F) * 0.2F;
-        float al = Mth.cos(q + 4.712389F) * 0.2F;
-        float am = Mth.sin(q + 4.712389F) * 0.2F;
+        float x = MathHelper.cos(q + 2.3561945F) * 0.282F;
+        float y = MathHelper.sin(q + 2.3561945F) * 0.282F;
+        float z = MathHelper.cos(q + 0.7853982F) * 0.282F;
+        float aa = MathHelper.sin(q + 0.7853982F) * 0.282F;
+        float ab = MathHelper.cos(q + 3.926991F) * 0.282F;
+        float ac = MathHelper.sin(q + 3.926991F) * 0.282F;
+        float ad = MathHelper.cos(q + 5.4977875F) * 0.282F;
+        float ae = MathHelper.sin(q + 5.4977875F) * 0.282F;
+        float af = MathHelper.cos(q + 3.1415927F) * 0.2F;
+        float ag = MathHelper.sin(q + 3.1415927F) * 0.2F;
+        float ah = MathHelper.cos(q + 0.0F) * 0.2F;
+        float ai = MathHelper.sin(q + 0.0F) * 0.2F;
+        float aj = MathHelper.cos(q + 1.5707964F) * 0.2F;
+        float ak = MathHelper.sin(q + 1.5707964F) * 0.2F;
+        float al = MathHelper.cos(q + 4.712389F) * 0.2F;
+        float am = MathHelper.sin(q + 4.712389F) * 0.2F;
         float aq = -1.0F - k; // Negated K to reverse direction of laser movement
         float ar = m * 2.5f + aq;
-        VertexConsumer vertexConsumer = buffer.getBuffer(renderType);
-        PoseStack.Pose pose = poseStack.last();
+        IVertexBuilder vertexConsumer = buffer.getBuffer(renderType);
+        MatrixStack.Entry pose = poseStack.last();
         Matrix4f matrix4f = pose.pose();
         Matrix3f matrix3f = pose.normal();
 
@@ -204,7 +201,7 @@ public class VanillaCopies {
     }
 
     public static void vertex(
-            VertexConsumer vertexConsumer,
+            IVertexBuilder vertexConsumer,
             Matrix4f matrix4f,
             Matrix3f matrix3f,
             float f,
@@ -225,10 +222,10 @@ public class VanillaCopies {
                 .endVertex();
     }
 
-    public static Vec3 fromLerpedPosition(LivingEntity entity, double yOffset, float delta) {
-        double d = Mth.lerp(delta, entity.xOld, entity.getX());
-        double e = Mth.lerp(delta, entity.yOld, entity.getY()) + yOffset;
-        double f = Mth.lerp(delta, entity.zOld, entity.getZ());
-        return new Vec3(d, e, f);
+    public static Vector3d fromLerpedPosition(LivingEntity entity, double yOffset, float delta) {
+        double d = MathHelper.lerp(delta, entity.xOld, entity.getX());
+        double e = MathHelper.lerp(delta, entity.yOld, entity.getY()) + yOffset;
+        double f = MathHelper.lerp(delta, entity.zOld, entity.getZ());
+        return new Vector3d(d, e, f);
     }
 }

@@ -10,13 +10,13 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldow
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -27,11 +27,11 @@ public class PunchAction implements IActionWithCooldown {
     private final EventScheduler eventScheduler;
     private final GauntletConfig mobConfig;
     private final Supplier<Boolean> cancelAction;
-    private final ServerLevel serverLevel;
+    private final ServerWorld serverLevel;
 
     private double previousSpeed = 0.0;
 
-    public PunchAction(GauntletEntity entity, EventScheduler eventScheduler, GauntletConfig mobConfig, Supplier<Boolean> cancelAction, ServerLevel serverLevel) {
+    public PunchAction(GauntletEntity entity, EventScheduler eventScheduler, GauntletConfig mobConfig, Supplier<Boolean> cancelAction, ServerWorld serverLevel) {
         this.entity = entity;
         this.eventScheduler = eventScheduler;
         this.mobConfig = mobConfig;
@@ -44,12 +44,12 @@ public class PunchAction implements IActionWithCooldown {
         LivingEntity target = entity.getTarget();
         if (target == null) return 40;
 
-        Vec3 targetPos = MobUtils.eyePos(entity).add(MathUtils.unNormedDirection(MobUtils.eyePos(entity), target.position()).scale(1.2));
+        Vector3d targetPos = MobUtils.eyePos(entity).add(MathUtils.unNormedDirection(MobUtils.eyePos(entity), target.position()).scale(1.2));
         int accelerateStartTime = 16;
         int unclenchTime = 56;
 
         BlockPos breakBoundCenter = new BlockPos(entity.position().add(entity.getLookAngle()));
-        AABB breakBounds = new AABB(breakBoundCenter.subtract(new BlockPos(1, 1, 1)), breakBoundCenter.offset(1, 2, 1));
+        AxisAlignedBB breakBounds = new AxisAlignedBB(breakBoundCenter.subtract(new BlockPos(1, 1, 1)), breakBoundCenter.offset(1, 2, 1));
         VanillaCopiesServer.destroyBlocks(entity, breakBounds);
         entity.push(0.0, 0.7, 0.0);
 
@@ -59,7 +59,7 @@ public class PunchAction implements IActionWithCooldown {
                                 serverLevel,
                                 entity.position(),
                                 BMDSounds.GAUNTLET_CLINK.get(),
-                                SoundSource.HOSTILE,
+                                SoundCategory.HOSTILE,
                                 2.0f,
                                 BMDUtils.randomPitch(entity.getRandom()) * 0.8f,
                                 32,
@@ -109,7 +109,7 @@ public class PunchAction implements IActionWithCooldown {
 
     private void testBlockPhysicalImpact(){
         if ((entity.horizontalCollision || entity.verticalCollision) && previousSpeed > 0.55f){
-            Vec3 pos = entity.position();
+            Vector3d pos = entity.position();
             entity.level.explode(
                     entity,
                     pos.x,
@@ -130,9 +130,9 @@ public class PunchAction implements IActionWithCooldown {
         }
     }
 
-    public static void accelerateTowardsTarget(Entity entity, Vec3 target, double velocity){
-        Vec3 dir = MathUtils.unNormedDirection(MobUtils.eyePos(entity), target).normalize();
-        Vec3 velocityCorrection = VecUtils.planeProject(entity.getDeltaMovement(), dir);
+    public static void accelerateTowardsTarget(Entity entity, Vector3d target, double velocity){
+        Vector3d dir = MathUtils.unNormedDirection(MobUtils.eyePos(entity), target).normalize();
+        Vector3d velocityCorrection = VecUtils.planeProject(entity.getDeltaMovement(), dir);
         BMDUtils.addDeltaMovement(entity, dir.subtract(velocityCorrection).scale(velocity));
     }
 }

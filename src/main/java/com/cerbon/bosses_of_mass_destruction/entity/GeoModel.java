@@ -2,7 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.entity;
 
 import com.cerbon.bosses_of_mass_destruction.client.render.ITextureProvider;
 import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimations;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

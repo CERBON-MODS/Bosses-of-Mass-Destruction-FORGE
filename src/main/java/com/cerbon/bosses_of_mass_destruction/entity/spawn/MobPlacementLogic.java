@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.entity.spawn;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class MobPlacementLogic {
     private final ISpawnPosition locationFinder;
@@ -21,7 +21,7 @@ public class MobPlacementLogic {
         if (entity == null) return false;
 
         for (int i = 0; i < tries; i++) {
-            Vec3 location = locationFinder.getPos();
+            Vector3d location = locationFinder.getPos();
 
             if (spawnPredicate.canSpawn(location, entity)) {
                 spawner.spawn(location, entity);

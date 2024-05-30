@@ -1,8 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.entity.util;
 
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.CompoundNBT;
 
 public interface INbtHandler {
-    CompoundTag toTag(CompoundTag tag);
-    void fromTag(CompoundTag tag);
+    CompoundNBT toTag(CompoundNBT tag);
+    void fromTag(CompoundNBT tag);
 }

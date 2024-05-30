@@ -3,30 +3,30 @@ package com.cerbon.bosses_of_mass_destruction.packet.custom;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.PacketUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VecId;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class SendVec3S2CPacket {
-    private final Vec3 pos;
+    private final Vector3d pos;
     private final int id;
 
-    public SendVec3S2CPacket(Vec3 pos, int id) {
+    public SendVec3S2CPacket(Vector3d pos, int id) {
         this.pos = pos;
         this.id = id;
     }
 
-    public SendVec3S2CPacket(FriendlyByteBuf buf) {
+    public SendVec3S2CPacket(PacketBuffer buf) {
         this.pos = PacketUtils.readVec3(buf);
         this.id = buf.readInt();
     }
 
-    public void write(FriendlyByteBuf buf){
+    public void write(PacketBuffer buf){
         PacketUtils.writeVec3(buf, this.pos);
         buf.writeInt(id);
     }
@@ -35,7 +35,7 @@ public class SendVec3S2CPacket {
         NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
             Minecraft client = Minecraft.getInstance();
-            ClientLevel level = client.level;
+            ClientWorld level = client.level;
             VecId vecId = VecId.fromInt(id);
 
             if (level == null) return;

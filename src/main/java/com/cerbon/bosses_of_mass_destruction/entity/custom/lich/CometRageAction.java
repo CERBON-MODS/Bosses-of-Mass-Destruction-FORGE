@@ -11,10 +11,10 @@ import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometProjectile;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class CometRageAction implements IActionWithCooldown {
     private final LichEntity entity;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
-    private final Function<Vec3, ProjectileThrower> cometThrower;
+    private final Function<Vector3d, ProjectileThrower> cometThrower;
 
     public static final int numCometsDuringRage = 6;
     public static final int initialRageCometDelay = 60;
@@ -52,27 +52,27 @@ public class CometRageAction implements IActionWithCooldown {
     @Override
     public int perform() {
         LivingEntity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return rageCometsMoveDuration;
-        performCometThrow((ServerPlayer) target);
+        if (!(target instanceof ServerPlayerEntity)) return rageCometsMoveDuration;
+        performCometThrow((ServerPlayerEntity) target);
         return rageCometsMoveDuration;
     }
 
-    private void performCometThrow(ServerPlayer target) {
-        List<Vec3> offsets = getRageCometOffsets(entity);
+    private void performCometThrow(ServerPlayerEntity target) {
+        List<Vector3d> offsets = getRageCometOffsets(entity);
 
         for (int i = 0; i < offsets.size(); i++) {
-            Vec3 offset = offsets.get(i);
+            Vector3d offset = offsets.get(i);
 
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 targetPos = target.getBoundingBox().getCenter();
+                                Vector3d targetPos = target.getBoundingBox().getCenter();
                                 cometThrower.apply(offset).throwProjectile(targetPos);
                                 BMDUtils.playSound(
                                         target.getLevel(),
                                         entity.position(),
                                         BMDSounds.COMET_SHOOT.get(),
-                                        SoundSource.HOSTILE,
+                                        SoundCategory.HOSTILE,
                                         3.0f,
                                         64,
                                         null
@@ -89,15 +89,15 @@ public class CometRageAction implements IActionWithCooldown {
                 target.getLevel(),
                 entity.position(),
                 BMDSounds.RAGE_PREPARE.get(),
-                SoundSource.HOSTILE,
+                SoundCategory.HOSTILE,
                 1.0f,
                 64,
                 null
         );
     }
 
-    public static List<Vec3> getRageCometOffsets(LichEntity entity) {
-        List<Vec3> offsets = new ArrayList<>();
+    public static List<Vector3d> getRageCometOffsets(LichEntity entity) {
+        List<Vector3d> offsets = new ArrayList<>();
         MathUtils.circleCallback(3.0, numCometsDuringRage, entity.getLookAngle(), offsets::add);
         return offsets;
     }

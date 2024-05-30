@@ -2,7 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.ai.goals;
 
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IAction;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionStop;
-import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.function.Supplier;
 
@@ -26,10 +26,10 @@ public class ActionGoal extends Goal {
         return hasTarget.get();
     }
 
-    @Override
-    public boolean requiresUpdateEveryTick() {
-        return true;
-    }
+//    @Override
+//    public boolean requiresUpdateEveryTick() {
+//        return true;
+//    }
 
     @Override
     public boolean canContinueToUse() {

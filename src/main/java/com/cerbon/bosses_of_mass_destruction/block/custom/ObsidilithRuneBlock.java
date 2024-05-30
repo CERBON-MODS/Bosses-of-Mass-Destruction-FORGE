@@ -1,14 +1,14 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
 import com.cerbon.bosses_of_mass_destruction.entity.custom.obsidilith.ObsidilithEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 public class ObsidilithRuneBlock extends Block {
@@ -18,18 +18,18 @@ public class ObsidilithRuneBlock extends Block {
     }
 
     @Override
-    public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull Random random) {
+    public void tick(@Nonnull BlockState state, @Nonnull ServerWorld level, @Nonnull BlockPos pos, @Nonnull Random random) {
         linkToEntities(level, pos);
     }
 
-    private void linkToEntities(ServerLevel level, BlockPos pos){
-        level.getEntitiesOfClass(ObsidilithEntity.class, new AABB(pos).inflate(15.0, 40.0, 15.0)).forEach(
+    private void linkToEntities(ServerWorld level, BlockPos pos){
+        level.getEntitiesOfClass(ObsidilithEntity.class, new AxisAlignedBB(pos).inflate(15.0, 40.0, 15.0)).forEach(
                 entity -> entity.addActivePillar(pos)
         );
     }
 
     @Override
-    public void onPlace(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
-        level.scheduleTick(pos, this, 10);
+    public void onPlace(@Nonnull BlockState state, World level, @Nonnull BlockPos pos, @Nonnull BlockState oldState, boolean movedByPiston) {
+        level.getBlockTicks().scheduleTick(pos, this, 10);
     }
 }

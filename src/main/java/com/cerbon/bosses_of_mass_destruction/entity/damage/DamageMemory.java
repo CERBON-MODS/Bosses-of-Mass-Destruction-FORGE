@@ -2,8 +2,8 @@ package com.cerbon.bosses_of_mass_destruction.entity.damage;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.data.HistoricalData;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.LivingEntity;
 
 import java.util.List;
 
@@ -34,6 +34,21 @@ public class DamageMemory implements IDamageHandler {
         return historicalData.getAll();
     }
 
-    public record DamageHistory(float amount, DamageSource source, int ageWhenDamaged) {}
+    public static class DamageHistory {
+
+        public final float amount;
+        public final DamageSource source;
+        public final int ageWhenDamaged;
+
+        public DamageHistory(float amount, DamageSource source, int ageWhenDamaged) {
+            this.amount = amount;
+            this.source = source;
+            this.ageWhenDamaged = ageWhenDamaged;
+        }
+
+        public float amount() {
+            return amount;
+        }
+    }
 }
 

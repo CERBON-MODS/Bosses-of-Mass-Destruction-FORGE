@@ -12,113 +12,113 @@ import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopies;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleType;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class BMDParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
             DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, BMDConstants.MOD_ID);
 
-    public static final RegistryObject<SimpleParticleType> DISAPPEARING_SWIRL = PARTICLE_TYPES.register("disappearing_swirl",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> DISAPPEARING_SWIRL = PARTICLE_TYPES.register("disappearing_swirl",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> SOUL_FLAME = PARTICLE_TYPES.register("soul_flame",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> SOUL_FLAME = PARTICLE_TYPES.register("soul_flame",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> MAGIC_CIRCLE = PARTICLE_TYPES.register("magic_circle",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> MAGIC_CIRCLE = PARTICLE_TYPES.register("magic_circle",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> OBSIDILITH_BURST = PARTICLE_TYPES.register("obsidilith_burst",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> OBSIDILITH_BURST = PARTICLE_TYPES.register("obsidilith_burst",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> ENCHANT = PARTICLE_TYPES.register("enchant",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> ENCHANT = PARTICLE_TYPES.register("enchant",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> OBSIDILITH_BURST_INDICATOR = PARTICLE_TYPES.register("obsidilith_burst_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> OBSIDILITH_BURST_INDICATOR = PARTICLE_TYPES.register("obsidilith_burst_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> OBSIDILITH_WAVE = PARTICLE_TYPES.register("obsidilith_wave",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> OBSIDILITH_WAVE = PARTICLE_TYPES.register("obsidilith_wave",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> OBSIDILITH_WAVE_INDICATOR = PARTICLE_TYPES.register("obsidilith_wave_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> OBSIDILITH_WAVE_INDICATOR = PARTICLE_TYPES.register("obsidilith_wave_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> DOWNSPARKLE = PARTICLE_TYPES.register("downsparkle",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> DOWNSPARKLE = PARTICLE_TYPES.register("downsparkle",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> OBSIDILITH_SPIKE_INDICATOR = PARTICLE_TYPES.register("obsidilith_spike_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> OBSIDILITH_SPIKE_INDICATOR = PARTICLE_TYPES.register("obsidilith_spike_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> OBSIDILITH_SPIKE = PARTICLE_TYPES.register("obsidilith_spike",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> OBSIDILITH_SPIKE = PARTICLE_TYPES.register("obsidilith_spike",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> PILLAR_RUNE = PARTICLE_TYPES.register("pillar_rune",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> PILLAR_RUNE = PARTICLE_TYPES.register("pillar_rune",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> PILLAR_SPAWN_INDICATOR = PARTICLE_TYPES.register("pillar_spawn_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> PILLAR_SPAWN_INDICATOR = PARTICLE_TYPES.register("pillar_spawn_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> PILLAR_SPAWN_INDICATOR_2 = PARTICLE_TYPES.register("pillar_spawn_indicator_2",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> PILLAR_SPAWN_INDICATOR_2 = PARTICLE_TYPES.register("pillar_spawn_indicator_2",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> OBSIDILITH_ANVIL_INDICATOR = PARTICLE_TYPES.register("obsidilith_anvil_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> OBSIDILITH_ANVIL_INDICATOR = PARTICLE_TYPES.register("obsidilith_anvil_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> SPARKLES = PARTICLE_TYPES.register("sparkles",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> SPARKLES = PARTICLE_TYPES.register("sparkles",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> GAUNTLET_REVIVE_SPARKLES = PARTICLE_TYPES.register("gauntlet_revive_sparkles",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> GAUNTLET_REVIVE_SPARKLES = PARTICLE_TYPES.register("gauntlet_revive_sparkles",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> EYE_OPEN = PARTICLE_TYPES.register("eye_open",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> EYE_OPEN = PARTICLE_TYPES.register("eye_open",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> LINE = PARTICLE_TYPES.register("line",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> LINE = PARTICLE_TYPES.register("line",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> VOID_BLOSSOM_SPIKE_INDICATOR = PARTICLE_TYPES.register("void_blossom_spike_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> VOID_BLOSSOM_SPIKE_INDICATOR = PARTICLE_TYPES.register("void_blossom_spike_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> VOID_BLOSSOM_SPIKE_WAVE_INDICATOR = PARTICLE_TYPES.register("void_blossom_spike_wave_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> VOID_BLOSSOM_SPIKE_WAVE_INDICATOR = PARTICLE_TYPES.register("void_blossom_spike_wave_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> PETAL = PARTICLE_TYPES.register("petal",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> PETAL = PARTICLE_TYPES.register("petal",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> SPORE = PARTICLE_TYPES.register("spore",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> SPORE = PARTICLE_TYPES.register("spore",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> SPORE_INDICATOR = PARTICLE_TYPES.register("spore_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> SPORE_INDICATOR = PARTICLE_TYPES.register("spore_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> FLUFF = PARTICLE_TYPES.register("fluff",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> FLUFF = PARTICLE_TYPES.register("fluff",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> POLLEN = PARTICLE_TYPES.register("pollen",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> POLLEN = PARTICLE_TYPES.register("pollen",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> EARTHDIVE_INDICATOR = PARTICLE_TYPES.register("earthdive_indicator",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> EARTHDIVE_INDICATOR = PARTICLE_TYPES.register("earthdive_indicator",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> ROD = PARTICLE_TYPES.register("rod",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> ROD = PARTICLE_TYPES.register("rod",
+            () -> new BasicParticleType(true));
 
-    public static final RegistryObject<SimpleParticleType> GROUND_ROD = PARTICLE_TYPES.register("ground_rod",
-            () -> new SimpleParticleType(true));
+    public static final RegistryObject<BasicParticleType> GROUND_ROD = PARTICLE_TYPES.register("ground_rod",
+            () -> new BasicParticleType(true));
 
     public static final int FULL_BRIGHT = 15728880;
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient(){
-        ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
+        ParticleManager particleEngine = Minecraft.getInstance().particleEngine;
 
         particleEngine.register(BMDParticles.DISAPPEARING_SWIRL.get(),
                 spriteSet -> new SimpleParticleProvider(spriteSet,
@@ -323,7 +323,7 @@ public class BMDParticles {
                 spriteSet -> new SimpleParticleProvider(spriteSet,
                         particleContext -> {
                             SimpleParticle particle = new SimpleParticle(particleContext, RandomUtils.range(15, 20), VanillaCopies::buildBillBoardGeometry, false, true);
-                            particle.setColorOverride(f -> new Vec3(1.0, 0.9, 0.4));
+                            particle.setColorOverride(f -> new Vector3d(1.0, 0.9, 0.4));
                             particle.setColorVariation(0.15);
                             particle.setBrightnessOverride(f -> FULL_BRIGHT);
                             particle.setScaleOverride(f -> 0.05f * (1 - f * 0.25f));

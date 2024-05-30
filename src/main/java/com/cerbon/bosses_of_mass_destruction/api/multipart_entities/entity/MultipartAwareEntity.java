@@ -1,10 +1,11 @@
 package com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity;
 
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+
+import javax.annotation.Nullable;
 
 /**
  * Should be implemented by entities who want to know what part of them was attacked or interacted
@@ -33,7 +34,7 @@ public interface MultipartAwareEntity extends MultipartEntity {
      * @param part   The part it is interacting with, should not be null
      * @return Same as vanilla interact
      */
-    default InteractionResult interact(final Entity entity, final InteractionHand hand, final String part) {
-        return InteractionResult.PASS;
+    default ActionResultType interact(final Entity entity, final Hand hand, final String part) {
+        return ActionResultType.PASS;
     }
 }

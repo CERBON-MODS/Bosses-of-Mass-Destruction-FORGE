@@ -7,6 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionStop;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -28,13 +29,12 @@ public class VoidBlossomAttacks {
         this.entity = entity;
 
         this.cancelAttackAction = () -> entity.isDeadOrDying() || entity.getTarget() == null;
-        Map<Byte, IActionWithCooldown> statusRegistry = Map.of(
-                spikeAttack, new SpikeAction(entity, eventScheduler, cancelAttackAction),
-                spikeWaveAttack, new SpikeWaveAction(entity, eventScheduler, cancelAttackAction),
-                sporeAttack, new SporeAction(entity, eventScheduler, cancelAttackAction),
-                bladeAttack, new BladeAction(entity, eventScheduler, cancelAttackAction),
-                blossomAction, new BlossomAction(entity, eventScheduler, cancelAttackAction)
-        );
+        Map<Byte, IActionWithCooldown> statusRegistry = new HashMap<>();
+        statusRegistry.put(spikeAttack, new SpikeAction(entity, eventScheduler, cancelAttackAction));
+        statusRegistry.put(spikeWaveAttack, new SpikeWaveAction(entity, eventScheduler, cancelAttackAction));
+        statusRegistry.put(sporeAttack, new SporeAction(entity, eventScheduler, cancelAttackAction));
+        statusRegistry.put(bladeAttack, new BladeAction(entity, eventScheduler, cancelAttackAction));
+        statusRegistry.put(blossomAction, new BlossomAction(entity, eventScheduler, cancelAttackAction));
 
         this.moveLogic = new VoidBlossomMoveLogic(statusRegistry, entity, doBlossom, targetSwitcher);
     }

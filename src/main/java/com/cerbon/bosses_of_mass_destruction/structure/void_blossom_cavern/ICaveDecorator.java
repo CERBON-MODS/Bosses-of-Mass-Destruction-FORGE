@@ -1,21 +1,21 @@
 package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 
 import com.cerbon.bosses_of_mass_destruction.structure.util.IStructurePiece;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.block.Block;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.util.math.MutableBoundingBox;
 
 import java.util.Random;
 
 public interface ICaveDecorator {
     void onBlockPlaced(BlockPos pos, Block block);
     void generate(
-            WorldGenLevel level,
+            ISeedReader level,
             ChunkGenerator chunkGenerator,
             Random random,
-            BoundingBox boundingBox,
+            MutableBoundingBox boundingBox,
             BlockPos pos,
             IStructurePiece structurePiece
     );

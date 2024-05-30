@@ -4,19 +4,19 @@ import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.MobEntity;
 
 import java.util.List;
 
-public class CappedHeal implements IEntityTick<ServerLevel> {
-    private final Mob entity;
+public class CappedHeal implements IEntityTick<ServerWorld> {
+    private final MobEntity entity;
     private final List<Float> hpMilestones;
     private final float healingPerTick;
     private final EntityAdapter adapter;
     private final EntityStats stats;
 
-    public CappedHeal(Mob entity, List<Float> hpMilestones, float healingPerTick) {
+    public CappedHeal(MobEntity entity, List<Float> hpMilestones, float healingPerTick) {
         this.entity = entity;
         this.hpMilestones = hpMilestones;
         this.healingPerTick = healingPerTick;
@@ -25,7 +25,7 @@ public class CappedHeal implements IEntityTick<ServerLevel> {
     }
 
     @Override
-    public void tick(ServerLevel level) {
+    public void tick(ServerWorld level) {
         if (entity.getTarget() == null)
             LichUtils.cappedHeal(adapter, stats, hpMilestones, healingPerTick, entity::heal);
     }

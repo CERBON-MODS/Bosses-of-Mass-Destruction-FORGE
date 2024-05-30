@@ -11,16 +11,17 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
+import com.google.common.collect.Lists;
 import me.shedaniel.autoconfig.AutoConfig;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.play.server.SPlayerAbilitiesPacket;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -35,10 +36,10 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAni
     private AnimationFactory animationFactory;
     public int animationAge = 0;
 
-    private static final HashSet<ServerPlayer> flight = new HashSet<>();
+    private static final HashSet<ServerPlayerEntity> flight = new HashSet<>();
 
-    public LevitationBlockEntity(BlockPos pos, BlockState blockState) {
-        super(BMDBlocks.LEVITATION_BLOCK.get(), BMDBlockEntities.LEVITATION_BLOCK_ENTITY.get(), pos, blockState);
+    public LevitationBlockEntity() {
+        super(BMDBlocks.LEVITATION_BLOCK.get(), BMDBlockEntities.LEVITATION_BLOCK_ENTITY.get());
     }
 
     @Override
@@ -61,34 +62,34 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAni
         return animationFactory;
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, LevitationBlockEntity entity){
+    public static void tick(World level, BlockPos pos, BlockState state, LevitationBlockEntity entity){
         ChunkCacheBlockEntity.tick(level, pos, state, entity);
         if (level.isClientSide){
             entity.animationAge++;
 
-            AABB box = getAffectingBox(level, VecUtils.asVec3(pos));
-            List<Player> playersInBox = level.getEntitiesOfClass(Player.class, box);
+            AxisAlignedBB box = getAffectingBox(level, VecUtils.asVec3(pos));
+            List<PlayerEntity> playersInBox = level.getEntitiesOfClass(PlayerEntity.class, box);
 
-            for (Player player : playersInBox) {
+            for (PlayerEntity player : playersInBox) {
 
-                for (double x : List.of(box.minX, box.maxX)) {
+                for (double x : Lists.newArrayList(box.minX, box.maxX)) {
                     double zRand = box.getCenter().z + box.getZsize() * RandomUtils.randomDouble(0.5);
-                    Particles.particlesFactory.build(randYPos(x, player, zRand), Vec3.ZERO);
+                    Particles.particlesFactory.build(randYPos(x, player, zRand), Vector3d.ZERO);
                 }
 
-                for (double z : List.of(box.minZ, box.maxZ)) {
+                for (double z : Lists.newArrayList(box.minZ, box.maxZ)) {
                     double xRand = box.getCenter().x + box.getXsize() * RandomUtils.randomDouble(0.5);
-                    Particles.particlesFactory.build(randYPos(xRand, player, z), Vec3.ZERO);
+                    Particles.particlesFactory.build(randYPos(xRand, player, z), Vector3d.ZERO);
                 }
             }
         }
     }
 
-    private static Vec3 randYPos(double x, Player player, double z){
-        return new Vec3(x, player.getY() + RandomUtils.randomDouble(0.5) + 1, z);
+    private static Vector3d randYPos(double x, PlayerEntity player, double z){
+        return new Vector3d(x, player.getY() + RandomUtils.randomDouble(0.5) + 1, z);
     }
 
-    public static void tickFlight(ServerPlayer player){
+    public static void tickFlight(ServerPlayerEntity player){
         List<BlockPos> blockToCheck = new ArrayList<>();
 
         for (int x = -1; x <= 1; x++) {
@@ -117,23 +118,23 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAni
         if (!hasLevitationBlock){
             if (flight.contains(player)) {
                 if (!player.isCreative() && !player.isSpectator()) {
-                    player.getAbilities().mayfly = false;
-                    player.getAbilities().flying = false;
-                    player.connection.send(new ClientboundPlayerAbilitiesPacket(player.getAbilities()));
+                    player.abilities.mayfly = false;
+                    player.abilities.flying = false;
+                    player.connection.send(new SPlayerAbilitiesPacket(player.abilities));
                 }
                 flight.remove(player);
             }
         } else if (!flight.contains(player)){
             flight.add(player);
-            if (!player.getAbilities().mayfly){
-                player.getAbilities().mayfly = true;
-                player.connection.send(new ClientboundPlayerAbilitiesPacket(player.getAbilities()));
+            if (!player.abilities.mayfly){
+                player.abilities.mayfly = true;
+                player.connection.send(new SPlayerAbilitiesPacket(player.abilities));
             }
         }
     }
 
-    private static AABB getAffectingBox(Level level, Vec3 pos){
-        return new AABB(pos.x, level.getMinBuildHeight(), pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(tableOfElevationRadius, 0.0, tableOfElevationRadius);
+    private static AxisAlignedBB getAffectingBox(World level, Vector3d pos){
+        return new AxisAlignedBB(pos.x, 0, pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(tableOfElevationRadius, 0.0, tableOfElevationRadius);
     }
 
     @Override

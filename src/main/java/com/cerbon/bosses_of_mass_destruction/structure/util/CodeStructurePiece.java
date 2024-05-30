@@ -1,75 +1,87 @@
 package com.cerbon.bosses_of_mass_destruction.structure.util;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.StructureManager;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
 
 import java.util.Random;
 
 public class CodeStructurePiece extends StructurePiece implements IStructurePiece {
-    private final IPieceGenerator pieceGenerator;
-
-    public CodeStructurePiece(StructurePieceType type, BoundingBox boundingBox, IPieceGenerator structurePieceData) {
-        super(type, 0, boundingBox);
-        this.pieceGenerator = structurePieceData;
-        setOrientation(Direction.NORTH);
-    }
-
-    public CodeStructurePiece(StructurePieceType type, CompoundTag tag, IPieceGenerator structurePieceData) {
-        super(type, tag);
-        this.pieceGenerator = structurePieceData;
-        setOrientation(Direction.NORTH);
+    protected CodeStructurePiece(IStructurePieceType p_i51342_1_, int p_i51342_2_) {
+        super(p_i51342_1_, p_i51342_2_);
     }
 
     @Override
-    protected void addAdditionalSaveData(@NotNull StructurePieceSerializationContext context, @NotNull CompoundTag tag) {}
+    public void placeBlock(ISeedReader level, BlockState block, BlockPos pos, MutableBoundingBox box) {
 
-
-    @Override
-    public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureFeatureManager structureManager, @NotNull ChunkGenerator generator, @NotNull Random random, @NotNull BoundingBox box, @NotNull ChunkPos chunkPos, @NotNull BlockPos pos) {
-        pieceGenerator.generate(
-                level,
-                structureManager,
-                generator,
-                random,
-                box,
-                chunkPos,
-                pos,
-                this
-        );
     }
 
     @Override
-    public void placeBlock(WorldGenLevel level, BlockState block, BlockPos pos, BoundingBox box) {
-        super.placeBlock(level, block, pos.getX(), pos.getY(), pos.getZ(), box);
+    protected void addAdditionalSaveData(CompoundNBT p_143011_1_) {
+
     }
 
     @Override
-    public @NotNull Rotation getRotation() {
-        return Rotation.NONE;
+    public boolean postProcess(ISeedReader pLevel, StructureManager pStructureManager, ChunkGenerator pChunkGenerator, Random pRandom, MutableBoundingBox pBox, ChunkPos pChunkPos, BlockPos pPos) {
+        return false;
     }
-
-    @Override
-    public @NotNull Mirror getMirror() {
-        return Mirror.NONE;
-    }
-
-    @Nullable
-    @Override
-    public Direction getOrientation() {
-        return null;
-    }
+//    private final IPieceGenerator pieceGenerator;
+//
+//    public CodeStructurePiece(StructurePieceType type, MutableBoundingBox boundingBox, IPieceGenerator structurePieceData) {
+//        super(type, 0, boundingBox);
+//        this.pieceGenerator = structurePieceData;
+//        setOrientation(Direction.NORTH);
+//    }
+//
+//    public CodeStructurePiece(StructurePieceType type, CompoundNBT tag, IPieceGenerator structurePieceData) {
+//        super(type, tag);
+//        this.pieceGenerator = structurePieceData;
+//        setOrientation(Direction.NORTH);
+//    }
+//
+//    @Override
+//    protected void addAdditionalSaveData(@Nonnull StructurePieceSerializationContext context, @Nonnull CompoundNBT tag) {}
+//
+//
+//    @Override
+//    public void postProcess(@Nonnull ISeedReader level, @Nonnull StructureManager structureManager, @Nonnull ChunkGenerator generator, @Nonnull Random random, @Nonnull MutableBoundingBox box, @Nonnull ChunkPos chunkPos, @Nonnull BlockPos pos) {
+//        pieceGenerator.generate(
+//                level,
+//                structureManager,
+//                generator,
+//                random,
+//                box,
+//                chunkPos,
+//                pos,
+//                this
+//        );
+//    }
+//
+//    @Override
+//    public void placeBlock(ISeedReader level, BlockState block, BlockPos pos, MutableBoundingBox box) {
+//        super.placeBlock(level, block, pos.getX(), pos.getY(), pos.getZ(), box);
+//    }
+//
+//    @Override
+//    public @Nonnull Rotation getRotation() {
+//        return Rotation.NONE;
+//    }
+//
+//    @Override
+//    public @Nonnull Mirror getMirror() {
+//        return Mirror.NONE;
+//    }
+//
+//    @Nullable
+//    @Override
+//    public Direction getOrientation() {
+//        return null;
+//    }
 }

@@ -11,13 +11,13 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.SendDeltaMovementS2CP
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import java.util.List;
 public class BurstAction implements IActionWithCooldown {
     private final LivingEntity entity;
     private final EventScheduler eventScheduler;
-    private final List<Vec3> circlePoints;
+    private final List<Vector3d> circlePoints;
 
     public static final int burstDelay = 30;
 
@@ -42,10 +42,10 @@ public class BurstAction implements IActionWithCooldown {
     }
 
     private void placeRifts(){
-        Level level = entity.level;
+        World level = entity.level;
         RiftBurst riftBurst = new RiftBurst(
                 entity,
-                (ServerLevel) level,
+                (ServerWorld) level,
                 BMDParticles.OBSIDILITH_BURST_INDICATOR.get(),
                 BMDParticles.OBSIDILITH_BURST.get(),
                 burstDelay,
@@ -54,10 +54,10 @@ public class BurstAction implements IActionWithCooldown {
         );
 
         BMDUtils.playSound(
-                (ServerLevel) level,
+                (ServerWorld) level,
                 entity.position(),
                 BMDSounds.OBSIDILITH_PREPARE_ATTACK.get(),
-                SoundSource.HOSTILE,
+                SoundCategory.HOSTILE,
                 3.0f,
                 0.7f,
                 64,
@@ -66,21 +66,21 @@ public class BurstAction implements IActionWithCooldown {
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDUtils.playSound((ServerLevel) level, entity.position(), BMDSounds.OBSIDILITH_BURST.get(), SoundSource.HOSTILE, 1.2f, 64, null),
+                        () -> BMDUtils.playSound((ServerWorld) level, entity.position(), BMDSounds.OBSIDILITH_BURST.get(), SoundCategory.HOSTILE, 1.2f, 64, null),
                         burstDelay,
                         1,
                         () -> !entity.isAlive()
                 )
         );
 
-        for (Vec3 point : circlePoints)
+        for (Vector3d point : circlePoints)
             riftBurst.tryPlaceRift(entity.position().add(point));
     }
 
     private void damageEntity(LivingEntity livingEntity){
         float damage = (float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        if (livingEntity instanceof ServerPlayer serverPlayer)
-            BMDPacketHandler.sendToPlayer(new SendDeltaMovementS2CPacket(new Vec3(livingEntity.getDeltaMovement().x, 1.3, livingEntity.getDeltaMovement().z)), serverPlayer);
+        if (livingEntity instanceof ServerPlayerEntity)
+            BMDPacketHandler.sendToPlayer(new SendDeltaMovementS2CPacket(new Vector3d(livingEntity.getDeltaMovement().x, 1.3, livingEntity.getDeltaMovement().z)), (ServerPlayerEntity) livingEntity);
 
         livingEntity.hurt(
                 new UnshieldableDamageSource(entity),

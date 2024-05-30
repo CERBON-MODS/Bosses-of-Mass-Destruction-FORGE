@@ -1,10 +1,10 @@
 package com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.math.ReferencedAxisRotator;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,17 +15,17 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class MathUtils {
-    public static boolean withinDistance(Vec3 pos1, Vec3 pos2, double distance) {
+    public static boolean withinDistance(Vector3d pos1, Vector3d pos2, double distance) {
         if (distance < 0) throw new IllegalArgumentException("Distance cannot be negative");
         return pos1.distanceToSqr(pos2) < Math.pow(distance, 2.0);
     }
 
-    public static boolean movingTowards(Vec3 center, Vec3 pos, Vec3 direction) {
-        Vec3 directionTo = unNormedDirection(pos, center);
+    public static boolean movingTowards(Vector3d center, Vector3d pos, Vector3d direction) {
+        Vector3d directionTo = unNormedDirection(pos, center);
         return direction.dot(directionTo) > 0;
     }
 
-    public static Vec3 unNormedDirection(Vec3 source, Vec3 target) {
+    public static Vector3d unNormedDirection(Vector3d source, Vector3d target) {
         return target.subtract(source);
     }
 
@@ -34,74 +34,74 @@ public class MathUtils {
      * <p>
      * Callback returns the position and the point number from 1 to points
      */
-    public static void lineCallback(Vec3 start, Vec3 end, int points, java.util.function.BiConsumer<Vec3, Integer> callback) {
-        Vec3 dir = end.subtract(start).scale(1.0 / (points - 1));
-        Vec3 pos = start;
+    public static void lineCallback(Vector3d start, Vector3d end, int points, java.util.function.BiConsumer<Vector3d, Integer> callback) {
+        Vector3d dir = end.subtract(start).scale(1.0 / (points - 1));
+        Vector3d pos = start;
         for (int i = 0; i < points; i++) {
             callback.accept(pos, i);
             pos = pos.add(dir);
         }
     }
 
-    public static void circleCallback(double radius, int points, Vec3 axis, Consumer<Vec3> callback) {
+    public static void circleCallback(double radius, int points, Vector3d axis, Consumer<Vector3d> callback) {
         double degrees = Math.PI * 2 / points;
         double axisYaw = directionToYaw(axis);
         ReferencedAxisRotator rotator = new ReferencedAxisRotator(VecUtils.yAxis, axis);
         for (int i = 0; i < points; i++) {
             double radians = i * degrees;
-            Vec3 offset = VecUtils.rotateVector(new Vec3(Math.sin(radians), 0.0, Math.cos(radians)).scale(radius), VecUtils.yAxis, -axisYaw);
-            Vec3 rotated = rotator.rotate(offset);
+            Vector3d offset = VecUtils.rotateVector(new Vector3d(Math.sin(radians), 0.0, Math.cos(radians)).scale(radius), VecUtils.yAxis, -axisYaw);
+            Vector3d rotated = rotator.rotate(offset);
             callback.accept(rotated);
         }
     }
 
-    public static Collection<Vec3> circlePoints(double radius, int points, Vec3 axis) {
-        Collection<Vec3> vectors = new ArrayList<>();
+    public static Collection<Vector3d> circlePoints(double radius, int points, Vector3d axis) {
+        Collection<Vector3d> vectors = new ArrayList<>();
         circleCallback(radius, points, axis, vectors::add);
         return vectors;
     }
 
-    public static boolean willAABBFit(AABB aabb, Vec3 movement, Predicate<AABB> collision) {
+    public static boolean willAABBFit(AxisAlignedBB aabb, Vector3d movement, Predicate<AxisAlignedBB> collision) {
         AtomicBoolean collided = new AtomicBoolean(false);
         int points = (int) Math.ceil(movement.length() / aabb.getSize());
-        lineCallback(Vec3.ZERO, movement, points, (vec3, integer) -> {
+        lineCallback(Vector3d.ZERO, movement, points, (vec3, integer) -> {
             if (collision.test(aabb.move(vec3)))
                 collided.set(true);
         });
         return !collided.get();
     }
 
-    public static float directionToPitch(Vec3 direction) {
+    public static float directionToPitch(Vector3d direction) {
         double x = direction.x;
         double z = direction.z;
         double y = direction.y;
 
         double h = Math.sqrt(x * x + z * z);
-        return (float) Math.toDegrees(-Mth.atan2(y, h));
+        return (float) Math.toDegrees(-MathHelper.atan2(y, h));
     }
 
-    public static double directionToYaw(Vec3 direction) {
+    public static double directionToYaw(Vector3d direction) {
         double x = direction.x();
         double z = direction.z();
 
-        return Math.toDegrees(Mth.atan2(z, x));
+        return Math.toDegrees(MathHelper.atan2(z, x));
     }
 
-    public static Vec3 lerpVec(float partialTicks, Vec3 vec1, Vec3 vec2) {
-        double x = Mth.lerp(partialTicks, vec1.x, vec2.x);
-        double y = Mth.lerp(partialTicks, vec1.y, vec2.y);
-        double z = Mth.lerp(partialTicks, vec1.z, vec2.z);
-        return new Vec3(x, y, z);
+    public static Vector3d lerpVec(float partialTicks, Vector3d vec1, Vector3d vec2) {
+        double x = MathHelper.lerp(partialTicks, vec1.x, vec2.x);
+        double y = MathHelper.lerp(partialTicks, vec1.y, vec2.y);
+        double z = MathHelper.lerp(partialTicks, vec1.z, vec2.z);
+        return new Vector3d(x, y, z);
     }
 
-    public static Vec3 axisOffset(Vec3 direction, Vec3 offset) {
-        Vec3 forward = direction.normalize();
-        Vec3 side = forward.cross(VecUtils.yAxis).normalize();
-        Vec3 up = side.cross(forward).normalize();
+    public static Vector3d axisOffset(Vector3d direction, Vector3d offset) {
+        Vector3d forward = direction.normalize();
+        Vector3d side = forward.cross(VecUtils.yAxis).normalize();
+        Vector3d up = side.cross(forward).normalize();
         return forward.scale(offset.x).add(side.scale(offset.z)).add(up.scale(offset.y));
     }
 
-    public static boolean facingSameDirection(Vec3 direction1, Vec3 direction2) {
+    public static boolean facingSameDirection(Vector3d direction1, Vector3d direction2) {
         return direction1.dot(direction2) > 0;
     }
 
@@ -129,13 +129,13 @@ public class MathUtils {
         }
     }
 
-    public static List<Vec3> buildBlockCircle(double radius) {
+    public static List<Vector3d> buildBlockCircle(double radius) {
         int intRadius = (int) radius;
         double radiusSq = radius * radius;
-        List<Vec3> points = new ArrayList<>();
+        List<Vector3d> points = new ArrayList<>();
         for (int x = -intRadius; x <= intRadius; x++) {
             for (int z = -intRadius; z <= intRadius; z++) {
-                Vec3 pos = new Vec3(x, 0.0, z);
+                Vector3d pos = new Vector3d(x, 0.0, z);
                 if (pos.lengthSqr() <= radiusSq)
                     points.add(pos);
             }
@@ -220,7 +220,7 @@ public class MathUtils {
         assert ratio >= 0;
         assert maxAge > 0;
 
-        float currentTime = Mth.clamp((time + partialTicks) / maxAge, 0f, 1f);
+        float currentTime = MathHelper.clamp((time + partialTicks) / maxAge, 0f, 1f);
         return Math.max(0f, currentTime - ratio) / (1 - ratio);
     }
 

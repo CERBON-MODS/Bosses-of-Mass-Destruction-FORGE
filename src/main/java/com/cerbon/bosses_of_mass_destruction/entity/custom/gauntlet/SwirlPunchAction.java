@@ -9,11 +9,11 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldow
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.Explosion;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -24,11 +24,11 @@ public class SwirlPunchAction implements IActionWithCooldown {
     private final EventScheduler eventScheduler;
     private final GauntletConfig mobConfig;
     private final Supplier<Boolean> cancelAction;
-    private final ServerLevel serverLevel;
+    private final ServerWorld serverLevel;
 
     private double previousSpeed = 0.0;
 
-    public SwirlPunchAction(GauntletEntity entity, EventScheduler eventScheduler, GauntletConfig mobConfig, Supplier<Boolean> cancelAction, ServerLevel serverLevel) {
+    public SwirlPunchAction(GauntletEntity entity, EventScheduler eventScheduler, GauntletConfig mobConfig, Supplier<Boolean> cancelAction, ServerWorld serverLevel) {
         this.entity = entity;
         this.eventScheduler = eventScheduler;
         this.mobConfig = mobConfig;
@@ -41,8 +41,8 @@ public class SwirlPunchAction implements IActionWithCooldown {
         LivingEntity target = entity.getTarget();
         if (target == null) return 40;
 
-        Vec3 targetDirection = MathUtils.unNormedDirection(MobUtils.eyePos(entity), target.getBoundingBox().getCenter());
-        Vec3 targetPos = MobUtils.eyePos(entity).add(targetDirection.scale(1.2));
+        Vector3d targetDirection = MathUtils.unNormedDirection(MobUtils.eyePos(entity), target.getBoundingBox().getCenter());
+        Vector3d targetPos = MobUtils.eyePos(entity).add(targetDirection.scale(1.2));
         int accelerateStartTime = 30;
         int unclenchTime = 60;
         int closeFistAnimationTime = 7;
@@ -52,7 +52,7 @@ public class SwirlPunchAction implements IActionWithCooldown {
                 serverLevel,
                 entity.position(),
                 BMDSounds.GAUNTLET_SPIN_PUNCH.get(),
-                SoundSource.HOSTILE,
+                SoundCategory.HOSTILE,
                 2.0f,
                 1.0f,
                 64,
@@ -93,8 +93,8 @@ public class SwirlPunchAction implements IActionWithCooldown {
 
     private void testBlockPhysicalImpact(){
         if ((entity.horizontalCollision || entity.verticalCollision) && previousSpeed > 0.55f){
-            Vec3 pos = entity.position();
-            Explosion.BlockInteraction flag = VanillaCopiesServer.getEntityDestructionType(entity.level);
+            Vector3d pos = entity.position();
+            Explosion.Mode flag = VanillaCopiesServer.getEntityDestructionType(entity.level);
             if (entity.getEntityData().get(GauntletEntity.isEnergized)){
                 entity.level.explode(
                         entity,

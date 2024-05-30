@@ -6,8 +6,9 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.action.CooldownAction;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionStop;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.server.ServerWorld;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -24,16 +25,15 @@ public class GauntletAttacks {
     public static final byte swirlPunchAttack = 10;
     public static final byte blindnessAttack = 11;
 
-    public GauntletAttacks(GauntletEntity entity, EventScheduler eventScheduler, GauntletConfig mobConfig, ServerLevel serverLevel) {
+    public GauntletAttacks(GauntletEntity entity, EventScheduler eventScheduler, GauntletConfig mobConfig, ServerWorld serverLevel) {
         this.entity = entity;
 
         Supplier<Boolean> cancelAttackAction = () -> entity.isDeadOrDying() || entity.getTarget() == null;
-        Map<Byte, IActionWithCooldown> statusRegistry = Map.of(
-                punchAttack, new PunchAction(entity, eventScheduler, mobConfig, cancelAttackAction, serverLevel),
-                laserAttack, new LaserAction(entity, eventScheduler, cancelAttackAction, serverLevel),
-                swirlPunchAttack, new SwirlPunchAction(entity, eventScheduler, mobConfig, cancelAttackAction, serverLevel),
-                blindnessAttack, new BlindnessAction(entity, eventScheduler, cancelAttackAction, serverLevel)
-        );
+        Map<Byte, IActionWithCooldown> statusRegistry = new HashMap<>();
+        statusRegistry.put(punchAttack, new PunchAction(entity, eventScheduler, mobConfig, cancelAttackAction, serverLevel));
+        statusRegistry.put(laserAttack, new LaserAction(entity, eventScheduler, cancelAttackAction, serverLevel));
+        statusRegistry.put(swirlPunchAttack, new SwirlPunchAction(entity, eventScheduler, mobConfig, cancelAttackAction, serverLevel));
+        statusRegistry.put(blindnessAttack, new BlindnessAction(entity, eventScheduler, cancelAttackAction, serverLevel));
         this.moveLogic = new GauntletMoveLogic(statusRegistry, entity, entity.damageMemory);
     }
 

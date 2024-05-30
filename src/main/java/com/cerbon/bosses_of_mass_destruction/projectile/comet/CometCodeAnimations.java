@@ -2,7 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.projectile.comet;
 
 import com.cerbon.bosses_of_mass_destruction.entity.GeoModel;
 import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimations;
-import net.minecraft.util.Mth;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 public class CometCodeAnimations implements ICodeAnimations<CometProjectile> {
@@ -12,7 +12,7 @@ public class CometCodeAnimations implements ICodeAnimations<CometProjectile> {
             AnimationEvent<?> data,
             GeoModel<CometProjectile> geoModel
     ) {
-        float pitch = Mth.rotLerp(data.getPartialTick(), animatable.getXRot() - 5, animatable.getXRot());
+        float pitch = MathHelper.rotLerp(data.getPartialTick(), animatable.getXRot() - 5, animatable.getXRot());
         software.bernie.geckolib3.geo.render.built.GeoModel model = geoModel.getModel(geoModel.getModelLocation(animatable));
         model.getBone("root1").ifPresent(geoBone -> geoBone.setRotationX((float) Math.toRadians(pitch)));
     }

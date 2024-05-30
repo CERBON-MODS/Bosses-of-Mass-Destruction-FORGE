@@ -2,13 +2,13 @@ package com.cerbon.bosses_of_mass_destruction.packet.custom;
 
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.VoidBlossomEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class SpikeS2CPacket {
         this.spikePositions = spikePositions;
     }
 
-    public SpikeS2CPacket(FriendlyByteBuf buf) {
+    public SpikeS2CPacket(PacketBuffer buf) {
         this.id = buf.readInt();
         int size = buf.readInt();
         this.spikePositions = new ArrayList<>();
@@ -31,7 +31,7 @@ public class SpikeS2CPacket {
             this.spikePositions.add(buf.readBlockPos());
     }
 
-    public void write(FriendlyByteBuf buf){
+    public void write(PacketBuffer buf){
         buf.writeInt(id);
         buf.writeInt(spikePositions.size());
         for (BlockPos spikePos : spikePositions){
@@ -45,7 +45,7 @@ public class SpikeS2CPacket {
             Minecraft client = Minecraft.getInstance();
 
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> client.execute(() -> {
-                ClientLevel clientLevel = client.level;
+                ClientWorld clientLevel = client.level;
                 if (clientLevel == null) return;
                 Entity entity = clientLevel.getEntity(id);
 

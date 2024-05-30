@@ -2,8 +2,9 @@ package com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity;
 
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util.OrientedBox;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util.QuaternionD;
-import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.math.AxisAlignedBB;
+
+import javax.annotation.Nullable;
 
 /**
  * Represents a hit box of an entity
@@ -12,12 +13,12 @@ public final class EntityPart {
     private boolean changed = true;
     private double offX,offY,offZ;
     private double x, y, z;
-    private final AABB box;
+    private final AxisAlignedBB box;
     private double px, py, pz;
     private QuaternionD rotation;
     private @Nullable EntityPart parent;
 
-    EntityPart(final @Nullable EntityPart parent, AABB box, final boolean center, double offX, double offY, double offZ) {
+    EntityPart(final @Nullable EntityPart parent, AxisAlignedBB box, final boolean center, double offX, double offY, double offZ) {
         this.parent = parent;
         this.offX = offX;
         this.offY = offY;

@@ -3,26 +3,26 @@ package com.cerbon.bosses_of_mass_destruction.packet.custom;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.PacketUtils;
 import com.cerbon.bosses_of_mass_destruction.block.custom.VoidBlossomBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class PlaceS2CPacket {
-    private final Vec3 pos;
+    private final Vector3d pos;
 
-    public PlaceS2CPacket(Vec3 pos) {
+    public PlaceS2CPacket(Vector3d pos) {
         this.pos = pos;
     }
 
-    public PlaceS2CPacket(FriendlyByteBuf buf) {
+    public PlaceS2CPacket(PacketBuffer buf) {
         this.pos = PacketUtils.readVec3(buf);
     }
 
-    public void write(FriendlyByteBuf buf){
+    public void write(PacketBuffer buf){
         PacketUtils.writeVec3(buf, this.pos);
     }
 

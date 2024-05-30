@@ -10,8 +10,8 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.IDataAccessorHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class GauntletClientEnergyShieldHandler implements IDataAccessorHandler {
     private final GauntletEntity entity;
@@ -34,7 +34,7 @@ public class GauntletClientEnergyShieldHandler implements IDataAccessorHandler {
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
+    public void onSyncedDataUpdated(DataParameter<?> data) {
         if (entity.getEntityData().get(GauntletEntity.isEnergized) && entity.level.isClientSide()){
             eventScheduler.addEvent(new TimedEvent(() -> energizedRenderAlpha += 0.1f, 0, 10, () -> false));
             eventScheduler.addEvent(
@@ -49,11 +49,11 @@ public class GauntletClientEnergyShieldHandler implements IDataAccessorHandler {
     }
 
     private void spawnParticles(){
-        Vec3 look = entity.getLookAngle();
-        Vec3 cross = look.cross(VecUtils.yAxis);
-        Vec3 rotatedOffset = VecUtils.rotateVector(cross, look, RandomUtils.range(0, 359));
-        Vec3 particlePos = MobUtils.eyePos(entity).add(rotatedOffset);
-        Vec3 particleVel = VecUtils.rotateVector(rotatedOffset, look, 90).scale(0.1);
+        Vector3d look = entity.getLookAngle();
+        Vector3d cross = look.cross(VecUtils.yAxis);
+        Vector3d rotatedOffset = VecUtils.rotateVector(cross, look, RandomUtils.range(0, 359));
+        Vector3d particlePos = MobUtils.eyePos(entity).add(rotatedOffset);
+        Vector3d particleVel = VecUtils.rotateVector(rotatedOffset, look, 90).scale(0.1);
         energizedParticles.build(particlePos, particleVel);
     }
 

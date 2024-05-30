@@ -13,21 +13,21 @@ import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.world.World;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 
-public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAccessorHandler, IEntityEventHandler {
+public class GauntletClientLaserHandler implements IEntityTick<World>, IDataAccessorHandler, IEntityEventHandler {
     private final GauntletEntity entity;
     private final EventScheduler eventScheduler;
 
     private LivingEntity cachedBeamTarget;
-    private final HistoricalData<Pair<Vec3, Vec3>> laserRenderPositions = new HistoricalData<>(Pair.of(Vec3.ZERO, Vec3.ZERO), LaserAction.laserLagTicks);
+    private final HistoricalData<Pair<Vector3d, Vector3d>> laserRenderPositions = new HistoricalData<>(Pair.of(Vector3d.ZERO, Vector3d.ZERO), LaserAction.laserLagTicks);
 
     public final ClientParticleBuilder laserChargeParticles = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
             .brightness(BMDParticles.FULL_BRIGHT)
@@ -40,10 +40,10 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
     }
 
     @Override
-    public void tick(Level level) {
+    public void tick(World level) {
         LivingEntity beamTarget = getBeamTarget();
         if (beamTarget != null){
-            Vec3 centerBoxOffset = beamTarget.getBoundingBox().getCenter().subtract(beamTarget.position());
+            Vector3d centerBoxOffset = beamTarget.getBoundingBox().getCenter().subtract(beamTarget.position());
             laserRenderPositions.set(
                     Pair.of(
                             beamTarget.position().add(centerBoxOffset),
@@ -58,33 +58,33 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
         return laserRenderPositions.getSize() > 1;
     }
 
-    public Pair<Vec3, Vec3> getLaserRenderPos(){
-        Pair<Vec3, Vec3> laserPos = laserRenderPositions.getAll().get(0);
-        Vec3 newPos = LaserAction.extendLaser(entity, laserPos.getFirst());
-        Vec3 prevPos = LaserAction.extendLaser(entity, laserPos.getSecond());
+    public Pair<Vector3d, Vector3d> getLaserRenderPos(){
+        Pair<Vector3d, Vector3d> laserPos = laserRenderPositions.getAll().get(0);
+        Vector3d newPos = LaserAction.extendLaser(entity, laserPos.getFirst());
+        Vector3d prevPos = LaserAction.extendLaser(entity, laserPos.getSecond());
 
-        BlockHitResult newResult = entity.level.clip(
-                new ClipContext(
+        BlockRayTraceResult newResult = entity.level.clip(
+                new RayTraceContext(
                         MobUtils.eyePos(entity),
                         newPos,
-                        ClipContext.Block.COLLIDER,
-                        ClipContext.Fluid.NONE,
+                        RayTraceContext.BlockMode.COLLIDER,
+                        RayTraceContext.FluidMode.NONE,
                         entity
                 )
         );
 
-        BlockHitResult prevResult = entity.level.clip(
-                new ClipContext(
+        BlockRayTraceResult prevResult = entity.level.clip(
+                new RayTraceContext(
                         MobUtils.eyePos(entity),
                         prevPos,
-                        ClipContext.Block.COLLIDER,
-                        ClipContext.Fluid.NONE,
+                        RayTraceContext.BlockMode.COLLIDER,
+                        RayTraceContext.FluidMode.NONE,
                         entity
                 )
         );
 
-        Vec3 colNewPos = newResult.getType() == HitResult.Type.BLOCK ? newResult.getLocation() : newPos;
-        Vec3 colPrevPos = prevResult.getType() == HitResult.Type.BLOCK ? prevResult.getLocation() : prevPos;
+        Vector3d colNewPos = newResult.getType() == RayTraceResult.Type.BLOCK ? newResult.getLocation() : newPos;
+        Vector3d colPrevPos = prevResult.getType() == RayTraceResult.Type.BLOCK ? prevResult.getLocation() : prevPos;
         return Pair.of(colNewPos, colPrevPos);
     }
 
@@ -96,8 +96,8 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
                 return this.cachedBeamTarget;
             else {
                 Entity entity1 = entity.level.getEntity(entity.getEntityData().get(GauntletEntity.laserTarget));
-                if (entity1 instanceof LivingEntity livingEntity){
-                    this.cachedBeamTarget = livingEntity;
+                if (entity1 instanceof LivingEntity){
+                    this.cachedBeamTarget = (LivingEntity) entity1;
                     return this.cachedBeamTarget;
                 }else
                     return null;
@@ -111,7 +111,7 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
+    public void onSyncedDataUpdated(DataParameter<?> data) {
         if (GauntletEntity.laserTarget == data)
             this.cachedBeamTarget = null;
     }
@@ -126,11 +126,11 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
             eventScheduler.addEvent(
                     new TimedEvent(
                             () -> {
-                                Vec3 lookVec = entity.getLookAngle();
+                                Vector3d lookVec = entity.getLookAngle();
                                 for (int i = 0; i <= 1; i++){
-                                    Vec3 circularOffset = VecUtils.rotateVector(lookVec.cross(VecUtils.yAxis), lookVec, RandomUtils.range(0, 359));
-                                    Vec3 velocity = circularOffset.normalize().reverse().scale(0.07).add(entity.getDeltaMovement().scale(1.2));
-                                    Vec3 position = MobUtils.eyePos(entity).add(circularOffset).add(lookVec.scale(0.5));
+                                    Vector3d circularOffset = VecUtils.rotateVector(lookVec.cross(VecUtils.yAxis), lookVec, RandomUtils.range(0, 359));
+                                    Vector3d velocity = circularOffset.normalize().reverse().scale(0.07).add(entity.getDeltaMovement().scale(1.2));
+                                    Vector3d position = MobUtils.eyePos(entity).add(circularOffset).add(lookVec.scale(0.5));
                                     laserChargeParticles.build(position, velocity);
                                 }
                             },

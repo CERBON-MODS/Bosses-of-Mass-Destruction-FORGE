@@ -1,15 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.entity.spawn;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.IRandom;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class RangedSpawnPosition implements ISpawnPosition {
-    private final Vec3 position;
+    private final Vector3d position;
     private final double minDistance;
     private final double maxDistance;
     private final IRandom random;
 
-    public RangedSpawnPosition(Vec3 position, double minDistance, double maxDistance, IRandom random) {
+    public RangedSpawnPosition(Vector3d position, double minDistance, double maxDistance, IRandom random) {
         this.position = position;
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
@@ -17,9 +17,9 @@ public class RangedSpawnPosition implements ISpawnPosition {
     }
 
     @Override
-    public Vec3 getPos() {
-        Vec3 randomOffset = random.getVector();
-        Vec3 coercedRandomOffset = randomOffset.normalize().scale(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
+    public Vector3d getPos() {
+        Vector3d randomOffset = random.getVector();
+        Vector3d coercedRandomOffset = randomOffset.normalize().scale(Math.max(Math.min(randomOffset.length(), maxDistance), minDistance));
         return position.add(coercedRandomOffset);
     }
 }

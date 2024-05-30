@@ -3,50 +3,50 @@ package com.cerbon.bosses_of_mass_destruction.projectile.comet;
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.projectile.BaseThrownItemProjectile;
 import com.cerbon.bosses_of_mass_destruction.projectile.util.ExemptEntities;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class CometProjectile extends BaseThrownItemProjectile implements IAnimatable, IAnimationTickable {
-    private Consumer<Vec3> impactAction;
+    private Consumer<Vector3d> impactAction;
     private boolean impacted = false;
 
-    public CometProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
+    public CometProjectile(EntityType<? extends ProjectileItemEntity> entityType, World level) {
         super(entityType, level);
     }
 
-    public CometProjectile(LivingEntity livingEntity, Level level, Consumer<Vec3> impactAction, List<EntityType<?>> exemptEntities){
+    public CometProjectile(LivingEntity livingEntity, World level, Consumer<Vector3d> impactAction, List<EntityType<?>> exemptEntities){
         super(BMDEntities.COMET.get(), livingEntity, level, new ExemptEntities(exemptEntities));
         this.impactAction = impactAction;
     }
 
     @Override
-    public void entityHit(EntityHitResult entityHitResult) {
+    public void entityHit(EntityRayTraceResult entityHitResult) {
         onImpact();
     }
 
     @Override
-    protected void onHitBlock(@NotNull BlockHitResult result) {
+    protected void onHitBlock(@Nonnull BlockRayTraceResult result) {
         onImpact();
         super.onHitBlock(result);
     }
 
     @Override
-    public boolean hurt(@NotNull DamageSource source, float amount) {
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
         onImpact();
         return super.hurt(source, amount);
     }
@@ -59,16 +59,15 @@ public class CometProjectile extends BaseThrownItemProjectile implements IAnimat
         if (owner instanceof LivingEntity){
             if (impactAction != null)
                 impactAction.accept(position());
-            discard();
+            remove();
         }
     }
 
     @Override
-    public boolean canCollideWith(@NotNull Entity entity) {
+    public boolean canCollideWith(@Nonnull Entity entity) {
         return true;
     }
 
-    @Override
     public float getXRot() {
         return tickCount * 5f;
     }

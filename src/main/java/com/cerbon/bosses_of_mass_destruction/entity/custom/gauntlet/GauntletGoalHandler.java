@@ -8,15 +8,15 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IMoveHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.INbtHandler;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.ai.goal.GoalSelector;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class GauntletGoalHandler implements INbtHandler, IMoveHandler, IDamageHandler {
     private final GauntletEntity entity;
@@ -53,18 +53,18 @@ public class GauntletGoalHandler implements INbtHandler, IMoveHandler, IDamageHa
     }
 
     @Override
-    public boolean canMove(MoverType type, Vec3 movement) {
+    public boolean canMove(MoverType type, Vector3d movement) {
         return isAggroed;
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
+    public CompoundNBT toTag(CompoundNBT tag) {
         tag.putBoolean("isAggroed", isAggroed);
         return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
+    public void fromTag(CompoundNBT tag) {
         if (tag.contains("isAggroed")){
             isAggroed = tag.getBoolean("isAggroed");
             if (isAggroed) addGoals();
@@ -72,15 +72,15 @@ public class GauntletGoalHandler implements INbtHandler, IMoveHandler, IDamageHa
     }
 
     private void addGoals() {
-        Level level = entity.level;
-        if (level instanceof ServerLevel serverLevel){
-            GauntletAttacks attackHelper = new GauntletAttacks(entity, eventScheduler, mobConfig, serverLevel);
+        World level = entity.level;
+        if (level instanceof ServerWorld){
+            GauntletAttacks attackHelper = new GauntletAttacks(entity, eventScheduler, mobConfig, (ServerWorld) level);
             CompositeGoal attackGoal = new CompositeGoal(movementHelper.buildAttackMovement(), attackHelper.buildAttackGoal());
 
             goalSelector.addGoal(2, new CompositeGoal());
             goalSelector.addGoal(3, attackGoal);
 
-            targetSelector.addGoal(2, new FindTargetGoal<>(entity, Player.class, d -> entity.getBoundingBox().inflate(d), 10, true, false, null));
+            targetSelector.addGoal(2, new FindTargetGoal<>(entity, PlayerEntity.class, d -> entity.getBoundingBox().inflate(d), 10, true, false, null));
         }
     }
 }

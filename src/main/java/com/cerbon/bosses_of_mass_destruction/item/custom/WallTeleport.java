@@ -2,29 +2,29 @@ package com.cerbon.bosses_of_mass_destruction.item.custom;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 public class WallTeleport {
-    private final ServerLevel level;
+    private final ServerWorld level;
     private final Entity entity;
 
-    public WallTeleport(ServerLevel level, Entity entity) {
+    public WallTeleport(ServerWorld level, Entity entity) {
         this.level = level;
         this.entity = entity;
     }
 
-    public boolean tryTeleport(Vec3 direction, Vec3 position) {
+    public boolean tryTeleport(Vector3d direction, Vector3d position) {
         return tryTeleport(direction, position, this::teleportTo);
     }
 
-    public boolean tryTeleport(Vec3 direction, Vec3 position, Consumer<BlockPos> action){
+    public boolean tryTeleport(Vector3d direction, Vector3d position, Consumer<BlockPos> action){
         Context context = new Context(direction, position);
         BlockPos teleportStart = getTeleportStart(context);
 
@@ -63,16 +63,24 @@ public class WallTeleport {
             if (blockState.isAir() && level.getBlockState(pos.above()).isAir())
                 return pos;
 
-            if (blockState.getBlock().defaultDestroyTime() < 0)
-                return null;
+//            if (blockState.getBlock().defaultDestroyTime() < 0)
+//                return null;
         }
         return null;
     }
 
     private void teleportTo(BlockPos teleportPos){
-        Vec3 pos = VecUtils.asVec3(teleportPos).add(new Vec3(0.5, 0.0, 0.5));
+        Vector3d pos = VecUtils.asVec3(teleportPos).add(new Vector3d(0.5, 0.0, 0.5));
         entity.teleportTo(pos.x, pos.y, pos.z);
     }
 
-    private record Context(Vec3 direction, Vec3 position) {}
+    private static class Context {
+        private final Vector3d direction;
+        private final Vector3d position;
+
+        public Context(Vector3d direction, Vector3d position) {
+            this.direction = direction;
+            this.position = position;
+        }
+    }
 }

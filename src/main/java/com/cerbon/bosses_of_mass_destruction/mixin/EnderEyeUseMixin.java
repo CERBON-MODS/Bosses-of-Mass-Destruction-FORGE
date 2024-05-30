@@ -1,9 +1,9 @@
 package com.cerbon.bosses_of_mass_destruction.mixin;
 
 import com.cerbon.bosses_of_mass_destruction.block.custom.ObsidilithSummonBlock;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.EnderEyeItem;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.item.EnderEyeItem;
+import net.minecraft.item.ItemUseContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EnderEyeUseMixin {
 
     @Inject(method = "useOn", at = @At("HEAD"), cancellable = true)
-    private void onEyeUsed(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir){
+    private void onEyeUsed(ItemUseContext context, CallbackInfoReturnable<ActionResultType> cir){
         ObsidilithSummonBlock.onEnderEyeUsed(context, cir);
     }
 }

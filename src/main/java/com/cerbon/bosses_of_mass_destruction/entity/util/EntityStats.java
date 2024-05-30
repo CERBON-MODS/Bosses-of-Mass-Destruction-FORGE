@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.util;
 
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.LivingEntity;
 
 public class EntityStats implements IEntityStats{
     final LivingEntity livingEntity;

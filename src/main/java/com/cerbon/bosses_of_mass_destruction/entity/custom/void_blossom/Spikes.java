@@ -5,17 +5,17 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEv
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.VecUtils;
 import com.cerbon.bosses_of_mass_destruction.damagesource.UnshieldableDamageSource;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.DirectionalPlaceContext;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Direction;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.DirectionalPlaceContext;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +23,13 @@ import java.util.function.Supplier;
 
 public class Spikes {
     private final LivingEntity entity;
-    private final ServerLevel level;
-    private final ParticleOptions indicatorParticle;
+    private final ServerWorld level;
+    private final IParticleData indicatorParticle;
     private final int riftTime;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
 
-    public Spikes(LivingEntity entity, ServerLevel level, ParticleOptions indicatorParticle, int riftTime, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
+    public Spikes(LivingEntity entity, ServerWorld level, IParticleData indicatorParticle, int riftTime, EventScheduler eventScheduler, Supplier<Boolean> shouldCancel) {
         this.entity = entity;
         this.level = level;
         this.indicatorParticle = indicatorParticle;
@@ -38,7 +38,7 @@ public class Spikes {
         this.shouldCancel = shouldCancel;
     }
 
-    public List<BlockPos> tryPlaceRift(Vec3 pos) {
+    public List<BlockPos> tryPlaceRift(Vector3d pos) {
         List<BlockPos> blockPosList = new ArrayList<>();
         for (int i = 0; i <= 12; i += 6) {
             BlockPos above = new BlockPos(pos.add(VecUtils.yAxis.scale(i)));
@@ -57,8 +57,8 @@ public class Spikes {
         BMDUtils.spawnParticle(
                 level,
                 indicatorParticle,
-                VecUtils.asVec3(pos).add(new Vec3(0.5, 0.1, 0.5)),
-                Vec3.ZERO,
+                VecUtils.asVec3(pos).add(new Vector3d(0.5, 0.1, 0.5)),
+                Vector3d.ZERO,
                 0,
                 0.0
         );
@@ -66,7 +66,7 @@ public class Spikes {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> {
-                            AABB box = new AABB(pos).inflate(.0, 4.0, .0);
+                            AxisAlignedBB box = new AxisAlignedBB(pos).inflate(.0, 4.0, .0);
                             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, box, livingEntity -> livingEntity != entity);
 
                             entities.forEach(livingEntity -> {
@@ -95,6 +95,6 @@ public class Spikes {
                         ItemStack.EMPTY,
                         Direction.UP
                 )
-        ) || level.getBlockState(up).getBlock() == Blocks.MOSS_CARPET;
+        ) || level.getBlockState(up).getBlock() == Blocks.GRASS;
     }
 }

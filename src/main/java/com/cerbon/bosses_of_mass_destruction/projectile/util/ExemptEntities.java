@@ -1,12 +1,12 @@
 package com.cerbon.bosses_of_mass_destruction.projectile.util;
 
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.entity.EntityType;
+import net.minecraft.util.math.EntityRayTraceResult;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class ExemptEntities implements Predicate<EntityHitResult> {
+public class ExemptEntities implements Predicate<EntityRayTraceResult> {
     final List<EntityType<?>> exemptEntities;
 
     public ExemptEntities(List<EntityType<?>> exemptEntities){
@@ -14,7 +14,7 @@ public class ExemptEntities implements Predicate<EntityHitResult> {
     }
 
     @Override
-    public boolean test(EntityHitResult t) {
+    public boolean test(EntityRayTraceResult t) {
         return !exemptEntities.contains(t.getEntity().getType());
     }
 }

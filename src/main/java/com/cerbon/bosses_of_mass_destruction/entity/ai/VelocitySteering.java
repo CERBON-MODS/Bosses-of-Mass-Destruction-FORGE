@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.entity.ai;
 
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 // https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
 public class VelocitySteering implements ISteering {
@@ -17,7 +17,7 @@ public class VelocitySteering implements ISteering {
     }
 
     @Override
-    public Vec3 accelerateTo(Vec3 target) {
+    public Vector3d accelerateTo(Vector3d target) {
         return target.subtract(entity.getPos())
                 .normalize()
                 .scale(maxVelocity)

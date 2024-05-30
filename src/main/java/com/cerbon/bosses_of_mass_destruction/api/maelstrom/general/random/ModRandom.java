@@ -1,7 +1,7 @@
 package com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.RandomUtils;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Random;
 
@@ -12,7 +12,7 @@ public class ModRandom implements IRandom {
     }
 
     @Override
-    public Vec3 getVector() {
+    public Vector3d getVector() {
         return RandomUtils.randVec();
     }
 }

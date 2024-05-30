@@ -1,17 +1,12 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import com.cerbon.bosses_of_mass_destruction.block.BMDBlockEntities;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.ContainerBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockReader;
 
-public class VoidBlossomSummonBlock extends BaseEntityBlock {
+import javax.annotation.Nullable;
+
+public class VoidBlossomSummonBlock extends ContainerBlock {
 
     public VoidBlossomSummonBlock(Properties properties) {
         super(properties);
@@ -19,13 +14,13 @@ public class VoidBlossomSummonBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new VoidBlossomSummonBlockEntity(pos, state);
+    public TileEntity newBlockEntity(IBlockReader blockReader) {
+        return new VoidBlossomSummonBlockEntity();
     }
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, BMDBlockEntities.VOID_BLOSSOM_SUMMON_BLOCK_ENTITY.get(), VoidBlossomSummonBlockEntity::tick);
-    }
+//    @Nullable
+//    @Override
+//    public <T extends TileEntity> BlockEntityTicker<T> getTicker(@Nonnull World level, @Nonnull BlockState state, @Nonnull TileEntityType<T> blockEntityType) {
+//        return createTickerHelper(blockEntityType, BMDBlockEntities.VOID_BLOSSOM_SUMMON_BLOCK_ENTITY.get(), VoidBlossomSummonBlockEntity::tick);
+//    }
 }

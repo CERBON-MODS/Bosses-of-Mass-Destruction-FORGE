@@ -8,7 +8,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class ClientSporeEffectHandler implements IEntityEventHandler {
     private final VoidBlossomEntity entity;
@@ -33,8 +33,8 @@ public class ClientSporeEffectHandler implements IEntityEventHandler {
     }
 
     private void spawnParticles(){
-        Vec3 pos = entity.getEyePosition().add(RandomUtils.randVec().scale(3.0)).subtract(entity.getForward().scale(2.0));
-        Vec3 vel = VecUtils.yAxis.scale(0.1);
+        Vector3d pos = entity.getEyePosition(1.0f).add(RandomUtils.randVec().scale(3.0)).subtract(entity.getForward().scale(2.0));
+        Vector3d vel = VecUtils.yAxis.scale(0.1);
         projectileParticles.build(pos, vel);
     }
 }

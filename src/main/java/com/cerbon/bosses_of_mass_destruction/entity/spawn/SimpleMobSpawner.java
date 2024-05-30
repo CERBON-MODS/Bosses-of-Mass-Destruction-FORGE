@@ -1,26 +1,26 @@
 package com.cerbon.bosses_of_mass_destruction.entity.spawn;
 
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class SimpleMobSpawner implements IMobSpawner {
-    private final ServerLevel serverLevel;
+    private final ServerWorld serverLevel;
 
-    public SimpleMobSpawner(ServerLevel serverLevel) {
+    public SimpleMobSpawner(ServerWorld serverLevel) {
         this.serverLevel = serverLevel;
     }
 
     @Override
-    public void spawn(Vec3 pos, Entity entity) {
-        entity.setPos(pos);
-        if (entity instanceof Mob mob) {
-            mob.finalizeSpawn(
+    public void spawn(Vector3d pos, Entity entity) {
+        entity.setPos(pos.x, pos.y, pos.z);
+        if (entity instanceof MobEntity) {
+            ((MobEntity)entity).finalizeSpawn(
                     serverLevel,
                     serverLevel.getCurrentDifficultyAt(entity.blockPosition()),
-                    MobSpawnType.MOB_SUMMONED,
+                    SpawnReason.MOB_SUMMONED,
                     null,
                     null
             );
@@ -28,8 +28,8 @@ public class SimpleMobSpawner implements IMobSpawner {
 
         serverLevel.addFreshEntityWithPassengers(entity);
 
-        if (entity instanceof Mob) {
-            ((Mob) entity).spawnAnim();
+        if (entity instanceof MobEntity) {
+            ((MobEntity) entity).spawnAnim();
         }
     }
 }

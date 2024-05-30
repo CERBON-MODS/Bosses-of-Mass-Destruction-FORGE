@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.client.render;
 
-import com.mojang.math.Vector4f;
+import net.minecraft.util.math.vector.Vector4f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
 @FunctionalInterface

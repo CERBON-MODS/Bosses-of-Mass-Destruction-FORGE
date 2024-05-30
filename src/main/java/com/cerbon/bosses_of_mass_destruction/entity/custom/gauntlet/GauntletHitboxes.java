@@ -11,18 +11,18 @@ import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.ChangeHitboxS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.fml.ModList;
 
 public class GauntletHitboxes implements IDamageHandler {
     private final GauntletEntity entity;
-    private final AABB collisionHitbox = new AABB(Vec3.ZERO, new Vec3(2.0, 4.0, 2.0));
-    private final AABB clampedCollisionHitbox = new AABB(Vec3.ZERO, new Vec3(2.0, 2.0, 2.0));
+    private final AxisAlignedBB collisionHitbox = new AxisAlignedBB(Vector3d.ZERO, new Vector3d(2.0, 4.0, 2.0));
+    private final AxisAlignedBB clampedCollisionHitbox = new AxisAlignedBB(Vector3d.ZERO, new Vector3d(2.0, 2.0, 2.0));
     private final String rootBoxPitch = "rootPitch";
     private final String rootBoxYaw = "rootYaw";
     private String nextDamagedPart;
@@ -61,14 +61,14 @@ public class GauntletHitboxes implements IDamageHandler {
 
     public void setOpenHandHitbox(){
         if (!entity.level.isClientSide() && currentHitbox != hitboxes){
-            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), true), (ServerLevel) entity.level, entity.position());
+            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), true), (ServerWorld) entity.level, entity.position());
         }
          currentHitbox = hitboxes;
     }
 
     public void setClosedFistHitbox() {
         if (!entity.level.isClientSide() && currentHitbox != clampedHitboxes){
-            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), false), (ServerLevel) entity.level, entity.position());
+            BMDPacketHandler.sendToAllPlayersTrackingChunk(new ChangeHitboxS2CPacket(entity.getId(), false), (ServerWorld) entity.level, entity.position());
         }
         currentHitbox = clampedHitboxes;
     }
@@ -81,8 +81,8 @@ public class GauntletHitboxes implements IDamageHandler {
         EntityPart rootPitch = hitboxes.getPart(rootBoxPitch);
         EntityPart rootYaw = hitboxes.getPart(rootBoxYaw);
 
-        rootYaw.setRotation(0.0, -entity.getYRot(), 0.0, true);
-        rootPitch.setRotation(entity.getXRot(), 0.0, 0.0, true);
+        rootYaw.setRotation(0.0, -entity.yRot, 0.0, true);
+        rootPitch.setRotation(entity.xRot, 0.0, 0.0, true);
 
         rootYaw.setX(entity.getX());
         rootYaw.setY(entity.getY());
@@ -91,8 +91,8 @@ public class GauntletHitboxes implements IDamageHandler {
         EntityPart fistYaw = clampedHitboxes.getPart(rootFistBoxYaw);
         EntityPart fist = clampedHitboxes.getPart(rootFistBox);
 
-        fistYaw.setRotation(0.0, -entity.getYRot(), 0.0, true);
-        fist.setRotation(entity.getXRot(), 0.0, 0.0, true);
+        fistYaw.setRotation(0.0, -entity.yRot, 0.0, true);
+        fist.setRotation(entity.xRot, 0.0, 0.0, true);
 
         fistYaw.setX(entity.getX());
         fistYaw.setY(entity.getY());
@@ -126,9 +126,9 @@ public class GauntletHitboxes implements IDamageHandler {
         if (part != null && part.equals(eyeBox) || damageSource.isBypassInvul()) return true;
 
         if (damageSource.isExplosion()){
-            Vec3 pos = damageSource.getSourcePosition();
+            Vector3d pos = damageSource.getSourcePosition();
             if (pos != null){
-                Vec3 explosionDirection = MathUtils.unNormedDirection(pos, MobUtils.eyePos(entity));
+                Vector3d explosionDirection = MathUtils.unNormedDirection(pos, MobUtils.eyePos(entity));
                 if (!MathUtils.facingSameDirection(explosionDirection, entity.getLookAngle()))
                     return true;
             }
@@ -136,8 +136,10 @@ public class GauntletHitboxes implements IDamageHandler {
 
         if (!damageSource.isProjectile()){
             Entity entity1 = damageSource.getEntity();
-            if (entity1 instanceof LivingEntity livingEntity){
-                livingEntity.knockback(0.5, actor.getX() - livingEntity.getX(), actor.getZ() - livingEntity.getZ());
+            if (entity1 instanceof LivingEntity) {
+                LivingEntity livingEntity = (LivingEntity) entity1;
+
+                livingEntity.knockback(0.5f, actor.getX() - livingEntity.getX(), actor.getZ() - livingEntity.getZ());
             }
         }
 

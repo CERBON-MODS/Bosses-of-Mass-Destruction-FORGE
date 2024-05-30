@@ -12,11 +12,11 @@ import com.cerbon.bosses_of_mass_destruction.projectile.comet.CometProjectile;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Collections;
 import java.util.function.Function;
@@ -26,7 +26,7 @@ public class CometAction implements IActionWithCooldown {
     private final LichEntity entity;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
-    private final Function<Vec3, ProjectileThrower> cometThrower;
+    private final Function<Vector3d, ProjectileThrower> cometThrower;
 
     public static final int cometThrowDelay = 60;
     public static final int cometParticleSummonDelay = 15;
@@ -51,19 +51,19 @@ public class CometAction implements IActionWithCooldown {
     @Override
     public int perform() {
         Entity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return cometThrowCooldown;
-        performCometThrow(((ServerPlayer) target).getLevel());
+        if (!(target instanceof ServerPlayerEntity)) return cometThrowCooldown;
+        performCometThrow(((ServerPlayerEntity) target).getLevel());
         return cometThrowCooldown;
     }
 
-    private void performCometThrow(ServerLevel serverLevel) {
+    private void performCometThrow(ServerWorld serverLevel) {
         eventScheduler.addEvent(
                 new TimedEvent(
                         () -> BMDUtils.playSound(
                                 serverLevel,
                                 entity.position(),
                                 BMDSounds.COMET_PREPARE.get(),
-                                SoundSource.HOSTILE,
+                                SoundCategory.HOSTILE,
                                 3.0f,
                                 64.0,
                                 null
@@ -85,7 +85,7 @@ public class CometAction implements IActionWithCooldown {
                                     serverLevel,
                                     entity.position(),
                                     BMDSounds.COMET_SHOOT.get(),
-                                    SoundSource.HOSTILE,
+                                    SoundCategory.HOSTILE,
                                     3.0f,
                                     64.0,
                                     null
@@ -98,7 +98,7 @@ public class CometAction implements IActionWithCooldown {
         );
     }
 
-    public static Vec3 getCometLaunchOffset() {
+    public static Vector3d getCometLaunchOffset() {
         return VecUtils.yAxis.scale(2.0);
     }
 }

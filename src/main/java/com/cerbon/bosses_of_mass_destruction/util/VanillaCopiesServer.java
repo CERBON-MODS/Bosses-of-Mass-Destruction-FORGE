@@ -1,22 +1,23 @@
 package com.cerbon.bosses_of_mass_destruction.util;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.DoublePlantBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DoublePlantBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.*;
 
 public class VanillaCopiesServer {
-    public static void travel(Vec3 relative, LivingEntity entity, float baseFrictionCoefficient) {
+    public static void travel(Vector3d relative, LivingEntity entity, float baseFrictionCoefficient) {
         if (entity.isInWater()) {
             entity.moveRelative(0.02F, relative);
             entity.move(MoverType.SELF, entity.getDeltaMovement());
@@ -41,20 +42,20 @@ public class VanillaCopiesServer {
         entity.calculateEntityAnimation(entity, false);
     }
 
-    public static void lookAtTarget(Mob mobEntity, Vec3 target, float maxYawChange, float maxPitchChange) {
+    public static void lookAtTarget(MobEntity mobEntity, Vector3d target, float maxYawChange, float maxPitchChange) {
         double d = target.x - mobEntity.getX();
         double e = target.z - mobEntity.getZ();
         double g = target.y - mobEntity.getEyeY();
 
         double h = Math.sqrt(d * d + e * e);
-        float i = (float) ((Mth.atan2(e, d) * 57.2957763671875) - 90.0f);
-        float j = (float) (-(Mth.atan2(g, h) * 57.2957763671875));
-        mobEntity.setXRot(changeAngle(mobEntity.getXRot(), j, maxPitchChange));
-        mobEntity.setYRot(changeAngle(mobEntity.getYRot(), i, maxYawChange));
+        float i = (float) ((MathHelper.atan2(e, d) * 57.2957763671875) - 90.0f);
+        float j = (float) (-(MathHelper.atan2(g, h) * 57.2957763671875));
+        mobEntity.xRot = (changeAngle(mobEntity.xRot, j, maxPitchChange));
+        mobEntity.yRot = (changeAngle(mobEntity.yRot, i, maxYawChange));
     }
 
     public static float changeAngle(float oldAngle, float newAngle, float maxChangeInAngle) {
-        float f = Mth.wrapDegrees(newAngle - oldAngle);
+        float f = MathHelper.wrapDegrees(newAngle - oldAngle);
 
         if (f > maxChangeInAngle)
             f = maxChangeInAngle;
@@ -65,41 +66,41 @@ public class VanillaCopiesServer {
         return oldAngle + f;
     }
 
-    public static boolean hasDirectLineOfSight(Vec3 to, Vec3 from, BlockGetter level, Entity entity) {
-        ClipContext context = new ClipContext(
+    public static boolean hasDirectLineOfSight(Vector3d to, Vector3d from, IBlockReader level, Entity entity) {
+        RayTraceContext context = new RayTraceContext(
                 to,
                 from,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
+                RayTraceContext.BlockMode.COLLIDER,
+                RayTraceContext.FluidMode.NONE,
                 entity
         );
-        return level.clip(context).getType() == HitResult.Type.MISS;
+        return level.clip(context).getType() == RayTraceResult.Type.MISS;
     }
 
-    public static void awardExperience(int amount, Vec3 pos, Level level) {
+    public static void awardExperience(int amount, Vector3d pos, World level) {
         int amt = amount;
         while (amt > 0) {
-            int i = ExperienceOrb.getExperienceValue(amt);
+            int i = ExperienceOrbEntity.getExperienceValue(amt);
             amt -= i;
-            level.addFreshEntity(new ExperienceOrb(level, pos.x, pos.y, pos.z, i));
+            level.addFreshEntity(new ExperienceOrbEntity(level, pos.x, pos.y, pos.z, i));
         }
     }
 
     public static int getBlockLight(Entity entity, BlockPos blockPos) {
-        return entity.isOnFire() ? 15 : entity.level.getBrightness(LightLayer.BLOCK, blockPos);
+        return entity.isOnFire() ? 15 : entity.level.getBrightness(LightType.BLOCK, blockPos);
     }
 
-    public static Explosion.BlockInteraction getEntityDestructionType(Level level){
-        return level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
+    public static Explosion.Mode getEntityDestructionType(World level){
+        return level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
     }
 
-    public static void destroyBlocks(Entity entity, AABB aabb) {
-        int i = Mth.floor(aabb.minX);
-        int j = Mth.floor(aabb.minY);
-        int k = Mth.floor(aabb.minZ);
-        int l = Mth.floor(aabb.maxX);
-        int m = Mth.floor(aabb.maxY);
-        int n = Mth.floor(aabb.maxZ);
+    public static void destroyBlocks(Entity entity, AxisAlignedBB aabb) {
+        int i = MathHelper.floor(aabb.minX);
+        int j = MathHelper.floor(aabb.minY);
+        int k = MathHelper.floor(aabb.minZ);
+        int l = MathHelper.floor(aabb.maxX);
+        int m = MathHelper.floor(aabb.maxY);
+        int n = MathHelper.floor(aabb.maxZ);
         boolean bl2 = false;
         for (int o = i; o <= l; o++)
             for (int p = j; p <= m; p++)
@@ -113,7 +114,7 @@ public class VanillaCopiesServer {
                 }
     }
 
-    public static void onBreakInCreative(Level level, BlockPos pos, BlockState state, Player player) {
+    public static void onBreakInCreative(World level, BlockPos pos, BlockState state, PlayerEntity player) {
         DoubleBlockHalf doubleBlockHalf = state.getValue(DoublePlantBlock.HALF);
 
         if (doubleBlockHalf == DoubleBlockHalf.UPPER) {

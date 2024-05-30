@@ -9,12 +9,13 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.StagedDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
+import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,11 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEntityTick<ServerLevel> {
+public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEntityTick<ServerWorld> {
     private final Map<Byte, IActionWithCooldown> actions;
     private final LichEntity actor;
     private final HistoricalData<Byte> moveHistory = new HistoricalData<>((byte)0, 4);
-    private final HistoricalData<Vec3> positionalHistory = new HistoricalData<>(Vec3.ZERO, 10);
+    private final HistoricalData<Vector3d> positionalHistory = new HistoricalData<>(Vector3d.ZERO, 10);
     private final List<Byte> priorityMoves = new ArrayList<>();
     private final StagedDamageHandler stagedDamageHandler;
     private final TargetSwitcher targetSwitcher;
@@ -36,7 +37,7 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
         this.actor = actor;
         this.stagedDamageHandler = new StagedDamageHandler(
                 LichUtils.hpPercentRageModes,
-                () -> priorityMoves.addAll(List.of(LichActions.cometRageAttack, LichActions.volleyRageAttack, LichActions.minionRageAttack))
+                () -> priorityMoves.addAll(Lists.newArrayList(LichActions.cometRageAttack, LichActions.volleyRageAttack, LichActions.minionRageAttack))
         );
         this.targetSwitcher = new TargetSwitcher(actor, damageMemory);
     }
@@ -85,7 +86,7 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
     }
 
     private double getTeleportWeight() {
-        List<Vec3> positions = positionalHistory.getAll();
+        List<Vector3d> positions = positionalHistory.getAll();
         double distanceTraveled = IntStream.range(0, positions.size() - 1)
                 .mapToDouble(i -> positions.get(i).distanceTo(positions.get(i + 1)))
                 .sum();
@@ -97,7 +98,7 @@ public class LichMoveLogic implements IDamageHandler, IActionWithCooldown, IEnti
     }
 
     @Override
-    public void tick(ServerLevel level) {
+    public void tick(ServerWorld level) {
         positionalHistory.set(actor.position());
     }
 }

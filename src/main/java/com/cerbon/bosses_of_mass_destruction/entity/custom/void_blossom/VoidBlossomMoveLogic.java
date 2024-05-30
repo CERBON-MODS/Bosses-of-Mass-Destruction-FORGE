@@ -3,7 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.WeightedRandom;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.TargetSwitcher;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.LivingEntity;
 
 import java.util.Map;
 import java.util.function.Supplier;

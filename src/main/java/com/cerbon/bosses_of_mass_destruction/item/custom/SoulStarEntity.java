@@ -10,30 +10,31 @@ import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
-import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IRendersAsItem;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.play.server.SSpawnObjectPacket;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 
-public class SoulStarEntity extends Entity implements ItemSupplier {
-    private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(SoulStarEntity.class, EntityDataSerializers.ITEM_STACK);
+import javax.annotation.Nonnull;
+
+public class SoulStarEntity extends Entity implements IRendersAsItem {
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(SoulStarEntity.class, DataSerializers.ITEM_STACK);
     private final ClientParticleBuilder particleBuilder = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
             .color(LichUtils.blueColorFade)
             .age(RandomUtils.range(80, 100))
@@ -45,11 +46,11 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     private double targetY = 0.0;
     private double targetZ = 0.0;
 
-    public SoulStarEntity(EntityType<?> entityType, Level level) {
+    public SoulStarEntity(EntityType<?> entityType, World level) {
         super(entityType, level);
     }
 
-    public SoulStarEntity(Level level, double x, double y, double z){
+    public SoulStarEntity(World level, double x, double y, double z){
         this(BMDEntities.SOUL_STAR.get(), level);
         absMoveTo(x, y, z);
     }
@@ -64,7 +65,7 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    public @NotNull ItemStack getItem() {
+    public @Nonnull ItemStack getItem() {
         ItemStack itemStack = getTrackedItem();
         return itemStack.isEmpty() ? new ItemStack(BMDItems.SOUL_STAR.get()) : itemStack;
     }
@@ -105,10 +106,10 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
         this.setDeltaMovement(x, y, z);
         if (xRotO == 0.0f && yRotO == 0.0f){
             double f = Math.sqrt(x * x + z * z);
-            setYRot((float) (Mth.atan2(x, z) * 57.2957763671875));
-            setXRot((float) (Mth.atan2(y, f) * 57.2957763671875));
-            yRotO = getYRot();
-            xRotO = getXRot();
+            yRot = ((float) (MathHelper.atan2(x, z) * 57.2957763671875));
+            xRot = ((float) (MathHelper.atan2(y, f) * 57.2957763671875));
+            yRotO = yRot;
+            xRotO = xRot;
         }
     }
 
@@ -120,37 +121,37 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
                     new Event(
                             () -> true,
                             () -> spawnTrailParticles(rotationOffset),
-                            this::isRemoved
+                            () -> this.removed
                     )
             );
         }
 
         super.tick();
-        Vec3 vec3 = getDeltaMovement();
+        Vector3d vec3 = getDeltaMovement();
         double d = this.getX() + vec3.x;
         double e = this.getY() + vec3.y;
         double f = this.getZ() + vec3.z;
-        double g = vec3.horizontalDistance();
-        setXRot(updateRotation(xRotO, (float) (Mth.atan2(vec3.y, g) * 57.2957763671875)));
-        setYRot(updateRotation(yRotO, (float) (Mth.atan2(vec3.x, vec3.z) * 57.2957763671875)));
+        double g = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z);
+        xRot = (updateRotation(xRotO, (float) (MathHelper.atan2(vec3.y, g) * 57.2957763671875)));
+        yRot = (updateRotation(yRotO, (float) (MathHelper.atan2(vec3.x, vec3.z) * 57.2957763671875)));
 
         if (!level.isClientSide()){
             double xd = targetX - d;
             double zd = targetZ - f;
             float distance = (float) Math.sqrt(xd * xd + zd * zd);
-            float k = (float) Mth.atan2(zd, xd);
-            double l = Mth.lerp(0.0025, g, distance);
+            float k = (float) MathHelper.atan2(zd, xd);
+            double l = MathHelper.lerp(0.0025, g, distance);
             double m = vec3.y;
             if(distance < 1.0f){
                 l *= 0.8;
                 m *= 0.8;
 
                 playSound(BMDSounds.SOUL_STAR.get(), 1.0f, 1.0f);
-                discard();
+                remove();
                 level.addFreshEntity(new ItemEntity(level, this.getX(), this.getY(), this.getZ(), this.getItem()));
             }
             int n = this.getY() < targetY ? 1 : -1;
-            vec3 = new Vec3(Math.cos(k) * l, m + (n - m) * 0.014999999664723873, Math.sin(k) * l);
+            vec3 = new Vector3d(Math.cos(k) * l, m + (n - m) * 0.014999999664723873, Math.sin(k) * l);
             setDeltaMovement(vec3);
 
             absMoveTo(d, e, f);
@@ -161,14 +162,14 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     private void spawnTrailParticles(double rotationOffset){
-        Vec3 look = getDeltaMovement();
-        Vec3 cross = look.cross(VecUtils.yAxis).normalize();
-        Vec3 rotatedOffset = VecUtils.rotateVector(cross, look, rotationOffset + tickCount * 30.0).scale(0.25);
-        Vec3 particlePos = position().add(rotatedOffset);
+        Vector3d look = getDeltaMovement();
+        Vector3d cross = look.cross(VecUtils.yAxis).normalize();
+        Vector3d rotatedOffset = VecUtils.rotateVector(cross, look, rotationOffset + tickCount * 30.0).scale(0.25);
+        Vector3d particlePos = position().add(rotatedOffset);
         particleBuilder.build(particlePos, getDeltaMovement().scale(0.1));
     }
 
-    private void spawnParticles(double d, Vec3 vec3, double e, double f){
+    private void spawnParticles(double d, Vector3d vec3, double e, double f){
         if (this.isInWater()){
             for (int p = 0; p <= 3; p++){
                 level.addParticle(
@@ -185,14 +186,14 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    protected void addAdditionalSaveData(@NotNull CompoundTag compound) {
+    protected void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
         ItemStack itemStack = this.getTrackedItem();
         if (!itemStack.isEmpty())
-            compound.put("Item", itemStack.save(new CompoundTag()));
+            compound.put("Item", itemStack.save(new CompoundNBT()));
     }
 
     @Override
-    protected void readAdditionalSaveData(@NotNull CompoundTag compound) {
+    protected void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
         ItemStack itemStack = ItemStack.of(compound.getCompound("Item"));
         setItem(itemStack);
     }
@@ -208,8 +209,8 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
+    public IPacket<?> getAddEntityPacket() {
+        return new SSpawnObjectPacket(this);
     }
 
     private float updateRotation(float f, float g){
@@ -220,6 +221,6 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
         while (g - f1 >= 180.0f)
             f1 += 360.0f;
 
-        return Mth.lerp(0.2f, f1, g);
+        return MathHelper.lerp(0.2f, f1, g);
     }
 }

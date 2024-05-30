@@ -22,23 +22,25 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityEventHan
 import com.cerbon.bosses_of_mass_destruction.entity.util.CompositeEntityTick;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.google.common.collect.Lists;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,22 +49,21 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
     private final NetworkedHitboxManager hitboxHelper;
 
     public final VoidBlossomClientSpikeHandler clientSpikeHandler;
-    public static final List<Float> hpMilestones = List.of(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
+    public static final List<Float> hpMilestones = Lists.newArrayList(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
 
-    public VoidBlossomEntity(EntityType<? extends PathfinderMob> entityType, Level level, VoidBlossomConfig mobConfig) {
+    public VoidBlossomEntity(EntityType<? extends CreatureEntity> entityType, World level, VoidBlossomConfig mobConfig) {
         super(entityType, level);
         noCulling = true;
 
-        this.animationHolder = new AnimationHolder(
-                this, Map.of(
-                VoidBlossomAttacks.spikeAttack, new AnimationHolder.Animation("spike", "idle"),
-                VoidBlossomAttacks.spikeWaveAttack, new AnimationHolder.Animation("spike_wave", "idle"),
-                VoidBlossomAttacks.sporeAttack, new AnimationHolder.Animation("spore", "idle"),
-                VoidBlossomAttacks.bladeAttack, new AnimationHolder.Animation("leaf_blade", "idle"),
-                VoidBlossomAttacks.blossomAction, new AnimationHolder.Animation("blossom", "idle"),
-                VoidBlossomAttacks.spawnAction, new AnimationHolder.Animation("spawn", "idle"),
-                (byte) 3, new AnimationHolder.Animation("death", "idle")),
-                VoidBlossomAttacks.stopAttackAnimation, 0);
+        Map<Byte, AnimationHolder.Animation> animationStatusFlags = new HashMap<>();
+        animationStatusFlags.put(VoidBlossomAttacks.spikeAttack, new AnimationHolder.Animation("spike", "idle"));
+        animationStatusFlags.put(VoidBlossomAttacks.spikeWaveAttack, new AnimationHolder.Animation("spike_wave", "idle"));
+        animationStatusFlags.put(VoidBlossomAttacks.sporeAttack, new AnimationHolder.Animation("spore", "idle"));
+        animationStatusFlags.put(VoidBlossomAttacks.bladeAttack, new AnimationHolder.Animation("leaf_blade", "idle"));
+        animationStatusFlags.put(VoidBlossomAttacks.blossomAction, new AnimationHolder.Animation("blossom", "idle"));
+        animationStatusFlags.put(VoidBlossomAttacks.spawnAction, new AnimationHolder.Animation("spawn", "idle"));
+        animationStatusFlags.put((byte) 3, new AnimationHolder.Animation("death", "idle"));
+        this.animationHolder = new AnimationHolder(this, animationStatusFlags, VoidBlossomAttacks.stopAttackAnimation, 0);
 
         VoidBlossomHitboxes hitboxes = new VoidBlossomHitboxes(this);
         this.hitboxHelper = new NetworkedHitboxManager(this, hitboxes.getMap());
@@ -73,7 +74,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
         BooleanFlag shouldSpawnBlossoms = new BooleanFlag();
         StagedDamageHandler hpDetector = new StagedDamageHandler(hpMilestones, shouldSpawnBlossoms::flag);
 
-        bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.NOTCHED_12);
+        bossBar = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.NOTCHED_12);
 
         this.clientSpikeHandler = new VoidBlossomClientSpikeHandler();
         clientTick = clientSpikeHandler;
@@ -91,12 +92,12 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
 
         damageHandler = new CompositeDamageHandler(hpDetector, hitboxes.getDamageHandlers(), damageMemory);
 
-        if (!level.isClientSide() && level instanceof ServerLevel){
+        if (!level.isClientSide() && level instanceof ServerWorld){
             VoidBlossomAttacks attackHandler = new VoidBlossomAttacks(this, preTickEvents, shouldSpawnBlossoms::getAndReset, targetSwitcher);
             goalSelector.addGoal(2, new CompositeGoal());
             goalSelector.addGoal(1, new CompositeGoal(attackHandler.buildAttackGoal(), new ActionGoal(this::canContinueAttack, null, this::lookAtTarget, null, null)));
 
-            targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> getBoundingBox().inflate(d), 10, true, false, null));
+            targetSelector.addGoal(2, new FindTargetGoal<>(this, PlayerEntity.class, d -> getBoundingBox().inflate(d), 10, true, false, null));
 
             preTickEvents.addEvent(
                     new TimedEvent(
@@ -122,8 +123,8 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
     }
 
     @Override
-    public void move(@NotNull MoverType type, @NotNull Vec3 movement) {
-        super.move(type, new Vec3(0.0, movement.y(), 0.0));
+    public void move(@Nonnull MoverType type, @Nonnull Vector3d movement) {
+        super.move(type, new Vector3d(0.0, movement.y(), 0.0));
     }
 
     private boolean canContinueAttack(){
@@ -136,7 +137,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
     }
 
     @Override
-    public CompoundOrientedBox getCompoundBoundingBox(AABB bounds) {
+    public CompoundOrientedBox getCompoundBoundingBox(AxisAlignedBB bounds) {
         return hitboxHelper.getBounds().getBox(bounds);
     }
 
@@ -152,7 +153,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return BMDSounds.VOID_BLOSSOM_HURT.get();
     }
 

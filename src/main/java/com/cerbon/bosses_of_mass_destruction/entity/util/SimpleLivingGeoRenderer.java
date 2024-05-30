@@ -1,17 +1,15 @@
 package com.cerbon.bosses_of_mass_destruction.entity.util;
 
 import com.cerbon.bosses_of_mass_destruction.client.render.*;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector4f;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector4f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -20,6 +18,8 @@ import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> extends GeoEntityRenderer<T> {
@@ -33,7 +33,7 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
 
     private final GeoRenderer<T> renderHelper = new GeoRenderer<>(modelProvider, this::getTextureLocation, this);
 
-    public SimpleLivingGeoRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> model, IRenderLight<T> brightness, IBoneLight iBoneLight, IRenderer<T> renderer, IRendererWithModel renderWithModel, IOverlayOverride overlayOverride, RenderType renderType, boolean deathRotation) {
+    public SimpleLivingGeoRenderer(EntityRendererManager renderManager, AnimatedGeoModel<T> model, IRenderLight<T> brightness, IBoneLight iBoneLight, IRenderer<T> renderer, IRendererWithModel renderWithModel, IOverlayOverride overlayOverride, RenderType renderType, boolean deathRotation) {
         super(renderManager, model);
         this.brightness = brightness;
         this.iBoneLight = iBoneLight;
@@ -45,17 +45,17 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
     }
 
     @Override
-    public RenderType getRenderType(T animatable, float partialTick, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, ResourceLocation texture) {
+    public RenderType getRenderType(T animatable, float partialTick, MatrixStack poseStack, @Nullable IRenderTypeBuffer bufferSource, @Nullable IVertexBuilder buffer, int packedLight, ResourceLocation texture) {
         return renderType != null ? renderHelper.getRenderType(animatable, partialTick, poseStack, bufferSource, buffer, packedLight, texture) : super.getRenderType(animatable, partialTick, poseStack, bufferSource, buffer, packedLight, texture);
     }
 
     @Override
-    protected int getBlockLightLevel(@NotNull T entity, @NotNull BlockPos pos) {
+    protected int getBlockLightLevel(@Nonnull T entity, @Nonnull BlockPos pos) {
         return brightness != null ? brightness.getBlockLight(entity, pos) : super.getBlockLightLevel(entity, pos);
     }
 
     @Override
-    public void renderRecursively(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, MatrixStack poseStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         int packedLight1 = iBoneLight != null ? iBoneLight.getLightForBone(bone, packedLight) : packedLight;
         Vector4f color = new Vector4f(red, green, blue, alpha);
         Vector4f newColor = iBoneLight != null ? iBoneLight.getColorForBone(bone, color) :color;
@@ -71,11 +71,11 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
 
     @Override
     public void render(
-            @NotNull T entity,
+            @Nonnull T entity,
             float entityYaw,
             float partialTick,
-            @NotNull PoseStack poseStack,
-            @NotNull MultiBufferSource bufferSource,
+            @Nonnull MatrixStack poseStack,
+            @Nonnull IRenderTypeBuffer bufferSource,
             int packedLight
     ) {
         if (renderer != null) renderer.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
@@ -85,7 +85,7 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
     }
 
     @Override
-    public void render(GeoModel model, T animatable, float partialTick, RenderType type, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void render(GeoModel model, T animatable, float partialTick, RenderType type, MatrixStack poseStack, @Nullable IRenderTypeBuffer bufferSource, @Nullable IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         super.render(model, animatable, partialTick, type, poseStack, bufferSource, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         int packetOverlay = overlayOverride != null ? overlayOverride.getOverlay() : packedOverlay;
         renderHelper.render(model, animatable, partialTick, type, poseStack, bufferSource, buffer, packedLight, packetOverlay, red, green, blue, alpha);
@@ -131,7 +131,7 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
         private final Function<T, ResourceLocation> textureLocation;
         private final SimpleLivingGeoRenderer<T> renderer;
 
-        private MultiBufferSource provider;
+        private IRenderTypeBuffer provider;
 
         public GeoRenderer(AnimatedGeoModel<T> geoModel, Function<T, ResourceLocation> textureLocation, SimpleLivingGeoRenderer<T> renderer) {
             this.geoModel = geoModel;
@@ -145,17 +145,17 @@ public class SimpleLivingGeoRenderer<T extends LivingEntity & IAnimatable> exten
         }
 
         @Override
-        public void renderRecursively(GeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        public void renderRecursively(GeoBone bone, MatrixStack poseStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
             renderer.renderRecursively(bone, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
         }
 
         @Override
-        public void setCurrentRTB(MultiBufferSource bufferSource) {
+        public void setCurrentRTB(IRenderTypeBuffer bufferSource) {
             provider = bufferSource;
         }
 
         @Override
-        public MultiBufferSource getCurrentRTB() {
+        public IRenderTypeBuffer getCurrentRTB() {
             return provider;
         }
 

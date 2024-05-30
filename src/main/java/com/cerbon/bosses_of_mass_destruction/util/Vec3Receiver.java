@@ -1,8 +1,8 @@
 package com.cerbon.bosses_of_mass_destruction.util;
 
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.vector.Vector3d;
 
 public interface Vec3Receiver {
-    void clientHandler(ClientLevel level, Vec3 vec3);
+    void clientHandler(ClientWorld level, Vector3d vec3);
 }

@@ -2,8 +2,8 @@ package com.cerbon.bosses_of_mass_destruction.mixin.multipart_entities;
 
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.MultipartAwareEntity;
 import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.entity.MultipartEntity;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinEntity {
 
     @Inject(method = "getBoundingBox", at = @At("RETURN"), cancellable = true)
-    private void getBoundingBox(CallbackInfoReturnable<AABB> cir) {
+    private void getBoundingBox(CallbackInfoReturnable<AxisAlignedBB> cir) {
         if (this instanceof MultipartEntity)
             cir.setReturnValue(((MultipartEntity) this).getCompoundBoundingBox(cir.getReturnValue()));
     }

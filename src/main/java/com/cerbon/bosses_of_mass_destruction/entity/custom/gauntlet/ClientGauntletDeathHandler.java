@@ -1,10 +1,9 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.World;
 
-public class ClientGauntletDeathHandler implements IEntityTick<Level> {
+public class ClientGauntletDeathHandler implements IEntityTick<World> {
     private final GauntletEntity entity;
 
     public ClientGauntletDeathHandler(GauntletEntity entity) {
@@ -12,9 +11,9 @@ public class ClientGauntletDeathHandler implements IEntityTick<Level> {
     }
 
     @Override
-    public void tick(Level level) {
+    public void tick(World level) {
         entity.deathTime++;
         if (entity.deathTime == ServerGauntletDeathHandler.deathAnimationTime)
-            entity.remove(Entity.RemovalReason.KILLED);
+            entity.remove();
     }
 }

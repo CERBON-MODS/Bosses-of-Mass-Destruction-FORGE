@@ -8,8 +8,8 @@ import com.cerbon.bosses_of_mass_destruction.entity.damage.DamageMemory;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.IDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.StagedDamageHandler;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityStats;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.LivingEntity;
 
 import java.util.Map;
 

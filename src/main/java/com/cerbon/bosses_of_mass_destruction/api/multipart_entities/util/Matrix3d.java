@@ -1,10 +1,10 @@
 package com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util;
 
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 public final class Matrix3d {
     public static final Matrix3d IDENTITY = new Matrix3d(QuaternionD.IDENTITY);
-    public static final Vec3[] IDENTITY_BASIS = IDENTITY.getBasis();
+    public static final Vector3d[] IDENTITY_BASIS = IDENTITY.getBasis();
     public final double m00;
     public final double m01;
     public final double m02;
@@ -78,16 +78,16 @@ public final class Matrix3d {
         return new Matrix3d(m00, m01, m02, m10, m11, m12, m20, m21, m22);
     }
 
-    public Vec3[] getBasis() {
-        return new Vec3[]{new Vec3(m00, m10, m20), new Vec3(m01, m11, m21), new Vec3(m02, m12, m22)};
+    public Vector3d[] getBasis() {
+        return new Vector3d[]{new Vector3d(m00, m10, m20), new Vector3d(m01, m11, m21), new Vector3d(m02, m12, m22)};
     }
 
-    public Vec3 transform(final Vec3 v) {
-        return new Vec3(m00 * v.x + m01 * v.y + m02 * v.z, m10 * v.x + m11 * v.y + m12 * v.z, m20 * v.x + m21 * v.y + m22 * v.z);
+    public Vector3d transform(final Vector3d v) {
+        return new Vector3d(m00 * v.x + m01 * v.y + m02 * v.z, m10 * v.x + m11 * v.y + m12 * v.z, m20 * v.x + m21 * v.y + m22 * v.z);
     }
 
-    public Vec3 transform(final double x, final double y, final double z) {
-        return new Vec3(m00 * x + m01 * y + m02 * z, m10 * x + m11 * y + m12 * z, m20 * x + m21 * y + m22 * z);
+    public Vector3d transform(final double x, final double y, final double z) {
+        return new Vector3d(m00 * x + m01 * y + m02 * z, m10 * x + m11 * y + m12 * z, m20 * x + m21 * y + m22 * z);
     }
 
     public double transformX(final double x, final double y, final double z) {

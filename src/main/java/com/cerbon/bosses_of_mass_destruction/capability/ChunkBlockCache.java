@@ -1,10 +1,13 @@
 package com.cerbon.bosses_of_mass_destruction.capability;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class ChunkBlockCache implements IChunkBlockCache {
     private final HashMap<ChunkPos, HashMap<Block, HashSet<BlockPos>>> map = new HashMap<>();
@@ -23,7 +26,7 @@ public class ChunkBlockCache implements IChunkBlockCache {
         List<BlockPos> positions = new ArrayList<>();
 
         if (map.containsKey(chunkPos) && map.get(chunkPos).containsKey(block))
-             positions = map.get(chunkPos).get(block).stream().toList();
+             positions = new ArrayList<>(map.get(chunkPos).get(block));
 
         return positions;
     }

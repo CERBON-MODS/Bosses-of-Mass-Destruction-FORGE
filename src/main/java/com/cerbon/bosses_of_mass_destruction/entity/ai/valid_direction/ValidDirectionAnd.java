@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction;
 
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class ValidDirectionAnd implements IValidDirection {
     }
 
     @Override
-    public boolean isValidDirection(Vec3 normedDirection) {
+    public boolean isValidDirection(Vector3d normedDirection) {
         return validators.stream().allMatch(validator -> validator.isValidDirection(normedDirection));
     }
 }

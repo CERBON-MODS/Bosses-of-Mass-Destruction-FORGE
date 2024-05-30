@@ -21,84 +21,86 @@ import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.monster.Phantom;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.monster.PhantomEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LichEntity extends BaseEntity {
     private final LichConfig mobConfig;
     private final AnimationHolder animationHolder;
     private final TeleportAction teleportAction;
-    public final HistoricalData<Vec3> velocityHistory;
+    public final HistoricalData<Vector3d> velocityHistory;
     public final boolean shouldSetToNighttime;
     public boolean collides;
 
-    public LichEntity(EntityType<? extends LichEntity> entityType, Level level, LichConfig mobConfig) {
+    public LichEntity(EntityType<? extends LichEntity> entityType, World level, LichConfig mobConfig) {
         super(entityType, level);
         this.mobConfig = mobConfig;
 
         noCulling = true;
 
-        this.animationHolder = new AnimationHolder(this, Map.of(
-                LichActions.endTeleport, new AnimationHolder.Animation("unteleport", "idle"),
-                LichActions.cometRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
-                LichActions.volleyRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
-                LichActions.cometAttack, new AnimationHolder.Animation("summon_fireball", "idle"),
-                LichActions.minionAttack, new AnimationHolder.Animation("summon_minions", "idle"),
-                LichActions.minionRageAttack, new AnimationHolder.Animation("rage_mode", "idle"),
-                LichActions.teleportAction, new AnimationHolder.Animation("teleport", "teleporting"),
-                LichActions.volleyAttack, new AnimationHolder.Animation("summon_missiles", "idle"),
-                (byte) 3, new AnimationHolder.Animation("idle", "idle")),
-                LichActions.stopAttackAnimation, 0
-        );
+        Map<Byte, AnimationHolder.Animation> animationStatusFlags = new HashMap<>();
+        animationStatusFlags.put(LichActions.endTeleport, new AnimationHolder.Animation("unteleport", "idle"));
+        animationStatusFlags.put(LichActions.cometRageAttack, new AnimationHolder.Animation("rage_mode", "idle"));
+        animationStatusFlags.put(LichActions.volleyRageAttack, new AnimationHolder.Animation("rage_mode", "idle"));
+        animationStatusFlags.put(LichActions.cometAttack, new AnimationHolder.Animation("summon_fireball", "idle"));
+        animationStatusFlags.put(LichActions.minionAttack, new AnimationHolder.Animation("summon_minions", "idle"));
+        animationStatusFlags.put(LichActions.minionRageAttack, new AnimationHolder.Animation("rage_mode", "idle"));
+        animationStatusFlags.put(LichActions.teleportAction, new AnimationHolder.Animation("teleport", "teleporting"));
+        animationStatusFlags.put(LichActions.volleyAttack, new AnimationHolder.Animation("summon_missiles", "idle"));
+        animationStatusFlags.put((byte) 3, new AnimationHolder.Animation("idle", "idle"));
+
+        this.animationHolder = new AnimationHolder(this, animationStatusFlags, LichActions.stopAttackAnimation, 0);
 
         MinionAction minionAction = new MinionAction(this, preTickEvents, this::cancelAttackAction);
         this.teleportAction = new TeleportAction(this, preTickEvents, this::cancelAttackAction);
-        Map<Byte, IActionWithCooldown> statusRegistry = Map.of(
-                LichActions.cometAttack, new CometAction(this, preTickEvents, this::cancelAttackAction, mobConfig),
-                LichActions.volleyAttack, new VolleyAction(this, mobConfig, preTickEvents, this::cancelAttackAction),
-                LichActions.minionAttack, minionAction,
-                LichActions.minionRageAttack, new MinionRageAction(this, preTickEvents, this::cancelAttackAction, minionAction),
-                LichActions.teleportAction, teleportAction,
-                LichActions.cometRageAttack, new CometRageAction(this, preTickEvents, this::cancelAttackAction, mobConfig),
-                LichActions.volleyRageAttack, new VolleyRageAction(this, mobConfig, preTickEvents, this::cancelAttackAction));
+        Map<Byte, IActionWithCooldown> statusRegistry = new HashMap<>();
+        statusRegistry.put(LichActions.cometAttack, new CometAction(this, preTickEvents, this::cancelAttackAction, mobConfig));
+        statusRegistry.put(LichActions.volleyAttack, new VolleyAction(this, mobConfig, preTickEvents, this::cancelAttackAction));
+        statusRegistry.put(LichActions.minionAttack, minionAction);
+        statusRegistry.put(LichActions.minionRageAttack, new MinionRageAction(this, preTickEvents, this::cancelAttackAction, minionAction));
+        statusRegistry.put(LichActions.teleportAction, teleportAction);
+        statusRegistry.put(LichActions.cometRageAttack, new CometRageAction(this, preTickEvents, this::cancelAttackAction, mobConfig));
+        statusRegistry.put(LichActions.volleyRageAttack, new VolleyRageAction(this, mobConfig, preTickEvents, this::cancelAttackAction));
+
         DamageMemory damageMemory = new DamageMemory(5, this);
         LichMoveLogic moveLogic = new LichMoveLogic(statusRegistry, this, damageMemory);
         LichParticleHandler lichParticles = new LichParticleHandler(this, preTickEvents);
 
         this.shouldSetToNighttime = mobConfig.eternalNighttime;
-        this.velocityHistory = new HistoricalData<>(Vec3.ZERO, 2);
+        this.velocityHistory = new HistoricalData<>(Vector3d.ZERO, 2);
         this.collides = true;
 
         CappedHeal cappedHeal = new CappedHeal(this, LichUtils.hpPercentRageModes, mobConfig.idleHealingPerTick);
         entityEventHandler = new CompositeEntityEventHandler(animationHolder, lichParticles);
         damageHandler = new CompositeDamageHandler(
                 new StagedDamageHandler(LichUtils.hpPercentRageModes, () -> level.broadcastEntityEvent(this, LichActions.hpBelowThresholdStatus)),
-                new DamagedAttackerNotSeen(this, livingEntity -> {if (livingEntity instanceof ServerPlayer) teleportAction.performTeleport((ServerPlayer) livingEntity);}),
+                new DamagedAttackerNotSeen(this, livingEntity -> {if (livingEntity instanceof ServerPlayerEntity) teleportAction.performTeleport((ServerPlayerEntity) livingEntity);}),
                 moveLogic, damageMemory
         );
 
-        bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
+        bossBar = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.BLUE, BossInfo.Overlay.PROGRESS);
         serverTick = new CompositeEntityTick<>(cappedHeal, moveLogic);
         clientTick = lichParticles;
 
@@ -106,11 +108,11 @@ public class LichEntity extends BaseEntity {
             LichActions attackHelper = new LichActions(this, moveLogic);
             LichMovement moveHelper = new LichMovement(this);
 
-            goalSelector.addGoal(1, new FloatGoal(this));
+            goalSelector.addGoal(1, new SwimGoal(this));
             goalSelector.addGoal(3, new CompositeGoal(moveHelper.buildAttackMovement(), attackHelper.buildAttackGoal()));
             goalSelector.addGoal(4, moveHelper.buildWanderGoal());
 
-            targetSelector.addGoal(2, new FindTargetGoal<>(this, Player.class, d -> this.getBoundingBox().inflate(d), 10, true, false, null));
+            targetSelector.addGoal(2, new FindTargetGoal<>(this, PlayerEntity.class, d -> this.getBoundingBox().inflate(d), 10, true, false, null));
         }
     }
 
@@ -123,8 +125,8 @@ public class LichEntity extends BaseEntity {
     }
 
     public boolean inLineOfSight(Entity target){
-        boolean hasDirectLineOfSight = VanillaCopiesServer.hasDirectLineOfSight(getEyePosition(), MobUtils.eyePos(target), level, this);
-        Vec3 directionToLich = MathUtils.unNormedDirection(MobUtils.eyePos(target), getEyePosition());
+        boolean hasDirectLineOfSight = VanillaCopiesServer.hasDirectLineOfSight(getEyePosition(1.0f), MobUtils.eyePos(target), level, this);
+        Vector3d directionToLich = MathUtils.unNormedDirection(MobUtils.eyePos(target), getEyePosition(1.0f));
         boolean facingSameDirection = MathUtils.facingSameDirection(target.getLookAngle(), directionToLich);
         return hasDirectLineOfSight && facingSameDirection;
     }
@@ -135,24 +137,24 @@ public class LichEntity extends BaseEntity {
     }
 
     @Override
-    public void serverTick(ServerLevel serverLevel) {
+    public void serverTick(ServerWorld serverLevel) {
         if (shouldSetToNighttime)
             serverLevel.setDayTime(LichUtils.timeToNighttime(serverLevel.dayTime()));
     }
 
     @Override
-    public boolean canCollideWith(@NotNull Entity entity) {
+    public boolean canCollideWith(@Nonnull Entity entity) {
         return collides;
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(float fallDistance, float multiplier) {
         return false;
     }
 
     @Override
-    public @NotNull MobType getMobType() {
-        return MobType.UNDEAD;
+    public @Nonnull CreatureAttribute getMobType() {
+        return CreatureAttribute.UNDEAD;
     }
 
     @Override
@@ -162,7 +164,7 @@ public class LichEntity extends BaseEntity {
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return BMDSounds.LICH_HURT.get();
     }
 
@@ -187,7 +189,7 @@ public class LichEntity extends BaseEntity {
     }
 
     @Override
-    public void die(@NotNull DamageSource damageSource) {
+    public void die(@Nonnull DamageSource damageSource) {
         int expTicks = 18;
         int expPerTick = (int) (mobConfig.experienceDrop / (float) expTicks);
         preTickEvents.addEvent(
@@ -198,16 +200,16 @@ public class LichEntity extends BaseEntity {
                 )
         );
 
-         level.getEntitiesOfClass(Phantom.class, new AABB(blockPosition()).inflate(100.0, 100.0, 100.0)).forEach(Phantom::kill);
+         level.getEntitiesOfClass(PhantomEntity.class, new AxisAlignedBB(blockPosition()).inflate(100.0, 100.0, 100.0)).forEach(PhantomEntity::kill);
 
          super.die(damageSource);
     }
 
     @Override
-    protected void checkFallDamage(double y, boolean onGround, @NotNull BlockState state, @NotNull BlockPos pos) {}
+    protected void checkFallDamage(double y, boolean onGround, @Nonnull BlockState state, @Nonnull BlockPos pos) {}
 
     @Override
-    public void travel(@NotNull Vec3 movementInput) {
+    public void travel(@Nonnull Vector3d movementInput) {
         VanillaCopiesServer.travel(movementInput, this, 0.91f);
     }
 }

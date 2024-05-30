@@ -1,9 +1,10 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
-import net.minecraft.util.StringRepresentable;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.IStringSerializable;
 
-public enum TripleBlockPart implements StringRepresentable {
+import javax.annotation.Nonnull;
+
+public enum TripleBlockPart implements IStringSerializable {
     TOP,
     MIDDLE,
     BOTTOM;
@@ -14,11 +15,12 @@ public enum TripleBlockPart implements StringRepresentable {
     }
 
     @Override
-    public @NotNull String getSerializedName() {
-        return switch (this){
-            case TOP -> "top";
-            case MIDDLE -> "middle";
-            case BOTTOM -> "bottom";
-        };
+    public @Nonnull String getSerializedName() {
+        switch (this){
+            case TOP: return  "top";
+            case MIDDLE: return  "middle";
+            case BOTTOM: return  "bottom";
+        }
+        return "";
     }
 }

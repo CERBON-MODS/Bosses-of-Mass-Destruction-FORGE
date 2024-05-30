@@ -4,8 +4,8 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.EventSc
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.event.TimedEvent;
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.LivingEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +39,12 @@ public class MinionRageAction implements IActionWithCooldown {
     @Override
     public int perform() {
         LivingEntity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return totalMoveTime;
-        performMinionSummon((ServerPlayer) target);
+        if (!(target instanceof ServerPlayerEntity)) return totalMoveTime;
+        performMinionSummon((ServerPlayerEntity) target);
         return totalMoveTime;
     }
 
-    private void performMinionSummon(ServerPlayer target) {
+    private void performMinionSummon(ServerPlayerEntity target) {
         for (int delayTime : delayTimes)
             eventScheduler.addEvent(new TimedEvent(() -> minionAction.beginSummonSingleMob(target), delayTime, 1, shouldCancel));
     }

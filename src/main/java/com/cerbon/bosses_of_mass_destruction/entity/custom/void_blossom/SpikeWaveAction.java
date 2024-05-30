@@ -12,28 +12,29 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Direction;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class SpikeWaveAction implements IActionWithCooldown {
     private final VoidBlossomEntity entity;
     private final EventScheduler eventScheduler;
     private final Supplier<Boolean> shouldCancel;
 
-    private final List<Vec3> firstCirclePoints = MathUtils.buildBlockCircle(7.0);
+    private final List<Vector3d> firstCirclePoints = MathUtils.buildBlockCircle(7.0);
     private final double secondRadius = 14.0;
-    private final List<Vec3> secondCirclePoints;
+    private final List<Vector3d> secondCirclePoints;
     private final double thirdRadius = 21.0;
-    private final List<Vec3> thirdCirclePoints;
+    private final List<Vector3d> thirdCirclePoints;
 
     public static final int indicatorDelay = 30;
 
@@ -54,16 +55,16 @@ public class SpikeWaveAction implements IActionWithCooldown {
     @Override
     public int perform() {
         LivingEntity target = entity.getTarget();
-        if (!(target instanceof ServerPlayer)) return 80;
-        placeRifts((ServerPlayer) target);
+        if (!(target instanceof ServerPlayerEntity)) return 80;
+        placeRifts((ServerPlayerEntity) target);
         return 120;
     }
 
-    private void placeRifts(ServerPlayer target){
+    private void placeRifts(ServerPlayerEntity target){
         int firstBurstDelay = 20;
         int secondBurstDelay = 45;
         int thirdBurstDelay = 70;
-        ServerLevel level = target.getLevel();
+        ServerWorld level = target.getLevel();
 
         eventScheduler.addEvent(
                 new EventSeries(
@@ -106,9 +107,9 @@ public class SpikeWaveAction implements IActionWithCooldown {
         createSpikeWave(
                 () -> {
                     createBurst(spikeGenerator, firstCirclePoints);
-                    BMDUtils.playSound(level, entity.position(), BMDSounds.SPIKE_WAVE_INDICATOR.get(), SoundSource.HOSTILE, 2.0f, 0.7f, 64, null);
+                    BMDUtils.playSound(level, entity.position(), BMDSounds.SPIKE_WAVE_INDICATOR.get(), SoundCategory.HOSTILE, 2.0f, 0.7f, 64, null);
                 },
-                () -> BMDUtils.playSound(level, entity.position(), BMDSounds.VOID_BLOSSOM_SPIKE.get(), SoundSource.HOSTILE, 1.2f, 64, null),
+                () -> BMDUtils.playSound(level, entity.position(), BMDSounds.VOID_BLOSSOM_SPIKE.get(), SoundCategory.HOSTILE, 1.2f, 64, null),
                 firstBurstDelay
         );
 
@@ -145,19 +146,19 @@ public class SpikeWaveAction implements IActionWithCooldown {
         );
     }
 
-    private void playSoundsInRadius(ServerLevel level, double radius, SoundEvent soundEvent, float volume, float pitch){
+    private void playSoundsInRadius(ServerWorld level, double radius, SoundEvent soundEvent, float volume, float pitch){
         for (Direction dir : Direction.Plane.HORIZONTAL){
-            Vec3 pos = entity.position().add(new Vec3(dir.step()).scale(radius));
-            BMDUtils.playSound(level, pos, soundEvent, SoundSource.HOSTILE, volume, pitch, 64, null);
+            Vector3d pos = entity.position().add(new Vector3d(dir.step()).scale(radius));
+            BMDUtils.playSound(level, pos, soundEvent, SoundCategory.HOSTILE, volume, pitch, 64, null);
         }
     }
 
-    private void createBurst(Spikes spikesGenerator, List<Vec3> positions){
-        List<BlockPos> placedPositions = positions.stream().flatMap(vec3 -> spikesGenerator.tryPlaceRift(entity.position().add(vec3)).stream()).toList();
+    private void createBurst(Spikes spikesGenerator, List<Vector3d> positions){
+        List<BlockPos> placedPositions = positions.stream().flatMap(vec3 -> spikesGenerator.tryPlaceRift(entity.position().add(vec3)).stream()).collect(Collectors.toList());
 
         eventScheduler.addEvent(
                 new TimedEvent(
-                        () -> BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), placedPositions), (ServerLevel) entity.level, entity.position()),
+                        () -> BMDPacketHandler.sendToAllPlayersTrackingChunk(new SpikeS2CPacket(entity.getId(), placedPositions), (ServerWorld) entity.level, entity.position()),
                         indicatorDelay,
                         1,
                         shouldCancel

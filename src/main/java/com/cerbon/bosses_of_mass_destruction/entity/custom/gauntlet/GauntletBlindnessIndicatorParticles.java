@@ -10,9 +10,9 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 import java.util.Random;
@@ -36,8 +36,8 @@ public class GauntletBlindnessIndicatorParticles implements IEntityEventHandler 
         this.eventScheduler = eventScheduler;
     }
 
-    public void handlePlayerEffects(List<Player> players){
-        for (Player player : players)
+    public void handlePlayerEffects(List<PlayerEntity> players){
+        for (PlayerEntity player : players)
             spawnRotatingParticles(player, particleBuilder);
     }
 
@@ -47,11 +47,11 @@ public class GauntletBlindnessIndicatorParticles implements IEntityEventHandler 
             int startingRotation = new Random().nextInt(360);
             particleBuilder
                     .continuousPosition(simpleParticle -> calculatePositions(player, i1, simpleParticle.getAge(), startingRotation))
-                    .build(calculatePositions(player, i1, 0, startingRotation), Vec3.ZERO);
+                    .build(calculatePositions(player, i1, 0, startingRotation), Vector3d.ZERO);
         }
     }
 
-    private Vec3 calculatePositions(Entity player, int i, int age, int startingRotation){
+    private Vector3d calculatePositions(Entity player, int i, int age, int startingRotation){
         return player.position().add(VecUtils.yAxis.scale(i * 0.1)).add(
                 VecUtils.xAxis.yRot(
                         (float) Math.toRadians(age * 2 + startingRotation)
@@ -66,8 +66,8 @@ public class GauntletBlindnessIndicatorParticles implements IEntityEventHandler 
                     new TimedEvent(
                             () -> {
                                 for (int i = 0; i <= 3; i++){
-                                    Vec3 particlePos = MobUtils.eyePos(entity).add(RandomUtils.randVec().normalize().scale(2.0));
-                                    Vec3 particleVel = RandomUtils.randVec().scale(0.05).add(VecUtils.yAxis.scale(0.05));
+                                    Vector3d particlePos = MobUtils.eyePos(entity).add(RandomUtils.randVec().normalize().scale(2.0));
+                                    Vector3d particleVel = RandomUtils.randVec().scale(0.05).add(VecUtils.yAxis.scale(0.05));
                                     gauntletParticleBuilder.build(particlePos, particleVel);
                                 }
                             },

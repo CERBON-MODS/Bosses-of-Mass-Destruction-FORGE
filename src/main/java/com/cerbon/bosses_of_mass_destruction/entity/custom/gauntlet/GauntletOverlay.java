@@ -2,8 +2,8 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
 import com.cerbon.bosses_of_mass_destruction.client.render.IOverlayOverride;
 import com.cerbon.bosses_of_mass_destruction.client.render.IRenderer;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 
 public class GauntletOverlay implements IRenderer<GauntletEntity>, IOverlayOverride {
@@ -22,7 +22,7 @@ public class GauntletOverlay implements IRenderer<GauntletEntity>, IOverlayOverr
     }
 
     @Override
-    public void render(GauntletEntity entity, float yaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light) {
+    public void render(GauntletEntity entity, float yaw, float partialTicks, MatrixStack poseStack, IRenderTypeBuffer buffer, int light) {
         this.entity = entity;
         this.partialTicks = partialTicks;
     }

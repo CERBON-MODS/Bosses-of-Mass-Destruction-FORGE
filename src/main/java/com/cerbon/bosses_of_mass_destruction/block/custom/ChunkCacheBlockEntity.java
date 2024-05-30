@@ -1,20 +1,20 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.block.BlockState;
 
-public class ChunkCacheBlockEntity extends BlockEntity {
+public class ChunkCacheBlockEntity extends TileEntity {
     private final Block block;
     private boolean added = false;
 
-    public ChunkCacheBlockEntity(Block block, BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
-        super(type, pos, blockState);
+    public ChunkCacheBlockEntity(Block block, TileEntityType<?> type) {
+        super(type);
         this.block = block;
     }
 
@@ -30,7 +30,7 @@ public class ChunkCacheBlockEntity extends BlockEntity {
         super.setRemoved();
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, ChunkCacheBlockEntity entity){
+    public static void tick(World level, BlockPos pos, BlockState state, ChunkCacheBlockEntity entity){
         if (!entity.added){
             BMDCapabilities.getChunkBlockCache(level).ifPresent(chunkBlockCache ->
                     chunkBlockCache.addToChunk(new ChunkPos(pos), entity.block, pos)

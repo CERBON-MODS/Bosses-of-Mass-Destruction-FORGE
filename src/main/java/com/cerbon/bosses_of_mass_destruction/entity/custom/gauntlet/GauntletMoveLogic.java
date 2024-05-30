@@ -5,7 +5,7 @@ import com.cerbon.bosses_of_mass_destruction.api.maelstrom.general.random.Weight
 import com.cerbon.bosses_of_mass_destruction.entity.ai.TargetSwitcher;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.DamageMemory;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.LivingEntity;
 
 import java.util.Map;
 

@@ -1,13 +1,12 @@
 package com.cerbon.bosses_of_mass_destruction.client.render;
 
 import com.cerbon.bosses_of_mass_destruction.api.maelstrom.static_utilities.MathUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.BossEvent;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.BossInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -25,25 +24,27 @@ public class NodeBossBarRenderer {
         this.textureSize = textureSize;
     }
 
-    public void renderBossBar(PoseStack poseStack, int x, int y, BossEvent bossEvent, CallbackInfo callbackInfo){
-        Component name = bossEvent.getName();
+    public void renderBossBar(MatrixStack poseStack, int x, int y, BossInfo bossEvent, CallbackInfo callbackInfo){
+        ITextComponent name = bossEvent.getName();
 
-        if (name instanceof TranslatableComponent translatableContents && translatableContents.getKey().equals(entityTypeKey)){
-            float colorLocation = bossEvent.getColor().ordinal() * 5 * 2f;
-            GuiComponent.blit(
-                    poseStack, x, y, 0f, colorLocation, 182, 5,
-                    textureSize,
-                    textureSize
-            );
-
-            int i = (int) (bossEvent.getProgress() * 183.0f);
-            if (i > 0){
-                float progressLocation = bossEvent.getColor().ordinal() * 5 * 2 + 5f;
-                GuiComponent.blit(
-                        poseStack, x, y, 0f, progressLocation, i, 5,
+        if (name instanceof TranslationTextComponent) {
+            if (((TranslationTextComponent) name).getKey().equals(entityTypeKey)) {
+                float colorLocation = bossEvent.getColor().ordinal() * 5 * 2f;
+                AbstractGui.blit(
+                        poseStack, x, y, 0f, colorLocation, 182, 5,
                         textureSize,
                         textureSize
                 );
+
+                int i = (int) (bossEvent.getPercent() * 183.0f);
+                if (i > 0){
+                    float progressLocation = bossEvent.getColor().ordinal() * 5 * 2 + 5f;
+                    AbstractGui.blit(
+                            poseStack, x, y, 0f, progressLocation, i, 5,
+                            textureSize,
+                            textureSize
+                    );
+                }
             }
 
             renderBossNodes(bossEvent, poseStack, x, y);
@@ -53,21 +54,21 @@ public class NodeBossBarRenderer {
     }
 
     private void renderBossNodes(
-            BossEvent bossEvent,
-            PoseStack poseStack,
+            BossInfo bossEvent,
+            MatrixStack poseStack,
             int x,
             int y
     ) {
-        RenderSystem.setShaderTexture(0, noteTexture);
-        int steppedPercentage = (int) (192 * MathUtils.roundedStep(bossEvent.getProgress(), hpPercentages, true)) + 7;
-        GuiComponent.blit(
+        //RenderSystem.setShaderTexture(0, noteTexture);
+        int steppedPercentage = (int) (192 * MathUtils.roundedStep(bossEvent.getPercent(), hpPercentages, true)) + 7;
+        AbstractGui.blit(
                 poseStack, x - 3, y - 1, 0f, 0f, steppedPercentage, 7,
                 textureSize,
                 textureSize
         );
 
         int steppedPercentageReverse = 192 - steppedPercentage;
-        GuiComponent.blit(
+        AbstractGui.blit(
                 poseStack,
                 x - 3 + steppedPercentage,
                 y - 1,

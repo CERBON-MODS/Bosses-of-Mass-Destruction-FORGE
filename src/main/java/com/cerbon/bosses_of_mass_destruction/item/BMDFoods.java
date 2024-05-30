@@ -1,16 +1,16 @@
 package com.cerbon.bosses_of_mass_destruction.item;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.food.FoodProperties;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.item.Food;
 
 public class BMDFoods {
-    public static final FoodProperties CRYSTAL_FRUIT = new FoodProperties.Builder()
+    public static final Food CRYSTAL_FRUIT = new Food.Builder()
             .nutrition(4)
             .saturationMod(1.2F)
-            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 300, 1), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.HEAL, 1), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0), 1.0F)
+            .effect(() -> new EffectInstance(Effects.REGENERATION, 300, 1), 1.0F)
+            .effect(() -> new EffectInstance(Effects.HEAL, 1), 1.0F)
+            .effect(() -> new EffectInstance(Effects.DAMAGE_RESISTANCE, 600, 0), 1.0F)
             .alwaysEat()
             .build();
 }

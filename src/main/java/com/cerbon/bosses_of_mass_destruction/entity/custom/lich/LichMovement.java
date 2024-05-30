@@ -12,11 +12,11 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntity;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.util.math.vector.Vector3d;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -37,7 +37,7 @@ public class LichMovement {
     }
 
     public VelocityGoal buildAttackMovement() {
-        Function<Vec3, Boolean> tooCloseToTarget = v -> getWithinDistancePredicate(tooCloseToTargetDistance, entity::safeGetTargetPos).test(v);
+        Function<Vector3d, Boolean> tooCloseToTarget = v -> getWithinDistancePredicate(tooCloseToTargetDistance, entity::safeGetTargetPos).test(v);
         ValidDirectionAnd canMoveTowardsPositionValidator = getValidDirectionAnd(tooCloseToTarget);
         ValidatedTargetSelector targetSelector = new ValidatedTargetSelector(
                 iEntity,
@@ -51,10 +51,10 @@ public class LichMovement {
         );
     }
 
-    @NotNull
-    private ValidDirectionAnd getValidDirectionAnd(Function<Vec3, Boolean> tooCloseToTarget) {
-        Function<Vec3, Boolean> tooFarFromTarget = v -> !getWithinDistancePredicate(tooFarFromTargetDistance, entity::safeGetTargetPos).test(v);
-        Function<Vec3, Boolean> movingToTarget = v -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), v);
+    @Nonnull
+    private ValidDirectionAnd getValidDirectionAnd(Function<Vector3d, Boolean> tooCloseToTarget) {
+        Function<Vector3d, Boolean> tooFarFromTarget = v -> !getWithinDistancePredicate(tooFarFromTargetDistance, entity::safeGetTargetPos).test(v);
+        Function<Vector3d, Boolean> movingToTarget = v -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), v);
 
         return new ValidDirectionAnd(
                 Arrays.asList(
@@ -64,7 +64,7 @@ public class LichMovement {
         );
     }
 
-    private void moveWhileAttacking(Vec3 velocity) {
+    private void moveWhileAttacking(Vector3d velocity) {
         BMDUtils.addDeltaMovement(entity, velocity);
 
         LivingEntity target = entity.getTarget();
@@ -75,8 +75,8 @@ public class LichMovement {
     }
 
     public VelocityGoal buildWanderGoal() {
-        Function<Vec3, Boolean> tooFarFromTarget = v -> getWithinDistancePredicate(idleWanderDistance, () -> entity.idlePosition).test(v);
-        Function<Vec3, Boolean> movingTowardsIdleCenter = v -> MathUtils.movingTowards(entity.idlePosition, entity.position(), v);
+        Function<Vector3d, Boolean> tooFarFromTarget = v -> getWithinDistancePredicate(idleWanderDistance, () -> entity.idlePosition).test(v);
+        Function<Vector3d, Boolean> movingTowardsIdleCenter = v -> MathUtils.movingTowards(entity.idlePosition, entity.position(), v);
 
         ValidDirectionAnd canMoveTowardsPositionValidator = new ValidDirectionAnd(
                 Arrays.asList(
@@ -102,17 +102,17 @@ public class LichMovement {
         return new VelocitySteering(iEntity, entity.getAttributeValue(Attributes.FLYING_SPEED), 120.0);
     }
 
-    private Predicate<Vec3> getWithinDistancePredicate(double distance, Supplier<Vec3> targetPos) {
+    private Predicate<Vector3d> getWithinDistancePredicate(double distance, Supplier<Vector3d> targetPos) {
         return v -> {
-            Vec3 target = entity.position().add(v.scale(reactionDistance));
+            Vector3d target = entity.position().add(v.scale(reactionDistance));
             return MathUtils.withinDistance(target, targetPos.get(), distance);
         };
     }
 
-    private void moveTowards(Vec3 velocity) {
+    private void moveTowards(Vector3d velocity) {
         BMDUtils.addDeltaMovement(entity, velocity);
 
-        Vec3 lookTarget = entity.position().add(new Vec3(0.0, entity.getEyeHeight(), 0.0)).add(velocity);
+        Vector3d lookTarget = entity.position().add(new Vector3d(0.0, entity.getEyeHeight(), 0.0)).add(velocity);
         entity.getLookControl().setLookAt(lookTarget);
         VanillaCopiesServer.lookAtTarget(entity, lookTarget, (float)entity.getHeadRotSpeed(), (float)entity.getMaxHeadXRot());
     }

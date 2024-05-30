@@ -1,22 +1,23 @@
 package com.cerbon.bosses_of_mass_destruction.item.custom;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ChargedEnderPearlItem extends Item {
@@ -26,7 +27,7 @@ public class ChargedEnderPearlItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand usedHand) {
+    public @Nonnull ActionResult<ItemStack> use(World level, PlayerEntity player, @Nonnull Hand usedHand) {
         ItemStack itemStack = player.getItemInHand(usedHand);
         level.playSound(
                 null,
@@ -34,7 +35,7 @@ public class ChargedEnderPearlItem extends Item {
                 player.getY(),
                 player.getZ(),
                 SoundEvents.ENDER_PEARL_THROW,
-                SoundSource.NEUTRAL,
+                SoundCategory.NEUTRAL,
                 0.5f,
                 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f)
         );
@@ -43,19 +44,19 @@ public class ChargedEnderPearlItem extends Item {
         player.getCooldowns().addCooldown(this, itemCooldown);
 
         if (!level.isClientSide()){
-            ThrowableItemProjectile projectile = new ChargedEnderPearlEntity(level, player);
+            ProjectileItemEntity projectile = new ChargedEnderPearlEntity(level, player);
             projectile.setItem(itemStack);
-            projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, 1.5f, 1.0f);
+            projectile.shootFromRotation(player, player.xRot, player.yRot, 0.0f, 1.5f, 1.0f);
             level.addFreshEntity(projectile);
         }
         player.awardStat(Stats.ITEM_USED.get(this));
-        return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
+        return ActionResult.sidedSuccess(itemStack, level.isClientSide());
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip").withStyle(ChatFormatting.DARK_GRAY));
-        tooltipComponents.add(new TranslatableComponent("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip2").withStyle(ChatFormatting.DARK_GRAY));
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World level, @Nonnull List<ITextComponent> tooltipComponents, @Nonnull ITooltipFlag isAdvanced) {
+        tooltipComponents.add(new TranslationTextComponent("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip").withStyle(TextFormatting.DARK_GRAY));
+        tooltipComponents.add(new TranslationTextComponent("item.bosses_of_mass_destruction.charged_ender_pearl.tooltip2").withStyle(TextFormatting.DARK_GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }

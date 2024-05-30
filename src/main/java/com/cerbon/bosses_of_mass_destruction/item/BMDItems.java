@@ -7,19 +7,18 @@ import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.LichStru
 import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.ObsidilithStructureRepair;
 import com.cerbon.bosses_of_mass_destruction.structure.structure_repair.VoidBlossomStructureRepair;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
+import com.google.common.collect.Lists;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.item.Rarity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-
-import java.util.List;
 
 public class BMDItems {
     public static final DeferredRegister<Item> ITEMS =
@@ -50,7 +49,7 @@ public class BMDItems {
             () -> new ChargedEnderPearlItem(new Item.Properties().fireResistant().stacksTo(1).tab(BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION)));
 
     public static final RegistryObject<Item> BRIMSTONE_NECTAR = ITEMS.register("brimstone_nectar",
-            () -> new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant().tab(BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION), List.of(
+            () -> new BrimstoneNectarItem(new Item.Properties().rarity(Rarity.RARE).fireResistant().tab(BMDCreativeModeTabs.BOSSES_OF_MASS_DESTRUCTION), Lists.newArrayList(
                     new GauntletStructureRepair(), new LichStructureRepair(), new ObsidilithStructureRepair(), new VoidBlossomStructureRepair()
             )));
 
@@ -92,14 +91,14 @@ public class BMDItems {
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient(){
-        ItemProperties.register(EARTHDIVE_SPEAR.get(),
+        ItemModelsProperties.register(EARTHDIVE_SPEAR.get(),
                 new ResourceLocation("throwing"),
-                (stack, level, entity, seed) -> {
+                ((stack, clientWorld, entity) -> {
                     if (entity == null)
                         return 0.0f;
 
                     return (entity.isUsingItem() && entity.getUseItem() == stack) ? 1.0f : 0.0f;
-                });
+                }));
     }
 
     public static void register(IEventBus eventBus){

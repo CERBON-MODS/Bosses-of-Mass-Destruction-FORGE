@@ -1,17 +1,17 @@
 package com.cerbon.bosses_of_mass_destruction.client.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.function.Consumer;
 
 public class LerpedPosRenderer<T extends Entity> implements IRenderer<T> {
-    private final Consumer<Vec3> callback;
+    private final Consumer<Vector3d> callback;
 
-    public LerpedPosRenderer(Consumer<Vec3> callback) {
+    public LerpedPosRenderer(Consumer<Vector3d> callback) {
         this.callback = callback;
     }
 
@@ -20,14 +20,14 @@ public class LerpedPosRenderer<T extends Entity> implements IRenderer<T> {
             T entity,
             float yaw,
             float partialTicks,
-            PoseStack poseStack,
-            MultiBufferSource buffer,
+            MatrixStack poseStack,
+            IRenderTypeBuffer buffer,
             int light
     ) {
-        double x = Mth.lerp(partialTicks, entity.xo, entity.getX());
-        double y = Mth.lerp(partialTicks, entity.yo, entity.getY());
-        double z = Mth.lerp(partialTicks, entity.zo, entity.getZ());
+        double x = MathHelper.lerp(partialTicks, entity.xo, entity.getX());
+        double y = MathHelper.lerp(partialTicks, entity.yo, entity.getY());
+        double z = MathHelper.lerp(partialTicks, entity.zo, entity.getZ());
 
-        callback.accept(new Vec3(x, y, z));
+        callback.accept(new Vector3d(x, y, z));
     }
 }

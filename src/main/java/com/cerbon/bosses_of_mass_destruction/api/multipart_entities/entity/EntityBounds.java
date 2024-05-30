@@ -5,10 +5,10 @@ import com.cerbon.bosses_of_mass_destruction.api.multipart_entities.util.Oriente
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public final class EntityBounds {
     private @Nullable
     final MutableBox overrideBox;
 
-    EntityBounds(final Map<String, EntityPart> partMap, @Nullable AABB overrideBox) {
+    EntityBounds(final Map<String, EntityPart> partMap, @Nullable AxisAlignedBB overrideBox) {
         this.partMap = partMap;
         this.overrideBox = new MutableBox(overrideBox);
     }
@@ -47,7 +47,7 @@ public final class EntityBounds {
      * @param end   Ending position of raycast
      * @return Part name the ray first intersects, or null if no part was intersected
      */
-    public @Nullable String raycast(final Vec3 start, final Vec3 end) {
+    public @Nullable String raycast(final Vector3d start, final Vector3d end) {
         double t = 1.00001;
         String result = null;
         for (final Map.Entry<String, EntityPart> entry : partMap.entrySet()) {
@@ -64,7 +64,7 @@ public final class EntityBounds {
      * @param bounds Bounding box outside which no collisions will be processed, should be the normal bounding box of the entity
      * @return Box compatible hierarchy of all the EntityParts
      */
-    public CompoundOrientedBox getBox(final AABB bounds) {
+    public CompoundOrientedBox getBox(final AxisAlignedBB bounds) {
         boolean changed = cache == null;
         for (final EntityPart value : partMap.values()) {
             if (value.isChanged()) {
@@ -98,7 +98,7 @@ public final class EntityBounds {
 
     public static final class EntityBoundsBuilder {
         private final Map<String, EntityPartInfo> partInfos = new Object2ObjectLinkedOpenHashMap<>();
-        private AABB overrideBox = null;
+        private AxisAlignedBB overrideBox = null;
 
         EntityBoundsBuilder() {}
 
@@ -110,7 +110,7 @@ public final class EntityBounds {
             return this;
         }
 
-        public EntityBoundsBuilder overrideCollisionBox(AABB box) {
+        public EntityBoundsBuilder overrideCollisionBox(AxisAlignedBB box) {
             this.overrideBox = box;
             return this;
         }
@@ -152,7 +152,7 @@ public final class EntityBounds {
         final String name;
         double x, y, z;
         double px, py, pz;
-        AABB bounds;
+        AxisAlignedBB bounds;
 
         EntityPartInfoBuilder(final EntityBoundsBuilder builder, final String name) {
             this.builder = builder;
@@ -204,13 +204,13 @@ public final class EntityBounds {
          * @param bounds Bounding box
          * @return this
          */
-        public EntityPartInfoBuilder setBounds(final AABB bounds) {
+        public EntityPartInfoBuilder setBounds(final AxisAlignedBB bounds) {
             this.bounds = bounds;
             return this;
         }
 
         /**
-         * Set dimensions of the box, you should prefer this to {@link #setBounds(AABB)}
+         * Set dimensions of the box, you should prefer this to {@link #setBounds(AxisAlignedBB)} (AABB)}
          *
          * @param xLength width
          * @param yLength height
@@ -218,7 +218,7 @@ public final class EntityBounds {
          * @return this
          */
         public EntityPartInfoBuilder setBounds(final double xLength, final double yLength, final double zLength) {
-            bounds = new AABB(-xLength / 2, -yLength / 2, -zLength / 2, xLength / 2, yLength / 2, zLength / 2);
+            bounds = new AxisAlignedBB(-xLength / 2, -yLength / 2, -zLength / 2, xLength / 2, yLength / 2, zLength / 2);
             return this;
         }
 
@@ -230,5 +230,30 @@ public final class EntityBounds {
         }
     }
 
-    private record EntityPartInfo(@Nullable String parent, String name, double x, double y, double z, double px, double py, double pz, AABB bounds) {}
+    private static class EntityPartInfo {
+
+        @Nullable
+        private final String parent;
+        private final String name;
+        private final double x;
+        private final double y;
+        private final double z;
+        private final double px;
+        private final double py;
+        private final double pz;
+        private final AxisAlignedBB bounds;
+
+        public EntityPartInfo(@Nullable String parent, String name, double x, double y, double z, double px, double py, double pz, AxisAlignedBB bounds) {
+            this.parent = parent;
+            this.name = name;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.px = px;
+            this.py = py;
+            this.pz = pz;
+            this.bounds = bounds;
+        }
+    }
 }
+

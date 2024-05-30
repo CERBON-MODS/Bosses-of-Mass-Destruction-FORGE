@@ -9,68 +9,69 @@ import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendParticleS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
-import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 
-public class VoidLilyBlockEntity extends BlockEntity {
-    private Vec3 structureDirection = null;
+import javax.annotation.Nonnull;
 
-    public VoidLilyBlockEntity(BlockPos pos, BlockState blockState) {
-        super(BMDBlockEntities.VOID_LILY_BLOCK_ENTITY.get(), pos, blockState);
+public class VoidLilyBlockEntity extends TileEntity {
+    private Vector3d structureDirection = null;
+
+    public VoidLilyBlockEntity() {
+        super(BMDBlockEntities.VOID_LILY_BLOCK_ENTITY.get());
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(BlockState blockState, CompoundNBT tag) {
         if (tag.contains("dirX"))
-            structureDirection = new Vec3(tag.getDouble("dirX"), tag.getDouble("dirY"), tag.getDouble("dirZ"));
+            structureDirection = new Vector3d(tag.getDouble("dirX"), tag.getDouble("dirY"), tag.getDouble("dirZ"));
 
-        super.load(tag);
+        super.load(blockState, tag);
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag tag) {
-        Vec3 dir = structureDirection;
+    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+        Vector3d dir = structureDirection;
         if (dir != null){
             tag.putDouble("dirX", dir.x);
             tag.putDouble("dirY", dir.y);
             tag.putDouble("dirZ", dir.z);
         }
-        super.saveAdditional(tag);
+        return super.save(tag);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, VoidLilyBlockEntity entity){
-        if (RandomUtils.range(0, 30) == 0 && level instanceof ServerLevel serverLevel) {
-            Vec3 direction = entity.structureDirection;
+    public static void tick(World level, BlockPos pos, BlockState state, VoidLilyBlockEntity entity){
+        if (RandomUtils.range(0, 30) == 0 && level instanceof ServerWorld) {
+            Vector3d direction = entity.structureDirection;
             if (direction == null)
-                setNearestStructureDirection(serverLevel, pos, entity);
+                setNearestStructureDirection((ServerWorld) level, pos, entity);
 
             if (direction != null)
-                BMDPacketHandler.sendToAllPlayersTrackingChunk(new SendParticleS2CPacket(pos, direction), serverLevel, VecUtils.asVec3(pos));
+                BMDPacketHandler.sendToAllPlayersTrackingChunk(new SendParticleS2CPacket(pos, direction), (ServerWorld) level, VecUtils.asVec3(pos));
         }
     }
 
-    private static void setNearestStructureDirection(ServerLevel level, BlockPos pos, VoidLilyBlockEntity entity){
-        BlockPos blockPos = level.findNearestMapFeature(BMDStructures.VOID_LILY_STRUCTURE_KEY, pos, 50, false);
-        if (blockPos != null)
-            entity.structureDirection = VecUtils.asVec3(new BlockPos(blockPos.getX(), level.getMinBuildHeight(), blockPos.getZ()).subtract(pos)).normalize();
-        else
-            entity.structureDirection = VecUtils.yAxis;
+    //TODO: Fix here
+    private static void setNearestStructureDirection(ServerWorld level, BlockPos pos, VoidLilyBlockEntity entity){
+//        BlockPos blockPos = level.findNearestMapFeature(BMDStructures.VOID_LILY_STRUCTURE_KEY, pos, 50, false);
+//        if (blockPos != null)
+//            entity.structureDirection = VecUtils.asVec3(new BlockPos(blockPos.getX(), 0, blockPos.getZ()).subtract(pos)).normalize();
+//        else
+//            entity.structureDirection = VecUtils.yAxis;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void spawnVoidLilyParticles(ClientLevel level, Vec3 pos, Vec3 dir){
-        Vec3 streakPos = pos.add(new Vec3(0.5, 0.7, 0.5)).add(RandomUtils.randVec().scale(0.5));
-        Vec3 right = dir.cross(VecUtils.yAxis).normalize();
+    public static void spawnVoidLilyParticles(ClientWorld level, Vector3d pos, Vector3d dir){
+        Vector3d streakPos = pos.add(new Vector3d(0.5, 0.7, 0.5)).add(RandomUtils.randVec().scale(0.5));
+        Vector3d right = dir.cross(VecUtils.yAxis).normalize();
         double sinCurve = RandomUtils.range(8.0, 11.0) * RandomUtils.randSign();
         double curveLength = RandomUtils.range(1.2, 1.6);
         int particleAmount = RandomUtils.range(7, 10);
@@ -78,13 +79,13 @@ public class VoidLilyBlockEntity extends BlockEntity {
         BMDCapabilities.getLevelEventScheduler(level).addEvent(
                 new TimedEvent(
                         () -> {
-                            Vec3 particlePos = streakPos.add(RandomUtils.randVec().scale(0.05));
+                            Vector3d particlePos = streakPos.add(RandomUtils.randVec().scale(0.05));
                             Particles.pollenParticles.continuousPosition(p -> {
                                 float age = p.ageRatio;
-                                Vec3 forward = dir.scale((double) age * curveLength);
-                                Vec3 sinSide = right.scale(Math.sin(age * sinCurve) * 0.1);
+                                Vector3d forward = dir.scale((double) age * curveLength);
+                                Vector3d sinSide = right.scale(Math.sin(age * sinCurve) * 0.1);
                                 return particlePos.add(forward).add(sinSide);
-                            }).build(particlePos, Vec3.ZERO);
+                            }).build(particlePos, Vector3d.ZERO);
                         },
                         0,
                         particleAmount,

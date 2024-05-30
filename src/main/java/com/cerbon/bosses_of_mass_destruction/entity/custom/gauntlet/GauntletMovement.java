@@ -11,11 +11,11 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.InDesired
 import com.cerbon.bosses_of_mass_destruction.entity.ai.valid_direction.ValidDirectionAnd;
 import com.cerbon.bosses_of_mass_destruction.entity.util.EntityAdapter;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.util.math.vector.Vector3d;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -33,7 +33,7 @@ public class GauntletMovement {
     }
 
     public VelocityGoal buildAttackMovement(){
-        Supplier<Vec3> targetPos = entity::safeGetTargetPos;
+        Supplier<Vector3d> targetPos = entity::safeGetTargetPos;
         ValidDirectionAnd canMoveTowardsPositionValidator = getValidDirectionAnd(targetPos);
 
         ValidatedTargetSelector targetSelector = new ValidatedTargetSelector(
@@ -49,11 +49,11 @@ public class GauntletMovement {
         );
     }
 
-    @NotNull
-    private ValidDirectionAnd getValidDirectionAnd(Supplier<Vec3> targetPos) {
-        Function<Vec3, Boolean> tooCloseToTarget = vec3 -> getWithinDistancePredicate(tooCloseToTargetDistance, targetPos).apply(vec3);
-        Function<Vec3, Boolean> tooFarFromTarget = vec3 -> !getWithinDistancePredicate(tooFarFromTargetDistance, targetPos).apply(vec3);
-        Function<Vec3, Boolean> movingToTarget = vec3 -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), vec3);
+    @Nonnull
+    private ValidDirectionAnd getValidDirectionAnd(Supplier<Vector3d> targetPos) {
+        Function<Vector3d, Boolean> tooCloseToTarget = vec3 -> getWithinDistancePredicate(tooCloseToTargetDistance, targetPos).apply(vec3);
+        Function<Vector3d, Boolean> tooFarFromTarget = vec3 -> !getWithinDistancePredicate(tooFarFromTargetDistance, targetPos).apply(vec3);
+        Function<Vector3d, Boolean> movingToTarget = vec3 -> MathUtils.movingTowards(entity.safeGetTargetPos(), entity.position(), vec3);
 
         return new ValidDirectionAnd(
                 Arrays.asList(
@@ -63,7 +63,7 @@ public class GauntletMovement {
         );
     }
 
-    private void moveAndLookAtTarget(Vec3 velocity){
+    private void moveAndLookAtTarget(Vector3d velocity){
         BMDUtils.addDeltaMovement(entity, velocity);
 
         LivingEntity target = entity.getTarget();
@@ -73,9 +73,9 @@ public class GauntletMovement {
         }
     }
 
-    private Function<Vec3, Boolean> getWithinDistancePredicate(double distance, Supplier<Vec3> targetPos){
+    private Function<Vector3d, Boolean> getWithinDistancePredicate(double distance, Supplier<Vector3d> targetPos){
         return vec3 -> {
-            Vec3 target = entity.position().add(vec3.scale(reactionDistance));
+            Vector3d target = entity.position().add(vec3.scale(reactionDistance));
             return MathUtils.withinDistance(target, targetPos.get(), distance);
         };
     }

@@ -1,6 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.ai.goals;
 
-import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,10 +24,10 @@ public class CompositeGoal extends Goal {
         return goals.stream().allMatch(Goal::isInterruptable);
     }
 
-    @Override
-    public boolean requiresUpdateEveryTick() {
-        return true;
-    }
+//    @Override
+//    public boolean requiresUpdateEveryTick() {
+//        return true;
+//    }
 
     @Override
     public void tick() {
