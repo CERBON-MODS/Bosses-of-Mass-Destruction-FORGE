@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"1": "block/spore_blossom",
-		"particle": "block/spore_blossom",
-		"base": "block/spore_blossom_base"
+		"1": "bosses_of_mass_destruction:block/spore_blossom",
+		"particle": "bosses_of_mass_destruction:block/spore_blossom",
+		"base": "bosses_of_mass_destruction:block/spore_blossom_base"
 	},
 	"elements": [
 		{
