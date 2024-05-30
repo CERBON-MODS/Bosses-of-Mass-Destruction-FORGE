@@ -12,17 +12,17 @@ import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class VoidLilyBlockEntity extends TileEntity {
+public class VoidLilyBlockEntity extends TileEntity implements ITickableTileEntity {
     private Vector3d structureDirection = null;
 
     public VoidLilyBlockEntity() {
@@ -48,14 +48,15 @@ public class VoidLilyBlockEntity extends TileEntity {
         return super.save(tag);
     }
 
-    public static void tick(World level, BlockPos pos, BlockState state, VoidLilyBlockEntity entity){
+    @Override
+    public void tick() {
         if (RandomUtils.range(0, 30) == 0 && level instanceof ServerWorld) {
-            Vector3d direction = entity.structureDirection;
+            Vector3d direction = this.structureDirection;
             if (direction == null)
-                setNearestStructureDirection((ServerWorld) level, pos, entity);
+                setNearestStructureDirection((ServerWorld) level, getBlockPos(), this);
 
             if (direction != null)
-                BMDPacketHandler.sendToAllPlayersTrackingChunk(new SendParticleS2CPacket(pos, direction), (ServerWorld) level, VecUtils.asVec3(pos));
+                BMDPacketHandler.sendToAllPlayersTrackingChunk(new SendParticleS2CPacket(getBlockPos(), direction), (ServerWorld) level, VecUtils.asVec3(getBlockPos()));
         }
     }
 

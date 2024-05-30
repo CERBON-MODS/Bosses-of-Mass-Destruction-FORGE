@@ -1,15 +1,13 @@
 package com.cerbon.bosses_of_mass_destruction.block.custom;
 
 import com.cerbon.bosses_of_mass_destruction.capability.util.BMDCapabilities;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.block.BlockState;
+import net.minecraft.util.math.ChunkPos;
 
-public class ChunkCacheBlockEntity extends TileEntity {
+public class ChunkCacheBlockEntity extends TileEntity implements ITickableTileEntity {
     private final Block block;
     private boolean added = false;
 
@@ -30,13 +28,16 @@ public class ChunkCacheBlockEntity extends TileEntity {
         super.setRemoved();
     }
 
-    public static void tick(World level, BlockPos pos, BlockState state, ChunkCacheBlockEntity entity){
-        if (!entity.added){
+    @Override
+    public void tick() {
+        if (level == null) return;
+
+        if (!this.added){
             BMDCapabilities.getChunkBlockCache(level).ifPresent(chunkBlockCache ->
-                    chunkBlockCache.addToChunk(new ChunkPos(pos), entity.block, pos)
+                    chunkBlockCache.addToChunk(new ChunkPos(getBlockPos()), this.block, getBlockPos())
             );
 
-            entity.added = true;
+            this.added = true;
         }
     }
 }

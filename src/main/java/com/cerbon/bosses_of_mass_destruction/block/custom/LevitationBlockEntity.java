@@ -13,7 +13,6 @@ import com.cerbon.bosses_of_mass_destruction.util.AnimationUtils;
 import com.cerbon.bosses_of_mass_destruction.util.BMDColors;
 import com.google.common.collect.Lists;
 import me.shedaniel.autoconfig.AutoConfig;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.SPlayerAbilitiesPacket;
@@ -62,12 +61,15 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAni
         return animationFactory;
     }
 
-    public static void tick(World level, BlockPos pos, BlockState state, LevitationBlockEntity entity){
-        ChunkCacheBlockEntity.tick(level, pos, state, entity);
-        if (level.isClientSide){
-            entity.animationAge++;
+    @Override
+    public void tick() {
+        super.tick();
+        if (level == null) return;
 
-            AxisAlignedBB box = getAffectingBox(level, VecUtils.asVec3(pos));
+        if (level.isClientSide){
+            this.animationAge++;
+
+            AxisAlignedBB box = getAffectingBox(level, VecUtils.asVec3(getBlockPos()));
             List<PlayerEntity> playersInBox = level.getEntitiesOfClass(PlayerEntity.class, box);
 
             for (PlayerEntity player : playersInBox) {
@@ -136,9 +138,6 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements IAni
     private static AxisAlignedBB getAffectingBox(World level, Vector3d pos){
         return new AxisAlignedBB(pos.x, 0, pos.z, (pos.x + 1), level.getHeight(), (pos.z + 1)).inflate(tableOfElevationRadius, 0.0, tableOfElevationRadius);
     }
-
-    @Override
-    public void tick() {}
 
     @Override
     public int tickTimer() {
