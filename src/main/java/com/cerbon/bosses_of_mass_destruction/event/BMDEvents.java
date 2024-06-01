@@ -10,6 +10,8 @@ import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructuresFeature;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +51,11 @@ public class BMDEvents {
 
         @SubscribeEvent
         protected static void onCommonSetup(FMLCommonSetupEvent event){
-            event.enqueueWork(BMDPacketHandler::register);
+            event.enqueueWork(() -> {
+                BMDPacketHandler.register();
+                BMDStructures.setupStructures();
+                BMDStructuresFeature.registerConfiguredStructures();
+            });
             ChunkBlockCacheProvider.register();
             LevelEventSchedulerProvider.register();
             PlayerMoveHistoryProvider.register();
