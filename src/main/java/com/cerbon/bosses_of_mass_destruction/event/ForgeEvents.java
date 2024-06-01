@@ -124,10 +124,10 @@ public class ForgeEvents {
             biomeName.equals(Biomes.ICE_SPIKES.location())
         ) event.getGeneration().getStructures().add(() -> BMDStructuresFeature.LICH_TOWER_FEATURE);
 
-        if (event.getCategory() == Biome.Category.NETHER)
+        else if (event.getCategory() == Biome.Category.NETHER)
             event.getGeneration().getStructures().add(() -> BMDStructuresFeature.GAUNTLET_FEATURE);
 
-        if (biomeName.equals(Biomes.END_HIGHLANDS.location()) ||
+        else if (biomeName.equals(Biomes.END_HIGHLANDS.location()) ||
             biomeName.equals(Biomes.END_MIDLANDS.location()) ||
             biomeName.equals(Biomes.SMALL_END_ISLANDS.location()) ||
             biomeName.equals(Biomes.END_BARRENS.location())
