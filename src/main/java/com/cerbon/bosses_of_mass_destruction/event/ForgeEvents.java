@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -110,12 +111,15 @@ public class ForgeEvents {
     public static void biomeModification(final BiomeLoadingEvent event) {
         if (event.getClimate().temperature <= 0.05)
             event.getGeneration().getStructures().add(() -> BMDStructuresFeature.LICH_TOWER_FEATURE);
+
+        if (event.getCategory() == Biome.Category.NETHER)
+            event.getGeneration().getStructures().add(() -> BMDStructuresFeature.GAUNTLET_FEATURE);
     }
 
     private static Method GETCODEC_METHOD;
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void addDimensionalSpacing(final WorldEvent.Load event) {
-        if(event.getWorld() instanceof ServerWorld){
+        if (event.getWorld() instanceof ServerWorld) {
             ServerWorld serverWorld = (ServerWorld) event.getWorld();
 
             try {
@@ -133,6 +137,9 @@ public class ForgeEvents {
 
             if (serverWorld.dimension().equals(World.OVERWORLD))
                 tempMap.putIfAbsent(BMDStructures.LICH_TOWER_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.LICH_TOWER_STRUCTURE.get()));
+
+            if (serverWorld.dimension().equals(World.NETHER))
+                tempMap.putIfAbsent(BMDStructures.GAUNTLET_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.GAUNTLET_STRUCTURE.get()));
 
             serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
         }
