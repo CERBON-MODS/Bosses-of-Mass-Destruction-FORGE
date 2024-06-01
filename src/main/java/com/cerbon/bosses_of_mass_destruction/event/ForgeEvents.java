@@ -111,8 +111,6 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void biomeModification(final BiomeLoadingEvent event) {
-//        Biome.Category biomeCategory = event.getCategory();
-
         ResourceLocation biomeName = event.getName();
         if (biomeName == null) return;
 
