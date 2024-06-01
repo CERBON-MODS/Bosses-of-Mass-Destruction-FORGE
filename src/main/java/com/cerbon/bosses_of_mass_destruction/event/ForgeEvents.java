@@ -21,6 +21,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -35,6 +36,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
@@ -109,16 +111,40 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void biomeModification(final BiomeLoadingEvent event) {
-        Biome.Category biomeCategory = event.getCategory();
+//        Biome.Category biomeCategory = event.getCategory();
 
-        if (biomeCategory == Biome.Category.NETHER)
+        ResourceLocation biomeName = event.getName();
+        if (biomeName == null) return;
+
+        if (biomeName.equals(Biomes.SNOWY_TAIGA.location()) ||
+            biomeName.equals(Biomes.SNOWY_TUNDRA.location()) ||
+            biomeName.equals(Biomes.SNOWY_BEACH.location()) ||
+            biomeName.equals(Biomes.SNOWY_MOUNTAINS.location()) ||
+            biomeName.equals(Biomes.SNOWY_TAIGA_HILLS.location()) ||
+            biomeName.equals(Biomes.SNOWY_TAIGA_MOUNTAINS.location()) ||
+            biomeName.equals(Biomes.FROZEN_OCEAN.location()) ||
+            biomeName.equals(Biomes.ICE_SPIKES.location())
+        ) event.getGeneration().getStructures().add(() -> BMDStructuresFeature.LICH_TOWER_FEATURE);
+
+        if (event.getCategory() == Biome.Category.NETHER)
             event.getGeneration().getStructures().add(() -> BMDStructuresFeature.GAUNTLET_FEATURE);
 
-        else if (biomeCategory == Biome.Category.THEEND)
-            event.getGeneration().getStructures().add(() -> BMDStructuresFeature.OBSIDILITH_ARENA_FEATURE);
+        if (biomeName.equals(Biomes.END_HIGHLANDS.location()) ||
+            biomeName.equals(Biomes.END_MIDLANDS.location()) ||
+            biomeName.equals(Biomes.SMALL_END_ISLANDS.location()) ||
+            biomeName.equals(Biomes.END_BARRENS.location())
+        ) event.getGeneration().getStructures().add(() -> BMDStructuresFeature.OBSIDILITH_ARENA_FEATURE);
 
-        else if (event.getClimate().temperature <= 0.05 && biomeCategory != Biome.Category.NONE)
-            event.getGeneration().getStructures().add(() -> BMDStructuresFeature.LICH_TOWER_FEATURE);
+        if (ModList.get().isLoaded("byg"))
+            if (biomeName.equals(new ResourceLocation("byg", "ivis_fields")) ||
+                biomeName.equals(new ResourceLocation("byg", "nightshade_forest")) ||
+                biomeName.equals(new ResourceLocation("byg", "ethereal_islands")) ||
+                biomeName.equals(new ResourceLocation("byg", "viscal_isles")) ||
+                biomeName.equals(new ResourceLocation("byg", "bulbis_gardens")) ||
+                biomeName.equals(new ResourceLocation("byg", "shulkren_forest")) ||
+                biomeName.equals(new ResourceLocation("byg", "cryptic_wastes")) ||
+                biomeName.equals(new ResourceLocation("byg", "imparius_grove"))
+            ) event.getGeneration().getStructures().add(() -> BMDStructuresFeature.OBSIDILITH_ARENA_FEATURE);
     }
 
     private static Method GETCODEC_METHOD;
