@@ -109,11 +109,16 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void biomeModification(final BiomeLoadingEvent event) {
-        if (event.getClimate().temperature <= 0.05)
-            event.getGeneration().getStructures().add(() -> BMDStructuresFeature.LICH_TOWER_FEATURE);
+        Biome.Category biomeCategory = event.getCategory();
 
-        if (event.getCategory() == Biome.Category.NETHER)
+        if (biomeCategory == Biome.Category.NETHER)
             event.getGeneration().getStructures().add(() -> BMDStructuresFeature.GAUNTLET_FEATURE);
+
+        else if (biomeCategory == Biome.Category.THEEND)
+            event.getGeneration().getStructures().add(() -> BMDStructuresFeature.OBSIDILITH_ARENA_FEATURE);
+
+        else if (event.getClimate().temperature <= 0.05 && biomeCategory != Biome.Category.NONE)
+            event.getGeneration().getStructures().add(() -> BMDStructuresFeature.LICH_TOWER_FEATURE);
     }
 
     private static Method GETCODEC_METHOD;
@@ -138,8 +143,11 @@ public class ForgeEvents {
             if (serverWorld.dimension().equals(World.OVERWORLD))
                 tempMap.putIfAbsent(BMDStructures.LICH_TOWER_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.LICH_TOWER_STRUCTURE.get()));
 
-            if (serverWorld.dimension().equals(World.NETHER))
+            else if (serverWorld.dimension().equals(World.NETHER))
                 tempMap.putIfAbsent(BMDStructures.GAUNTLET_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.GAUNTLET_STRUCTURE.get()));
+
+            else if (serverWorld.dimension().equals(World.END))
+                tempMap.putIfAbsent(BMDStructures.OBSIDILITH_ARENA_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.OBSIDILITH_ARENA_STRUCTURE.get()));
 
             serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
         }
