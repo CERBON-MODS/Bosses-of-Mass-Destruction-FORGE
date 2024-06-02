@@ -2,7 +2,6 @@ package com.cerbon.bosses_of_mass_destruction.structure.lich_tower;
 
 import com.cerbon.bosses_of_mass_destruction.BossesOfMassDestruction;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedSeedRandom;
@@ -12,7 +11,6 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
@@ -24,8 +22,6 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-
-import java.util.List;
 
 public class LichTowerStructure extends Structure<NoFeatureConfig> {
 
@@ -41,16 +37,6 @@ public class LichTowerStructure extends Structure<NoFeatureConfig> {
     @Override
     public GenerationStage.Decoration step() {
         return GenerationStage.Decoration.SURFACE_STRUCTURES;
-    }
-
-    @Override
-    public List<MobSpawnInfo.Spawners> getDefaultSpawnList() {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public List<MobSpawnInfo.Spawners> getDefaultCreatureSpawnList() {
-        return ImmutableList.of();
     }
 
     @Override
