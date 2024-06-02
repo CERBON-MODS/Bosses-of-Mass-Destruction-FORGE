@@ -14,6 +14,8 @@ import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -31,8 +33,10 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -175,5 +179,20 @@ public class ForgeEvents {
 
             serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
         }
+    }
+
+    @SubscribeEvent
+    public static void onLivingSpawn(LivingSpawnEvent.CheckSpawn event) {
+        LivingEntity livingEntity = event.getEntityLiving();
+        World level = livingEntity.level;
+        if (level.isClientSide) return;
+
+        ServerWorld serverLevel = (ServerWorld) level;
+        if (
+           event.getSpawnReason() == SpawnReason.NATURAL &&
+           (serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.LICH_TOWER_STRUCTURE.get()).isValid() ||
+           serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.GAUNTLET_STRUCTURE.get()).isValid() ||
+           serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.OBSIDILITH_ARENA_STRUCTURE.get()).isValid())
+        ) event.setResult(Event.Result.DENY);
     }
 }
