@@ -1,5 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
+import com.cerbon.bosses_of_mass_destruction.block.BMDBlocks;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityTick;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.server.ServerWorld;
@@ -13,7 +14,7 @@ public class LightBlockPlacer implements IEntityTick<ServerWorld> {
 
     @Override
     public void tick(ServerWorld level) {
-//        if (!level.getBlockState(entity.blockPosition()).is(Blocks.LIGHT))
-//            level.setBlockAndUpdate(entity.blockPosition(), Blocks.LIGHT.defaultBlockState());
+        if (!level.getBlockState(entity.blockPosition()).is(BMDBlocks.LIGHT.get()))
+            level.setBlockAndUpdate(entity.blockPosition(), BMDBlocks.LIGHT.get().defaultBlockState());
     }
 }

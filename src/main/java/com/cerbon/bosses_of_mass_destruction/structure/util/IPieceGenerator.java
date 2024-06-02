@@ -10,7 +10,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import java.util.Random;
 
 public interface IPieceGenerator {
-    void generate(
+    boolean generate(
             ISeedReader level,
             StructureManager structureManager,
             ChunkGenerator chunkGenerator,

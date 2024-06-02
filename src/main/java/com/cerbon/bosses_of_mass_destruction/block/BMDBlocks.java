@@ -58,6 +58,9 @@ public class BMDBlocks {
     public static final RegistryObject<Block> VOID_LILY_BLOCK = BLOCKS.register("void_lily",
             () -> new VoidLilyBlock(AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).lightLevel(value -> 8)));
 
+    public static final RegistryObject<Block> LIGHT = BLOCKS.register("light", () ->
+            new LightBlock(AbstractBlock.Properties.of(Material.AIR).strength(-1.0F, 3600000.8F).noCollission().noOcclusion().lightLevel(LightBlock.LIGHT_EMISSION)));
+
     @OnlyIn(Dist.CLIENT)
     public static void initClient(){
         RenderTypeLookup.setRenderLayer(MOB_WARD.get(), RenderType.cutout());

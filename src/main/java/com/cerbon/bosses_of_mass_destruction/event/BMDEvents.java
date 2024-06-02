@@ -10,6 +10,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.item.BMDItems;
 import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructurePieces;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructuresFeature;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
@@ -55,6 +56,7 @@ public class BMDEvents {
                 BMDPacketHandler.register();
                 BMDStructures.setupStructures();
                 BMDStructuresFeature.registerConfiguredStructures();
+                BMDStructurePieces.registerStructurePieces();
             });
             ChunkBlockCacheProvider.register();
             LevelEventSchedulerProvider.register();

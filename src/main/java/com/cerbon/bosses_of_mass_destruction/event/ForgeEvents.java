@@ -118,6 +118,9 @@ public class ForgeEvents {
         ResourceLocation biomeName = event.getName();
         if (biomeName == null) return;
 
+        if (event.getCategory() != Biome.Category.NETHER && event.getCategory() != Biome.Category.THEEND)
+            event.getGeneration().getStructures().add(() -> BMDStructuresFeature.VOID_BLOSSOM_FEATURE);
+
         if (biomeName.equals(Biomes.SNOWY_TAIGA.location()) ||
             biomeName.equals(Biomes.SNOWY_TUNDRA.location()) ||
             biomeName.equals(Biomes.SNOWY_BEACH.location()) ||
@@ -168,8 +171,10 @@ public class ForgeEvents {
 
             Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(serverWorld.getChunkSource().generator.getSettings().structureConfig());
 
-            if (serverWorld.dimension().equals(World.OVERWORLD))
+            if (serverWorld.dimension().equals(World.OVERWORLD)) {
                 tempMap.putIfAbsent(BMDStructures.LICH_TOWER_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.LICH_TOWER_STRUCTURE.get()));
+                tempMap.putIfAbsent(BMDStructures.VOID_BLOSSOM_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.VOID_BLOSSOM_STRUCTURE.get()));
+            }
 
             else if (serverWorld.dimension().equals(World.NETHER))
                 tempMap.putIfAbsent(BMDStructures.GAUNTLET_STRUCTURE.get(), DimensionStructuresSettings.DEFAULTS.get(BMDStructures.GAUNTLET_STRUCTURE.get()));
@@ -192,7 +197,8 @@ public class ForgeEvents {
            event.getSpawnReason() == SpawnReason.NATURAL &&
            (serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.LICH_TOWER_STRUCTURE.get()).isValid() ||
            serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.GAUNTLET_STRUCTURE.get()).isValid() ||
-           serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.OBSIDILITH_ARENA_STRUCTURE.get()).isValid())
+           serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.OBSIDILITH_ARENA_STRUCTURE.get()).isValid() ||
+           serverLevel.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), false, BMDStructures.VOID_BLOSSOM_STRUCTURE.get()).isValid())
         ) event.setResult(Event.Result.DENY);
     }
 }

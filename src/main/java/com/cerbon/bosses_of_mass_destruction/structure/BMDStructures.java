@@ -4,6 +4,7 @@ import com.cerbon.bosses_of_mass_destruction.config.BMDConfig;
 import com.cerbon.bosses_of_mass_destruction.structure.gauntlet_arena.GauntletArenaStructure;
 import com.cerbon.bosses_of_mass_destruction.structure.lich_tower.LichTowerStructure;
 import com.cerbon.bosses_of_mass_destruction.structure.obsidilith_arena.ObsidilithArenaStructure;
+import com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern.VoidBlossomArenaStructure;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -29,6 +30,7 @@ public class BMDStructures {
     public static final RegistryObject<Structure<NoFeatureConfig>> LICH_TOWER_STRUCTURE = STRUCTURES.register("lich_tower", () -> new LichTowerStructure(NoFeatureConfig.CODEC));
     public static final RegistryObject<Structure<NoFeatureConfig>> GAUNTLET_STRUCTURE = STRUCTURES.register("gauntlet_arena", () -> new GauntletArenaStructure(NoFeatureConfig.CODEC));
     public static final RegistryObject<Structure<NoFeatureConfig>> OBSIDILITH_ARENA_STRUCTURE = STRUCTURES.register("obsidilith_arena", () -> new ObsidilithArenaStructure(NoFeatureConfig.CODEC, config.obsidilithConfig));
+    public static final RegistryObject<Structure<NoFeatureConfig>> VOID_BLOSSOM_STRUCTURE = STRUCTURES.register("void_blossom", () -> new VoidBlossomArenaStructure(NoFeatureConfig.CODEC));
 
     public static void register(IEventBus eventBus) {
         STRUCTURES.register(eventBus);
@@ -38,6 +40,7 @@ public class BMDStructures {
         setupMapSpacingAndLand(LICH_TOWER_STRUCTURE.get(), new StructureSeparationSettings(100, 50, 1230784), false);
         setupMapSpacingAndLand(GAUNTLET_STRUCTURE.get(), new StructureSeparationSettings(32, 16, 499672), false);
         setupMapSpacingAndLand(OBSIDILITH_ARENA_STRUCTURE.get(), new StructureSeparationSettings(64, 32, 499672), false);
+        setupMapSpacingAndLand(VOID_BLOSSOM_STRUCTURE.get(), new StructureSeparationSettings(64, 24, 574839), false);
     }
 
     public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings, boolean transformSurroundingLand) {
