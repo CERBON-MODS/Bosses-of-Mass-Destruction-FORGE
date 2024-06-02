@@ -79,29 +79,4 @@ public class ObsidilithArenaStructure extends Structure<NoFeatureConfig> impleme
                     this.pieces.get(0).getBoundingBox().z0);
         }
     }
-//    private static final ResourceLocation template = new ResourceLocation(BMDConstants.MOD_ID, "obsidilith_arena");
-//
-//    public ObsidilithArenaStructureFeature(Codec<NoFeatureConfig> codec, ObsidilithConfig obsidilithConfig) {
-//        super(
-//                codec,
-//                PieceGeneratorSupplier.simple(
-//                        PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Type.WORLD_SURFACE_WG),
-//                        (collector, context) -> ObsidilithArenaStructureFeature.addPieces(collector, context, obsidilithConfig)
-//                )
-//        );
-//    }
-//
-//    @Override
-//    public GenerationStage.@Nonnull Decoration step() {
-//        return GenerationStage.Decoration.SURFACE_STRUCTURES;
-//    }
-//
-//    public static void addPieces(StructurePiecesBuilder collector, PieceGenerator.Context<?> context, ObsidilithConfig obsidilithConfig){
-//        int x = context.chunkPos().getMinBlockX();
-//        int z = context.chunkPos().getMinBlockZ();
-//        int y = obsidilithConfig.arenaGeneration.generationHeight;
-//        BlockPos blockPos = new BlockPos(x, y, z);
-//        Rotation rotation = Rotation.getRandom(context.random());
-//        collector.addPiece(new BMDStructurePiece(context.structureManager(), blockPos, template, rotation, BMDStructures.OBSIDILITH_STRUCTURE_PIECE.get()));
-//    }
 }
