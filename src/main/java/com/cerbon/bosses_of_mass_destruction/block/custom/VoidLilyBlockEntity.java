@@ -9,6 +9,7 @@ import com.cerbon.bosses_of_mass_destruction.packet.BMDPacketHandler;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SendParticleS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.particle.ClientParticleBuilder;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.nbt.CompoundNBT;
@@ -60,13 +61,12 @@ public class VoidLilyBlockEntity extends TileEntity implements ITickableTileEnti
         }
     }
 
-    //TODO: Fix here
     private static void setNearestStructureDirection(ServerWorld level, BlockPos pos, VoidLilyBlockEntity entity){
-//        BlockPos blockPos = level.findNearestMapFeature(BMDStructures.VOID_LILY_STRUCTURE_KEY, pos, 50, false);
-//        if (blockPos != null)
-//            entity.structureDirection = VecUtils.asVec3(new BlockPos(blockPos.getX(), 0, blockPos.getZ()).subtract(pos)).normalize();
-//        else
-//            entity.structureDirection = VecUtils.yAxis;
+        BlockPos blockPos = level.findNearestMapFeature(BMDStructures.VOID_BLOSSOM_STRUCTURE.get(), pos, 50, false);
+        if (blockPos != null)
+            entity.structureDirection = VecUtils.asVec3(new BlockPos(blockPos.getX(), 0, blockPos.getZ()).subtract(pos)).normalize();
+        else
+            entity.structureDirection = VecUtils.yAxis;
     }
 
     @OnlyIn(Dist.CLIENT)

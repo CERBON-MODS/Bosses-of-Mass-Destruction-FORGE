@@ -13,20 +13,23 @@ import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.lich.LichEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.spawn.*;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
+import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -122,49 +125,48 @@ public class SoulStarItem extends Item {
         });
     }
 
-    //TODO: Fix here
-//    @Override
-//    public @Nonnull ActionResult<ItemStack> use(@Nonnull World level, PlayerEntity player, @Nonnull Hand usedHand) {
-//        ItemStack itemStack = player.getItemInHand(usedHand);
-//        BlockRayTraceResult hitResult = getPlayerPOVHitResult(level, player, RayTraceContext.FluidMode.NONE);
-//
-//        if (hitResult.getType() == RayTraceResult.Type.BLOCK && level.getBlockState(hitResult.getBlockPos()).is(BMDBlocks.CHISELED_STONE_ALTAR.get())){
-//            return ActionResult.pass(itemStack);
-//
-//        }else {
-//            player.startUsingItem(usedHand);
-//            if (level instanceof ServerWorld) {
-//                ServerWorld serverLevel = (ServerWorld) level;
-//
-//                BlockPos blockPos = serverLevel.findNearestMapFeature(BMDStructures.SOUL_STAR_STRUCTURE_KEY, player.blockPosition(), 100, false);
-//                if (blockPos != null){
-//                    SoulStarEntity entity = new SoulStarEntity(level, player.getX(), player.getEyeY(), player.getZ());
-//                    entity.setItem(itemStack);
-//                    entity.initTargetPos(blockPos);
-//                    level.addFreshEntity(entity);
-//                    level.playSound(
-//                            null,
-//                            player.getX(),
-//                            player.getY(),
-//                            player.getZ(),
-//                            SoundEvents.ENDER_EYE_LAUNCH,
-//                            SoundCategory.NEUTRAL,
-//                            0.5f,
-//                            0.4f / level.getRandom().nextFloat() * 0.4f + 0.8f
-//                    );
-//
-//                    if (!player.abilities.instabuild)
-//                        itemStack.shrink(1);
-//
-//                    player.awardStat(Stats.ITEM_USED.get(this));
-//                    player.swing(usedHand, true);
-//                    return ActionResult.success(itemStack);
-//                }
-//                return ActionResult.pass(itemStack);
-//            }
-//            return ActionResult.consume(itemStack);
-//        }
-//    }
+    @Override
+    public @Nonnull ActionResult<ItemStack> use(@Nonnull World level, PlayerEntity player, @Nonnull Hand usedHand) {
+        ItemStack itemStack = player.getItemInHand(usedHand);
+        BlockRayTraceResult hitResult = getPlayerPOVHitResult(level, player, RayTraceContext.FluidMode.NONE);
+
+        if (hitResult.getType() == RayTraceResult.Type.BLOCK && level.getBlockState(hitResult.getBlockPos()).is(BMDBlocks.CHISELED_STONE_ALTAR.get())){
+            return ActionResult.pass(itemStack);
+
+        }else {
+            player.startUsingItem(usedHand);
+            if (level instanceof ServerWorld) {
+                ServerWorld serverLevel = (ServerWorld) level;
+
+                BlockPos blockPos = serverLevel.findNearestMapFeature(BMDStructures.LICH_TOWER_STRUCTURE.get(), player.blockPosition(), 100, false);
+                if (blockPos != null){
+                    SoulStarEntity entity = new SoulStarEntity(level, player.getX(), player.getEyeY(), player.getZ());
+                    entity.setItem(itemStack);
+                    entity.initTargetPos(blockPos);
+                    level.addFreshEntity(entity);
+                    level.playSound(
+                            null,
+                            player.getX(),
+                            player.getY(),
+                            player.getZ(),
+                            SoundEvents.ENDER_EYE_LAUNCH,
+                            SoundCategory.NEUTRAL,
+                            0.5f,
+                            0.4f / level.getRandom().nextFloat() * 0.4f + 0.8f
+                    );
+
+                    if (!player.abilities.instabuild)
+                        itemStack.shrink(1);
+
+                    player.awardStat(Stats.ITEM_USED.get(this));
+                    player.swing(usedHand, true);
+                    return ActionResult.success(itemStack);
+                }
+                return ActionResult.pass(itemStack);
+            }
+            return ActionResult.consume(itemStack);
+        }
+    }
 
     public void spawnLich(BlockPos blockPos, World level){
         CompoundNBT compoundTag = new CompoundNBT();
