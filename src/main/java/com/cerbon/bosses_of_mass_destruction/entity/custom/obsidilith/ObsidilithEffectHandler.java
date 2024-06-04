@@ -51,13 +51,11 @@ public class ObsidilithEffectHandler {
     }
 
     public void handleStatus(byte status){
-        switch (status){
-            case ObsidilithUtils.burstAttackStatus: burstEffect();
-            case ObsidilithUtils.waveAttackStatus: waveEffect();
-            case ObsidilithUtils.spikeAttackStatus: spikeEffect();
-            case ObsidilithUtils.anvilAttackStatus: anvilEffect();
-            case ObsidilithUtils.deathStatus: deathEffect();
-        }
+        if (status == ObsidilithUtils.burstAttackStatus) burstEffect();
+        else if (status == ObsidilithUtils.waveAttackStatus) waveEffect();
+        else if (status == ObsidilithUtils.spikeAttackStatus) spikeEffect();
+        else if (status == ObsidilithUtils.anvilAttackStatus) anvilEffect();
+        else if (status == ObsidilithUtils.deathStatus) deathEffect();
     }
 
     private void burstEffect(){
