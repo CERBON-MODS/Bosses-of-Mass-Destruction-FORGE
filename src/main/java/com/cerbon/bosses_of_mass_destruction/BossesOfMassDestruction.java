@@ -15,12 +15,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(BMDConstants.MOD_ID)
 public class BossesOfMassDestruction {
-    public static final Logger LOGGER = LoggerFactory.getLogger(BMDConstants.MOD_ID);
+    public static final Logger LOGGER = LogManager.getLogger(BMDConstants.MOD_ID);
 
     public BossesOfMassDestruction() {
         AutoConfig.register(BMDConfig.class, JanksonConfigSerializer::new);
