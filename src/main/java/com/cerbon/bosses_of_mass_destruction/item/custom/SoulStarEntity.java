@@ -33,6 +33,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
+@OnlyIn(
+        value = Dist.CLIENT,
+        _interface = IRendersAsItem.class
+)
 public class SoulStarEntity extends Entity implements IRendersAsItem {
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(SoulStarEntity.class, DataSerializers.ITEM_STACK);
     private final ClientParticleBuilder particleBuilder = new ClientParticleBuilder(BMDParticles.SPARKLES.get())
