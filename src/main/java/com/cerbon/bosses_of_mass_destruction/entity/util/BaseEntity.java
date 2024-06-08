@@ -77,8 +77,13 @@ public abstract class BaseEntity extends CreatureEntity implements IAnimatable, 
         else if (level instanceof ServerWorld && deathServerTick != null)
             deathServerTick.tick((ServerWorld) level);
 
-        else
-            super.tickDeath();
+        else {
+            ++deathTime;
+            if (deathTime >= 20 && !level.isClientSide() && !removed) {
+                level.broadcastEntityEvent(this, (byte) 60);
+                this.remove();
+            }
+        }
     }
 
     public void clientTick(){}
