@@ -12,14 +12,15 @@ import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.Direction;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -148,7 +149,7 @@ public class SpikeWaveAction implements IActionWithCooldown {
 
     private void playSoundsInRadius(ServerWorld level, double radius, SoundEvent soundEvent, float volume, float pitch){
         for (Direction dir : Direction.Plane.HORIZONTAL){
-            Vector3d pos = entity.position().add(new Vector3d(dir.step()).scale(radius));
+            Vector3d pos = entity.position().add(new Vector3d(new Vector3f(dir.getStepX(), dir.getStepY(), dir.getStepZ())).scale(radius));
             BMDUtils.playSound(level, pos, soundEvent, SoundCategory.HOSTILE, volume, pitch, 64, null);
         }
     }

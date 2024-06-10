@@ -30,7 +30,7 @@ public class VoidBlossomDropExpDeathTick implements IEntityTick<ServerWorld> {
     private void scheduleExp(){
         int expTicks = 20;
         int expPerTick = (int) (exp / (float) expTicks);
-        Vector3d fallDirection = VecUtils.planeProject(entity.getForward(), VecUtils.yAxis).yRot(180f);
+        Vector3d fallDirection = VecUtils.planeProject(Vector3d.directionFromRotation(entity.getRotationVector()), VecUtils.yAxis).yRot(180f);
         Vector3d originPos = entity.position().add(VecUtils.yAxis.scale(2.0));
 
         eventScheduler.addEvent(

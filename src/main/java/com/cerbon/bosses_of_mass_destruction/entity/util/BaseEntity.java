@@ -45,7 +45,7 @@ public abstract class BaseEntity extends CreatureEntity implements IAnimatable, 
     }
 
     @Override
-    public void tick() {
+    public void baseTick() {
         preTickEvents.updateEvents();
 
         if (idlePosition == Vector3d.ZERO)
@@ -64,7 +64,7 @@ public abstract class BaseEntity extends CreatureEntity implements IAnimatable, 
                 serverTick.tick((ServerWorld) level);
         }
 
-        super.tick();
+        super.baseTick();
 
         postTickEvents.updateEvents();
     }
