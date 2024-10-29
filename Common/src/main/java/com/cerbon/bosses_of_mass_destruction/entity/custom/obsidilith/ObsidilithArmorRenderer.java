@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoCube;
@@ -25,7 +26,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
     private final GeoModel<ObsidilithEntity> geoModel;
     private final EntityRendererProvider.Context context;
 
-    private final ResourceLocation armorTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
+    private final ResourceLocation armorTexture = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
     private RenderHelper geoModelProvider;
     private ObsidilithEntity obsidilithEntity;
     private RenderType type;
@@ -55,6 +56,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
 
         if (obsidilithEntity.isShielded()){
             Vec3 color = getColor().add(VecUtils.unit).normalize().scale(0.6);
+            var colour = FastColor.ARGB32.colorFromFloat(1.0f, (float) color.x, (float) color.y, (float) color.z);
 
             if (geoModelProvider == null) return;
             geoModelProvider.actuallyRender(
@@ -68,7 +70,7 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
                     partialTicks,
                     packedLightIn,
                     OverlayTexture.NO_OVERLAY,
-                    (float) color.x, (float) color.y, (float) color.z, 1.0f
+                    colour
             );
         }
     }
@@ -95,10 +97,10 @@ public class ObsidilithArmorRenderer implements IRendererWithModel, IRenderer<Ob
         }
 
         @Override
-        public void renderCube(PoseStack poseStack, GeoCube cube, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        public void renderCube(PoseStack poseStack, GeoCube cube, VertexConsumer buffer, int packedLight, int packedOverlay, int colour) {
             poseStack.pushPose();
             poseStack.scale(1.08f, 1.05f, 1.08f);
-            super.renderCube(poseStack, cube, buffer, IBoneLight.fullbright, packedOverlay, red, green, blue, alpha);
+            super.renderCube(poseStack, cube, buffer, IBoneLight.fullbright, packedOverlay, colour);
             poseStack.popPose();
         }
 

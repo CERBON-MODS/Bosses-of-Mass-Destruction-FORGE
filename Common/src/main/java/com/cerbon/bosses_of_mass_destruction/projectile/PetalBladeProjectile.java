@@ -26,13 +26,13 @@ public class PetalBladeProjectile extends BaseThrownItemProjectile{
 
     public PetalBladeProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
         super(entityType, level);
-        getEntityData().define(renderRotation, 0f);
+        getEntityData().set(renderRotation, 0f);
     }
 
     public PetalBladeProjectile(LivingEntity livingEntity, Level level, Consumer<LivingEntity> entityHit, List<EntityType<?>> exemptEntities, float rotation){
         super(BMDEntities.PETAL_BLADE.get(), livingEntity, level, new ExemptEntities(exemptEntities));
         this.entityHit = entityHit;
-        getEntityData().define(renderRotation, rotation);
+        getEntityData().set(renderRotation, rotation);
     }
 
     @Override

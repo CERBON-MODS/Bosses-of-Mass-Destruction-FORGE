@@ -21,7 +21,6 @@ public class SimpleMobSpawner implements IMobSpawner {
                     serverLevel,
                     serverLevel.getCurrentDifficultyAt(entity.blockPosition()),
                     MobSpawnType.MOB_SUMMONED,
-                    null,
                     null
             );
         }

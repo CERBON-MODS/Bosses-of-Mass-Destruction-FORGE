@@ -20,13 +20,13 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -54,8 +54,10 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     public void setItem(ItemStack stack){
-        if (stack.getItem() != Items.ENDER_EYE || stack.hasTag())
-            getEntityData().set(ITEM, stack.copyWithCount(1));
+        if (stack.isEmpty())
+            this.getEntityData().set(ITEM, new ItemStack(BMDItems.SOUL_STAR.get()));
+        else
+            this.getEntityData().set(ITEM, stack.copyWithCount(1));
     }
 
     private ItemStack getTrackedItem(){
@@ -69,8 +71,8 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    protected void defineSynchedData() {
-        getEntityData().define(ITEM, ItemStack.EMPTY);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(ITEM, ItemStack.EMPTY);
     }
 
     @Override
@@ -187,12 +189,12 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     protected void addAdditionalSaveData(@NotNull CompoundTag compound) {
         ItemStack itemStack = this.getTrackedItem();
         if (!itemStack.isEmpty())
-            compound.put("Item", itemStack.save(new CompoundTag()));
+            compound.put("Item", itemStack.save(level().registryAccess(), new CompoundTag()));
     }
 
     @Override
     protected void readAdditionalSaveData(@NotNull CompoundTag compound) {
-        ItemStack itemStack = ItemStack.of(compound.getCompound("Item"));
+        ItemStack itemStack = ItemStack.parseOptional(level().registryAccess(), compound.getCompound("Item"));
         setItem(itemStack);
     }
 
@@ -207,8 +209,8 @@ public class SoulStarEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return super.getAddEntityPacket();
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
+        return super.getAddEntityPacket(entity);
     }
 
     private float updateRotation(float f, float g){

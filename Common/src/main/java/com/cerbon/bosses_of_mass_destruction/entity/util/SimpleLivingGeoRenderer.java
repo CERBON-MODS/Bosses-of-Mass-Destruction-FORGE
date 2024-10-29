@@ -7,16 +7,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4f;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-
-
 
 public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends GeoEntityRenderer<T> {
     private final IRenderLight<T> brightness;
@@ -42,25 +42,14 @@ public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends G
     }
 
     @Override
-    public void renderRecursively(
-            PoseStack poseStack,
-            T animatable,
-            GeoBone bone,
-            RenderType renderType,
-            MultiBufferSource bufferSource,
-            VertexConsumer buffer,
-            boolean isReRender,
-            float partialTick,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderRecursively(PoseStack poseStack, T animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
         int packedLight1 = iBoneLight != null ? iBoneLight.getLightForBone(bone, packedLight) : packedLight;
-        Vector4f color = new Vector4f(red, green, blue, alpha);
-        Vector4f newColor = iBoneLight != null ? iBoneLight.getColorForBone(bone, color) :color;
+        int red = FastColor.ABGR32.red(colour);
+        int green = FastColor.ABGR32.green(colour);
+        int blue = FastColor.ABGR32.blue(colour);
+        int alpha = FastColor.ABGR32.alpha(colour);
+        Vector4f color = new Vector4f(red, green, blue, alpha).mul(1 / 255f);
+        Vector4f newColor = (iBoneLight != null ? iBoneLight.getColorForBone(bone, color) : color).mul(255f);
         super.renderRecursively(
                 poseStack,
                 animatable,
@@ -72,10 +61,7 @@ public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends G
                 partialTick,
                 packedLight1,
                 packedOverlay,
-                newColor.x(),
-                newColor.y(),
-                newColor.z(),
-                newColor.w()
+                FastColor.ABGR32.color((int) newColor.w, (int) newColor.x, (int) newColor.y, (int) newColor.z)
         );
     }
 
@@ -95,30 +81,15 @@ public class SimpleLivingGeoRenderer<T extends Entity & GeoAnimatable> extends G
     }
 
     @Override
-    public void actuallyRender(
-            PoseStack poseStack,
-            T animatable,
-            BakedGeoModel model,
-            RenderType renderType,
-            MultiBufferSource bufferSource,
-            VertexConsumer buffer,
-            boolean isReRender,
-            float partialTick,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
-        super.actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+    public void actuallyRender(PoseStack poseStack, T animatable, BakedGeoModel model, @Nullable RenderType renderType, MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
+        super.actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         int packetOverlay = overlayOverride != null ? overlayOverride.getOverlay() : packedOverlay;
-        if (renderWithModel != null) renderWithModel.render(model, partialTick, poseStack, bufferSource, packedLight, packetOverlay, red, green, blue, alpha);
+        if (renderWithModel != null) renderWithModel.render(model, partialTick, poseStack, bufferSource, packedLight, packetOverlay, FastColor.ABGR32.red(colour), FastColor.ABGR32.green(colour), FastColor.ABGR32.blue(colour), FastColor.ABGR32.alpha(colour));
     }
 
     @Override
-    public int getPackedOverlay(T animatable, float u) {
-        return overlayOverride != null ? overlayOverride.getOverlay() : super.getPackedOverlay(animatable, u);
+    public int getPackedOverlay(T animatable, float u, float partialTick) {
+        return overlayOverride != null ? overlayOverride.getOverlay() : super.getPackedOverlay(animatable, u, partialTick);
     }
 
     @Override

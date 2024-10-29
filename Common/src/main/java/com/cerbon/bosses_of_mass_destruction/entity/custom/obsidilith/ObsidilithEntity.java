@@ -33,11 +33,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class ObsidilithEntity extends BaseEntity {
 
         bossBar = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_12);
         damageHandler = new CompositeDamageHandler(moveLogic, new ShieldDamageHandler(this::isShielded), damageMemory);
-        mobEffectHandler = new EffectsImmunity(MobEffects.WITHER, MobEffects.POISON);
+        mobEffectHandler = new EffectsImmunity(MobEffects.WITHER.value(), MobEffects.POISON.value());
         serverTick = new CappedHeal(this, ObsidilithUtils.hpPillarShieldMilestones, mobConfig.idleHealingPerTick);
 
         if (!level.isClientSide()) {
@@ -90,7 +90,7 @@ public class ObsidilithEntity extends BaseEntity {
                     )
             );
         }
-        entityData.define(ObsidilithUtils.isShielded, false);
+        entityData.set(ObsidilithUtils.isShielded, false);
     }
 
     private ActionGoal buildAttackGoal(){

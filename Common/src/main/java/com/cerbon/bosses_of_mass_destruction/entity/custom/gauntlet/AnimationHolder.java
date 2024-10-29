@@ -2,10 +2,10 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
 import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
 import com.cerbon.bosses_of_mass_destruction.entity.util.IEntityEventHandler;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.Map;
 

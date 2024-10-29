@@ -61,7 +61,7 @@ public class BMDSounds {
     public static final RegistryEntry<SoundEvent> BRIMSTONE = registerSoundEvent("brimstone");
 
     private static RegistryEntry<SoundEvent> registerSoundEvent(String name) {
-        ResourceLocation id = new ResourceLocation(BMDConstants.MOD_ID, name);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 

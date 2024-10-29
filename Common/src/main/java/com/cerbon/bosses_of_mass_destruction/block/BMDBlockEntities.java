@@ -39,9 +39,9 @@ public class BMDBlockEntities {
         BlockEntityRenderers.register(LEVITATION_BLOCK_ENTITY.get(), context ->
                 new BMDBlockEntityRenderer<>(
                         new GeoModel<>(
-                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "geo/levitation_block.geo.json"),
-                                entity -> new ResourceLocation(BMDConstants.MOD_ID, "textures/block/levitation_block.png"),
-                                new ResourceLocation(BMDConstants.MOD_ID, "animations/levitation_block.animation.json"),
+                                entity -> ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "geo/levitation_block.geo.json"),
+                                entity -> ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/block/levitation_block.png"),
+                                ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "animations/levitation_block.animation.json"),
                                 (animatable, data, geoModel) -> {},
                                 RenderType::entityCutout
                         ),

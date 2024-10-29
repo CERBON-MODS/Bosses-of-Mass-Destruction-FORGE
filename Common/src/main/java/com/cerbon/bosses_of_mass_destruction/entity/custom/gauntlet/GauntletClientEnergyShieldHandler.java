@@ -58,6 +58,6 @@ public class GauntletClientEnergyShieldHandler implements IDataAccessorHandler {
     }
 
     public void initDataTracker(){
-        entity.getEntityData().define(GauntletEntity.isEnergized, false);
+        entity.getEntityData().set(GauntletEntity.isEnergized, false);
     }
 }

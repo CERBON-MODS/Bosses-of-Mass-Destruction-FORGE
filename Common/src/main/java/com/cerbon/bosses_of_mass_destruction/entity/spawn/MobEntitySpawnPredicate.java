@@ -23,7 +23,7 @@ public class MobEntitySpawnPredicate implements ISpawnPredicate {
 
         BlockState blockState = levelReader.getBlockState(blockPos);
         FluidState fluidState = levelReader.getFluidState(blockPos);
-        AABB prospectiveBoundingBox = entity.getType().getAABB(pos.x, pos.y, pos.z);
+        AABB prospectiveBoundingBox = entity.getType().getSpawnAABB(pos.x, pos.y, pos.z);
 
         return (!levelReader.containsAnyLiquid(prospectiveBoundingBox)
                 && levelReader.noCollision(prospectiveBoundingBox)

@@ -13,13 +13,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 import java.util.function.Function;
 
 public class VoidBlossomSpikeRenderer implements IRenderer<VoidBlossomEntity> {
-    private final ResourceLocation spikeTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/void_blossom_spike.png");
+    private final ResourceLocation spikeTexture = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/entity/void_blossom_spike.png");
     private final RenderType type = RenderType.entityCutoutNoCull(spikeTexture);
 
     @Override
@@ -70,18 +69,17 @@ public class VoidBlossomSpikeRenderer implements IRenderer<VoidBlossomEntity> {
         VertexConsumer vertexConsumer= bufferSource.getBuffer(type);
         PoseStack.Pose entry = poseStack.last();
         Matrix4f matrix4f = entry.pose();
-        Matrix3f matrix3f = entry.normal();
         float c0 = texTransformer.apply(0.4999f);
         float c2 = texTransformer.apply(0.0f);
         float c1 = texTransformer.apply(1.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, af, spikeHeight, ag, red, green, blue, c0, 0.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, af, 0.0f, ag, red, green, blue, c0, 1.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, ah, 0.0f, ai, red, green, blue, c2, 1.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, ah, spikeHeight, ai, red, green, blue, c2, 0.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, aj, spikeHeight, ak, red, green, blue, c1, 0.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, aj, 0.0f, ak, red, green, blue, c1, 1.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, al, 0.0f, am, red, green, blue, c0, 1.0f);
-        VanillaCopies.vertex(vertexConsumer, matrix4f, matrix3f, al, spikeHeight, am, red, green, blue, c0, 0.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, af, spikeHeight, ag, red, green, blue, c0, 0.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, af, 0.0f, ag, red, green, blue, c0, 1.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, ah, 0.0f, ai, red, green, blue, c2, 1.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, ah, spikeHeight, ai, red, green, blue, c2, 0.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, aj, spikeHeight, ak, red, green, blue, c1, 0.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, aj, 0.0f, ak, red, green, blue, c1, 1.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, al, 0.0f, am, red, green, blue, c0, 1.0f);
+        VanillaCopies.vertex(vertexConsumer, matrix4f, entry, al, spikeHeight, am, red, green, blue, c0, 0.0f);
         poseStack.popPose();
     }
 

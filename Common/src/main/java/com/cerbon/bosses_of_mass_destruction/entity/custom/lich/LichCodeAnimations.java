@@ -5,8 +5,8 @@ import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimatio
 import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.core.animation.AnimationState;
 
 public class LichCodeAnimations implements ICodeAnimations<LichEntity> {
 

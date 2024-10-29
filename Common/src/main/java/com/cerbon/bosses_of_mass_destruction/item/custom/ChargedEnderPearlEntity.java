@@ -10,6 +10,7 @@ import com.cerbon.cerbons_api.api.network.Dispatcher;
 import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -140,19 +142,19 @@ public class ChargedEnderPearlEntity extends ThrowableItemProjectile {
             super.tick();
     }
 
-    @Nullable
+
     @Override
-    public Entity changeDimension(@NotNull ServerLevel destination) {
+    public @Nullable Entity changeDimension(DimensionTransition transition) {
         Entity entity = getOwner();
-        if (entity != null && entity.level().dimension() != destination.dimension())
+        if (entity != null && entity.level().dimension() != transition.newLevel().dimension())
             setOwner(null);
 
-        return super.changeDimension(destination);
+        return super.changeDimension(transition);
     }
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return super.getAddEntityPacket();
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
+        return super.getAddEntityPacket(entity);
     }
 
     public static void handlePearlImpact(Vec3 pos){

@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -16,6 +17,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -25,6 +27,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -35,35 +38,30 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class EarthdiveSpear extends Item {
-    private final Multimap<Attribute, AttributeModifier> attributeModifiers;
+    private final ItemAttributeModifiers attributeModifiers;
 
     public EarthdiveSpear(Properties properties) {
         super(properties);
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(
-                BASE_ATTACK_DAMAGE_UUID,
-                "Tool modifier",
+
+
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        builder.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(
+                BASE_ATTACK_DAMAGE_ID,
                 8.0,
-                AttributeModifier.Operation.ADDITION
-        ));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(
-                BASE_ATTACK_SPEED_UUID,
-                "Tool modifier",
+                AttributeModifier.Operation.ADD_VALUE
+        ), EquipmentSlotGroup.MAINHAND);
+        builder.add(Attributes.ATTACK_SPEED, new AttributeModifier(
+                BASE_ATTACK_SPEED_ID,
                 -2.9000000953674316,
-                AttributeModifier.Operation.ADDITION
-        ));
+                AttributeModifier.Operation.ADD_VALUE
+        ), EquipmentSlotGroup.MAINHAND);
         this.attributeModifiers = builder.build();
     }
 
     @Override
-    public void appendHoverText(
-            @NotNull ItemStack stack,
-            @Nullable Level level,
-            List<Component> tooltipComponents,
-            @NotNull TooltipFlag isAdvanced
-    ) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(Component.translatable("item.bosses_of_mass_destruction.earthdive_spear.tooltip").withStyle(ChatFormatting.DARK_GRAY));
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class EarthdiveSpear extends Item {
                     if (new WallTeleport(serverLevel, player).tryTeleport(player.getLookAngle(), player.getEyePosition()) ||
                         new WallTeleport(serverLevel, player).tryTeleport(player.getLookAngle(), player.getEyePosition().add(0.0, -1.0, 0.0)))
                     {
-                        stack.hurtAndBreak(1 , player, it -> it.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                        stack.hurtAndBreak(1 , player, EquipmentSlot.MAINHAND);
                         player.awardStat(Stats.ITEM_USED.get(this));
                         serverLevel.playSound(
                                 null,
@@ -89,8 +87,7 @@ public class EarthdiveSpear extends Item {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, @NotNull LivingEntity target, @NotNull LivingEntity attacker) {
-        stack.hurtAndBreak(1, attacker, it ->
-                it.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+        stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
         return true;
     }
 
@@ -103,8 +100,7 @@ public class EarthdiveSpear extends Item {
             @NotNull LivingEntity miningEntity
     ) {
         if (state.getDestroySpeed(level, pos) != 0.0){
-            stack.hurtAndBreak(2, miningEntity,
-                    miner -> miner.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+            stack.hurtAndBreak(2, miningEntity, EquipmentSlot.MAINHAND);
         }
         return true;
     }
@@ -140,16 +136,16 @@ public class EarthdiveSpear extends Item {
     }
 
     private boolean isCharged(ItemStack stack, int remainingUseTicks){
-        return getUseDuration(stack) - remainingUseTicks >= 10;
+        return 72000 - remainingUseTicks >= 10;
     }
 
     @Override
-    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot slot) {
-        return slot == EquipmentSlot.MAINHAND ? attributeModifiers : super.getDefaultAttributeModifiers(slot);
+    public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers() {
+        return attributeModifiers;
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 

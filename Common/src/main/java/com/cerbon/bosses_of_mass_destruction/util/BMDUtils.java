@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class BMDUtils {
-    public static final ResourceKey<DamageType> SHIELD_PIERCING = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(BMDConstants.MOD_ID, "shield_piercing"));
+    public static final ResourceKey<DamageType> SHIELD_PIERCING = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "shield_piercing"));
 
     public static DamageSource shieldPiercing(Level level, Entity attacker) {
         return VanillaCopiesServer.create(level, SHIELD_PIERCING, attacker);

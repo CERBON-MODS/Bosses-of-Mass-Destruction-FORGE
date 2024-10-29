@@ -9,7 +9,7 @@ public class GauntletTextureProvider implements ITextureProvider<GauntletEntity>
     @Override
     public ResourceLocation getTexture(GauntletEntity entity) {
         return entity.hurtTime > 0
-                ? new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/gauntlet_hurt.png")
-                : new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/gauntlet.png");
+                ? ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/entity/gauntlet_hurt.png")
+                : ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/entity/gauntlet.png");
     }
 }

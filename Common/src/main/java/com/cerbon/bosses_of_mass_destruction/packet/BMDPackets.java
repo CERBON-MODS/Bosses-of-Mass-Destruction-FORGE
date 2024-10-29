@@ -1,83 +1,22 @@
 package com.cerbon.bosses_of_mass_destruction.packet;
 
 import com.cerbon.bosses_of_mass_destruction.packet.custom.*;
-import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.cerbons_api.api.network.Network;
-import net.minecraft.resources.ResourceLocation;
 
 public class BMDPackets {
 
     public void registerPackets() {
-
-        Network.registerPacket(channel("blindness"), BlindnessS2CPacket.class,
-                BlindnessS2CPacket::new,
-                BlindnessS2CPacket::write,
-                BlindnessS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("change_hitbox"), ChangeHitboxS2CPacket.class,
-                ChangeHitboxS2CPacket::new,
-                ChangeHitboxS2CPacket::write,
-                ChangeHitboxS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("charged_ender_pearl"), ChargedEnderPearlS2CPacket.class,
-                ChargedEnderPearlS2CPacket::new,
-                ChargedEnderPearlS2CPacket::write,
-                ChargedEnderPearlS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("heal"), HealS2CPacket.class,
-                HealS2CPacket::new,
-                HealS2CPacket::write,
-                HealS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("obsidilith_revive"), ObsidilithReviveS2CPacket.class,
-                ObsidilithReviveS2CPacket::new,
-                ObsidilithReviveS2CPacket::write,
-                ObsidilithReviveS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("place"), PlaceS2CPacket.class,
-                PlaceS2CPacket::new,
-                PlaceS2CPacket::write,
-                PlaceS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("send_delta_movement"), SendDeltaMovementS2CPacket.class,
-                SendDeltaMovementS2CPacket::new,
-                SendDeltaMovementS2CPacket::write,
-                SendDeltaMovementS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("send_particle"), SendParticleS2CPacket.class,
-                SendParticleS2CPacket::new,
-                SendParticleS2CPacket::write,
-                SendParticleS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("send_vec3"), SendVec3S2CPacket.class,
-                SendVec3S2CPacket::new,
-                SendVec3S2CPacket::write,
-                SendVec3S2CPacket::handle
-        );
-
-        Network.registerPacket(channel("spike"), SpikeS2CPacket.class,
-                SpikeS2CPacket::new,
-                SpikeS2CPacket::write,
-                SpikeS2CPacket::handle
-        );
-
-        Network.registerPacket(channel("void_blossom_revive"), VoidBlossomReviveS2CPacket.class,
-                VoidBlossomReviveS2CPacket::new,
-                VoidBlossomReviveS2CPacket::write,
-                VoidBlossomReviveS2CPacket::handle
-        );
-    }
-
-    private ResourceLocation channel(String name) {
-        return new ResourceLocation(BMDConstants.MOD_ID, name);
+        Network.registerPacket(BlindnessS2CPacket.IDENTIFIER, BlindnessS2CPacket.CODEC, BlindnessS2CPacket::handle);
+        Network.registerPacket(ChangeHitboxS2CPacket.IDENTIFIER, ChangeHitboxS2CPacket.CODEC, ChangeHitboxS2CPacket::handle);
+        Network.registerPacket(ChargedEnderPearlS2CPacket.IDENTIFIER, ChargedEnderPearlS2CPacket.CODEC, ChargedEnderPearlS2CPacket::handle);
+        Network.registerPacket(HealS2CPacket.IDENTIFIER, HealS2CPacket.CODEC, HealS2CPacket::handle);
+        Network.registerPacket(ObsidilithReviveS2CPacket.IDENTIFIER, ObsidilithReviveS2CPacket.CODEC, ObsidilithReviveS2CPacket::handle);
+        Network.registerPacket(PlaceS2CPacket.IDENTIFIER, PlaceS2CPacket.CODEC, PlaceS2CPacket::handle);
+        Network.registerPacket(SendDeltaMovementS2CPacket.IDENTIFIER, SendDeltaMovementS2CPacket.CODEC, SendDeltaMovementS2CPacket::handle);
+        Network.registerPacket(SendParticleS2CPacket.IDENTIFIER, SendParticleS2CPacket.CODEC, SendParticleS2CPacket::handle);
+        Network.registerPacket(SendVec3S2CPacket.IDENTIFIER, SendVec3S2CPacket.CODEC, SendVec3S2CPacket::handle);
+        Network.registerPacket(SpikeS2CPacket.IDENTIFIER, SpikeS2CPacket.CODEC, SpikeS2CPacket::handle);
+        Network.registerPacket(VoidBlossomReviveS2CPacket.IDENTIFIER, VoidBlossomReviveS2CPacket.CODEC, VoidBlossomReviveS2CPacket::handle);
     }
 
     public static void register() {

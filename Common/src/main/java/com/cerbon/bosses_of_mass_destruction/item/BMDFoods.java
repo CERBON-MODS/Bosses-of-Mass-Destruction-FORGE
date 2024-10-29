@@ -7,10 +7,10 @@ import net.minecraft.world.food.FoodProperties;
 public class BMDFoods {
     public static final FoodProperties CRYSTAL_FRUIT = new FoodProperties.Builder()
             .nutrition(4)
-            .saturationMod(1.2F)
+            .saturationModifier(1.2F)
             .effect(new MobEffectInstance(MobEffects.REGENERATION, 300, 1), 1.0F)
             .effect(new MobEffectInstance(MobEffects.HEAL, 1), 1.0F)
             .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0), 1.0F)
-            .alwaysEat()
+            .alwaysEdible()
             .build();
 }

@@ -35,10 +35,10 @@ public abstract class BaseThrownItemProjectile extends ThrowableItemProjectile {
             clientTick();
     }
 
-    @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return super.getAddEntityPacket();
-    }
+//    @Override
+//    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+//        return super.getAddEntityPacket();
+//    }
 
     @Override
     protected void onHit(@NotNull HitResult hitResult) {

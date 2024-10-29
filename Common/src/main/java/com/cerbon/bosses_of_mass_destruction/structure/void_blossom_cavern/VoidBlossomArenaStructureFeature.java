@@ -3,6 +3,7 @@ package com.cerbon.bosses_of_mass_destruction.structure.void_blossom_cavern;
 import com.cerbon.bosses_of_mass_destruction.structure.util.CodeStructurePiece;
 import com.cerbon.bosses_of_mass_destruction.structure.BMDStructures;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class VoidBlossomArenaStructureFeature extends Structure {
-    public static final Codec<VoidBlossomArenaStructureFeature> CODEC = simpleCodec(VoidBlossomArenaStructureFeature::new);
+    public static final MapCodec<VoidBlossomArenaStructureFeature> CODEC = simpleCodec(VoidBlossomArenaStructureFeature::new);
 
     protected VoidBlossomArenaStructureFeature(StructureSettings settings) {
         super(settings);

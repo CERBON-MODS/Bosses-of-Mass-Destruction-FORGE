@@ -4,8 +4,8 @@ import com.cerbon.bosses_of_mass_destruction.entity.GeoModel;
 import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimations;
 import com.cerbon.bosses_of_mass_destruction.projectile.SporeBallProjectile;
 import net.minecraft.util.Mth;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.core.animation.AnimationState;
 
 public class SporeCodeAnimations implements ICodeAnimations<SporeBallProjectile> {
 

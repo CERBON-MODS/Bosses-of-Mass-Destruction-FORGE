@@ -28,14 +28,14 @@ public class BossHealthOverlayMixin {
         NodeBossBarRenderer lichBossBarRenderer = new NodeBossBarRenderer(
                 BMDEntities.LICH.get().getDescriptionId(),
                 LichUtils.hpPercentRageModes,
-                new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/lich_boss_bar_dividers.png"),
+                ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/gui/lich_boss_bar_dividers.png"),
                 LichUtils.textureSize
         );
 
         NodeBossBarRenderer voidBlossomBarRenderer = new NodeBossBarRenderer(
                 BMDEntities.VOID_BLOSSOM.get().getDescriptionId(),
                 VoidBlossomEntity.hpMilestones,
-                new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/void_blossom_boss_bar_dividers.png"),
+                ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/gui/void_blossom_boss_bar_dividers.png"),
                 LichUtils.textureSize
         );
 

@@ -91,7 +91,7 @@ public class BMDItems {
     @Environment(EnvType.CLIENT)
     public static void initClient() {
         ItemProperties.register(BMDItems.EARTHDIVE_SPEAR.get(),
-                new ResourceLocation("throwing"),
+                ResourceLocation.withDefaultNamespace("throwing"),
                 (stack, level, entity, seed) -> {
                     if (entity == null)
                         return 0.0f;

@@ -4,8 +4,8 @@ import com.cerbon.bosses_of_mass_destruction.client.render.ITextureProvider;
 import com.cerbon.bosses_of_mass_destruction.entity.util.animation.ICodeAnimations;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animation.AnimationState;
 
 import java.util.function.Function;
 

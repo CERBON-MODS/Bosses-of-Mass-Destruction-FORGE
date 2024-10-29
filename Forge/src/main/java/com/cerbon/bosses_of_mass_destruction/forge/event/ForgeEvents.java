@@ -25,13 +25,13 @@ public class ForgeEvents {
     @SubscribeEvent
     public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
         if (event.getObject() == null || event.getObject().getCapability(ChunkBlockCacheProvider.CHUNK_BLOCK_CACHE).isPresent()) return;
-        event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "chunk_block_cache_capability"), new ChunkBlockCacheProvider());
+        event.addCapability(ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "chunk_block_cache_capability"), new ChunkBlockCacheProvider());
     }
 
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if(!(event.getObject() instanceof Player) || event.getObject().getCapability(PlayerMoveHistoryProvider.HISTORICAL_DATA).isPresent()) return;
-        event.addCapability(new ResourceLocation(BMDConstants.MOD_ID, "player_move_history"), new PlayerMoveHistoryProvider());
+        event.addCapability(ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "player_move_history"), new PlayerMoveHistoryProvider());
     }
 
     @SubscribeEvent

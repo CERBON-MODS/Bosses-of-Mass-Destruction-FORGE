@@ -23,17 +23,15 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimatableManager;
 
 import java.util.Map;
 
@@ -74,7 +72,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
         clientTick = laserHandler;
         serverTick = serverLevel -> {if (getTarget() == null) heal(mobConfig.idleHealingPerTick);};
         bossBar = new ServerBossEvent(getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_6);
-        mobEffectHandler = new EffectsImmunity(MobEffects.WITHER, MobEffects.POISON);
+        mobEffectHandler = new EffectsImmunity(MobEffects.WITHER.value(), MobEffects.POISON.value());
         moveHandler = gauntletGoalHandler;
         nbtHandler = gauntletGoalHandler;
         deathClientTick = new ClientGauntletDeathHandler(this);
@@ -127,11 +125,6 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     @Override
     public EntityBounds getBounds() {
         return hitboxHelper.getHitbox();
-    }
-
-    @Override
-    protected float getStandingEyeHeight(@NotNull Pose pose, EntityDimensions dimensions) {
-        return dimensions.height * 0.4f;
     }
 
     @Override

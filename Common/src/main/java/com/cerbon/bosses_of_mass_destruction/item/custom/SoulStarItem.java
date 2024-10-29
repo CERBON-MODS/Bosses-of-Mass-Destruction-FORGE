@@ -38,7 +38,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +49,7 @@ public class SoulStarItem extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(Component.translatable("item.bosses_of_mass_destruction.soul_star.tooltip").withStyle(ChatFormatting.DARK_GRAY));
     }
 
@@ -166,7 +165,7 @@ public class SoulStarItem extends Item {
 
     public void spawnLich(BlockPos blockPos, Level level){
         CompoundTag compoundTag = new CompoundTag();
-        compoundTag.putString("id", new ResourceLocation(BMDConstants.MOD_ID, "lich").toString());
+        compoundTag.putString("id", ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "lich").toString());
 
         Vec3 spawnPos = VecUtils.asVec3(blockPos);
         boolean spawned = new MobPlacementLogic(

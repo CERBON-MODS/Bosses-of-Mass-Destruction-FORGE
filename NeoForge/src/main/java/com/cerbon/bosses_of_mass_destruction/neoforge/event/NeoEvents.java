@@ -11,13 +11,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@Mod.EventBusSubscriber(modid = BMDConstants.MOD_ID)
+@EventBusSubscriber(modid = BMDConstants.MOD_ID)
 public class NeoEvents {
 
     @SubscribeEvent
@@ -26,13 +25,13 @@ public class NeoEvents {
     }
 
     @SubscribeEvent
-    protected static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(event.side == LogicalSide.CLIENT) return;
+    protected static void onPlayerTick(PlayerTickEvent event) {
+        if(event.getEntity().level().isClientSide) return;
 
-        HistoricalData<Vec3> data = event.player.getData(BMDAttachments.HISTORICAL_DATA);
+        HistoricalData<Vec3> data = event.getEntity().getData(BMDAttachments.HISTORICAL_DATA);
 
         Vec3 previousPosition = data.get(0);
-        Vec3 newPosition = event.player.position();
+        Vec3 newPosition = event.getEntity().position();
 
         // Extremely fast movement in one tick is a sign of teleportation or dimension hopping, and thus we should clear history to avoid undefined behavior
         if (previousPosition.distanceToSqr(newPosition) > 5)
@@ -40,7 +39,7 @@ public class NeoEvents {
 
         data.add(newPosition);
 
-        LevitationBlockEntity.tickFlight((ServerPlayer) event.player);
+        LevitationBlockEntity.tickFlight((ServerPlayer) event.getEntity());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

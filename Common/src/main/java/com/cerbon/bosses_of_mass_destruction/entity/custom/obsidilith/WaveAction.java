@@ -98,7 +98,7 @@ public class WaveAction implements IActionWithCooldown {
         float damage = (float) this.entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
         if (livingEntity instanceof ServerPlayer serverPlayer)
             Dispatcher.sendToClient(new SendDeltaMovementS2CPacket(new Vec3(livingEntity.getDeltaMovement().x, 0.8, livingEntity.getDeltaMovement().z)), serverPlayer);
-        livingEntity.setSecondsOnFire(5);
+        livingEntity.setRemainingFireTicks(5);
         livingEntity.hurt(BMDUtils.shieldPiercing(livingEntity.level(), this.entity), damage);
     }
 }

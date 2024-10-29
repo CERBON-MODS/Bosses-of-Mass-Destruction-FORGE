@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public class GauntletLaserRenderer implements IRenderer<GauntletEntity> {
-    private final ResourceLocation laserTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/gauntlet_beam.png");
+    private final ResourceLocation laserTexture = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/entity/gauntlet_beam.png");
     private final RenderType type = RenderType.entityCutoutNoCull(laserTexture);
 
     @Override

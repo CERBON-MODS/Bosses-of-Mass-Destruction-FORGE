@@ -18,7 +18,7 @@ public class NetworkedHitboxManager implements ICompoundHitbox{
         this.entity = entity;
         this.hitboxMap = hitboxMap;
 
-        entity.getEntityData().define(hitbox, hitboxMap.keySet().iterator().next());
+        entity.getEntityData().set(hitbox, hitboxMap.keySet().iterator().next());
     }
 
     @Override

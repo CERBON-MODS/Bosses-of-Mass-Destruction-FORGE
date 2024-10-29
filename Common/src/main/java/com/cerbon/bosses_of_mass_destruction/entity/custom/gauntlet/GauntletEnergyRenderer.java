@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoCube;
@@ -21,7 +22,7 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
     private final GeoModel<GauntletEntity> geoModel;
     private final EntityRendererProvider.Context context;
 
-    private final ResourceLocation armorTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
+    private final ResourceLocation armorTexture = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/entity/obsidilith_armor.png");
     private RenderHelper geoModelProvider;
     private GauntletEntity gauntletEntity;
     private RenderType type;
@@ -51,6 +52,12 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
         float renderAlpha = gauntletEntity.energyShieldHandler.getRenderAlpha();
         if (renderAlpha == 0.0f) return;
         float lerpedAlpha = Mth.lerp(partialTicks, renderAlpha - 0.1f, renderAlpha);
+        int colour = FastColor.ARGB32.colorFromFloat(
+                lerpedAlpha,
+                0.8f * lerpedAlpha,
+                0.2f * lerpedAlpha,
+                0.2f * lerpedAlpha
+        );
 
         if (geoModelProvider == null) return;
         geoModelProvider.actuallyRender(
@@ -64,10 +71,7 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
                 partialTicks,
                 packedLightIn,
                 OverlayTexture.NO_OVERLAY,
-                0.8f * lerpedAlpha,
-                0.2f * lerpedAlpha,
-                0.2f * lerpedAlpha,
-                lerpedAlpha
+                colour
         );
     }
 
@@ -80,10 +84,10 @@ public class GauntletEnergyRenderer implements IRendererWithModel, IRenderer<Gau
         }
 
         @Override
-        public void renderCube(PoseStack poseStack, GeoCube cube, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        public void renderCube(PoseStack poseStack, GeoCube cube, VertexConsumer buffer, int packedLight, int packedOverlay, int colour) {
             poseStack.pushPose();
             poseStack.scale(1.1f, 1.05f, 1.1f);
-            super.renderCube(poseStack, cube, buffer, IBoneLight.fullbright, packedOverlay, red, green, blue, alpha);
+            super.renderCube(poseStack, cube, buffer, IBoneLight.fullbright, packedOverlay, colour);
             poseStack.popPose();
         }
 

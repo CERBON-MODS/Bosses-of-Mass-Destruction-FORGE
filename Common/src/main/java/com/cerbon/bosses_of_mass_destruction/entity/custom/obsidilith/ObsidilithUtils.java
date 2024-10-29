@@ -8,9 +8,11 @@ import com.cerbon.cerbons_api.api.general.event.EventScheduler;
 import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.RandomizableContainer;
@@ -23,7 +25,7 @@ import java.util.List;
 
 public class ObsidilithUtils {
     private static final int textureSize = 256;
-    private static final ResourceLocation bossBarDividerTexture = new ResourceLocation(BMDConstants.MOD_ID, "textures/gui/obsidilith_boss_bar_dividers.png");
+    private static final ResourceLocation bossBarDividerTexture = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "textures/gui/obsidilith_boss_bar_dividers.png");
     public static final List<Float> hpPillarShieldMilestones = List.of(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
     public static final EntityDataAccessor<Boolean> isShielded = SynchedEntityData.defineId(ObsidilithEntity.class, EntityDataSerializers.BOOLEAN);
     public static final NodeBossBarRenderer obsidilithBossBarRenderer = new NodeBossBarRenderer(BMDEntities.OBSIDILITH.get().getDescriptionId(), hpPillarShieldMilestones, bossBarDividerTexture, textureSize);
@@ -78,7 +80,7 @@ public class ObsidilithUtils {
                             () -> {
                                 BlockPos chestPos = blockPos.above(deathPillarHeight + 1);
                                 level.setBlock(chestPos, Blocks.SHULKER_BOX.defaultBlockState(), 2);
-                                RandomizableContainer.setBlockEntityLootTable(level, actor.getRandom(), chestPos, new ResourceLocation(BMDConstants.MOD_ID, "chests/obsidilith"));
+                                RandomizableContainer.setBlockEntityLootTable(level, actor.getRandom(), chestPos, ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "chests/obsidilith")));
                             },
                             deathPillarHeight * ticksBetweenPillarLayer
                     )

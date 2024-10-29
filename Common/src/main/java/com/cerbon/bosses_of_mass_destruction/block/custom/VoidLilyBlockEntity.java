@@ -14,6 +14,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -30,22 +31,22 @@ public class VoidLilyBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("dirX"))
             structureDirection = new Vec3(tag.getDouble("dirX"), tag.getDouble("dirY"), tag.getDouble("dirZ"));
 
-        super.load(tag);
+        super.loadAdditional(tag, registries);
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.Provider registries) {
         Vec3 dir = structureDirection;
         if (dir != null){
             tag.putDouble("dirX", dir.x);
             tag.putDouble("dirY", dir.y);
             tag.putDouble("dirZ", dir.z);
         }
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, registries);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, VoidLilyBlockEntity entity){

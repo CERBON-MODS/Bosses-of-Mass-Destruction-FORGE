@@ -30,32 +30,30 @@ public class VanillaCopies {
         poseStack.mulPose(rotation);
         PoseStack.Pose pose = poseStack.last();
         Matrix4f matrix4f = pose.pose();
-        Matrix3f matrix3f = pose.normal();
         VertexConsumer vertexConsumer = buffer.getBuffer(type);
-        produceVertex(vertexConsumer, matrix4f, matrix3f, i, 0.0f, 0, 0, 1);
-        produceVertex(vertexConsumer, matrix4f, matrix3f, i, 1.0f, 0, 1, 1);
-        produceVertex(vertexConsumer, matrix4f, matrix3f, i, 1.0f, 1, 1, 0);
-        produceVertex(vertexConsumer, matrix4f, matrix3f, i, 0.0f, 1, 0, 0);
+        produceVertex(vertexConsumer, matrix4f, pose, i, 0.0f, 0, 0, 1);
+        produceVertex(vertexConsumer, matrix4f, pose, i, 1.0f, 0, 1, 1);
+        produceVertex(vertexConsumer, matrix4f, pose, i, 1.0f, 1, 1, 0);
+        produceVertex(vertexConsumer, matrix4f, pose, i, 0.0f, 1, 0, 0);
         poseStack.popPose();
     }
 
     public static void produceVertex(
             VertexConsumer vertexConsumer,
             Matrix4f modelMatrix,
-            Matrix3f normalMatrix,
+            PoseStack.Pose normalMatrix,
             int light,
             float x,
             int y,
             int textureU,
             int textureV
     ) {
-        vertexConsumer.vertex(modelMatrix, x - 0.5f, (float) y - 0.25f, 0.0f)
-                .color(255, 255, 255, 255)
-                .uv((float) textureU, (float) textureV)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
-                .normal(normalMatrix, 0.0f, 1.0f, 0.0f)
-                .endVertex();
+        vertexConsumer.addVertex(modelMatrix, x - 0.5f, (float) y - 0.25f, 0.0f)
+                .setColor(255, 255, 255, 255)
+                .setUv((float) textureU, (float) textureV)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(normalMatrix, 0.0f, 1.0f, 0.0f);
     }
 
     public static void renderBeam(LivingEntity actor, Vec3 target, Vec3 prevTarget, float partialTicks, Vec3 color, PoseStack poseStack, MultiBufferSource buffer, RenderType renderType){
@@ -99,26 +97,25 @@ public class VanillaCopies {
         VertexConsumer vertexConsumer = buffer.getBuffer(renderType);
         PoseStack.Pose pose = poseStack.last();
         Matrix4f matrix4f = pose.pose();
-        Matrix3f matrix3f = pose.normal();
 
-        vertex(vertexConsumer, matrix4f, matrix3f, af, m, ag, red, green, blue, 0.4999f, ar);
-        vertex(vertexConsumer, matrix4f, matrix3f, af, 0.0f, ag, red, green, blue, 0.4999f, aq);
-        vertex(vertexConsumer, matrix4f, matrix3f, ah, 0.0f, ai, red, green, blue, 0.0f, aq);
-        vertex(vertexConsumer, matrix4f, matrix3f, ah, m, ai, red, green, blue, 0.0f, ar);
-        vertex(vertexConsumer, matrix4f, matrix3f, aj, m, ak, red, green, blue, 0.4999f, ar);
-        vertex(vertexConsumer, matrix4f, matrix3f, aj, 0.0f, ak, red, green, blue, 0.4999f, aq);
-        vertex(vertexConsumer, matrix4f, matrix3f, al, 0.0f, am, red, green, blue, 0.0f, aq);
-        vertex(vertexConsumer, matrix4f, matrix3f, al, m, am, red, green, blue, 0.0f, ar);
+        vertex(vertexConsumer, matrix4f, pose, af, m, ag, red, green, blue, 0.4999f, ar);
+        vertex(vertexConsumer, matrix4f, pose, af, 0.0f, ag, red, green, blue, 0.4999f, aq);
+        vertex(vertexConsumer, matrix4f, pose, ah, 0.0f, ai, red, green, blue, 0.0f, aq);
+        vertex(vertexConsumer, matrix4f, pose, ah, m, ai, red, green, blue, 0.0f, ar);
+        vertex(vertexConsumer, matrix4f, pose, aj, m, ak, red, green, blue, 0.4999f, ar);
+        vertex(vertexConsumer, matrix4f, pose, aj, 0.0f, ak, red, green, blue, 0.4999f, aq);
+        vertex(vertexConsumer, matrix4f, pose, al, 0.0f, am, red, green, blue, 0.0f, aq);
+        vertex(vertexConsumer, matrix4f, pose, al, m, am, red, green, blue, 0.0f, ar);
 
         float as = 0.0F;
         if (actor.tickCount % 2 == 0)
             as = 0.5F;
 
-        vertex(vertexConsumer, matrix4f, matrix3f, x, m, y, red, green, blue, 0.5f, as + 0.5f);
+        vertex(vertexConsumer, matrix4f, pose, x, m, y, red, green, blue, 0.5f, as + 0.5f);
         vertex(
                 vertexConsumer,
                 matrix4f,
-                matrix3f,
+                pose,
                 z,
                 m,
                 aa,
@@ -128,15 +125,15 @@ public class VanillaCopies {
                 1.0f,
                 as + 0.5f
             );
-        vertex(vertexConsumer, matrix4f, matrix3f, ad, m, ae, red, green, blue, 1.0f, as);
-        vertex(vertexConsumer, matrix4f, matrix3f, ab, m, ac, red, green, blue, 0.5f, as);
+        vertex(vertexConsumer, matrix4f, pose, ad, m, ae, red, green, blue, 1.0f, as);
+        vertex(vertexConsumer, matrix4f, pose, ab, m, ac, red, green, blue, 0.5f, as);
         poseStack.popPose();
     }
 
     public static void vertex(
             VertexConsumer vertexConsumer,
             Matrix4f matrix4f,
-            Matrix3f matrix3f,
+            PoseStack.Pose pose,
             float f,
             float g,
             float h,
@@ -146,13 +143,12 @@ public class VanillaCopies {
             float l,
             float m
     ) {
-        vertexConsumer.vertex(matrix4f, f, g, h)
-                .color(i, j, k, 255)
-                .uv(l, m)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728800)
-                .normal(matrix3f, 0.0F, 0.0F, -1.0F) // Changed from normal(0, 1, 0) because that brightened it for some reason that I cannot fathom with my pathetic opengl knowledge
-                .endVertex();
+        vertexConsumer.addVertex(matrix4f, f, g, h)
+                .setColor(i, j, k, 255)
+                .setUv(l, m)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728800)
+                .setNormal(pose, 0.0F, 0.0F, -1.0F); // Changed from normal(0, 1, 0) because that brightened it for some reason that I cannot fathom with my pathetic opengl knowledge
     }
 
     public static Vec3 fromLerpedPosition(LivingEntity entity, double yOffset, float delta) {

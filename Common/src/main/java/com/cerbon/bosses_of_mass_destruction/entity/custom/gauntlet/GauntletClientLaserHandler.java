@@ -117,7 +117,7 @@ public class GauntletClientLaserHandler implements IEntityTick<Level>, IDataAcce
     }
 
     public void initDataTracker(){
-        entity.getEntityData().define(GauntletEntity.laserTarget, 0);
+        entity.getEntityData().set(GauntletEntity.laserTarget, 0);
     }
 
     @Override
