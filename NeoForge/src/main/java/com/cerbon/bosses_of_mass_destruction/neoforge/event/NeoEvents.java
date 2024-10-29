@@ -25,7 +25,7 @@ public class NeoEvents {
     }
 
     @SubscribeEvent
-    protected static void onPlayerTick(PlayerTickEvent event) {
+    protected static void onPlayerTick(PlayerTickEvent.Post event) {
         if(event.getEntity().level().isClientSide) return;
 
         HistoricalData<Vec3> data = event.getEntity().getData(BMDAttachments.HISTORICAL_DATA);
