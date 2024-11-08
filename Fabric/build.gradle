@@ -27,8 +27,8 @@ dependencies {
     // modImplementation "com.cerbon:cerbons_api-fabric-${minecraft_version}:${cerbons_api_version}"
 
     // Useful Mods
-    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}"
-    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
+    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}.1-fabric-api:${jei_version}"
+    modRuntimeOnly "mezz.jei:jei-${minecraft_version}.1-fabric:${jei_version}"
 
     modImplementation "curse.maven:jade-324717:${jade_version_fabric}"
 

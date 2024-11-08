@@ -36,8 +36,8 @@ dependencies {
     }
 
     // Useful Mods
-    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}.1-neoforge-api:${jei_version}"
+    modRuntimeOnly "mezz.jei:jei-${minecraft_version}.1-neoforge:${jei_version}"
 
     modImplementation "curse.maven:jade-324717:${jade_version_neo}"
 

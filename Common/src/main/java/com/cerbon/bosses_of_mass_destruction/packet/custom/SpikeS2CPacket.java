@@ -1,46 +1,24 @@
 package com.cerbon.bosses_of_mass_destruction.packet.custom;
 
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.VoidBlossomEntity;
-import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.cerbon.cerbons_api.api.network.Network;
 import com.cerbon.cerbons_api.api.network.data.PacketContext;
 import com.cerbon.cerbons_api.api.network.data.Side;
+import com.cerbon.cerbons_api.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpikeS2CPacket implements CustomPacketPayload {
-    public static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "spike_s2c_packet");
-    public static final StreamCodec<RegistryFriendlyByteBuf, SpikeS2CPacket> CODEC = new StreamCodec<>() {
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, SpikeS2CPacket packet) {
-            buf.writeInt(packet.id);
-            buf.writeInt(packet.spikePositions.size());
-            for (BlockPos spikePos : packet.spikePositions)
-                buf.writeBlockPos(spikePos);
-        }
-
-        @Override
-        public @NotNull SpikeS2CPacket decode(RegistryFriendlyByteBuf buf) {
-            int id = buf.readInt();
-            int size = buf.readInt();
-            List<BlockPos> spikePositions = new ArrayList<>();
-            for (int i = 0; i < size; i++)
-                spikePositions.add(buf.readBlockPos());
-
-            return new SpikeS2CPacket(id, spikePositions);
-        }
-    };
+public class SpikeS2CPacket {
+    public static final ResourceLocation CHANNEL = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "spike_s2c_packet");
+    public static final StreamCodec<FriendlyByteBuf, SpikeS2CPacket> STREAM_CODEC = StreamCodec.ofMember(SpikeS2CPacket::write, SpikeS2CPacket::new);
 
     private final int id;
     private final List<BlockPos> spikePositions;
@@ -48,6 +26,22 @@ public class SpikeS2CPacket implements CustomPacketPayload {
     public SpikeS2CPacket(int id, List<BlockPos> spikePositions) {
         this.id = id;
         this.spikePositions = spikePositions;
+    }
+
+    public SpikeS2CPacket(FriendlyByteBuf buf) {
+        this.id = buf.readInt();
+        int size = buf.readInt();
+        this.spikePositions = new ArrayList<>();
+        for (int i = 0; i < size; i++)
+            this.spikePositions.add(buf.readBlockPos());
+    }
+
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(id);
+        buf.writeInt(spikePositions.size());
+        for (BlockPos spikePos : spikePositions){
+            buf.writeBlockPos(spikePos);
+        }
     }
 
     public static void handle(PacketContext<SpikeS2CPacket> ctx) {
@@ -66,8 +60,7 @@ public class SpikeS2CPacket implements CustomPacketPayload {
         });
     }
 
-    @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
-        return Network.getType(IDENTIFIER);
+    public static CustomPacketPayload.Type<CustomPacketPayload> type() {
+        return new CustomPacketPayload.Type<>(CHANNEL);
     }
 }

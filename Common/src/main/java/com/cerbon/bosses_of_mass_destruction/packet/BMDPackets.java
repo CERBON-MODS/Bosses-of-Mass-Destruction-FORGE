@@ -6,17 +6,17 @@ import com.cerbon.cerbons_api.api.network.Network;
 public class BMDPackets {
 
     public void registerPackets() {
-        Network.registerPacket(BlindnessS2CPacket.IDENTIFIER, BlindnessS2CPacket.CODEC, BlindnessS2CPacket::handle);
-        Network.registerPacket(ChangeHitboxS2CPacket.IDENTIFIER, ChangeHitboxS2CPacket.CODEC, ChangeHitboxS2CPacket::handle);
-        Network.registerPacket(ChargedEnderPearlS2CPacket.IDENTIFIER, ChargedEnderPearlS2CPacket.CODEC, ChargedEnderPearlS2CPacket::handle);
-        Network.registerPacket(HealS2CPacket.IDENTIFIER, HealS2CPacket.CODEC, HealS2CPacket::handle);
-        Network.registerPacket(ObsidilithReviveS2CPacket.IDENTIFIER, ObsidilithReviveS2CPacket.CODEC, ObsidilithReviveS2CPacket::handle);
-        Network.registerPacket(PlaceS2CPacket.IDENTIFIER, PlaceS2CPacket.CODEC, PlaceS2CPacket::handle);
-        Network.registerPacket(SendDeltaMovementS2CPacket.IDENTIFIER, SendDeltaMovementS2CPacket.CODEC, SendDeltaMovementS2CPacket::handle);
-        Network.registerPacket(SendParticleS2CPacket.IDENTIFIER, SendParticleS2CPacket.CODEC, SendParticleS2CPacket::handle);
-        Network.registerPacket(SendVec3S2CPacket.IDENTIFIER, SendVec3S2CPacket.CODEC, SendVec3S2CPacket::handle);
-        Network.registerPacket(SpikeS2CPacket.IDENTIFIER, SpikeS2CPacket.CODEC, SpikeS2CPacket::handle);
-        Network.registerPacket(VoidBlossomReviveS2CPacket.IDENTIFIER, VoidBlossomReviveS2CPacket.CODEC, VoidBlossomReviveS2CPacket::handle);
+        Network.registerPacket(BlindnessS2CPacket.type(), BlindnessS2CPacket.class, BlindnessS2CPacket.STREAM_CODEC, BlindnessS2CPacket::handle);
+        Network.registerPacket(ChangeHitboxS2CPacket.type(), ChangeHitboxS2CPacket.class, ChangeHitboxS2CPacket.STREAM_CODEC, ChangeHitboxS2CPacket::handle);
+        Network.registerPacket(ChargedEnderPearlS2CPacket.type(), ChargedEnderPearlS2CPacket.class, ChargedEnderPearlS2CPacket.STREAM_CODEC, ChargedEnderPearlS2CPacket::handle);
+        Network.registerPacket(HealS2CPacket.type(), HealS2CPacket.class, HealS2CPacket.STREAM_CODEC, HealS2CPacket::handle);
+        Network.registerPacket(ObsidilithReviveS2CPacket.type(), ObsidilithReviveS2CPacket.class, ObsidilithReviveS2CPacket.STREAM_CODEC, ObsidilithReviveS2CPacket::handle);
+        Network.registerPacket(PlaceS2CPacket.type(), PlaceS2CPacket.class, PlaceS2CPacket.STREAM_CODEC, PlaceS2CPacket::handle);
+        Network.registerPacket(SendDeltaMovementS2CPacket.type(), SendDeltaMovementS2CPacket.class, SendDeltaMovementS2CPacket.STREAM_CODEC, SendDeltaMovementS2CPacket::handle);
+        Network.registerPacket(SendParticleS2CPacket.type(), SendParticleS2CPacket.class, SendParticleS2CPacket.STREAM_CODEC, SendParticleS2CPacket::handle);
+        Network.registerPacket(SendVec3S2CPacket.type(), SendVec3S2CPacket.class, SendVec3S2CPacket.STREAM_CODEC, SendVec3S2CPacket::handle);
+        Network.registerPacket(SpikeS2CPacket.type(), SpikeS2CPacket.class, SpikeS2CPacket.STREAM_CODEC, SpikeS2CPacket::handle);
+        Network.registerPacket(VoidBlossomReviveS2CPacket.type(), VoidBlossomReviveS2CPacket.class, VoidBlossomReviveS2CPacket.STREAM_CODEC, VoidBlossomReviveS2CPacket::handle);
     }
 
     public static void register() {

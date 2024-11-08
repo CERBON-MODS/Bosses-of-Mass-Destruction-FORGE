@@ -1,34 +1,21 @@
 package com.cerbon.bosses_of_mass_destruction.packet.custom;
 
 import com.cerbon.bosses_of_mass_destruction.block.custom.VoidBlossomBlock;
-import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
-import com.cerbon.cerbons_api.api.network.Network;
 import com.cerbon.cerbons_api.api.network.data.PacketContext;
 import com.cerbon.cerbons_api.api.network.data.Side;
+import com.cerbon.cerbons_api.api.static_utilities.PacketUtils;
+import com.cerbon.cerbons_api.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
-public class HealS2CPacket implements CustomPacketPayload {
-    public static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "heal_s2c_packet");
-    public static final StreamCodec<RegistryFriendlyByteBuf, HealS2CPacket> CODEC = new StreamCodec<>() {
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, HealS2CPacket packet) {
-            buf.writeVec3(packet.source);
-            buf.writeVec3(packet.dest);
-        }
-
-        @Override
-        public @NotNull HealS2CPacket decode(RegistryFriendlyByteBuf buf) {
-            return new HealS2CPacket(buf.readVec3(), buf.readVec3());
-        }
-    };
+public class HealS2CPacket {
+    public static final ResourceLocation CHANNEL = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "heal_s2c_packet");
+    public static final StreamCodec<FriendlyByteBuf, HealS2CPacket> STREAM_CODEC = StreamCodec.ofMember(HealS2CPacket::write, HealS2CPacket::new);
 
     private final Vec3 source;
     private final Vec3 dest;
@@ -36,6 +23,16 @@ public class HealS2CPacket implements CustomPacketPayload {
     public HealS2CPacket(Vec3 source, Vec3 dest) {
         this.source = source;
         this.dest = dest;
+    }
+
+    public HealS2CPacket(FriendlyByteBuf buf) {
+        this.source = PacketUtils.readVec3(buf);
+        this.dest = PacketUtils.readVec3(buf);
+    }
+
+    public void write(FriendlyByteBuf buf) {
+        PacketUtils.writeVec3(buf, this.source);
+        PacketUtils.writeVec3(buf, this.dest);
     }
 
     public static void handle(PacketContext<HealS2CPacket> ctx) {
@@ -50,8 +47,7 @@ public class HealS2CPacket implements CustomPacketPayload {
         client.execute(() -> VoidBlossomBlock.handleVoidBlossomHeal(level, packet.source, packet.dest));
     }
 
-    @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
-        return Network.getType(IDENTIFIER);
+    public static CustomPacketPayload.Type<CustomPacketPayload> type() {
+        return new CustomPacketPayload.Type<>(CHANNEL);
     }
 }
