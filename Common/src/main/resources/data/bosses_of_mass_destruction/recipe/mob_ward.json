@@ -1,22 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
+    "A",
     "H",
-    "V",
-    "S"
+    "C"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:stick"
+    "C": {
+      "item": "minecraft:obsidian"
     },
-    "V": {
-      "item": "bosses_of_mass_destruction:void_thorn"
+    "A": {
+      "item": "bosses_of_mass_destruction:ancient_anima"
     },
     "H": {
       "item": "bosses_of_mass_destruction:obsidian_heart"
     }
   },
   "result": {
-    "item": "bosses_of_mass_destruction:earthdive_spear"
+    "id": "bosses_of_mass_destruction:mob_ward"
   }
 }

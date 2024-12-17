@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "A",
-    "H",
-    "C"
+    " A ",
+    "GHG",
+    "CCC"
   ],
   "key": {
     "C": {
@@ -13,10 +13,13 @@
       "item": "bosses_of_mass_destruction:ancient_anima"
     },
     "H": {
-      "item": "bosses_of_mass_destruction:obsidian_heart"
+      "item": "bosses_of_mass_destruction:blazing_eye"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
     }
   },
   "result": {
-    "item": "bosses_of_mass_destruction:mob_ward"
+    "id": "bosses_of_mass_destruction:levitation_block"
   }
 }

@@ -2,27 +2,28 @@
   "parent": "minecraft:adventure/kill_a_mob",
   "display": {
     "title": {
-      "translate": "advancements.adventure.void_blossom_defeat.title",
+      "translate": "advancements.adventure.night_lich_defeat.title",
       "color": "white"
     },
     "description": {
-      "translate": "advancements.adventure.void_blossom_defeat.description"
+      "translate": "advancements.adventure.night_lich_defeat.description"
     },
     "icon": {
-      "item": "bosses_of_mass_destruction:void_lily"
+      "count" : 1,
+      "id": "bosses_of_mass_destruction:soul_star"
     },
-    "frame": "task",
+    "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false,
     "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png"
   },
   "criteria": {
-    "bosses_of_mass_destruction:void_blossom": {
+    "bosses_of_mass_destruction:lich": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
         "entity": {
-          "type": "bosses_of_mass_destruction:void_blossom"
+          "type": "bosses_of_mass_destruction:lich"
         }
       }
     }
