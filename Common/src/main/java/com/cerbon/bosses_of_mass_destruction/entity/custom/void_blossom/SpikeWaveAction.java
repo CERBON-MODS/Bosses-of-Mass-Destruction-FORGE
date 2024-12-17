@@ -2,7 +2,6 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom;
 
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
-import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.NetworkedHitboxManager;
 import com.cerbon.bosses_of_mass_destruction.packet.custom.SpikeS2CPacket;
 import com.cerbon.bosses_of_mass_destruction.particle.BMDParticles;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
@@ -68,25 +67,25 @@ public class SpikeWaveAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new EventSeries(
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.SpikeWave1.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.SpikeWave1.getId()),
                                 20,
                                 1,
                                 shouldCancel
                         ),
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.SpikeWave2.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.SpikeWave2.getId()),
                                 26,
                                 1,
                                 shouldCancel
                         ),
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.SpikeWave3.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.SpikeWave3.getId()),
                                 26,
                                 1,
                                 shouldCancel
                         ),
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Idle.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Idle.getId()),
                                 26,
                                 1,
                                 () -> false

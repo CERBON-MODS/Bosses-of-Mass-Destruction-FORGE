@@ -6,6 +6,7 @@ import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.ActionGoal;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.CompositeGoal;
 import com.cerbon.bosses_of_mass_destruction.entity.ai.goals.FindTargetGoal;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.AnimationHolder;
+import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.HitboxId;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.NetworkedHitboxManager;
 import com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox.VoidBlossomHitboxes;
 import com.cerbon.bosses_of_mass_destruction.entity.damage.CompositeDamageHandler;
@@ -21,6 +22,9 @@ import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
 import com.cerbon.cerbons_api.api.multipart_entities.entity.MultipartAwareEntity;
 import com.cerbon.cerbons_api.api.multipart_entities.util.CompoundOrientedBox;
 import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -47,6 +51,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
 
     public final VoidBlossomClientSpikeHandler clientSpikeHandler;
     public static final List<Float> hpMilestones = List.of(0.0f, 0.25f, 0.5f, 0.75f, 1.0f);
+    public static final EntityDataAccessor<Byte> hitbox = SynchedEntityData.defineId(VoidBlossomEntity.class, EntityDataSerializers.BYTE);
 
     public VoidBlossomEntity(EntityType<? extends PathfinderMob> entityType, Level level, VoidBlossomConfig mobConfig) {
         super(entityType, level);
@@ -64,7 +69,7 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
                 VoidBlossomAttacks.stopAttackAnimation, 0);
 
         VoidBlossomHitboxes hitboxes = new VoidBlossomHitboxes(this);
-        this.hitboxHelper = new NetworkedHitboxManager(this, hitboxes.getMap());
+        this.hitboxHelper = new NetworkedHitboxManager(this, hitboxes.getMap(), hitbox);
         entityEventHandler = new CompositeEntityEventHandler(animationHolder, new ClientSporeEffectHandler(this, preTickEvents), new ClientDeathEffectHandler(this, preTickEvents));
         DamageMemory damageMemory = new DamageMemory(10, this);
         TargetSwitcher targetSwitcher = new TargetSwitcher(this, damageMemory);
@@ -105,6 +110,12 @@ public class VoidBlossomEntity extends BaseEntity implements MultipartAwareEntit
             );
         }else if (level().isClientSide())
             animationHolder.handleEntityEvent(VoidBlossomAttacks.spawnAction);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(hitbox, HitboxId.Idle.getId());
     }
 
     private void lookAtTarget(){

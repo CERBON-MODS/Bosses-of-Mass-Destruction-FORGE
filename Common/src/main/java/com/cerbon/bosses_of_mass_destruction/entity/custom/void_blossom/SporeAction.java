@@ -38,13 +38,13 @@ public class SporeAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new EventSeries(
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Spore.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Spore.getId()),
                                 20,
                                 1,
                                 shouldCancel
                         ),
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Idle.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Idle.getId()),
                                 27,
                                 1,
                                 () -> false

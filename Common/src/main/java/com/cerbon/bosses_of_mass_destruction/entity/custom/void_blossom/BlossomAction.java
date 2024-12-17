@@ -55,13 +55,13 @@ public class BlossomAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new EventSeries(
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.SpikeWave3.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.SpikeWave3.getId()),
                                 20,
                                 1,
                                 shouldCancel
                         ),
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Idle.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Idle.getId()),
                                 80
                         )
                 )

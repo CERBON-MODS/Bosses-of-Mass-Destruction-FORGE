@@ -40,13 +40,13 @@ public class BladeAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new EventSeries(
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Petal.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Petal.getId()),
                                 10,
                                 1,
                                 shouldCancel
                         ),
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Idle.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Idle.getId()),
                                 90
                         )
                 )

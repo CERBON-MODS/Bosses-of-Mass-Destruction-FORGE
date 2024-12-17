@@ -80,6 +80,13 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
     }
 
     @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(laserTarget, 0);
+        builder.define(isEnergized, false);
+    }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar data) {
         animationHandler.registerControllers(data);
     }

@@ -1,7 +1,6 @@
 package com.cerbon.bosses_of_mass_destruction.projectile;
 
 import com.cerbon.bosses_of_mass_destruction.entity.BMDEntities;
-import com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet.GauntletEntity;
 import com.cerbon.bosses_of_mass_destruction.projectile.util.ExemptEntities;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,7 +21,7 @@ import java.util.function.Consumer;
 public class PetalBladeProjectile extends BaseThrownItemProjectile{
     private Consumer<LivingEntity> entityHit;
 
-    public static final EntityDataAccessor<Float> renderRotation = SynchedEntityData.defineId(GauntletEntity.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> renderRotation = SynchedEntityData.defineId(PetalBladeProjectile.class, EntityDataSerializers.FLOAT);
 
     public PetalBladeProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
         super(entityType, level);
@@ -33,6 +32,12 @@ public class PetalBladeProjectile extends BaseThrownItemProjectile{
         super(BMDEntities.PETAL_BLADE.get(), livingEntity, level, new ExemptEntities(exemptEntities));
         this.entityHit = entityHit;
         getEntityData().set(renderRotation, rotation);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(renderRotation, 0f);
     }
 
     @Override

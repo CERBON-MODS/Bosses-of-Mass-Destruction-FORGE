@@ -17,6 +17,7 @@ import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -91,6 +92,12 @@ public class ObsidilithEntity extends BaseEntity {
             );
         }
         entityData.set(ObsidilithUtils.isShielded, false);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ObsidilithUtils.isShielded, false);
     }
 
     private ActionGoal buildAttackGoal(){

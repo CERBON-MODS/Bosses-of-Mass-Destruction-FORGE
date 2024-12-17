@@ -3,22 +3,18 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.void_blossom.hitbox;
 import com.cerbon.bosses_of_mass_destruction.entity.util.BaseEntity;
 import com.cerbon.cerbons_api.api.multipart_entities.entity.EntityBounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 
 import java.util.Map;
 
 public class NetworkedHitboxManager implements ICompoundHitbox{
     private final BaseEntity entity;
     private final Map<Byte, ICompoundHitbox> hitboxMap;
+    public final EntityDataAccessor<Byte> hitbox;
 
-    public static final EntityDataAccessor<Byte> hitbox = SynchedEntityData.defineId(BaseEntity.class, EntityDataSerializers.BYTE);
-
-    public NetworkedHitboxManager(BaseEntity entity, Map<Byte, ICompoundHitbox> hitboxMap){
+    public NetworkedHitboxManager(BaseEntity entity, Map<Byte, ICompoundHitbox> hitboxMap, EntityDataAccessor<Byte> hitbox) {
         this.entity = entity;
         this.hitboxMap = hitboxMap;
-
-        entity.getEntityData().set(hitbox, hitboxMap.keySet().iterator().next());
+        this.hitbox = hitbox;
     }
 
     @Override

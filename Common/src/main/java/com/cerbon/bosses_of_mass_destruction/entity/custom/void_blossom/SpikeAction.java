@@ -70,13 +70,13 @@ public class SpikeAction implements IActionWithCooldown {
         eventScheduler.addEvent(
                 new EventSeries(
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Spike.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Spike.getId()),
                                 20,
                                 1,
                                 shouldCancel
                         ),
                         new TimedEvent(
-                                () -> entity.getEntityData().set(NetworkedHitboxManager.hitbox, HitboxId.Idle.getId()),
+                                () -> entity.getEntityData().set(VoidBlossomEntity.hitbox, HitboxId.Idle.getId()),
                                 100
                         )
                 )
