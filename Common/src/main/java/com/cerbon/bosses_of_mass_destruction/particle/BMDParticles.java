@@ -83,19 +83,19 @@ public class BMDParticles {
             new BMDSimpleParticleType(true));
 
     public static final RegistryEntry<BMDSimpleParticleType> FLUFF = PARTICLE_TYPES.register("fluff", () ->
-            new BMDSimpleParticleType(true));
+            new BMDSimpleParticleType(false));
 
     public static final RegistryEntry<BMDSimpleParticleType> POLLEN = PARTICLE_TYPES.register("pollen", () ->
             new BMDSimpleParticleType(true));
 
     public static final RegistryEntry<BMDSimpleParticleType> EARTHDIVE_INDICATOR = PARTICLE_TYPES.register("earthdive_indicator", () ->
-            new BMDSimpleParticleType(true));
+            new BMDSimpleParticleType(false));
 
     public static final RegistryEntry<BMDSimpleParticleType> ROD = PARTICLE_TYPES.register("rod", () ->
-            new BMDSimpleParticleType(true));
+            new BMDSimpleParticleType(false));
 
     public static final RegistryEntry<BMDSimpleParticleType> GROUND_ROD = PARTICLE_TYPES.register("ground_rod", () ->
-            new BMDSimpleParticleType(true));
+            new BMDSimpleParticleType(false));
 
     public static final int FULL_BRIGHT = 15728880;
 
