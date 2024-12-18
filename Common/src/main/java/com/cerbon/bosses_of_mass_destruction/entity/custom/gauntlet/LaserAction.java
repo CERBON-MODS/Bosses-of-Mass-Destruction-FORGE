@@ -2,6 +2,7 @@ package com.cerbon.bosses_of_mass_destruction.entity.custom.gauntlet;
 
 import com.cerbon.bosses_of_mass_destruction.entity.ai.action.IActionWithCooldown;
 import com.cerbon.bosses_of_mass_destruction.sound.BMDSounds;
+import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.bosses_of_mass_destruction.util.BMDUtils;
 import com.cerbon.bosses_of_mass_destruction.util.VanillaCopiesServer;
 import com.cerbon.cerbons_api.api.general.data.HistoricalData;
@@ -11,10 +12,12 @@ import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
 import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
@@ -23,7 +26,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class LaserAction implements IActionWithCooldown {
@@ -33,6 +35,8 @@ public class LaserAction implements IActionWithCooldown {
     private final ServerLevel serverLevel;
 
     public static final int laserLagTicks = 8;
+
+    private static final ResourceLocation laserDamageModifier = ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "laser");
 
     public LaserAction(GauntletEntity entity, EventScheduler eventScheduler, Supplier<Boolean> cancelAction, ServerLevel serverLevel) {
         this.entity = entity;
@@ -108,10 +112,9 @@ public class LaserAction implements IActionWithCooldown {
                 .stream().filter(LivingEntity.class::isInstance).map(entity1 -> (LivingEntity) entity1).toList();
 
         for (LivingEntity hitEntity : entitiesHit){
-            double originalAttack = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-            Objects.requireNonNull(entity.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(originalAttack * 0.75);
+            entity.getAttribute(Attributes.ATTACK_DAMAGE).addTransientModifier(new AttributeModifier(laserDamageModifier, -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             entity.doHurtTarget(hitEntity);
-            Objects.requireNonNull(entity.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(originalAttack);
+            entity.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(laserDamageModifier);
         }
     }
 
