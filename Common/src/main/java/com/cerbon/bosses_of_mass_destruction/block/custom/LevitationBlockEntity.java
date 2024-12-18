@@ -27,8 +27,10 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoBlockEntity {
     private final AnimatableInstanceCache animationFactory = GeckoLibUtil.createInstanceCache(this);
@@ -80,13 +82,13 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
     }
 
     public static void tickFlight(ServerPlayer player){
-        List<BlockPos> blockToCheck = new ArrayList<>();
+        List<ChunkPos> chunksToCheck = new ArrayList<>();
 
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++)
-                blockToCheck.add(new BlockPos(x * (int) tableOfElevationRadius, 0, z * (int) tableOfElevationRadius));
+        for (int x = -2; x <= 2; x++) {
+            for (int z = -2; z <= 2; z++)
+                chunksToCheck.add(new ChunkPos(player.blockPosition().offset(new ChunkPos(x, z).getBlockAt(0, 0, 0))));
         }
-        Set<ChunkPos> chunksToCheck = blockToCheck.stream().map(pos -> new ChunkPos(pos.offset(player.blockPosition()))).collect(Collectors.toSet());
+
         boolean hasLevitationBlock = chunksToCheck.stream().anyMatch(chunkPos -> {
             Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(player.level());
 
