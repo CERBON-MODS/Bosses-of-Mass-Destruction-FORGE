@@ -3,7 +3,7 @@ name: BUG/ISSUE Template
 about: Use this template if you’ve discovered a bug or are experiencing an issue.
 title: "[BUG/ISSUE] Replace this with your title"
 labels: bug
-assignees: ''
+assignees: CerbonXD
 
 ---
 
