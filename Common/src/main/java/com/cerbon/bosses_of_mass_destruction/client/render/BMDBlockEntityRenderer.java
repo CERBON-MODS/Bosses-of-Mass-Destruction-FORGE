@@ -59,7 +59,7 @@ public class BMDBlockEntityRenderer<T extends BlockEntity & GeoAnimatable> exten
                 partialTick,
                 packedLight1,
                 packedOverlay,
-                FastColor.ARGB32.colorFromFloat(newColor.w, newColor.x, newColor.y, newColor.z));
+                FastColor.ARGB32.color((int) newColor.w, (int) newColor.x, (int) newColor.y, (int) newColor.z));
     }
 }
 
