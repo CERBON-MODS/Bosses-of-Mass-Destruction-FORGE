@@ -17,6 +17,8 @@ import com.cerbon.cerbons_api.api.general.event.TimedEvent;
 import com.cerbon.cerbons_api.api.static_utilities.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -56,6 +58,8 @@ public class ObsidilithEntity extends BaseEntity {
 
     public byte currentAttack = 0;
 
+    public static final EntityDataAccessor<Boolean> isShielded = SynchedEntityData.defineId(ObsidilithEntity.class, EntityDataSerializers.BOOLEAN);
+
     public ObsidilithEntity(EntityType<? extends PathfinderMob> entityType, Level level, ObsidilithConfig mobConfig) {
         super(entityType, level);
         this.mobConfig = mobConfig;
@@ -91,13 +95,12 @@ public class ObsidilithEntity extends BaseEntity {
                     )
             );
         }
-        entityData.set(ObsidilithUtils.isShielded, false);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(ObsidilithUtils.isShielded, false);
+        builder.define(isShielded, false);
     }
 
     private ActionGoal buildAttackGoal(){
@@ -119,7 +122,7 @@ public class ObsidilithEntity extends BaseEntity {
                 pos -> level().getBlockState(pos).getBlock() != BMDBlocks.OBSIDILITH_RUNE.get()
                 || !pos.closerThan(blockPosition(), 64));
 
-        getEntityData().set(ObsidilithUtils.isShielded, !activePillars.isEmpty());
+        getEntityData().set(isShielded, !activePillars.isEmpty());
 
         if (this.tickCount % 40 == 0){
             if (!activePillars.isEmpty()){
@@ -214,7 +217,7 @@ public class ObsidilithEntity extends BaseEntity {
     }
 
     public boolean isShielded(){
-        return getEntityData().get(ObsidilithUtils.isShielded);
+        return getEntityData().get(isShielded);
     }
 
     public void addActivePillar(BlockPos pos){
