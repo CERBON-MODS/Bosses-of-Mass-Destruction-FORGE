@@ -61,7 +61,7 @@ public class GauntletEntity extends BaseEntity implements MultipartAwareEntity {
                 GauntletAttacks.swirlPunchAttack, new AnimationHolder.Animation("swirl_punch", "idle"),
                 GauntletAttacks.blindnessAttack, new AnimationHolder.Animation("cast", "idle"),
                 (byte) 3, new AnimationHolder.Animation("death", "idle")
-        ), GauntletAttacks.stopAttackAnimation, 5);
+        ), GauntletAttacks.stopAttackAnimation, 0);
 
         noCulling = true;
         laserHandler.initDataTracker();
