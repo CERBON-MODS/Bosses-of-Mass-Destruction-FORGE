@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -59,7 +58,7 @@ public class VanillaCopies {
     public static void renderBeam(LivingEntity actor, Vec3 target, Vec3 prevTarget, float partialTicks, Vec3 color, PoseStack poseStack, MultiBufferSource buffer, RenderType renderType){
         float j = actor.level().getGameTime() + partialTicks;
         float k = j % 1.0F;
-        float l = actor.getEyeHeight();
+        float l = actor.getEyeHeight() - 1.7f; // Subtracted by 1.7 to center the beam at the Gauntlet eye. Not sure why I had to add this. (1.21 addition)
         poseStack.pushPose();
         poseStack.translate(0.0, l, 0.0);
         Vec3 vec3 = MathUtils.lerpVec(partialTicks, prevTarget, target);
