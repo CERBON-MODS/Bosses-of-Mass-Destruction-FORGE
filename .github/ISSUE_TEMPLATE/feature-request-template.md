@@ -3,7 +3,7 @@ name: FEATURE REQUEST Template
 about: Use this template if there’s a feature you’d like to propose for the project.
 title: "[FEATURE REQUEST] Brief description"
 labels: enhancement
-assignees: ''
+assignees: CerbonXD
 
 ---
 
