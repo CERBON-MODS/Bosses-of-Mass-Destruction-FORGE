@@ -11,7 +11,6 @@ import com.cerbon.cerbons_api.api.static_utilities.MathUtils;
 import com.cerbon.cerbons_api.api.static_utilities.MobUtils;
 import com.cerbon.cerbons_api.api.static_utilities.SoundUtils;
 import com.cerbon.cerbons_api.api.static_utilities.VecUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -110,7 +109,7 @@ public class VolleyAction implements IActionWithCooldown {
                             MagicMissileProjectile projectile = new MagicMissileProjectile(
                                     entity,
                                     entity.level(),
-                                    livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new MobEffectInstance(Holder.direct(effect), missileEffectDuration, missileEffectAmplifier))),
+                                    livingEntity -> missileMobEffect.ifPresent(effect -> livingEntity.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect), missileEffectDuration, missileEffectAmplifier))),
                                     MinionAction.summonEntityType != null ? List.of(MinionAction.summonEntityType) : List.of());
 
                             MobUtils.setPos(projectile, MobUtils.eyePos(entity).add(offset));
