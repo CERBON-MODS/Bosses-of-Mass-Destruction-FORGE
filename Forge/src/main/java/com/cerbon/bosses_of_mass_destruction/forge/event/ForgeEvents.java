@@ -7,6 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.forge.capability.PlayerMoveHistoryP
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -55,7 +56,10 @@ public class ForgeEvents {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onLivingDeath(LivingDeathEvent event){
         if (BMDEntities.mobConfig.lichConfig.summonMechanic.isEnabled) {
-            Entity attacker = event.getSource().getEntity();
+            DamageSource damageSource = event.getSource();
+            if (damageSource == null) return;
+
+            Entity attacker = damageSource.getEntity();
 
             if (attacker != null)
                 BMDEntities.killCounter.afterKilledOtherEntity(attacker, event.getEntity());

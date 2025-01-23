@@ -7,6 +7,7 @@ import com.cerbon.bosses_of_mass_destruction.neoforge.attachment.saved_data.Leve
 import com.cerbon.bosses_of_mass_destruction.util.BMDConstants;
 import com.cerbon.cerbons_api.api.general.data.HistoricalData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
@@ -45,7 +46,10 @@ public class NeoEvents {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onLivingDeath(LivingDeathEvent event){
         if (BMDEntities.mobConfig.lichConfig.summonMechanic.isEnabled){
-            Entity attacker = event.getSource().getEntity();
+            DamageSource damageSource = event.getSource();
+            if (damageSource == null) return;
+
+            Entity attacker = damageSource.getEntity();
 
             if (attacker != null)
                 BMDEntities.killCounter.afterKilledOtherEntity(attacker, event.getEntity());
