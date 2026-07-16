@@ -25,7 +25,7 @@ public class BMDStructures {
     public static final StructureRegister GAUNTLET_STRUCTURE_REGISTRY = new StructureRegister(ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "gauntlet_arena"));
     public static final StructureRegister LICH_STRUCTURE_REGISTRY = new StructureRegister(ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "lich_tower"));
 
-    public static final RegistryEntry<StructureType<VoidBlossomArenaStructureFeature>> VOID_BLOSSOM_STRUCTURE_TYPE = STRUCTURE_TYPES.register("void_blossom", () -> Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "void_blossom"), () -> VoidBlossomArenaStructureFeature.CODEC));
+    public static final RegistryEntry<StructureType<VoidBlossomArenaStructureFeature>> VOID_BLOSSOM_STRUCTURE_TYPE = STRUCTURE_TYPES.register("void_blossom", () -> (StructureType<VoidBlossomArenaStructureFeature>) () -> VoidBlossomArenaStructureFeature.CODEC);
     public static final RegistryEntry<StructurePieceType> VOID_BLOSSOM_CAVERN_PIECE = STRUCTURE_PIECES.register("void_blossom_piece", () -> StructureFactories.VOID_BLOSSOM);
 
     public static final TagKey<Structure> SOUL_STAR_STRUCTURE_KEY = TagKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(BMDConstants.MOD_ID, "soul_star_target"));
