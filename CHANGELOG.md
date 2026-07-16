@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix double registering for VOID_BLOSSOM_STRUCTURE_TYPE (Fix NeoForge .238+ crash). Thanks [jsaperr](https://github.com/jsaperr).
+- Fix: java.util.ConcurrentModificationException in ItemProperties.register. Thanks [Viola-Siemens](https://github.com/Viola-Siemens).
 
 ## [1.3.2] - 2025-01-23
 
