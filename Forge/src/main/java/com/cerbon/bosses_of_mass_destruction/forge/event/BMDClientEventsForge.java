@@ -33,10 +33,12 @@ public class BMDClientEventsForge {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        BMDItems.initClient();
-        BMDEntities.initClient();
-        BMDBlockEntities.initClient();
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> AutoConfig.getConfigScreen(BMDConfig.class, parent).get()));
+        event.enqueueWork(() -> {
+            BMDItems.initClient();
+            BMDEntities.initClient();
+            BMDBlockEntities.initClient();
+            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> AutoConfig.getConfigScreen(BMDConfig.class, parent).get()));
+        });
     }
     
     @SubscribeEvent

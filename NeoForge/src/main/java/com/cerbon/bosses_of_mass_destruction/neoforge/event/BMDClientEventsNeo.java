@@ -33,10 +33,12 @@ public class BMDClientEventsNeo {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        BMDItems.initClient();
-        BMDEntities.initClient();
-        BMDBlockEntities.initClient();
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (modContainer, screen) -> AutoConfig.getConfigScreen(BMDConfig.class, screen).get());
+        event.enqueueWork(() -> {
+            BMDItems.initClient();
+            BMDEntities.initClient();
+            BMDBlockEntities.initClient();
+            ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (modContainer, screen) -> AutoConfig.getConfigScreen(BMDConfig.class, screen).get());
+        });
     }
 
     @SubscribeEvent
