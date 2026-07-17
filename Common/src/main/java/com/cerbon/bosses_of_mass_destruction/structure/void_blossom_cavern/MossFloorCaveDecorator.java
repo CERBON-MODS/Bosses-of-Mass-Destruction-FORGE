@@ -50,16 +50,19 @@ public class MossFloorCaveDecorator implements ICaveDecorator{
         for (BlockPos mossPos : spacedMossPositions)
             if (boundingBox.isInside(mossPos)){
                 ConfiguredFeature<?, ?> configuredFeature = BMDUtils.getConfiguredFeature(level, CaveFeatures.MOSS_PATCH);
-                Feature.VEGETATION_PATCH.place(
-                        new FeaturePlaceContext<>(
-                                Optional.of(configuredFeature),
-                                level,
-                                chunkGenerator,
-                                random,
-                                mossPos,
-                                (VegetationPatchConfiguration) configuredFeature.config()
-                        )
-                );
+
+                if (configuredFeature.config() instanceof VegetationPatchConfiguration vegetationPatchConfiguration) {
+                    Feature.VEGETATION_PATCH.place(
+                            new FeaturePlaceContext<>(
+                                    Optional.of(configuredFeature),
+                                    level,
+                                    chunkGenerator,
+                                    random,
+                                    mossPos,
+                                    vegetationPatchConfiguration
+                            )
+                    );
+                }
             }
     }
 }
