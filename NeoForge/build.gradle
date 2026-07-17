@@ -119,7 +119,7 @@ tasks.register("publishCurseForge", TaskPublishCurseForge) {
 
     def mainFile = upload(curseforge_project_id, remapJar)
     mainFile.addModLoader("NeoForge")
-    mainFile.addGameVersion(game_versions.replaceAll(" ", "").split(","))
+    mainFile.addGameVersion(game_versions_curseforge.replaceAll(" ", "").split(","))
 
     mainFile.releaseType = release_type
     mainFile.changelogType = changelog_type
@@ -135,7 +135,7 @@ modrinth {
     uploadFile = remapJar
     loaders = ["neoforge"]
 
-    gameVersions = game_versions.replaceAll(" ", "").split(",") as Iterable<? extends String>
+    gameVersions = game_versions_modrinth.replaceAll(" ", "").split(",") as Iterable<? extends String>
 
     versionName = archivesBaseName + "-" + mod_version
     versionNumber = mod_version
