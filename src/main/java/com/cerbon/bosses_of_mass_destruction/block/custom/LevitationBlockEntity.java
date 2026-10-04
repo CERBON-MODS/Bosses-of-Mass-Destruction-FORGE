@@ -80,22 +80,21 @@ public class LevitationBlockEntity extends ChunkCacheBlockEntity implements GeoB
     }
 
     public static void tickFlight(ServerPlayer player){
-        List<BlockPos> blockToCheck = new ArrayList<>();
+        Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(player.level());
+        boolean hasLevitationBlock = false;
+        if (blockCache.isPresent() && blockCache.get().hasBlocks(BMDBlocks.LEVITATION_BLOCK.get())) {
+            List<BlockPos> blockToCheck = new ArrayList<>();
 
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++)
-                blockToCheck.add(new BlockPos(x * (int) tableOfElevationRadius, 0, z * (int) tableOfElevationRadius));
-        }
-        Set<ChunkPos> chunksToCheck = blockToCheck.stream().map(pos -> new ChunkPos(pos.offset(player.blockPosition()))).collect(Collectors.toSet());
-        boolean hasLevitationBlock = chunksToCheck.stream().anyMatch(chunkPos -> {
-            Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(player.level());
-
-            if (blockCache.isPresent()){
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++)
+                    blockToCheck.add(new BlockPos(x * (int) tableOfElevationRadius, 0, z * (int) tableOfElevationRadius));
+            }
+            Set<ChunkPos> chunksToCheck = blockToCheck.stream().map(pos -> new ChunkPos(pos.offset(player.blockPosition()))).collect(Collectors.toSet());
+            hasLevitationBlock = chunksToCheck.stream().anyMatch(chunkPos -> {
                 List<BlockPos> blocks = blockCache.get().getBlocksFromChunk(chunkPos, BMDBlocks.LEVITATION_BLOCK.get());
                 return blocks.stream().anyMatch(pos -> getAffectingBox(player.level(), VecUtils.asVec3(pos)).contains(player.position()));
-            } else
-                return false;
-        });
+            });
+        }
 
         /*
           Known bugs:

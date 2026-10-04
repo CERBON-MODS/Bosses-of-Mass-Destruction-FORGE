@@ -212,6 +212,7 @@ public class MobWardBlock extends BaseEntityBlock {
 
         ChunkPos chunkPos = new ChunkPos(pos);
         BMDCapabilities.getChunkBlockCache(serverLevel).ifPresent(capability -> {
+            if (!capability.hasBlocks(BMDBlocks.MOB_WARD.get())) return;
             for (int x = chunkPos.x - 4; x <= chunkPos.x + 4; x++)
                 for (int z = chunkPos.z - 4; z <= chunkPos.z + 4; z++){
                     List<BlockPos> blocks = capability.getBlocksFromChunk(new ChunkPos(x, z), BMDBlocks.MOB_WARD.get());

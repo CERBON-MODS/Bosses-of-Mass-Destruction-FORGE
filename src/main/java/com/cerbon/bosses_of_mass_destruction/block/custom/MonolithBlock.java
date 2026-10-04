@@ -142,7 +142,7 @@ public class MonolithBlock extends BaseEntityBlock {
         ChunkPos chunkPos = new ChunkPos(pos);
         Optional<ChunkBlockCache> blockCache = BMDCapabilities.getChunkBlockCache(level);
 
-        if (blockCache.isPresent()) {
+        if (blockCache.isPresent() && blockCache.get().hasBlocks(BMDBlocks.MONOLITH_BLOCK.get())) {
             for (int x = chunkPos.x - 4; x <= chunkPos.x + 4; x++)
                 for (int z = chunkPos.z - 4; z <= chunkPos.z + 4; z++) {
                     List<BlockPos> blocks = blockCache.get().getBlocksFromChunk(new ChunkPos(x, z), BMDBlocks.MONOLITH_BLOCK.get());
